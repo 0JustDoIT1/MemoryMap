@@ -87,7 +87,8 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full bg-white"
+            className="w-full"
+            style={{backgroundColor: '#FFFFFF'}}
             mode="flat"
             label="이메일"
             activeUnderlineColor={theme.colors.brandMain}
@@ -115,7 +116,8 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1 bg-white"
+            className="w-full mt-1"
+            style={{backgroundColor: '#FFFFFF'}}
             mode="flat"
             label="비밀번호"
             activeUnderlineColor={theme.colors.brandMain}
@@ -173,7 +175,8 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1 bg-white"
+            className="w-full mt-1"
+            style={{backgroundColor: '#FFFFFF'}}
             mode="flat"
             label="비밀번호 확인"
             activeUnderlineColor={theme.colors.brandMain}

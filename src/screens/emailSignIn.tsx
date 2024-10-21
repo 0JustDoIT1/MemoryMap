@@ -64,12 +64,12 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full bg-white"
+            className="w-full"
+            style={{backgroundColor: '#FFFFFF'}}
             mode="flat"
             label="이메일"
             activeUnderlineColor={theme.colors.brandMain}
             value={value}
-            style={{backgroundColor: '#ffffff'}}
             onChangeText={text => {
               onChange(text);
               setEmail(text);
@@ -82,7 +82,8 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1 bg-white"
+            className="w-full mt-1"
+            style={{backgroundColor: '#FFFFFF'}}
             mode="flat"
             label="비밀번호"
             activeUnderlineColor={theme.colors.brandMain}
