@@ -82,9 +82,15 @@ const SignInScreen = ({navigation}: SignInProps) => {
           }}
         />
         <View className="flex-row justify-center items-center">
-          <Divider className="w-1/3 my-5 bg-gray-300" />
+          <Divider
+            className="w-1/3 my-5"
+            style={{backgroundColor: theme.colors.blur}}
+          />
           <Text className="text-xs mx-2">또는</Text>
-          <Divider className="w-1/3 my-5 bg-gray-300" />
+          <Divider
+            className="w-1/3 my-5"
+            style={{backgroundColor: theme.colors.blur}}
+          />
         </View>
         <View className="w-full flex items-center">
           <TouchableOpacity
@@ -118,11 +124,11 @@ const SignInScreen = ({navigation}: SignInProps) => {
           <TouchableOpacity>
             <Text className="text-xs">개인정보 처리방침</Text>
           </TouchableOpacity>
-          <View className="h-3/4 mx-3 border-r-[0.5px]"></View>
+          <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
           <TouchableOpacity>
             <Text className="text-xs">서비스 이용약관</Text>
           </TouchableOpacity>
-          <View className="h-3/4 mx-3 border-r-[0.5px]"></View>
+          <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
           <TouchableOpacity
             onPress={() => {
               handlePresentModalPress({

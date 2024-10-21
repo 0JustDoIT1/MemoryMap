@@ -17,6 +17,7 @@ export const PaperTheme = {
     brandAccent: '#FF290F',
     success: '#198754',
     info: '#0DCAF0',
+    blur: '#9CA3AF',
   },
 };
 
