@@ -2,6 +2,7 @@ module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
     'nativewind/babel',
+    'react-native-paper/babel',
     [
       'module-resolver',
       {
@@ -19,5 +20,19 @@ module.exports = {
         ],
       },
     ],
+    // react-native-dotenv
+    [
+      'module:react-native-dotenv',
+      {
+        moduleName: '@env',
+        path: '.env',
+        blocklist: null,
+        allowlist: null,
+        safe: false,
+        allowUndefined: true,
+        verbose: false,
+      },
+    ],
+    'react-native-reanimated/plugin',
   ],
 };

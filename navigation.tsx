@@ -10,6 +10,7 @@ import MapScreen from 'src/screens/map';
 import SignInScreen from 'src/screens/signIn';
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
+import Root from 'src/screens/root';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomTabStackParamList>();
@@ -82,10 +83,11 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Auth"
+        initialRouteName="Root"
         screenOptions={{
           headerShown: false,
         }}>
+        <Stack.Screen name="Root" component={Root} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
       </Stack.Navigator>
