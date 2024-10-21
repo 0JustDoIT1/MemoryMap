@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "634770973339",
+    "project_id": "memorymap-20e31",
+    "storage_bucket": "memorymap-20e31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634770973339:android:7e5f1089612aada7b8dc3e",
+        "android_client_info": {
+          "package_name": "com.memorymap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634770973339-1h3btln3dvekuhkc9egipd0bmq618f5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.memorymap",
+            "certificate_hash": "e48404acb2eb7eef348dce5aee3048cbd9f435a1"
+          }
+        },
+        {
+          "client_id": "634770973339-ae9l841vgnscqo1581b5csi0eisgheqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDefJm5Qo61ofzF8TpEd5dE63M335fsk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634770973339-ae9l841vgnscqo1581b5csi0eisgheqj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
