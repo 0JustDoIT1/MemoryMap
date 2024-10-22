@@ -1,3 +1,4 @@
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
@@ -8,10 +9,15 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {appUserState} from 'src/recoil/atom';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Account, AppUser} from 'src/types/account';
-import {EmailSignInProps} from 'src/types/stack';
+import {RootStackParamList, SignInProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 
-interface EmailSignIn extends Omit<EmailSignInProps, 'route'> {
+interface EmailSignIn extends Omit<SignInProps, 'route'> {
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'SignIn',
+    undefined
+  >;
   close: () => void;
 }
 
@@ -38,7 +44,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     if (!data.email || !data.password)
       return setError('password', {type: 'custom'});
 
-    await onSignInEmailAndPassword()
+    return await onSignInEmailAndPassword()
       .then(res => onSignInSuccess(res))
       .catch(error => onSignInError(error));
   };
@@ -50,11 +56,11 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     });
     close();
     navigation.replace('Main');
-    showBottomToast('success', `반갑습니다. ${result.displayName}`);
+    return showBottomToast('success', `반갑습니다. ${result.displayName}`);
   };
 
   const onSignInError = (error: any) => {
-    showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
+    return showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
   };
 
   return (

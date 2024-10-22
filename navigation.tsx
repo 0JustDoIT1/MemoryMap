@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import BootSplash from 'react-native-bootsplash';
 
 import {BottomTabStackParamList, RootStackParamList} from 'src/types/stack';
 
@@ -81,7 +82,10 @@ const Main = () => {
 
 const Navigation = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onReady={() => {
+        BootSplash.hide({fade: true});
+      }}>
       <Stack.Navigator
         initialRouteName="Root"
         screenOptions={{

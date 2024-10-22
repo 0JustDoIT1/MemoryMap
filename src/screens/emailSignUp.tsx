@@ -13,10 +13,14 @@ import {showBottomToast} from 'src/utils/showToast';
 import {useSetRecoilState} from 'recoil';
 import {appUserState} from 'src/recoil/atom';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {EmailSignUpProps, RootStackParamList} from 'src/types/stack';
+import {SignInProps, RootStackParamList} from 'src/types/stack';
 
-interface EmailSignUp extends Omit<EmailSignUpProps, 'route'> {
-  navigation: NativeStackNavigationProp<RootStackParamList, any, undefined>;
+interface EmailSignUp extends Omit<SignInProps, 'route'> {
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'SignIn',
+    undefined
+  >;
   close: () => void;
 }
 
@@ -48,7 +52,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     if (data.password !== data.passwordCheck)
       return setError('passwordCheck', {type: 'validate'});
 
-    await onSignUpEmailAndPassword()
+    return await onSignUpEmailAndPassword()
       .then(res => onSignUpSuccess(res))
       .catch(error => onSignUpError(error));
   };
@@ -60,16 +64,16 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     });
     close();
     navigation.replace('Main');
-    showBottomToast('success', `반갑습니다. ${result.displayName}`);
+    return showBottomToast('success', `반갑습니다. ${result.displayName}`);
   };
 
   const onSignUpError = (error: any) => {
     if (error.code === 'auth/email-already-in-use') {
-      showBottomToast('error', '이미 사용 중인 이메일입니다.');
+      return showBottomToast('error', '이미 사용 중인 이메일입니다.');
     } else if (error.code === 'auth/invalid-email') {
-      showBottomToast('error', '유효하지 않은 이메일입니다.');
+      return showBottomToast('error', '유효하지 않은 이메일입니다.');
     } else {
-      showBottomToast('error', '회원가입에 실패했습니다.');
+      return showBottomToast('error', '회원가입에 실패했습니다.');
     }
   };
 

@@ -14,6 +14,10 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import EmailSignUp from './emailSignUp';
 import ResetPassword from './resetPassword';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
+import {useSetRecoilState} from 'recoil';
+import {appUserState, isButtonDisabledState} from 'src/recoil/atom';
+import {showBottomToast} from 'src/utils/showToast';
+import {statusCodes, User} from '@react-native-google-signin/google-signin';
 // import useKakaoAuth from 'src/hook/useKakaoAuth';
 
 const SignInScreen = ({navigation}: SignInProps) => {
@@ -21,6 +25,53 @@ const SignInScreen = ({navigation}: SignInProps) => {
 
   const {onSignInGoogle} = useGoogleAuth();
   // const {onSignInKakao} = useKakaoAuth();
+
+  const setAppUser = useSetRecoilState(appUserState);
+  const setIsButtonDisabled = useSetRecoilState(isButtonDisabledState);
+
+  const onSignInGoogleAuth = async () => {
+    setIsButtonDisabled(true);
+    return await onSignInGoogle()
+      .then(res => onSignInGoogleAuthSuccess(res))
+      .catch(error => onSignInGoogleAuthError(error));
+  };
+
+  const onSignInGoogleAuthSuccess = (result: void | User) => {
+    if (result) {
+      const name = result.user.name
+        ? result.user.name
+        : result.user.email.split('@')[0];
+      setAppUser({
+        email: result.user.email,
+        displayName: name,
+      });
+      navigation.replace('Main');
+      setIsButtonDisabled(false);
+      return showBottomToast('success', `반갑습니다. ${name}님!`);
+    }
+  };
+
+  const onSignInGoogleAuthError = (error: any) => {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      // user cancelled the login flow
+      return;
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      // operation sign in is in progress already
+      return showBottomToast(
+        'error',
+        '이미 로그인 진행 중입니다. 잠시만 기다려주세요.',
+      );
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      // play services not available
+      return showBottomToast(
+        'error',
+        '구글 플레이 서비스를 이용할 수 없거나 업데이트가 필요합니다.',
+      );
+    } else {
+      // some other error
+      return showBottomToast('error', '구글 로그인에 실패했습니다.');
+    }
+  };
 
   const {
     bottomSheetModalRef,
@@ -51,7 +102,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
           text="Google"
           color="white"
           textColor="#000000"
-          onPress={onSignInGoogle}
+          onPress={onSignInGoogleAuth}
         />
         {/* <SocialLoginButton
           icon={() => (

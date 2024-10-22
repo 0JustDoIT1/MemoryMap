@@ -5,8 +5,6 @@ export type RootStackParamList = {
   Auth: undefined;
   Main: undefined;
   SignIn: undefined;
-  EmailSignIn: undefined;
-  EmailSignUp: undefined;
 };
 
 export type BottomTabStackParamList = {
@@ -16,10 +14,14 @@ export type BottomTabStackParamList = {
 };
 
 export type RootProps = NativeStackScreenProps<RootStackParamList, 'Root'>;
-export type SignInProps = NativeStackScreenProps<RootStackParamList>;
-export type EmailSignInProps = NativeStackScreenProps<RootStackParamList>;
-export type EmailSignUpProps = NativeStackScreenProps<RootStackParamList>;
+export type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-export type MapProps = NativeStackScreenProps<BottomTabStackParamList>;
-export type StoryProps = NativeStackScreenProps<BottomTabStackParamList>;
-export type SettingProps = NativeStackScreenProps<BottomTabStackParamList>;
+export type MapProps = NativeStackScreenProps<BottomTabStackParamList, 'Map'>;
+export type StoryProps = NativeStackScreenProps<
+  BottomTabStackParamList,
+  'Story'
+>;
+export type SettingProps = NativeStackScreenProps<
+  BottomTabStackParamList,
+  'Setting'
+>;
