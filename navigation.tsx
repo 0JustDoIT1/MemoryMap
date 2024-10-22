@@ -1,8 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import BootSplash from 'react-native-bootsplash';
 
 import {BottomTabStackParamList, RootStackParamList} from 'src/types/stack';
@@ -12,6 +11,7 @@ import SignInScreen from 'src/screens/signIn';
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
 import Root from 'src/screens/root';
+import {useAppTheme} from 'src/style/paperTheme';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomTabStackParamList>();
@@ -29,6 +29,8 @@ const Auth = () => {
 };
 
 const Main = () => {
+  const theme = useAppTheme();
+
   return (
     <Tab.Navigator
       initialRouteName="Map"
@@ -39,41 +41,46 @@ const Main = () => {
           fontWeight: 'bold',
         },
         headerTitleAlign: 'center',
-        headerTitle: 'PhotoMap',
+        headerTitle: 'MemoryMap',
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: theme.colors.brandMain,
         },
-        tabBarActiveTintColor: '#0000ff',
+        tabBarActiveTintColor: '#ffffff',
+        tabBarInactiveTintColor: theme.colors.surfaceVariant,
         tabBarHideOnKeyboard: true,
+        tabBarShowLabel: false,
       }}>
       <Tab.Screen
         name="Map"
         component={MapScreen}
         options={{
-          tabBarIcon: ({size, color}) => (
-            <FontAwesome name="picture-o" size={size} color={color} />
-          ),
-          tabBarLabel: '여행지도',
+          tabBarIcon: ({focused, size, color}) => {
+            const name = focused ? 'image' : 'image-outline';
+            return <Ionicons name={name} size={size} color={color} />;
+          },
+          // tabBarLabel: '여행지도',
         }}
       />
       <Tab.Screen
         name="Story"
         component={StoryScreen}
         options={{
-          tabBarIcon: ({size, color}) => (
-            <Entypo name="book" size={size} color={color} />
-          ),
-          tabBarLabel: '스토리',
+          tabBarIcon: ({focused, size, color}) => {
+            const name = focused ? 'book' : 'book-outline';
+            return <Ionicons name={name} size={size} color={color} />;
+          },
+          // tabBarLabel: '스토리',
         }}
       />
       <Tab.Screen
         name="Setting"
         component={SettingScreen}
         options={{
-          tabBarIcon: ({size, color}) => (
-            <FontAwesome name="gear" size={size} color={color} />
-          ),
-          tabBarLabel: '설정',
+          tabBarIcon: ({focused, size, color}) => {
+            const name = focused ? 'options' : 'options-outline';
+            return <Ionicons name={name} size={size} color={color} />;
+          },
+          // tabBarLabel: '설정',
         }}
       />
     </Tab.Navigator>
