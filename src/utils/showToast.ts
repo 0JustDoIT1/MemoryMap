@@ -5,6 +5,6 @@ export const showBottomToast = (type: ToastType, text: string) => {
     type,
     text1: text,
     position: 'bottom',
-    visibilityTime: 1000,
+    visibilityTime: 1500,
   });
 };

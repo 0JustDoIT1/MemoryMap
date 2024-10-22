@@ -1,6 +1,8 @@
 import {GestureResponderEvent, Text} from 'react-native';
 import {Button} from 'react-native-paper';
 import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
+import {useRecoilValue} from 'recoil';
+import {isButtonDisabledState} from 'src/recoil/atom';
 
 interface SocialLoginButton {
   icon: IconSource;
@@ -19,6 +21,8 @@ const SocialLoginButton = ({
   classes,
   onPress,
 }: SocialLoginButton) => {
+  const isButtonDisabled = useRecoilValue(isButtonDisabledState);
+
   return (
     <Button
       icon={icon}
@@ -26,10 +30,12 @@ const SocialLoginButton = ({
       onPress={onPress}
       buttonColor={color}
       className={classes}
+      disabled={isButtonDisabled}
       style={{
         display: 'flex',
         justifyContent: 'center',
         borderRadius: 12,
+        backgroundColor: isButtonDisabled ? color : color,
       }}>
       <Text
         style={{fontSize: 14, fontFamily: 'Roboto-Medium', color: textColor}}>

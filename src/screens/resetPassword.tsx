@@ -29,20 +29,21 @@ const ResetPassword = ({close}: ResetPassword) => {
 
   const onSendResetPassword = async (data: {email: string}) => {
     await onSendPasswordResetEmail()
-      .then(res => {
-        close();
-        showBottomToast(
-          'info',
-          '비밀번호 재설정을 위한 메일이 전송되었습니다.',
-        );
-      })
-      .catch(error => {
-        if (error.code === 'auth/too-many-requests')
-          showBottomToast(
-            'error',
-            '요청이 너무 빈번합니다. 잠시 후 다시 시도해 주세요.',
-          );
-      });
+      .then(res => onSendResetPasswordSuccess())
+      .catch(error => onSendResetPasswordError(error));
+  };
+
+  const onSendResetPasswordSuccess = () => {
+    close();
+    showBottomToast('info', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
+  };
+
+  const onSendResetPasswordError = (error: any) => {
+    if (error.code === 'auth/too-many-requests')
+      showBottomToast(
+        'error',
+        '요청이 너무 빈번합니다. 잠시 후 다시 시도해 주세요.',
+      );
   };
 
   return (
