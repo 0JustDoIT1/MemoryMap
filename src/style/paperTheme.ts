@@ -15,8 +15,9 @@ export const PaperTheme = {
     brandDark: '#FF4832',
     brandBase: '#FF9A8E',
     brandAccent: '#FF290F',
-    success: '#198754',
-    info: '#0DCAF0',
+    success: '#22bb33',
+    error: '#bb2124',
+    info: '#5bc0de',
     blur: '#9CA3AF',
   },
 };
