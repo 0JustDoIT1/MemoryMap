@@ -35,7 +35,7 @@ const ResetPassword = ({close}: ResetPassword) => {
 
   const onSendResetPasswordSuccess = () => {
     close();
-    showBottomToast('info', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
+    showBottomToast('success', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
   };
 
   const onSendResetPasswordError = (error: any) => {

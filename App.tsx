@@ -7,6 +7,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {RecoilRoot} from 'recoil';
 import {PaperTheme} from 'src/style/paperTheme';
+import {toastConfig} from 'src/style/toast.config';
 
 const App = (): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -19,7 +20,7 @@ const App = (): React.JSX.Element => {
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
           <GestureHandlerRootView style={{flex: 1}}>
             <Navigation />
-            <Toast />
+            <Toast config={toastConfig} />
           </GestureHandlerRootView>
         </RecoilRoot>
       </PaperProvider>
