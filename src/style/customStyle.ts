@@ -64,4 +64,11 @@ export const customStyle = (props?: CustomStyle) =>
     bottomSheetIcon: {
       color: colors.outline,
     },
+    mapBox: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+    },
   });
