@@ -15,8 +15,8 @@ const KoreaMapSvg = () => {
   const [background, setBackground] = useState<string>('#ffffff');
 
   const onChangeBackground = () => {
-    if (background === 'url(#image)') setBackground('#ffffff');
-    else setBackground('url(#image)');
+    // if (background === 'url(#image)') setBackground('#ffffff');
+    // else setBackground('url(#image)');
   };
 
   return (
