@@ -1,14 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    fontFamily: {
-      sans: ['"GmarketSansMedium"', ...defaultTheme.fontFamily.sans],
-      roboto: ['"Roboto-Medium"'],
-    },
     extend: {
       colors: {
         brandLight: '#FF7C6C',
@@ -23,7 +16,10 @@ module.exports = {
         outline: '#968e98',
         blur: '#9CA3AF',
       },
-
+      fontFamily: {
+        gmarket: ['GmarketSansMedium'],
+        roboto: ['Roboto-Medium'],
+      },
       transitionProperty: {
         colors:
           'color, background-color, border-color, text-decoration-color, fill, stroke',
