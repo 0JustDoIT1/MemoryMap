@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/GmarketSansBold.otf",
+      "sha1": "017d9458fd2a064694e7385b9d5a830856ef256b"
+    },
+    {
+      "path": "assets/fonts/GmarketSansLight.otf",
+      "sha1": "5be4ccef1e1bd975bf3fc9820f798ba0744e2917"
+    },
+    {
+      "path": "assets/fonts/GmarketSansMedium.otf",
+      "sha1": "bbda3c04c05e602cf59609e1e095bb6d769606f8"
+    },
+    {
+      "path": "assets/fonts/Roboto-Medium.ttf",
+      "sha1": "0ee6b0bd5ff6fe30e4ef720a08e38656dc60985f"
+    }
+  ]
+}

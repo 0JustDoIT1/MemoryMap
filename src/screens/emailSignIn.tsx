@@ -70,8 +70,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white"
             mode="flat"
             label="이메일"
             activeUnderlineColor={theme.colors.brandMain}
@@ -88,8 +87,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호"
             activeUnderlineColor={theme.colors.brandMain}

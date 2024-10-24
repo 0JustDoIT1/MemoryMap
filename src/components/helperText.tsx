@@ -1,8 +1,9 @@
 import {HelperText} from 'react-native-paper';
+import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 
 interface CustomHelperText {
-  type?: 'error' | 'info';
+  type: 'error' | 'info';
   text: string | React.JSX.Element | undefined;
   color?: string;
 }
@@ -13,15 +14,13 @@ const CustomHelperText = ({type, text, color}: CustomHelperText) => {
     ? color
     : type === 'info'
     ? theme.colors.outline
-    : theme.colors.brandMain;
+    : theme.colors.error;
 
   return (
     <HelperText
-      type={type ? type : 'info'}
+      type={type}
       className="w-full"
-      style={{
-        color: textColor,
-      }}>
+      style={customStyle({color: textColor}).helperText}>
       {text}
     </HelperText>
   );
