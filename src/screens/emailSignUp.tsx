@@ -91,8 +91,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white"
             mode="flat"
             label="이메일"
             activeUnderlineColor={theme.colors.brandMain}
@@ -120,8 +119,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호"
             activeUnderlineColor={theme.colors.brandMain}
@@ -151,14 +149,14 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
               size={14}
               color={
                 errors.password?.type === 'pattern'
-                  ? theme.colors.brandMain
+                  ? theme.colors.error
                   : theme.colors.outline
               }
             />
             <Text
               className={`text-xs ml-1 ${
                 errors.password?.type === 'pattern'
-                  ? 'text-brandMain'
+                  ? 'text-error'
                   : 'text-outline'
               }`}>
               영문, 숫자, 특수문자 조합 8~16자리로 입력해 주세요.
@@ -179,8 +177,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full mt-1"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호 확인"
             activeUnderlineColor={theme.colors.brandMain}

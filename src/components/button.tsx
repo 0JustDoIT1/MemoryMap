@@ -1,5 +1,6 @@
 import {GestureResponderEvent} from 'react-native';
 import {ActivityIndicator, Button} from 'react-native-paper';
+import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 
 interface Button {
@@ -54,7 +55,7 @@ export const FormOutlinedButton = ({
     <Button
       mode="outlined"
       className={classes}
-      style={{borderColor: theme.colors.brandMain}}
+      style={customStyle().formOutlinedButton}
       textColor={theme.colors.brandMain}
       onPress={onSubmit}
       disabled={isSubmitting}>

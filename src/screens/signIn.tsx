@@ -5,9 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {useAppTheme} from 'src/style/paperTheme';
 import {SignInProps} from 'src/types/stack';
-import GoogleImage from 'assets/images/google_logo.png';
-// import KakaoImage from 'assets/images/kakao_logo.png';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SocialLoginButton from 'src/components/socialLogin';
 import EmailSignIn from './emailSignIn';
 import CustomBottomSheet from 'src/components/bottomSheet';
@@ -18,13 +15,11 @@ import {useSetRecoilState} from 'recoil';
 import {appUserState, isButtonDisabledState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
 import {statusCodes, User} from '@react-native-google-signin/google-signin';
-// import useKakaoAuth from 'src/hook/useKakaoAuth';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const theme = useAppTheme();
 
   const {onSignInGoogle} = useGoogleAuth();
-  // const {onSignInKakao} = useKakaoAuth();
 
   const setAppUser = useSetRecoilState(appUserState);
   const setIsButtonDisabled = useSetRecoilState(isButtonDisabledState);
@@ -48,10 +43,13 @@ const SignInScreen = ({navigation}: SignInProps) => {
       navigation.replace('Main');
       setIsButtonDisabled(false);
       return showBottomToast('success', `반갑습니다. ${name}님!`);
+    } else {
+      setIsButtonDisabled(false);
     }
   };
 
   const onSignInGoogleAuthError = (error: any) => {
+    setIsButtonDisabled(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow
       return;
@@ -92,36 +90,18 @@ const SignInScreen = ({navigation}: SignInProps) => {
       </View>
       <View className="h-1/3 flex justify-center items-center">
         <SocialLoginButton
-          icon={() => (
-            <Image
-              source={GoogleImage}
-              style={{width: 18, height: 18, marginTop: 1}}
-            />
-          )}
-          classes="w-full py-1"
+          type="Google"
           text="Google"
-          color="white"
-          textColor="#000000"
+          buttonColor={theme.colors.white}
+          textColor={theme.colors.black}
           onPress={onSignInGoogleAuth}
         />
-        {/* <SocialLoginButton
-          icon={() => (
-            <Image source={KakaoImage} style={{width: 18, height: 18}} />
-          )}
-          classes="w-full py-1"
-          text="Kakao"
-          color="#FEE500"
-          textColor="#000000"
-          onPress={onSignInKakao}
-        /> */}
         <SocialLoginButton
-          icon={() => (
-            <MaterialCommunityIcons name="email" size={18} color="#FFFFFF" />
-          )}
-          classes="w-full py-1 mt-2"
+          type="Email"
           text="이메일"
-          color={theme.colors.brandMain}
-          textColor="#FFFFFF"
+          buttonClass="mt-2"
+          buttonColor={theme.colors.brandMain}
+          textColor={theme.colors.white}
           onPress={() => {
             handlePresentModalPress({
               title: '계정 로그인',
@@ -133,15 +113,9 @@ const SignInScreen = ({navigation}: SignInProps) => {
           }}
         />
         <View className="flex-row justify-center items-center">
-          <Divider
-            className="w-1/3 my-5"
-            style={{backgroundColor: theme.colors.blur}}
-          />
+          <Divider className="w-1/3 my-5 bg-blur" />
           <Text className="text-xs mx-2">또는</Text>
-          <Divider
-            className="w-1/3 my-5"
-            style={{backgroundColor: theme.colors.blur}}
-          />
+          <Divider className="w-1/3 my-5 bg-blur" />
         </View>
         <View className="w-full flex items-center">
           <TouchableOpacity
@@ -159,17 +133,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
             }}>
             <Text className="underline">이메일로 회원가입</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            className="mt-1"
-            onPress={() => {
-              handlePresentModalPress(
-                '40%',
-                '비밀번호 재설정',
-                <ResetPassword close={handleClosePress} />,
-              );
-            }}>
-            <Text className="text-xs">비밀번호를 잊으셨나요?</Text>
-          </TouchableOpacity> */}
         </View>
         <View className="w-full mt-auto flex-row justify-center items-center">
           <TouchableOpacity>
@@ -192,13 +155,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
             <Text className="text-xs">비밀번호 찾기</Text>
           </TouchableOpacity>
         </View>
-        {/* <Button
-          onPress={() => {
-            navigation.replace('Main');
-          }}>
-          지도
-        </Button>
-        <Button onPress={onSignOutGoogle}>로그아웃</Button> */}
       </View>
       <CustomBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}

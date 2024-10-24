@@ -16,6 +16,10 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		3975085E185E422A993A2610 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65E9256E47BE4AB084B6DA1A /* BootSplash.storyboard */; };
 		99771749AA7A42D8BB0E0651 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7220A888A0042C3801413E9 /* Colors.xcassets */; };
+		AC8CCFF42C3140E2A950C56E /* GmarketSansBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5FE0C19AC778492F91D2C3C5 /* GmarketSansBold.otf */; };
+		1EC284D7FDE0404CBC4ED17B /* GmarketSansLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAEA1AD9B56416AB2924877 /* GmarketSansLight.otf */; };
+		3E38E1F3900F4A9D8BC29D11 /* GmarketSansMedium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 275C5BB3928D423C87C0F66D /* GmarketSansMedium.otf */; };
+		15AB0A9272044A37917629C4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93328DA10A2E482C887C6740 /* Roboto-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		65E9256E47BE4AB084B6DA1A /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "MemoryMap/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D7220A888A0042C3801413E9 /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "MemoryMap/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
+		5FE0C19AC778492F91D2C3C5 /* GmarketSansBold.otf */ = {isa = PBXFileReference; name = "GmarketSansBold.otf"; path = "../assets/fonts/GmarketSansBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9EAEA1AD9B56416AB2924877 /* GmarketSansLight.otf */ = {isa = PBXFileReference; name = "GmarketSansLight.otf"; path = "../assets/fonts/GmarketSansLight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		275C5BB3928D423C87C0F66D /* GmarketSansMedium.otf */ = {isa = PBXFileReference; name = "GmarketSansMedium.otf"; path = "../assets/fonts/GmarketSansMedium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		93328DA10A2E482C887C6740 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +138,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				D3547BFCF7A14F5496BDAFAA /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -155,6 +164,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		D3547BFCF7A14F5496BDAFAA /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				5FE0C19AC778492F91D2C3C5 /* GmarketSansBold.otf */,
+				9EAEA1AD9B56416AB2924877 /* GmarketSansLight.otf */,
+				275C5BB3928D423C87C0F66D /* GmarketSansMedium.otf */,
+				93328DA10A2E482C887C6740 /* Roboto-Medium.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -253,6 +274,10 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3975085E185E422A993A2610 /* BootSplash.storyboard in Resources */,
 				99771749AA7A42D8BB0E0651 /* Colors.xcassets in Resources */,
+				AC8CCFF42C3140E2A950C56E /* GmarketSansBold.otf in Resources */,
+				1EC284D7FDE0404CBC4ED17B /* GmarketSansLight.otf in Resources */,
+				3E38E1F3900F4A9D8BC29D11 /* GmarketSansMedium.otf in Resources */,
+				15AB0A9272044A37917629C4 /* Roboto-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

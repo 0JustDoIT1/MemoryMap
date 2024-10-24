@@ -60,8 +60,7 @@ const ResetPassword = ({close}: ResetPassword) => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            className="w-full"
-            style={{backgroundColor: '#FFFFFF'}}
+            className="w-full bg-white"
             mode="flat"
             label="이메일"
             activeUnderlineColor={theme.colors.brandMain}
