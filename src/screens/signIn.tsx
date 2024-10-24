@@ -1,6 +1,6 @@
 import React from 'react';
-import {Image, View, Text, TouchableOpacity} from 'react-native';
-import {Divider} from 'react-native-paper';
+import {Image, View, TouchableOpacity} from 'react-native';
+import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {useAppTheme} from 'src/style/paperTheme';
@@ -114,7 +114,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
         />
         <View className="flex-row justify-center items-center">
           <Divider className="w-1/3 my-5 bg-blur" />
-          <Text className="text-xs mx-2">또는</Text>
+          <Text className="text-xs mx-2 text-blur">또는</Text>
           <Divider className="w-1/3 my-5 bg-blur" />
         </View>
         <View className="w-full flex items-center">
@@ -131,16 +131,16 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 snap: '70%',
               });
             }}>
-            <Text className="underline">이메일로 회원가입</Text>
+            <Text className="underline text-blur">이메일로 회원가입</Text>
           </TouchableOpacity>
         </View>
         <View className="w-full mt-auto flex-row justify-center items-center">
           <TouchableOpacity>
-            <Text className="text-xs">개인정보 처리방침</Text>
+            <Text className="text-xs text-blur">개인정보 처리방침</Text>
           </TouchableOpacity>
           <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
           <TouchableOpacity>
-            <Text className="text-xs">서비스 이용약관</Text>
+            <Text className="text-xs text-blur">서비스 이용약관</Text>
           </TouchableOpacity>
           <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
           <TouchableOpacity
@@ -152,7 +152,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 snap: '50%',
               });
             }}>
-            <Text className="text-xs">비밀번호 찾기</Text>
+            <Text className="text-xs text-blur">비밀번호 찾기</Text>
           </TouchableOpacity>
         </View>
       </View>

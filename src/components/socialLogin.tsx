@@ -1,5 +1,5 @@
-import {GestureResponderEvent, Image, Text} from 'react-native';
-import {Button} from 'react-native-paper';
+import {GestureResponderEvent, Image} from 'react-native';
+import {Button, Text} from 'react-native-paper';
 import {useRecoilValue} from 'recoil';
 import {isButtonDisabledState} from 'src/recoil/atom';
 import GoogleImage from 'assets/images/google_logo.png';

@@ -4,7 +4,8 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
-import {TouchableOpacity, View, Text} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
 

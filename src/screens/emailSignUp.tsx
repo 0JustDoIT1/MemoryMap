@@ -1,6 +1,6 @@
 import {Controller, useForm} from 'react-hook-form';
-import {Text, View} from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {View} from 'react-native';
+import {Text, TextInput} from 'react-native-paper';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
