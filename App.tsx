@@ -1,3 +1,4 @@
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import Navigation from 'navigation';
 import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
@@ -19,7 +20,9 @@ const App = (): React.JSX.Element => {
         <RecoilRoot>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
           <GestureHandlerRootView style={{flex: 1}}>
-            <Navigation />
+            <BottomSheetModalProvider>
+              <Navigation />
+            </BottomSheetModalProvider>
             <Toast config={toastConfig} />
           </GestureHandlerRootView>
         </RecoilRoot>

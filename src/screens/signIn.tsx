@@ -41,8 +41,8 @@ const SignInScreen = ({navigation}: SignInProps) => {
         displayName: name,
       });
       navigation.replace('Main');
+      showBottomToast('success', `반갑습니다. ${name}님!`);
       setIsButtonDisabled(false);
-      return showBottomToast('success', `반갑습니다. ${name}님!`);
     } else {
       setIsButtonDisabled(false);
     }

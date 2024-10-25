@@ -5,26 +5,26 @@ import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
 
-interface CustomBottomSheet {
+interface MapBottomSheet {
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
   snapPoints: string[];
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
   title: string;
-  description?: string;
-  contents: React.JSX.Element;
+  tag?: [string, string];
+  code: string;
 }
 
-const CustomBottomSheet = ({
+const MapBottomSheet = ({
   bottomSheetModalRef,
   snapPoints,
   handleClosePress,
   renderBackdrop,
   title,
-  description,
-  contents,
-}: CustomBottomSheet) => {
-  const titleMarginBottom = description ? 'mb-4' : 'mb-8';
+  tag,
+  code,
+}: MapBottomSheet) => {
+  const titleMarginBottom = tag ? 'mb-4' : 'mb-8';
 
   return (
     <BottomSheetModal
@@ -47,16 +47,13 @@ const CustomBottomSheet = ({
               />
             </TouchableOpacity>
           </View>
-          {description && (
-            <Text className="text-xs text-outline text-center mb-8">
-              {description}
-            </Text>
+          {tag && (
+            <Text className="text-xs text-outline text-center mb-8">{tag}</Text>
           )}
-          {contents}
         </View>
       </BottomSheetView>
     </BottomSheetModal>
   );
 };
 
-export default CustomBottomSheet;
+export default MapBottomSheet;
