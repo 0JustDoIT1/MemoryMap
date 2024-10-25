@@ -8,14 +8,21 @@ interface SettingBottomSheet {
   snap: string;
 }
 
+interface SettingMapSheet {
+  title: string;
+  code: string;
+  tag?: [string, string];
+  snap: string;
+}
+
 const useCustomBottomSheet = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const [bottomSheetTitle, setbottomSheetTitle] = useState<string>('');
+  const [bottomSheetTitle, setBottomSheetTitle] = useState<string>('');
   const [bottomSheetDescription, setBottomSheetDescription] = useState<
     string | undefined
   >('');
-  const [bottomSheetContents, setbottomSheetContents] =
+  const [bottomSheetContents, setBottomSheetContents] =
     useState<React.JSX.Element>(<></>);
   const [point, setPoint] = useState<string>('');
 
@@ -24,9 +31,9 @@ const useCustomBottomSheet = () => {
   // Bottom Sheet present event
   const handlePresentModalPress = useCallback(
     ({title, description, contents, snap}: SettingBottomSheet) => {
-      setbottomSheetTitle(title);
+      setBottomSheetTitle(title);
       setBottomSheetDescription(description);
-      setbottomSheetContents(contents);
+      setBottomSheetContents(contents);
       setPoint(snap);
       bottomSheetModalRef.current?.present();
     },
@@ -40,6 +47,21 @@ const useCustomBottomSheet = () => {
     [],
   );
 
+  /** --------------------Map Bottom Sheet--------------------------- */
+  const [tag, setTag] = useState<[string, string] | undefined>(['', '']);
+  const [code, setCode] = useState<string>('');
+
+  const handleMapModalPress = useCallback(
+    ({title, code, tag, snap}: SettingMapSheet) => {
+      setBottomSheetTitle(title);
+      setTag(tag);
+      setCode(code);
+      setPoint(snap);
+      bottomSheetModalRef.current?.present();
+    },
+    [bottomSheetTitle, tag, bottomSheetContents, point],
+  );
+
   return {
     bottomSheetModalRef,
     snapPoints,
@@ -47,8 +69,11 @@ const useCustomBottomSheet = () => {
     bottomSheetDescription,
     bottomSheetContents,
     handlePresentModalPress,
+    handleMapModalPress,
     handleClosePress,
     renderBackdrop,
+    tag,
+    code,
   };
 };
 
