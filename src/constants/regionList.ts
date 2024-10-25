@@ -1,4 +1,18 @@
-export const KoreaRegionList = {
+interface RegionList {
+  title: string;
+  value: string;
+  code?: string;
+  display: boolean;
+  sub?: {
+    [key: string]: RegionList;
+  };
+}
+
+interface KoreaRegionList {
+  [key: string]: RegionList;
+}
+
+export const KoreaRegionList: KoreaRegionList = {
   'KR-1': {
     title: '서울',
     value: '서울',
@@ -1426,16 +1440,19 @@ export const KoreaRegionList = {
   'KR-17': {
     title: '제주도',
     value: '제주특별자치도',
+    code: 'KR-17',
     display: true,
     sub: {
       'KR-17-1': {
         title: '서귀포',
         value: '서귀포시',
+        code: 'KR-17-1',
         display: false,
       },
       'KR-17-2': {
         title: '제주',
         value: '제주시',
+        code: 'KR-17-2',
         display: false,
       },
     },

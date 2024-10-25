@@ -12,6 +12,7 @@ import {
 import Test from 'assets/images/test.png';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import MapBottomSheet from './mapBottomSheet';
+import {KoreaRegionList} from 'src/constants/regionList';
 
 const KoreaMapSvg = () => {
   const [background, setBackground] = useState<string>('#ffffff');
@@ -40,12 +41,13 @@ const KoreaMapSvg = () => {
             <Image width="960" height="1110" href={Test} />
           </Pattern>
         </Defs>
-        <G id="제주특별자치도_1_">
+        <G id="KR-17">
           <Polygon
+            id="KR-17"
             onPress={() => {
               handleMapModalPress({
-                title: '제주도',
-                code: '',
+                title: KoreaRegionList['KR-17'].title,
+                code: KoreaRegionList['KR-17'].code as string,
                 snap: '40%',
               });
             }}

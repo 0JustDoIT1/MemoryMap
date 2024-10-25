@@ -11,7 +11,7 @@ interface MapBottomSheet {
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
   title: string;
-  tag?: [string, string];
+  tag?: string[];
   code: string;
 }
 
