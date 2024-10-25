@@ -1,5 +1,6 @@
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useCallback, useMemo, useRef, useState} from 'react';
+import {KoreaRegionList} from 'src/constants/regionList';
 
 interface SettingBottomSheet {
   title: string;
@@ -11,7 +12,6 @@ interface SettingBottomSheet {
 interface SettingMapSheet {
   title: string;
   code: string;
-  tag?: [string, string];
   snap: string;
 }
 
@@ -48,18 +48,23 @@ const useCustomBottomSheet = () => {
   );
 
   /** --------------------Map Bottom Sheet--------------------------- */
-  const [tag, setTag] = useState<[string, string] | undefined>(['', '']);
+  const [tag, setTag] = useState<string[] | undefined>([]);
   const [code, setCode] = useState<string>('');
 
   const handleMapModalPress = useCallback(
-    ({title, code, tag, snap}: SettingMapSheet) => {
+    ({title, code, snap}: SettingMapSheet) => {
+      const length = code.split('-').length - 1;
+      const tagList = [];
+      for (let i = 0; i < length; i++) {
+        tagList.push(KoreaRegionList[code].value);
+      }
       setBottomSheetTitle(title);
-      setTag(tag);
+      setTag(tagList);
       setCode(code);
       setPoint(snap);
       bottomSheetModalRef.current?.present();
     },
-    [bottomSheetTitle, tag, bottomSheetContents, point],
+    [bottomSheetTitle, tag, code, point],
   );
 
   return {
