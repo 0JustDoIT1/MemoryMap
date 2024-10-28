@@ -10,27 +10,14 @@ import {
   Text,
 } from 'react-native-svg';
 import Test from 'assets/images/test.png';
-import useCustomBottomSheet from 'src/hook/useBottomSheet';
-import MapBottomSheet from './mapBottomSheet';
-import {KoreaRegionList} from 'src/constants/regionList';
+import {SettingMapSheet} from 'src/types/bottomSheet';
 
-const KoreaMapSvg = () => {
+interface KoreaMapSvg {
+  open: ({id, snap}: SettingMapSheet) => void;
+}
+
+const KoreaMapSvg = ({open}: KoreaMapSvg) => {
   const [background, setBackground] = useState<string>('#ffffff');
-
-  const {
-    bottomSheetModalRef,
-    snapPoints,
-    bottomSheetTitle,
-    handleMapModalPress,
-    handleClosePress,
-    renderBackdrop,
-    tag,
-  } = useCustomBottomSheet();
-
-  const onChangeBackground = () => {
-    // if (background === 'url(#image)') setBackground('#ffffff');
-    // else setBackground('url(#image)');
-  };
 
   return (
     <React.Fragment>
@@ -44,7 +31,7 @@ const KoreaMapSvg = () => {
           <Polygon
             id="KR-17"
             onPress={() => {
-              handleMapModalPress({
+              open({
                 id: 'KR-17',
                 snap: '40%',
               });
@@ -64,8 +51,8 @@ const KoreaMapSvg = () => {
           <Polygon
             id="합천군_1_"
             onPress={() => {
-              handleMapModalPress({
-                id: 'KR-2-1-1',
+              open({
+                id: 'KR-13-18',
                 snap: '40%',
               });
             }}
@@ -79,7 +66,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="거창군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -91,7 +78,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="함양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -102,7 +89,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="산청군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -113,7 +100,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="하동군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -125,7 +112,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="남해군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -139,7 +126,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="고성군_2_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -151,7 +138,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="창녕군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -162,7 +149,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="함안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -172,7 +159,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="의령군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -183,7 +170,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="양산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -194,7 +181,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="거제시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -208,7 +195,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="밀양시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -220,7 +207,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="김해시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -230,7 +217,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="사천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -242,7 +229,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="통영시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -260,7 +247,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="진주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -272,7 +259,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="창원시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -293,7 +280,7 @@ const KoreaMapSvg = () => {
         <G id="경상북도_1_">
           <Path
             id="울진군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -304,7 +291,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="봉화군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -318,7 +305,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="예천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -330,7 +317,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="칠곡군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -342,7 +329,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="성주군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -353,7 +340,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="고령군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -364,7 +351,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="청도군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -376,7 +363,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="영덕군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -386,7 +373,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="영양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -398,7 +385,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="청송군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -410,7 +397,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="의성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -422,7 +409,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="군위군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -436,7 +423,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="경산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -447,7 +434,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="문경시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -460,7 +447,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="상주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -472,7 +459,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="영천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -484,7 +471,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="영주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -497,7 +484,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="구미시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -509,7 +496,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="안동시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -523,7 +510,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="김천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -535,7 +522,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="경주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -547,7 +534,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="포항시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -562,7 +549,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="울릉군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -575,7 +562,7 @@ const KoreaMapSvg = () => {
         <G id="전라남도_1_">
           <Path
             id="신안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -604,7 +591,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="진도군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -617,7 +604,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="완도군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -640,7 +627,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="장성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -652,7 +639,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="영광군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -663,7 +650,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="함평군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -674,7 +661,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="무안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -688,7 +675,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="영암군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -700,7 +687,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="해남군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -715,7 +702,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="강진군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -726,7 +713,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="장흥군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -738,7 +725,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="화순군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -750,7 +737,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="보성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -762,7 +749,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="고흥군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -780,7 +767,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="구례군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -790,7 +777,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="곡성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -801,7 +788,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="담양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -812,7 +799,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="광양시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -822,7 +809,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="나주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -834,7 +821,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="순천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -846,7 +833,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="여수시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -862,7 +849,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="목포시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -873,7 +860,7 @@ const KoreaMapSvg = () => {
         <G id="전라북도_1_">
           <Path
             id="부안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -884,7 +871,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="고창군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -896,7 +883,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="순창군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -910,7 +897,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="장수군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -923,7 +910,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="무주군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -935,7 +922,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="진안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -947,7 +934,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="완주군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -960,7 +947,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="김제시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -971,7 +958,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="남원시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -985,7 +972,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="정읍시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -997,7 +984,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="익산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1007,7 +994,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="군산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1017,7 +1004,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="전주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1027,7 +1014,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="임실군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1045,7 +1032,7 @@ const KoreaMapSvg = () => {
         <G id="충청남도_1_">
           <Path
             id="태안군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1061,7 +1048,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="예산군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1072,7 +1059,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="홍성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1083,7 +1070,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="청양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1094,7 +1081,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="서천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1105,7 +1092,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="부여군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1116,7 +1103,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="금산군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1128,7 +1115,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="당진시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1139,7 +1126,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="계룡시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1148,7 +1135,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="논산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1159,7 +1146,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="서산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1171,7 +1158,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="아산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1182,7 +1169,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="보령시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1195,7 +1182,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="공주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1207,7 +1194,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="천안시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1221,7 +1208,7 @@ const KoreaMapSvg = () => {
         <G id="충청북도_1_">
           <Polygon
             id="단양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1232,7 +1219,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="음성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1244,7 +1231,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="괴산군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1256,7 +1243,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="진천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1266,7 +1253,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="증평군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1276,7 +1263,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="영동군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1287,7 +1274,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="옥천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1298,7 +1285,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="보은군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1309,7 +1296,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="제천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1322,7 +1309,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="충주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1334,7 +1321,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="청주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1350,7 +1337,7 @@ const KoreaMapSvg = () => {
         <G id="강원도_1_">
           <Polygon
             id="양양군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1361,7 +1348,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="고성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1371,7 +1358,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="인제군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1385,7 +1372,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="양구군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1396,7 +1383,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="화천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1407,7 +1394,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="정선군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1420,7 +1407,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="평창군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1434,7 +1421,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="영월군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1449,7 +1436,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="횡성군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1461,7 +1448,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="홍천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1475,7 +1462,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="삼척시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1486,7 +1473,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="속초시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1495,7 +1482,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="태백시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1506,7 +1493,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="동해시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1516,7 +1503,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="강릉시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1528,7 +1515,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="원주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1540,7 +1527,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="춘천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1555,7 +1542,7 @@ const KoreaMapSvg = () => {
           <G>
             <Path
               id="철원군_1_"
-              onPress={onChangeBackground}
+              onPress={() => {}}
               fill={background}
               stroke="#000000"
               strokeWidth="0.8"
@@ -1570,7 +1557,7 @@ const KoreaMapSvg = () => {
         <G id="경기도_1_">
           <Polygon
             id="양평군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1582,7 +1569,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="여주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1594,7 +1581,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="양주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1605,7 +1592,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="광주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1616,7 +1603,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="화성시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1631,7 +1618,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="김포시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1642,7 +1629,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="안성시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1653,7 +1640,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="이천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1665,7 +1652,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="파주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1675,7 +1662,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="하남시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1685,7 +1672,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="의왕시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1695,7 +1682,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="군포시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1704,7 +1691,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="시흥시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1714,7 +1701,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="오산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1723,7 +1710,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="남양주시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1733,7 +1720,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="과천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1742,7 +1729,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="고양시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1753,7 +1740,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="평택시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1764,7 +1751,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="광명시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1773,7 +1760,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="부천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1782,7 +1769,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="안양시_2_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1792,7 +1779,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="의정부시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1801,7 +1788,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="성남시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1811,7 +1798,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="안양시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1821,7 +1808,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="동두천시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1830,7 +1817,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="용인시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1842,7 +1829,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="구리시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1851,7 +1838,7 @@ const KoreaMapSvg = () => {
           />
           <Polygon
             id="안산시_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1863,7 +1850,7 @@ const KoreaMapSvg = () => {
           <G>
             <Path
               id="연천군_1_"
-              onPress={onChangeBackground}
+              onPress={() => {}}
               fill={background}
               stroke="#000000"
               strokeWidth="0.8"
@@ -1877,7 +1864,7 @@ const KoreaMapSvg = () => {
           <G>
             <Polygon
               id="포천시_1_"
-              onPress={onChangeBackground}
+              onPress={() => {}}
               fill={background}
               stroke="#000000"
               strokeWidth="0.8"
@@ -1892,7 +1879,7 @@ const KoreaMapSvg = () => {
           <G>
             <Polygon
               id="가평군_1_"
-              onPress={onChangeBackground}
+              onPress={() => {}}
               fill={background}
               stroke="#000000"
               strokeWidth="0.8"
@@ -1906,7 +1893,7 @@ const KoreaMapSvg = () => {
         </G>
         <Polygon
           id="세종특별자치시_1_"
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -1918,7 +1905,7 @@ const KoreaMapSvg = () => {
 	394.22,500.31 394.22,500.31 393.591,500.562 393.591,500.562 390.945,501.695 390.945,501.695 386.284,502.704 386.157,502.704 "
         />
         <Polygon
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -1933,7 +1920,7 @@ const KoreaMapSvg = () => {
         />
         <Polygon
           id="대전광역시_1_"
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -1946,7 +1933,7 @@ const KoreaMapSvg = () => {
         />
         <Polygon
           id="광주광역시_1_"
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -1956,7 +1943,7 @@ const KoreaMapSvg = () => {
 	339.795,757.57 340.55,755.05 342.693,747.364 "
         />
         <Polygon
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -1970,7 +1957,7 @@ const KoreaMapSvg = () => {
         <G id="인천광역시_1_">
           <Path
             id="강화군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1986,7 +1973,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="옹진군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -1997,7 +1984,7 @@ const KoreaMapSvg = () => {
           />
           <Path
             id="인천_구_1_"
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="1"
@@ -2015,7 +2002,7 @@ const KoreaMapSvg = () => {
         </G>
         <G>
           <Polygon
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="1"
@@ -2023,7 +2010,7 @@ const KoreaMapSvg = () => {
 		677.938,769.414 675.542,762.482 	"
           />
           <Polygon
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="1"
@@ -2031,7 +2018,7 @@ const KoreaMapSvg = () => {
 		636.235,763.994 	"
           />
           <Polygon
-            onPress={onChangeBackground}
+            onPress={() => {}}
             fill={background}
             stroke="#000000"
             strokeWidth="1"
@@ -2048,7 +2035,7 @@ const KoreaMapSvg = () => {
         </G>
         <Polygon
           id="서울특별시_1_"
-          onPress={onChangeBackground}
+          onPress={() => {}}
           fill={background}
           stroke="#000000"
           strokeWidth="1"
@@ -3034,14 +3021,6 @@ const KoreaMapSvg = () => {
           </Text>
         </G>
       </Svg>
-      <MapBottomSheet
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        title={bottomSheetTitle}
-        tag={tag}
-      />
     </React.Fragment>
   );
 };

@@ -4,8 +4,14 @@ import {TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
+import {BrandContainedButton, BrandOutlinedButton} from './button';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {MapProps, StackParamList} from 'src/types/stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-interface MapBottomSheet {
+interface MapBottomSheet extends Omit<MapProps, 'route'> {
+  navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
+  close: () => void;
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
   snapPoints: string[];
   handleClosePress: () => void;
@@ -15,6 +21,8 @@ interface MapBottomSheet {
 }
 
 const MapBottomSheet = ({
+  navigation,
+  close,
   bottomSheetModalRef,
   snapPoints,
   handleClosePress,
@@ -22,6 +30,20 @@ const MapBottomSheet = ({
   title,
   tag,
 }: MapBottomSheet) => {
+  const onImagePicker = async () => {
+    await launchImageLibrary({
+      mediaType: 'photo',
+    }).then(res => {
+      if (res.assets) {
+        close();
+        navigation.navigate('CropImage', {
+          title: title,
+          image: res.assets[0].uri as string,
+        });
+      }
+    });
+  };
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -50,6 +72,10 @@ const MapBottomSheet = ({
             <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
               # 스토리 0건
             </Text>
+          </View>
+          <View className="w-full">
+            <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
+            <BrandOutlinedButton text="색칠 하기" classes="mt-1" />
           </View>
         </View>
       </BottomSheetView>

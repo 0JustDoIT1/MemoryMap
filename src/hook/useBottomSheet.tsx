@@ -1,18 +1,7 @@
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {KoreaRegionList} from 'src/constants/regionList';
-
-interface SettingBottomSheet {
-  title: string;
-  description?: string;
-  contents: React.JSX.Element;
-  snap: string;
-}
-
-interface SettingMapSheet {
-  id: string;
-  snap: string;
-}
+import {SettingBottomSheet, SettingMapSheet} from 'src/types/bottomSheet';
 
 const useCustomBottomSheet = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);

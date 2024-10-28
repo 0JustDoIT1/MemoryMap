@@ -9,15 +9,11 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {appUserState} from 'src/recoil/atom';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Account, AppUser} from 'src/types/account';
-import {RootStackParamList, SignInProps} from 'src/types/stack';
+import {SignInProps, StackParamList} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface EmailSignIn extends Omit<SignInProps, 'route'> {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'SignIn',
-    undefined
-  >;
+  navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
   close: () => void;
 }
 
@@ -109,7 +105,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
       <FormOutlinedButton
         text="로그인"
         classes="w-full mt-4 py-1"
-        isSubmitting={isSubmitting}
+        isDisabled={isSubmitting}
         onSubmit={handleSubmit(onSignInAccount)}
       />
     </View>

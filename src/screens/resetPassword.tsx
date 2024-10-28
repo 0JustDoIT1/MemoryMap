@@ -78,7 +78,7 @@ const ResetPassword = ({close}: ResetPassword) => {
       <FormOutlinedButton
         text="확인"
         classes="w-full mt-4 py-1"
-        isSubmitting={isSubmitting}
+        isDisabled={isSubmitting}
         onSubmit={handleSubmit(onSendResetPassword)}
       />
     </View>
