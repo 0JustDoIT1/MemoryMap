@@ -44,6 +44,8 @@ const MapBottomSheet = ({
     });
   };
 
+  const onColorPicker = () => {};
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -75,7 +77,11 @@ const MapBottomSheet = ({
           </View>
           <View className="w-full">
             <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
-            <BrandOutlinedButton text="색칠 하기" classes="mt-1" />
+            <BrandOutlinedButton
+              text="색칠 하기"
+              classes="mt-1"
+              onPress={onColorPicker}
+            />
           </View>
         </View>
       </BottomSheetView>

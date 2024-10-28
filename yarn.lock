@@ -4060,6 +4060,7 @@ __metadata:
     react-native-toast-message: ^2.2.1
     react-native-vector-icons: ^10.2.0
     react-test-renderer: 18.3.1
+    reanimated-color-picker: ^3.0.4
     recoil: ^0.7.7
     tailwindcss: 3.3.2
     typescript: 5.0.4
@@ -10503,6 +10504,22 @@ __metadata:
   version: 1.3.0
   resolution: "readline@npm:1.3.0"
   checksum: dfaf8e6ac20408ea00d650e95f7bb47f77c4c62dd12ed7fb51731ee84532a2f3675fcdc4cab4923dc1eef227520a2e082a093215190907758bea9f585b19438e
+  languageName: node
+  linkType: hard
+
+"reanimated-color-picker@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "reanimated-color-picker@npm:3.0.4"
+  peerDependencies:
+    expo: ">=44.0.0"
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">=2.0.0"
+    react-native-reanimated: ^2.0.0 || ^3.0.0
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: c402ac803311810f97b48418270cd0a1a912f44cf856b8d84836cdb9c653f5c47d9e711a4c0208eacf9d391a4947d8d0756311e779dbd5d28eac5efa7649ddba
   languageName: node
   linkType: hard
 
