@@ -10,8 +10,7 @@ interface SettingBottomSheet {
 }
 
 interface SettingMapSheet {
-  title: string;
-  code: string;
+  id: string;
   snap: string;
 }
 
@@ -48,23 +47,38 @@ const useCustomBottomSheet = () => {
   );
 
   /** --------------------Map Bottom Sheet--------------------------- */
-  const [tag, setTag] = useState<string[] | undefined>([]);
-  const [code, setCode] = useState<string>('');
+  const [tag, setTag] = useState<string[]>([]);
 
   const handleMapModalPress = useCallback(
-    ({title, code, snap}: SettingMapSheet) => {
-      const length = code.split('-').length - 1;
-      const tagList = [];
-      for (let i = 0; i < length; i++) {
-        tagList.push(KoreaRegionList[code].value);
+    ({id, snap}: SettingMapSheet) => {
+      let result: any;
+
+      // 객체 속 원하는 값 찾기 (Defth First Search 방식, 중첩 객체도 가능)
+      const DFS = (obj: any, name: any, val: any) => {
+        if (obj[name] === val) result = obj;
+        else
+          Object.values(obj).forEach(value => {
+            if (typeof value === 'object') DFS(value, name, val);
+          });
+      };
+
+      DFS(KoreaRegionList, 'id', id);
+
+      const values = result.value;
+      const length = values.length;
+      const title = values[length - 1];
+
+      let tagList = [];
+      for (let i = 0; i < length - 1; i++) {
+        tagList.push(values[i]);
       }
+
       setBottomSheetTitle(title);
       setTag(tagList);
-      setCode(code);
       setPoint(snap);
       bottomSheetModalRef.current?.present();
     },
-    [bottomSheetTitle, tag, code, point],
+    [bottomSheetTitle, tag, point],
   );
 
   return {
@@ -78,7 +92,6 @@ const useCustomBottomSheet = () => {
     handleClosePress,
     renderBackdrop,
     tag,
-    code,
   };
 };
 
