@@ -8,4 +8,5 @@ export interface SettingBottomSheet {
 export interface SettingMapSheet {
   id: string;
   snap: string;
+  polygon: string;
 }

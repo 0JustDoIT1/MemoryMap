@@ -113,14 +113,14 @@ const MapScreen = ({navigation}: MapProps) => {
         </Animated.View>
       </GestureDetector>
       <MapBottomSheet
+        navigation={navigation}
+        close={handleClosePress}
         bottomSheetModalRef={bottomSheetModalRef}
         snapPoints={snapPoints}
         handleClosePress={handleClosePress}
         renderBackdrop={renderBackdrop}
         title={bottomSheetTitle}
         tag={tag}
-        navigation={navigation}
-        close={handleClosePress}
       />
     </SafeAreaView>
   );

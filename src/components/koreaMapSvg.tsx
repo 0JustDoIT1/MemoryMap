@@ -13,7 +13,7 @@ import Test from 'assets/images/test.png';
 import {SettingMapSheet} from 'src/types/bottomSheet';
 
 interface KoreaMapSvg {
-  open: ({id, snap}: SettingMapSheet) => void;
+  open: ({id, snap, polygon}: SettingMapSheet) => void;
 }
 
 const KoreaMapSvg = ({open}: KoreaMapSvg) => {
@@ -27,13 +27,15 @@ const KoreaMapSvg = ({open}: KoreaMapSvg) => {
             <Image width="960" height="1110" href={Test} />
           </Pattern>
         </Defs>
-        <G id="KR-17">
+        <G id="제주특별자치도_1_">
           <Polygon
-            id="KR-17"
+            id="제주도_1_"
             onPress={() => {
               open({
                 id: 'KR-17',
                 snap: '40%',
+                polygon:
+                  '332.363,1015.313 333.118,1011.282 329.591,1010.652 329.337,1010.652 328.834,1009.896 328.582,1009.896 330.598,1005.989 328.96,1002.337 321.527,1001.455 316.363,994.778 286.376,995.156 284.867,999.061 231.7,1011.659 207.006,1036.478 207.384,1048.194 207.258,1048.32 223.888,1065.58 233.337,1056.762 240.519,1058.778 255.006,1056.888 257.275,1060.036 265.464,1057.14 278.439,1058.273 288.267,1050.841 302.376,1049.958 307.796,1044.415 317.998,1043.407 336.015,1014.935 334.501,1010.778',
               });
             }}
             fill={background}
@@ -54,6 +56,7 @@ const KoreaMapSvg = ({open}: KoreaMapSvg) => {
               open({
                 id: 'KR-13-18',
                 snap: '40%',
+                polygon: '',
               });
             }}
             fill={background}
