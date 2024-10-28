@@ -25,7 +25,6 @@ const KoreaMapSvg = () => {
     handleClosePress,
     renderBackdrop,
     tag,
-    code,
   } = useCustomBottomSheet();
 
   const onChangeBackground = () => {
@@ -46,8 +45,7 @@ const KoreaMapSvg = () => {
             id="KR-17"
             onPress={() => {
               handleMapModalPress({
-                title: KoreaRegionList['KR-17'].title,
-                code: KoreaRegionList['KR-17'].code as string,
+                id: 'KR-17',
                 snap: '40%',
               });
             }}
@@ -65,7 +63,12 @@ const KoreaMapSvg = () => {
         <G id="경상남도_1_">
           <Polygon
             id="합천군_1_"
-            onPress={onChangeBackground}
+            onPress={() => {
+              handleMapModalPress({
+                id: 'KR-2-1-1',
+                snap: '40%',
+              });
+            }}
             fill={background}
             stroke="#000000"
             strokeWidth="0.8"
@@ -3038,7 +3041,6 @@ const KoreaMapSvg = () => {
         renderBackdrop={renderBackdrop}
         title={bottomSheetTitle}
         tag={tag}
-        code={code}
       />
     </React.Fragment>
   );

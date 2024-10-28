@@ -11,8 +11,7 @@ interface MapBottomSheet {
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
   title: string;
-  tag?: string[];
-  code: string;
+  tag: string[];
 }
 
 const MapBottomSheet = ({
@@ -22,10 +21,7 @@ const MapBottomSheet = ({
   renderBackdrop,
   title,
   tag,
-  code,
 }: MapBottomSheet) => {
-  const titleMarginBottom = tag ? 'mb-4' : 'mb-8';
-
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -34,22 +30,27 @@ const MapBottomSheet = ({
       backdropComponent={renderBackdrop}>
       <BottomSheetView className="flex-1 items-center">
         <View className="flex justify-center items-center w-full py-6 px-8">
-          <View
-            className={`flex-row justify-center items-center w-full ${titleMarginBottom}`}>
-            <Text className="text-xl text-outline">{title}</Text>
-            <TouchableOpacity
-              className="absolute top-50 right-0"
-              onPress={handleClosePress}>
+          <View className="flex-row justify-between items-center w-full mb-2">
+            <Text className="text-xl text-black">{title}</Text>
+            <TouchableOpacity onPress={handleClosePress}>
               <AntDesign
                 name="close"
                 size={32}
-                style={customStyle().bottomSheetIcon}
+                style={customStyle().mapBottomSheetIcon}
               />
             </TouchableOpacity>
           </View>
-          {tag && (
-            <Text className="text-xs text-outline text-center mb-8">{tag}</Text>
-          )}
+          <View className="w-full flex-row justify-start items-center">
+            {tag.length > 0 &&
+              tag.map(item => (
+                <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
+                  {item}
+                </Text>
+              ))}
+            <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
+              # 스토리 0건
+            </Text>
+          </View>
         </View>
       </BottomSheetView>
     </BottomSheetModal>

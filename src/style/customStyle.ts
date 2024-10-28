@@ -71,4 +71,7 @@ export const customStyle = (props?: CustomStyle) =>
       width: '100%',
       height: '100%',
     },
+    mapBottomSheetIcon: {
+      color: '#000000',
+    },
   });
