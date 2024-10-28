@@ -24,7 +24,7 @@ const colors = {
 
 export const customStyle = (props?: CustomStyle) =>
   StyleSheet.create({
-    formOutlinedButton: {
+    brandOutlinedButton: {
       borderColor: colors.brandMain,
     },
     helperText: {

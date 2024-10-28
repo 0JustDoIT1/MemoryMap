@@ -1,18 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
+import React from 'react';
+import {Dimensions} from 'react-native';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useRecoilValue} from 'recoil';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
-import {appUserState} from 'src/recoil/atom';
+import MapBottomSheet from 'src/components/mapBottomSheet';
+import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
 
@@ -23,8 +19,6 @@ const clamp = (val: number, min: number, max: number) => {
 };
 
 const MapScreen = ({navigation}: MapProps) => {
-  const appUser = useRecoilValue(appUserState);
-
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
   const prevTranslationX = useSharedValue(0);
@@ -96,13 +90,38 @@ const MapScreen = ({navigation}: MapProps) => {
 
   const composed = Gesture.Simultaneous(pinch, pan);
 
+  const {
+    bottomSheetModalRef,
+    snapPoints,
+    bottomSheetTitle,
+    handleMapModalPress,
+    handleClosePress,
+    renderBackdrop,
+    tag,
+  } = useCustomBottomSheet();
+
+  const onChangeBackground = () => {
+    // if (background === 'url(#image)') setBackground('#ffffff');
+    // else setBackground('url(#image)');
+  };
+
   return (
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
       <GestureDetector gesture={composed}>
         <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-          <KoreaMapSvg />
+          <KoreaMapSvg open={handleMapModalPress} />
         </Animated.View>
       </GestureDetector>
+      <MapBottomSheet
+        bottomSheetModalRef={bottomSheetModalRef}
+        snapPoints={snapPoints}
+        handleClosePress={handleClosePress}
+        renderBackdrop={renderBackdrop}
+        title={bottomSheetTitle}
+        tag={tag}
+        navigation={navigation}
+        close={handleClosePress}
+      />
     </SafeAreaView>
   );
 };

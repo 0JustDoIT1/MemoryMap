@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BootSplash from 'react-native-bootsplash';
 
-import {BottomTabStackParamList, RootStackParamList} from 'src/types/stack';
+import {StackParamList} from 'src/types/stack';
 
 import MapScreen from 'src/screens/map';
 import SignInScreen from 'src/screens/signIn';
@@ -12,9 +12,10 @@ import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
 import Root from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
+import CropImage from 'src/screens/cropImage';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<BottomTabStackParamList>();
+const Stack = createNativeStackNavigator<StackParamList>();
+const Tab = createBottomTabNavigator<StackParamList>();
 
 const Auth = () => {
   return (
@@ -36,6 +37,7 @@ const Main = () => {
       initialRouteName="Map"
       screenOptions={{
         headerShown: true,
+        headerShadowVisible: false,
         headerTintColor: '#000000',
         headerTitleStyle: {
           fontWeight: 'bold',
@@ -101,6 +103,21 @@ const Navigation = () => {
         <Stack.Screen name="Root" component={Root} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen
+          name="CropImage"
+          component={CropImage}
+          options={({route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#000000',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: route.params.title,
+            headerBackButtonMenuEnabled: true,
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

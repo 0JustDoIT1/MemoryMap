@@ -1,27 +1,24 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export type RootStackParamList = {
+export type StackParamList = {
   Root: undefined;
   Auth: undefined;
   Main: undefined;
   SignIn: undefined;
-};
-
-export type BottomTabStackParamList = {
   Map: undefined;
   Story: undefined;
   Setting: undefined;
+  Sub: undefined;
+  CropImage: {title: string; image: string};
 };
 
-export type RootProps = NativeStackScreenProps<RootStackParamList, 'Root'>;
-export type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
-
-export type MapProps = NativeStackScreenProps<BottomTabStackParamList, 'Map'>;
-export type StoryProps = NativeStackScreenProps<
-  BottomTabStackParamList,
-  'Story'
->;
-export type SettingProps = NativeStackScreenProps<
-  BottomTabStackParamList,
-  'Setting'
+export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
+export type SignInProps = NativeStackScreenProps<StackParamList, 'SignIn'>;
+export type MapProps = NativeStackScreenProps<StackParamList, 'Map'>;
+export type StoryProps = NativeStackScreenProps<StackParamList, 'Story'>;
+export type SettingProps = NativeStackScreenProps<StackParamList, 'Setting'>;
+export type SubProps = NativeStackScreenProps<StackParamList, 'Sub'>;
+export type CropImageProps = NativeStackScreenProps<
+  StackParamList,
+  'CropImage'
 >;

@@ -13,14 +13,10 @@ import {showBottomToast} from 'src/utils/showToast';
 import {useSetRecoilState} from 'recoil';
 import {appUserState} from 'src/recoil/atom';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {SignInProps, RootStackParamList} from 'src/types/stack';
+import {SignInProps, StackParamList} from 'src/types/stack';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'SignIn',
-    undefined
-  >;
+  navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
   close: () => void;
 }
 
@@ -201,7 +197,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
       <FormOutlinedButton
         text="회원가입"
         classes="w-full mt-4 py-1"
-        isSubmitting={isSubmitting}
+        isDisabled={isSubmitting}
         onSubmit={handleSubmit(onSignUpAccount)}
       />
     </View>

@@ -6,12 +6,17 @@ import {useAppTheme} from 'src/style/paperTheme';
 interface Button {
   text: string;
   classes?: string;
-  isSubmitting?: boolean;
+  isDisabled?: boolean;
   onPress?: (e: GestureResponderEvent) => void;
   onSubmit?: (data: any) => void;
 }
 
-export const BrandButton = ({text, classes, isSubmitting, onPress}: Button) => {
+export const BrandContainedButton = ({
+  text,
+  classes,
+  isDisabled,
+  onPress,
+}: Button) => {
   const theme = useAppTheme();
   return (
     <Button
@@ -19,8 +24,28 @@ export const BrandButton = ({text, classes, isSubmitting, onPress}: Button) => {
       className={classes}
       buttonColor={theme.colors.brandMain}
       onPress={onPress}
-      disabled={isSubmitting}>
-      {isSubmitting ? <ActivityIndicator /> : text}
+      disabled={isDisabled}>
+      {isDisabled ? <ActivityIndicator /> : text}
+    </Button>
+  );
+};
+
+export const BrandOutlinedButton = ({
+  text,
+  classes,
+  isDisabled,
+  onPress,
+}: Button) => {
+  const theme = useAppTheme();
+  return (
+    <Button
+      mode="outlined"
+      className={classes}
+      style={customStyle().brandOutlinedButton}
+      textColor={theme.colors.brandMain}
+      onPress={onPress}
+      disabled={isDisabled}>
+      {isDisabled ? <ActivityIndicator /> : text}
     </Button>
   );
 };
@@ -28,7 +53,7 @@ export const BrandButton = ({text, classes, isSubmitting, onPress}: Button) => {
 export const FormContainedButton = ({
   text,
   classes,
-  isSubmitting,
+  isDisabled,
   onSubmit,
 }: Button) => {
   const theme = useAppTheme();
@@ -38,8 +63,8 @@ export const FormContainedButton = ({
       className={classes}
       buttonColor={theme.colors.brandMain}
       onPress={onSubmit}
-      disabled={isSubmitting}>
-      {isSubmitting ? <ActivityIndicator /> : text}
+      disabled={isDisabled}>
+      {isDisabled ? <ActivityIndicator /> : text}
     </Button>
   );
 };
@@ -47,7 +72,7 @@ export const FormContainedButton = ({
 export const FormOutlinedButton = ({
   text,
   classes,
-  isSubmitting,
+  isDisabled,
   onSubmit,
 }: Button) => {
   const theme = useAppTheme();
@@ -55,11 +80,11 @@ export const FormOutlinedButton = ({
     <Button
       mode="outlined"
       className={classes}
-      style={customStyle().formOutlinedButton}
+      style={customStyle().brandOutlinedButton}
       textColor={theme.colors.brandMain}
       onPress={onSubmit}
-      disabled={isSubmitting}>
-      {isSubmitting ? <ActivityIndicator /> : text}
+      disabled={isDisabled}>
+      {isDisabled ? <ActivityIndicator /> : text}
     </Button>
   );
 };
