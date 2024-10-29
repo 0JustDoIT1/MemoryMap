@@ -1,7 +1,6 @@
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {KoreaRegionList} from 'src/constants/regionList';
-import {SettingMapSheet} from 'src/types/mapSheet';
 
 const useMapSheet = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -13,7 +12,7 @@ const useMapSheet = () => {
   const snapPoints = useMemo(() => ['30%', '40%'], []);
 
   const handleMapModalPress = useCallback(
-    ({id}: SettingMapSheet) => {
+    (id: string) => {
       let result: any;
 
       // 객체 속 원하는 값 찾기 (Defth First Search 방식, 중첩 객체도 가능)

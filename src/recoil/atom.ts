@@ -1,5 +1,9 @@
-import {atom} from 'recoil';
+import {atom, RecoilEnv} from 'recoil';
+import {KoreaMapDataInit} from 'src/constants/koreaMapData';
 import {AppUser} from 'src/types/account';
+import {KoreaMapData} from 'src/types/koreaMap';
+
+RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
 export const appUserState = atom<AppUser | null>({
   key: 'appUser',
@@ -11,7 +15,7 @@ export const isButtonDisabledState = atom<boolean>({
   default: false,
 });
 
-export const KoreaMapDataState = atom<any>({
+export const koreaMapDataState = atom<KoreaMapData>({
   key: 'koreaMapData',
-  default: {},
+  default: KoreaMapDataInit,
 });
