@@ -7,8 +7,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
-import MapBottomSheet from 'src/components/mapBottomSheet';
-import useCustomBottomSheet from 'src/hook/useBottomSheet';
+import MapSheet from 'src/components/mapSheet';
+import useMapSheet from 'src/hook/useMapSheet';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
 
@@ -94,11 +94,11 @@ const MapScreen = ({navigation}: MapProps) => {
     bottomSheetModalRef,
     snapPoints,
     bottomSheetTitle,
+    tag,
     handleMapModalPress,
     handleClosePress,
     renderBackdrop,
-    tag,
-  } = useCustomBottomSheet();
+  } = useMapSheet();
 
   const onChangeBackground = () => {
     // if (background === 'url(#image)') setBackground('#ffffff');
@@ -112,7 +112,7 @@ const MapScreen = ({navigation}: MapProps) => {
           <KoreaMapSvg open={handleMapModalPress} />
         </Animated.View>
       </GestureDetector>
-      <MapBottomSheet
+      <MapSheet
         navigation={navigation}
         close={handleClosePress}
         bottomSheetModalRef={bottomSheetModalRef}
