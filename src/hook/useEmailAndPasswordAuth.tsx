@@ -15,6 +15,7 @@ const useEmailAndPasswordAuth = () => {
       .then(async res => {
         const name = await onUpdateProfile(false);
         const result: AppUser = {
+          uid: res.user.uid as string,
           email: res.user.email as string,
           displayName: name as string,
         };
@@ -28,6 +29,7 @@ const useEmailAndPasswordAuth = () => {
       .signInWithEmailAndPassword(email, password)
       .then(res => {
         const result: AppUser = {
+          uid: res.user.uid as string,
           email: res.user.email as string,
           displayName: res.user.displayName as string,
         };

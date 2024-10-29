@@ -15,6 +15,7 @@ import {useSetRecoilState} from 'recoil';
 import {appUserState, isButtonDisabledState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
 import {statusCodes, User} from '@react-native-google-signin/google-signin';
+import {AppUser} from 'src/types/account';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const theme = useAppTheme();
@@ -31,13 +32,14 @@ const SignInScreen = ({navigation}: SignInProps) => {
       .catch(error => onSignInGoogleAuthError(error));
   };
 
-  const onSignInGoogleAuthSuccess = (result: void | User) => {
+  const onSignInGoogleAuthSuccess = (result: AppUser | undefined) => {
     if (result) {
-      const name = result.user.name
-        ? result.user.name
-        : result.user.email.split('@')[0];
+      const name = result.displayName
+        ? result.displayName
+        : result.email.split('@')[0];
       setAppUser({
-        email: result.user.email,
+        uid: result.uid,
+        email: result.email,
         displayName: name,
       });
       navigation.replace('Main');
