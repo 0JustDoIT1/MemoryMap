@@ -1,38 +1,36 @@
 import {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import ColorPicker, {
-  Preview,
-  PreviewText,
-  returnedResults,
-  Swatches,
-} from 'reanimated-color-picker';
-import CustomColorPicker from 'src/components/colorPicker';
+import {returnedResults} from 'reanimated-color-picker';
+import CustomColorPannel from 'src/components/colorPannel';
+import CustomColorSwatch from 'src/components/colorSwatch';
+import {KoreaRegionData} from 'src/types/koreaMap';
 
-const ColorPickerModal = () => {
+const ColorPickerModal = ({background}: KoreaRegionData) => {
   const [more, setMore] = useState<boolean>(false);
-  const [hex, setHex] = useState<string>('#ff0000');
-  const onPickerColor = (colors: returnedResults) => {
-    console.log('###', colors.hex);
-    setHex(colors.hex);
+  const [hex, setHex] = useState<string>(background);
+
+  const onPickerColor = (color: returnedResults) => {
+    setHex(color.hex);
   };
-  const onSelectColor = () => {};
+  const onSelectColor = () => {
+    console.log('###', hex);
+  };
   return (
     <View>
       <Text className="text-lg mb-4">색상 선택</Text>
       {more ? (
-        <CustomColorPicker value="red" onComplete={onPickerColor} />
+        <CustomColorPannel value={background} onComplete={onPickerColor} />
       ) : (
-        <ColorPicker value="red" onComplete={onPickerColor}>
-          <Swatches />
-          <Preview style={{marginTop: 20}} colorFormat="hex" />
-        </ColorPicker>
+        <CustomColorSwatch value={background} onComplete={onPickerColor} />
       )}
       <View className="mt-4 flex-row justify-between items-center">
-        <TouchableOpacity onPress={() => setMore(!more)}>
-          <Text className="text-brandMain">다른 색상</Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => setMore(!more)}>
+          <Text className="text-brandMain">
+            {more ? '기본 색상' : '더 많은 색상'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onSelectColor}>
+        <TouchableOpacity activeOpacity={0.8} onPress={onSelectColor}>
           <Text className="text-brandMain">선택</Text>
         </TouchableOpacity>
       </View>

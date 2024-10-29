@@ -7,6 +7,7 @@ const useMapSheet = () => {
 
   const [bottomSheetTitle, setBottomSheetTitle] = useState<string>('');
   const [tag, setTag] = useState<string[]>([]);
+  const [id, setId] = useState<string>('');
 
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['30%', '40%'], []);
@@ -37,6 +38,7 @@ const useMapSheet = () => {
 
       setBottomSheetTitle(title);
       setTag(tagList);
+      setId(result.id);
       bottomSheetModalRef.current?.present();
     },
     [bottomSheetTitle, tag],
@@ -56,6 +58,7 @@ const useMapSheet = () => {
     snapPoints,
     bottomSheetTitle,
     tag,
+    id,
     handleMapModalPress,
     handleClosePress,
     renderBackdrop,

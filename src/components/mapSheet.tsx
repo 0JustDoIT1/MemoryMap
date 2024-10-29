@@ -12,6 +12,7 @@ import useModal from 'src/hook/useModal';
 import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
+import useKoreaMap from 'src/hook/useKoreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -20,6 +21,7 @@ interface MapSheet extends Omit<MapProps, 'route'> {
   snapPoints: string[];
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
+  id: string;
   title: string;
   tag: string[];
 }
@@ -31,10 +33,14 @@ const MapSheet = ({
   snapPoints,
   handleClosePress,
   renderBackdrop,
+  id,
   title,
   tag,
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
+  const {getMapDataById} = useKoreaMap();
+
+  const regionData = getMapDataById(id);
 
   const onImagePicker = async () => {
     await launchImageLibrary({
@@ -94,7 +100,7 @@ const MapSheet = ({
       <CustomModal
         visible={visible}
         hideModal={hideModal}
-        contents={<ColorPickerModal />}
+        contents={<ColorPickerModal {...regionData} />}
       />
     </React.Fragment>
   );

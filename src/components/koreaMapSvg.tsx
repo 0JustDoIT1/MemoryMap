@@ -37,7 +37,7 @@ const KoreaMapSvg = ({open}: KoreaMapSvg) => {
             onPress={() => {
               open('KR-17');
             }}
-            fill={background}
+            fill={getMapDataById('KR-17').background}
             stroke="#000000"
             strokeWidth="1"
             strokeMiterlimit="10"
