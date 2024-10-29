@@ -6,9 +6,11 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useRecoilValue} from 'recoil';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
 import MapSheet from 'src/components/mapSheet';
 import useMapSheet from 'src/hook/useMapSheet';
+import {appUserState} from 'src/recoil/atom';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
 
@@ -19,6 +21,8 @@ const clamp = (val: number, min: number, max: number) => {
 };
 
 const MapScreen = ({navigation}: MapProps) => {
+  const test = useRecoilValue(appUserState);
+  console.log('hi', test);
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
   const prevTranslationX = useSharedValue(0);

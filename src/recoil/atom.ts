@@ -10,3 +10,8 @@ export const isButtonDisabledState = atom<boolean>({
   key: 'isButtonDisabled',
   default: false,
 });
+
+export const KoreaMapDataState = atom<any>({
+  key: 'koreaMapData',
+  default: {},
+});

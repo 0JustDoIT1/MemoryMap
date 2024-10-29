@@ -55,6 +55,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
 
   const onSignUpSuccess = (result: AppUser) => {
     setAppUser({
+      uid: result.uid,
       email: result.email,
       displayName: result.displayName,
     });

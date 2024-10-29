@@ -47,6 +47,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
 
   const onSignInSuccess = (result: AppUser) => {
     setAppUser({
+      uid: result.uid,
       email: result.email,
       displayName: result.displayName,
     });
