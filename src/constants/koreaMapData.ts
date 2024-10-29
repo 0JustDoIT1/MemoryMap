@@ -1306,7 +1306,7 @@ export const KoreaMapDataInit: KoreaMapData = {
     title: '제주도',
     value: ['제주특별자치도'],
     type: 'init',
-    background: '#ff0000',
+    background: '#ffffff',
     story: 0,
   },
 };

@@ -95,6 +95,7 @@ const MapScreen = ({navigation}: MapProps) => {
     snapPoints,
     bottomSheetTitle,
     tag,
+    id,
     handleMapModalPress,
     handleClosePress,
     renderBackdrop,
@@ -119,6 +120,7 @@ const MapScreen = ({navigation}: MapProps) => {
         snapPoints={snapPoints}
         handleClosePress={handleClosePress}
         renderBackdrop={renderBackdrop}
+        id={id}
         title={bottomSheetTitle}
         tag={tag}
       />

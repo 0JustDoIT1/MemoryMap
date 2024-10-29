@@ -1,11 +1,11 @@
 import {useRecoilState} from 'recoil';
 import {koreaMapDataState} from 'src/recoil/atom';
-import {KoreaMapData} from 'src/types/koreaMap';
+import {KoreaRegionData} from 'src/types/koreaMap';
 
 const useKoreaMap = () => {
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
 
-  const getMapDataById = (id: string) => {
+  const getMapDataById = (id: string): KoreaRegionData => {
     let result: any;
 
     // 객체 속 원하는 값 찾기 (Defth First Search 방식, 중첩 객체도 가능)
@@ -19,7 +19,7 @@ const useKoreaMap = () => {
 
     DFS(koreaMapData, 'id', id);
 
-    return result as KoreaMapData;
+    return result;
   };
 
   return {getMapDataById};
