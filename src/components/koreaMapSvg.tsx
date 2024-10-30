@@ -13,6 +13,7 @@ import Test from 'assets/images/test.png';
 import {useRecoilState} from 'recoil';
 import {koreaMapDataState} from 'src/recoil/atom';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 
 interface KoreaMapSvg {
   handleMapModalPress: (id: string) => void;
@@ -2047,973 +2048,1139 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Text
           transform="matrix(1 0 0 1 394.8042 148.499)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           철원
         </Text>
         <Text
           transform="matrix(1 0 0 1 441.3252 163.6094)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           화천
         </Text>
         <Text
           transform="matrix(1 0 0 1 489.7334 157.8848)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           양구
         </Text>
         <Text
           transform="matrix(1 0 0 1 548.3799 123.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고성
         </Text>
         <Text
           transform="matrix(1 0 0 1 531.2451 180.4355)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           인제
         </Text>
         <Text
           transform="matrix(1 0 0 1 571.5947 157.8848)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           속초
         </Text>
         <Text
           transform="matrix(1 0 0 1 583.4053 191.5234)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           양양
         </Text>
         <Text
           transform="matrix(1 0 0 1 449.1045 212.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           춘천
         </Text>
         <Text
           transform="matrix(1 0 0 1 498.1748 241.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           홍천
         </Text>
         <Text
           transform="matrix(1 0 0 1 622.8799 246.3252)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           강릉
         </Text>
         <Text
           transform="matrix(1 0 0 1 560.8799 281.3105)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           평창
         </Text>
         <Text
           transform="matrix(1 0 0 1 505.3799 288.5625)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           횡성
         </Text>
         <Text
           transform="matrix(1 0 0 1 473.6299 326.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           원주
         </Text>
         <Text
           transform="matrix(1 0 0 1 563.3799 351.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영월
         </Text>
         <Text
           transform="matrix(1 0 0 1 603.3721 316)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           정선
         </Text>
         <Text
           transform="matrix(1 0 0 1 655.3408 289.5625)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           동해
         </Text>
         <Text
           transform="matrix(1 0 0 1 669.6299 333.9082)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           삼척
         </Text>
         <Text
           transform="matrix(1 0 0 1 761.5703 299.8691)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           울릉도
         </Text>
         <Text
           transform="matrix(1 0 0 1 811.2129 305.5381)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           독도
         </Text>
         <Text
           transform="matrix(1 0 0 1 644.3799 359.334)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           태백
         </Text>
         <Text
           transform="matrix(1 0 0 1 632.1299 403.3809)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           봉화
         </Text>
         <Text
           transform="matrix(1 0 0 1 697.3799 402.6572)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           울진
         </Text>
         <Text
           transform="matrix(1 0 0 1 670.8447 448.2852)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영양
         </Text>
         <Text
           transform="matrix(1 0 0 1 701.6299 490.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영덕
         </Text>
         <Text
           transform="matrix(1 0 0 1 661.6299 514.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           청송
         </Text>
         <Text
           transform="matrix(1 0 0 1 613.6299 471.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           안동
         </Text>
         <Text
           transform="matrix(1 0 0 1 578.4053 418.1914)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영주
         </Text>
         <Text
           transform="matrix(1 0 0 1 561.3799 456.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           예천
         </Text>
         <Text
           transform="matrix(1 0 0 1 516.8799 450.3965)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           문경
         </Text>
         <Text
           transform="matrix(1 0 0 1 503.498 505.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           상주
         </Text>
         <Text
           transform="matrix(1 0 0 1 583.4053 515.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           의성
         </Text>
         <Text
           transform="matrix(1 0 0 1 546.7197 545.791)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           구미
         </Text>
         <Text
           transform="matrix(1 0 0 1 503.7588 575)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           김천
         </Text>
         <Text
           transform="matrix(1 0 0 1 594.4893 555)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           군위
         </Text>
         <Text
           transform="matrix(1 0 0 1 688.6299 554)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           포항
         </Text>
         <Text
           transform="matrix(1 0 0 1 642.1299 582.5703)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영천
         </Text>
         <Text
           transform="matrix(1 0 0 1 690.8916 621.1055)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           경주
         </Text>
         <Text
           transform="matrix(1 0 0 1 622.3799 620.7285)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           경산
         </Text>
         <Text
           transform="matrix(1 0 0 1 587.6299 611.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           대구
         </Text>
         <Text
           transform="matrix(1 0 0 1 528.8799 607.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           성주
         </Text>
         <Text
           transform="matrix(1 0 0 1 535.1299 640.9082)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고령
         </Text>
         <Text
           transform="matrix(1 0 0 1 618.1299 653.8936)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           청도
         </Text>
         <Text
           transform="matrix(1 0 0 1 686.8916 672.9014)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           울산
         </Text>
         <Text
           transform="matrix(1 0 0 1 658.6299 706.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           양산
         </Text>
         <Text
           transform="matrix(1 0 0 1 661.3799 745.4902)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           부산
         </Text>
         <Text
           transform="matrix(1 0 0 1 627.8799 729.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           김해
         </Text>
         <Text
           transform="matrix(1 0 0 1 613.8799 687)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           밀양
         </Text>
         <Text
           transform="matrix(1 0 0 1 565.6299 676.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           창녕
         </Text>
         <Text
           transform="matrix(1 0 0 1 514.1299 674.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill={getTextColorByBackgroundColor(
+            getMapDataById('KR-13-18').background,
+          )}>
           합천
         </Text>
         <Text
           transform="matrix(1 0 0 1 534.3799 706.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           의령
         </Text>
         <Text
           transform="matrix(1 0 0 1 560.3799 726.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           함한
         </Text>
         <Text
           transform="matrix(1 0 0 1 587.6299 736.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           창원
         </Text>
         <Text
           transform="matrix(1 0 0 1 593.1299 810.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           거제
         </Text>
         <Text
           transform="matrix(1 0 0 1 538.3799 782.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고성
         </Text>
         <Text
           transform="matrix(1 0 0 1 505.3799 776.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           사천
         </Text>
         <Text
           transform="matrix(1 0 0 1 512.1299 743.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           진주
         </Text>
         <Text
           transform="matrix(1 0 0 1 474.8799 713.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           산청
         </Text>
         <Text
           transform="matrix(1 0 0 1 474.1299 638.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           거창
         </Text>
         <Text
           transform="matrix(1 0 0 1 447.1299 673.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           함양
         </Text>
         <Text
           transform="matrix(1 0 0 1 454.3799 751)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           하동
         </Text>
         <Text
           transform="matrix(1 0 0 1 434.3799 778.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           광양
         </Text>
         <Text
           transform="matrix(1 0 0 1 479.1299 824.5859)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           남해
         </Text>
         <Text
           transform="matrix(1 0 0 1 434.8799 825.1055)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           여수
         </Text>
         <Text
           transform="matrix(1 0 0 1 391.6299 786)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           순천
         </Text>
         <Text
           transform="matrix(1 0 0 1 410.3799 738.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           구례
         </Text>
         <Text
           transform="matrix(1 0 0 1 371.6299 738)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           곡성
         </Text>
         <Text
           transform="matrix(1 0 0 1 328.8799 783.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           화순
         </Text>
         <Text
           transform="matrix(1 0 0 1 352.6299 822)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           보성
         </Text>
         <Text
           transform="matrix(1 0 0 1 378.6299 862.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고흥
         </Text>
         <Text
           transform="matrix(1 0 0 1 313.8799 833)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           장흥
         </Text>
         <Text
           transform="matrix(1 0 0 1 290.2852 849.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           강진
         </Text>
         <Text
           transform="matrix(1 0 0 1 279.3799 913.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           완도
         </Text>
         <Text
           transform="matrix(1 0 0 1 254.3799 872.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           해남
         </Text>
         <Text
           transform="matrix(1 0 0 1 204.6299 890.373)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           진도
         </Text>
         <Text
           transform="matrix(1 0 0 1 269.8799 820.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영암
         </Text>
         <Text
           transform="matrix(1 0 0 1 234.5249 820.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           목포
         </Text>
         <Text
           transform="matrix(1 0 0 1 276.6299 782.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           나주
         </Text>
         <Text
           transform="matrix(1 0 0 1 302.333 754.6719)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           광주
         </Text>
         <Text
           transform="matrix(1 0 0 1 328.1299 727.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           담양
         </Text>
         <Text
           transform="matrix(1 0 0 1 253.4429 760.7832)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           함평
         </Text>
         <Text
           transform="matrix(1 0 0 1 208.6299 769.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           신안
         </Text>
         <Text
           transform="matrix(1 0 0 1 241.8799 732.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영광
         </Text>
         <Text
           transform="matrix(1 0 0 1 292.4355 719.168)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           장성
         </Text>
         <Text
           transform="matrix(1 0 0 1 266.3799 698.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고창
         </Text>
         <Text
           transform="matrix(1 0 0 1 313.6299 665.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           정읍
         </Text>
         <Text
           transform="matrix(1 0 0 1 273.8799 649.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           부안
         </Text>
         <Text
           transform="matrix(1 0 0 1 351.4663 700.7588)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           순창
         </Text>
         <Text
           transform="matrix(1 0 0 1 401.6299 703.8379)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           남원
         </Text>
         <Text
           transform="matrix(1 0 0 1 368.3799 667.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           임실
         </Text>
         <Text
           transform="matrix(1 0 0 1 419.1196 654.8936)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           장수
         </Text>
         <Text
           transform="matrix(1 0 0 1 399.3799 622.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           진안
         </Text>
         <Text
           transform="matrix(1 0 0 1 444.1299 600.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           무주
         </Text>
         <Text
           transform="matrix(1 0 0 1 459.6299 558)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           영동
         </Text>
         <Text
           transform="matrix(1 0 0 1 406.6299 565.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           금산
         </Text>
         <Text
           transform="matrix(1 0 0 1 367.1299 592)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           완주
         </Text>
         <Text
           transform="matrix(1 0 0 1 331.3799 584)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           익산
         </Text>
         <Text
           transform="matrix(1 0 0 1 288.1299 597.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           군산
         </Text>
         <Text
           transform="matrix(1 0 0 1 313.1299 623)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           김제
         </Text>
         <Text
           transform="matrix(1 0 0 1 347.8799 620.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           전주
         </Text>
         <Text
           transform="matrix(1 0 0 1 355.1299 549.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           논산
         </Text>
         <Text
           transform="matrix(1 0 0 1 393.1299 520.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           대전
         </Text>
         <Text
           transform="matrix(1 0 0 1 433.1299 525.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           옥천
         </Text>
         <Text
           transform="matrix(1 0 0 1 447.6299 490.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           보은
         </Text>
         <Text
           transform="matrix(1 0 0 1 407.3799 462.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           청주
         </Text>
         <Text
           transform="matrix(1 0 0 1 373.3799 484.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           세종
         </Text>
         <Text
           transform="matrix(1 0 0 1 337.6299 490)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           공주
         </Text>
         <Text
           transform="matrix(1 0 0 1 301.3799 496.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           청양
         </Text>
         <Text
           transform="matrix(1 0 0 1 309.8799 539.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           부여
         </Text>
         <Text
           transform="matrix(1 0 0 1 283.1299 564.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           서천
         </Text>
         <Text
           transform="matrix(1 0 0 1 269.1299 508)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           보령
         </Text>
         <Text
           transform="matrix(1 0 0 1 270.6299 473.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           홍성
         </Text>
         <Text
           transform="matrix(1 0 0 1 212.8799 434)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           태안
         </Text>
         <Text
           transform="matrix(1 0 0 1 247.1299 439)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           서산
         </Text>
         <Text
           transform="matrix(1 0 0 1 278.1299 408.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           당진
         </Text>
         <Text
           transform="matrix(1 0 0 1 299.6299 450.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           예산
         </Text>
         <Text
           transform="matrix(1 0 0 1 329.3799 429)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           아산
         </Text>
         <Text
           transform="matrix(1 0 0 1 365.293 429)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           천안
         </Text>
         <Text
           transform="matrix(1 0 0 1 401.1299 416)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           진천
         </Text>
         <Text
           transform="matrix(1 0 0 1 461.3799 435.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           괴산
         </Text>
         <Text
           transform="matrix(1 0 0 1 428.3042 429.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           증평
         </Text>
         <Text
           transform="matrix(1 0 0 1 425.8799 396)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           음성
         </Text>
         <Text
           transform="matrix(1 0 0 1 471.8799 386)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           충주
         </Text>
         <Text
           transform="matrix(1 0 0 1 513.6299 369.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           제천
         </Text>
         <Text
           transform="matrix(1 0 0 1 548.3799 392.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           단양
         </Text>
         <Text
           transform="matrix(1 0 0 1 432.1299 330.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           여주
         </Text>
         <Text
           transform="matrix(1 0 0 1 423.3799 291.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           양평
         </Text>
         <Text
           transform="matrix(1 0 0 1 402.3799 340.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           이천
         </Text>
         <Text
           transform="matrix(1 0 0 1 373.6299 384)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           안성
         </Text>
         <Text
           transform="matrix(1 0 0 1 329.8799 385.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           평택
         </Text>
         <Text
           transform="matrix(1 0 0 1 311.6299 353.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           화성
         </Text>
         <Text
           transform="matrix(1 0 0 1 341.0542 355.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           오산
         </Text>
         <Text
           transform="matrix(1 0 0 1 369.6299 347.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           용인
         </Text>
         <Text
           transform="matrix(1 0 0 1 381.1299 307.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           광주
         </Text>
         <Text
           transform="matrix(1 0 0 1 368.3042 288.3574)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           하남
         </Text>
         <Text
           transform="matrix(1 0 0 1 333.4229 335.4336)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           수원
         </Text>
         <Text
           transform="matrix(1 0 0 1 356.978 271.25)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           구리
         </Text>
         <Text
           transform="matrix(1 0 0 1 351.0542 310.2627)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           성남
         </Text>
         <Text
           transform="matrix(1 0 0 1 336.9844 305.5381)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           과천
         </Text>
         <Text
           transform="matrix(1 0 0 1 336.4175 315.2393)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           의왕
         </Text>
         <Text
           transform="matrix(1 0 0 1 322.4175 322.2393)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           군포
         </Text>
         <Text
           transform="matrix(1 0 0 1 324.9521 310.2627)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           안양
         </Text>
         <Text
           transform="matrix(1 0 0 1 313.228 300.876)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           광명
         </Text>
         <Text
           transform="matrix(1 0 0 1 302.978 290.3574)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           부천
         </Text>
         <Text
           transform="matrix(1 0 0 1 307.0283 329.8535)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           안산
         </Text>
         <Text
           transform="matrix(1 0 0 1 301.0542 312.9707)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           시흥
         </Text>
         <Text
           transform="matrix(1 0 0 1 281.8799 286.2627)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           인천
         </Text>
         <Text
           transform="matrix(1 0 0 1 330.4985 284.3105)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           서울
         </Text>
         <Text
           transform="matrix(1 0 0 1 367.0703 258.2871)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           남양주
         </Text>
         <Text
           transform="matrix(1 0 0 1 398.9624 231.208)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           가평
         </Text>
         <Text
           transform="matrix(1 0 0 1 372.8799 200)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           포천
         </Text>
         <Text
           transform="matrix(1 0 0 1 336.6299 176.75)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           연천
         </Text>
         <Text
           transform="matrix(1 0 0 1 333.3799 229)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           양주
         </Text>
         <Text
           transform="matrix(1 0 0 1 302.3799 222)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           파주
         </Text>
         <Text
           transform="matrix(1 0 0 1 305.3799 258.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           고양
         </Text>
         <Text
           transform="matrix(1 0 0 1 270.1299 255.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           김포
         </Text>
         <Text
           transform="matrix(1 0 0 1 247.3042 249.5)"
           fontFamily="GmarketSansMedium"
-          fontSize="7">
+          fontSize="7"
+          fill="black">
           강화
         </Text>
         <Text
           transform="matrix(1 0 0 1 343.8066 244.8574)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           의정부
         </Text>
         <Text
           transform="matrix(1 0 0 1 346.5923 211.3574)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           동두천
         </Text>
         <Text
           transform="matrix(1 0 0 1 371.5664 531.0488)"
           fontFamily="GmarketSansMedium"
-          fontSize="5">
+          fontSize="5"
+          fill="black">
           계룡
         </Text>
         <Text
           transform="matrix(1 0 0 1 239.8799 794.2246)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           무안
         </Text>
         <Text
           transform="matrix(1 0 0 1 249.7368 1030.1787)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill={getTextColorByBackgroundColor(
+            getMapDataById('KR-17').background,
+          )}>
           제주도
         </Text>
         <Text
           transform="matrix(1 0 0 1 565.6299 583.1367)"
           fontFamily="GmarketSansMedium"
-          fontSize="10">
+          fontSize="10"
+          fill="black">
           칠곡
         </Text>
       </G>

@@ -2,27 +2,34 @@ import {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {returnedResults} from 'reanimated-color-picker';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import {koreaMapDataState} from 'src/recoil/atom';
+import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {customStyle} from 'src/style/customStyle';
-import {KoreaRegionData} from 'src/types/koreaMap';
+import {AppData} from 'src/types/account';
+import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
+import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 
 interface ColorPickerModal {
   id: string;
   hideModal: () => void;
-  closeSheet: () => void;
+  handleClosePress: () => void;
 }
 
-const ColorPickerModal = ({id, hideModal, closeSheet}: ColorPickerModal) => {
+const ColorPickerModal = ({
+  id,
+  hideModal,
+  handleClosePress,
+}: ColorPickerModal) => {
   const {getMapDataById} = useKoreaMap();
   const regionData = getMapDataById(id);
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(regionData.background);
 
+  const appUser = useRecoilValue(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
 
   const onChangeMode = () => {
@@ -34,13 +41,23 @@ const ColorPickerModal = ({id, hideModal, closeSheet}: ColorPickerModal) => {
   };
   const onSelectColor = () => {
     hideModal();
-    closeSheet();
-    const update: KoreaRegionData = {
+    handleClosePress();
+    const updateRegion: KoreaRegionData = {
       ...regionData,
       background: hex,
       type: 'color',
     };
-    setKoreaMapData({...koreaMapData, [regionData.id]: update});
+    const upDateKorea: KoreaMapData = {
+      ...koreaMapData,
+      [regionData.id]: updateRegion,
+    };
+    setKoreaMapData(upDateKorea);
+
+    const appData: AppData = {
+      uid: appUser?.uid as string,
+      email: appUser?.email as string,
+      koreaMapData: upDateKorea,
+    };
   };
 
   return (
@@ -61,13 +78,21 @@ const ColorPickerModal = ({id, hideModal, closeSheet}: ColorPickerModal) => {
         <Text
           className="w-1/2 text-center py-1"
           style={
-            customStyle({color: regionData.background}).colorPickerPreview
+            customStyle({
+              bgColor: regionData.background,
+              color: getTextColorByBackgroundColor(regionData.background),
+            }).colorPickerPreview
           }>
           {regionData.background}
         </Text>
         <Text
           className="w-1/2 text-center py-1"
-          style={customStyle({color: hex}).colorPickerPreview}>
+          style={
+            customStyle({
+              bgColor: hex,
+              color: getTextColorByBackgroundColor(hex),
+            }).colorPickerPreview
+          }>
           {hex}
         </Text>
       </View>

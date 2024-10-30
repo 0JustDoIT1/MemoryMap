@@ -1,3 +1,5 @@
+import {KoreaMapData} from './koreaMap';
+
 export interface Account {
   email: string;
   password: string;
@@ -15,4 +17,10 @@ export interface AppUser {
   uid: string;
   email: string;
   displayName: string;
+}
+
+export interface AppData {
+  uid: string;
+  email: string;
+  koreaMapData: KoreaMapData;
 }
