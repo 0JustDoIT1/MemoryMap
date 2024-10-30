@@ -3,9 +3,9 @@ import {useCallback, useMemo, useRef, useState} from 'react';
 import {KoreaRegionList} from 'src/constants/regionList';
 
 const useMapSheet = () => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const mapSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const [bottomSheetTitle, setBottomSheetTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [tag, setTag] = useState<string[]>([]);
   const [id, setId] = useState<string>('');
 
@@ -36,16 +36,16 @@ const useMapSheet = () => {
         tagList.push(values[i]);
       }
 
-      setBottomSheetTitle(title);
+      setTitle(title);
       setTag(tagList);
       setId(result.id);
-      bottomSheetModalRef.current?.present();
+      mapSheetModalRef.current?.present();
     },
-    [bottomSheetTitle, tag],
+    [title, tag, id, snapPoints],
   );
 
   // Bottom Sheet close event
-  const handleClosePress = () => bottomSheetModalRef.current?.close();
+  const handleClosePress = () => mapSheetModalRef.current?.close();
 
   // Bottom Sheet close event when background touch
   const renderBackdrop = useCallback(
@@ -54,9 +54,9 @@ const useMapSheet = () => {
   );
 
   return {
-    bottomSheetModalRef,
+    mapSheetModalRef,
     snapPoints,
-    bottomSheetTitle,
+    title,
     tag,
     id,
     handleMapModalPress,
