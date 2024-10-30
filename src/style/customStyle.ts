@@ -84,4 +84,7 @@ export const customStyle = (props?: CustomStyle) =>
       padding: 20,
       margin: 40,
     },
+    colorPickerPreview: {
+      backgroundColor: props?.color,
+    },
   });
