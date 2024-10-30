@@ -15,9 +15,9 @@ const App = (): React.JSX.Element => {
   // const backgroundStyle = 'bg-neutral-300 dark:bg-slate-900';
 
   return (
-    <SafeAreaProvider>
-      <PaperProvider theme={PaperTheme}>
-        <RecoilRoot>
+    <RecoilRoot>
+      <SafeAreaProvider>
+        <PaperProvider theme={PaperTheme}>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
           <GestureHandlerRootView style={{flex: 1}}>
             <BottomSheetModalProvider>
@@ -25,9 +25,9 @@ const App = (): React.JSX.Element => {
             </BottomSheetModalProvider>
             <Toast config={toastConfig} />
           </GestureHandlerRootView>
-        </RecoilRoot>
-      </PaperProvider>
-    </SafeAreaProvider>
+        </PaperProvider>
+      </SafeAreaProvider>
+    </RecoilRoot>
   );
 };
 

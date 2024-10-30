@@ -12,12 +12,10 @@ import useModal from 'src/hook/useModal';
 import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
-import useKoreaMap from 'src/hook/useKoreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
-  close: () => void;
-  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
+  mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
   snapPoints: string[];
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
@@ -28,8 +26,7 @@ interface MapSheet extends Omit<MapProps, 'route'> {
 
 const MapSheet = ({
   navigation,
-  close,
-  bottomSheetModalRef,
+  mapSheetModalRef,
   snapPoints,
   handleClosePress,
   renderBackdrop,
@@ -38,16 +35,13 @@ const MapSheet = ({
   tag,
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
-  const {getMapDataById} = useKoreaMap();
-
-  const regionData = getMapDataById(id);
 
   const onImagePicker = async () => {
     await launchImageLibrary({
       mediaType: 'photo',
     }).then(res => {
       if (res.assets) {
-        close();
+        handleClosePress();
         navigation.navigate('CropImage', {
           title: title,
           image: res.assets[0].uri as string,
@@ -57,58 +51,56 @@ const MapSheet = ({
   };
 
   return (
-    <React.Fragment>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}>
-        <BottomSheetView className="flex-1 items-center">
-          <View className="flex justify-center items-center w-full py-6 px-8">
-            <View className="flex-row justify-between items-center w-full mb-2">
-              <Text className="text-xl text-black">{title}</Text>
-              <TouchableOpacity onPress={handleClosePress}>
-                <AntDesign
-                  name="close"
-                  size={32}
-                  style={customStyle().mapBottomSheetIcon}
-                />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full flex-row justify-start items-center">
-              {tag.length > 0 &&
-                tag.map(item => (
-                  <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
-                    {item}
-                  </Text>
-                ))}
-              <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
-                # 스토리 0건
-              </Text>
-            </View>
-            <View className="w-full">
-              <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
-              <BrandOutlinedButton
-                text="색칠 하기"
-                classes="mt-1"
-                onPress={showModal}
+    // <React.Fragment>
+    <BottomSheetModal
+      ref={mapSheetModalRef}
+      index={1}
+      snapPoints={snapPoints}
+      backdropComponent={renderBackdrop}>
+      <BottomSheetView className="flex-1 items-center">
+        <View className="flex justify-center items-center w-full py-6 px-8">
+          <View className="flex-row justify-between items-center w-full mb-2">
+            <Text className="text-xl text-black">{title}</Text>
+            <TouchableOpacity onPress={handleClosePress}>
+              <AntDesign
+                name="close"
+                size={32}
+                style={customStyle().mapBottomSheetIcon}
               />
-            </View>
+            </TouchableOpacity>
           </View>
-        </BottomSheetView>
-      </BottomSheetModal>
-      <CustomModal
-        visible={visible}
-        hideModal={hideModal}
-        contents={
-          <ColorPickerModal
-            data={regionData}
-            hideModal={hideModal}
-            closeSheet={close}
-          />
-        }
-      />
-    </React.Fragment>
+          <View className="w-full flex-row justify-start items-center">
+            {tag.length > 0 &&
+              tag.map(item => (
+                <Text
+                  key={item}
+                  className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
+                  {item}
+                </Text>
+              ))}
+            <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
+              # 스토리 0건
+            </Text>
+          </View>
+          <View className="w-full">
+            <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
+            <BrandOutlinedButton
+              text="색칠 하기"
+              classes="mt-1"
+              onPress={showModal}
+            />
+          </View>
+        </View>
+      </BottomSheetView>
+    </BottomSheetModal>
+    //   <CustomModal
+    //     visible={visible}
+    //     hideModal={hideModal}
+    //     contents={
+    //       <ColorPickerModal id={id} hideModal={hideModal} closeSheet={close} />
+    //     }
+    //   />
+    // </React.Fragment>
   );
 };
 

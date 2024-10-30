@@ -91,9 +91,9 @@ const MapScreen = ({navigation}: MapProps) => {
   const composed = Gesture.Simultaneous(pinch, pan);
 
   const {
-    bottomSheetModalRef,
+    mapSheetModalRef,
     snapPoints,
-    bottomSheetTitle,
+    title,
     tag,
     id,
     handleMapModalPress,
@@ -110,18 +110,17 @@ const MapScreen = ({navigation}: MapProps) => {
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
       <GestureDetector gesture={composed}>
         <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-          <KoreaMapSvg open={handleMapModalPress} />
+          <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
         </Animated.View>
       </GestureDetector>
       <MapSheet
         navigation={navigation}
-        close={handleClosePress}
-        bottomSheetModalRef={bottomSheetModalRef}
+        mapSheetModalRef={mapSheetModalRef}
         snapPoints={snapPoints}
         handleClosePress={handleClosePress}
         renderBackdrop={renderBackdrop}
         id={id}
-        title={bottomSheetTitle}
+        title={title}
         tag={tag}
       />
     </SafeAreaView>
