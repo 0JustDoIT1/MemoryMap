@@ -12,9 +12,9 @@ const CustomColorSwatch = ({value, onChange}: CustomColorSwatch) => {
   return (
     <ColorPicker value={value} onChange={onChange}>
       <Swatches />
-      <View className="bg-black mt-4 p-[1px] rounded-lg">
+      {/* <View className="bg-black mt-4 p-[1px] rounded-lg">
         <Preview style={{borderRadius: 8}} />
-      </View>
+      </View> */}
     </ColorPicker>
   );
 };

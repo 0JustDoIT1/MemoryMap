@@ -100,7 +100,13 @@ const MapSheet = ({
       <CustomModal
         visible={visible}
         hideModal={hideModal}
-        contents={<ColorPickerModal {...regionData} />}
+        contents={
+          <ColorPickerModal
+            data={regionData}
+            hideModal={hideModal}
+            closeSheet={close}
+          />
+        }
       />
     </React.Fragment>
   );
