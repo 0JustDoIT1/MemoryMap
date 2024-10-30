@@ -6,13 +6,13 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 interface CustomColorSwatch {
   value: string;
-  onComplete: ((colors: returnedResults) => void) | undefined;
+  onChange: ((colors: returnedResults) => void) | undefined;
 }
-const CustomColorSwatch = ({value, onComplete}: CustomColorSwatch) => {
+const CustomColorSwatch = ({value, onChange}: CustomColorSwatch) => {
   return (
-    <ColorPicker value={value} onChange={onComplete}>
+    <ColorPicker value={value} onChange={onChange}>
       <Swatches />
-      <View className="bg-black mt-2 p-[1px] rounded-lg">
+      <View className="bg-black mt-4 p-[1px] rounded-lg">
         <Preview style={{borderRadius: 8}} />
       </View>
     </ColorPicker>

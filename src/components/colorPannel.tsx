@@ -7,16 +7,16 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 interface CustomColorPannel {
   value: string;
-  onComplete: ((colors: returnedResults) => void) | undefined;
+  onChange: ((colors: returnedResults) => void) | undefined;
 }
-const CustomColorPannel = ({value, onComplete}: CustomColorPannel) => {
+const CustomColorPannel = ({value, onChange}: CustomColorPannel) => {
   return (
-    <ColorPicker value={value} onChange={onComplete}>
+    <ColorPicker value={value} onChange={onChange}>
       <View className="flex-row justify-between">
         <Panel1 style={{width: '85%'}} thumbSize={15} />
         <HueSlider vertical thumbShape="pill" thumbColor="#000000" />
       </View>
-      <View className="bg-black mt-2 p-[1px] rounded-lg">
+      <View className="bg-black mt-4 p-[1px] rounded-lg">
         <Preview style={{borderRadius: 8}} />
       </View>
     </ColorPicker>

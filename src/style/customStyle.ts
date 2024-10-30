@@ -74,9 +74,14 @@ export const customStyle = (props?: CustomStyle) =>
     mapBottomSheetIcon: {
       color: '#000000',
     },
+    modalStyle: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     modalContentStyle: {
       backgroundColor: '#ffffff',
       padding: 20,
-      marginHorizontal: 40,
+      margin: 40,
     },
   });
