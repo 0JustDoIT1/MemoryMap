@@ -80,7 +80,7 @@ const SocialLoginButton = ({
       buttonColor={buttonColor}
       textColor={textColor}
       style={
-        customStyle({disabled: isButtonDisabled, color: buttonColor})
+        customStyle({disabled: isButtonDisabled, bgColor: buttonColor})
           .socialLoginButton
       }
       onPress={onPress}

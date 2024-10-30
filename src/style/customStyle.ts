@@ -4,6 +4,7 @@
 import {StyleSheet} from 'react-native';
 
 interface CustomStyle {
+  bgColor?: string;
   color?: string;
   disabled?: boolean;
 }
@@ -31,10 +32,10 @@ export const customStyle = (props?: CustomStyle) =>
       color: props?.color,
     },
     socialLoginButton: {
-      backgroundColor: props?.disabled ? props?.color : props?.color,
+      backgroundColor: props?.disabled ? props?.bgColor : props?.bgColor,
     },
     socialLoginLabel: {
-      color: props?.disabled ? props?.color : props?.color,
+      color: props?.disabled ? props?.bgColor : props?.color,
     },
     successToast: {
       backgroundColor: colors.success,
@@ -85,6 +86,7 @@ export const customStyle = (props?: CustomStyle) =>
       margin: 40,
     },
     colorPickerPreview: {
-      backgroundColor: props?.color,
+      backgroundColor: props?.bgColor,
+      color: props?.color,
     },
   });
