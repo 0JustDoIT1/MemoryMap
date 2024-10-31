@@ -10,7 +10,9 @@ import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {customStyle} from 'src/style/customStyle';
 import {AppData} from 'src/types/account';
 import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
+import {_set, _update} from 'src/utils/firebase';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
+import {showBottomToast} from 'src/utils/showToast';
 
 interface ColorPickerModal {
   id: string;
@@ -39,9 +41,8 @@ const ColorPickerModal = ({
   const onColorSelect = (color: returnedResults) => {
     setHex(color.hex);
   };
-  const onSelectColor = () => {
-    hideModal();
-    handleClosePress();
+
+  const onSettingColor = async () => {
     const updateRegion: KoreaRegionData = {
       ...regionData,
       background: hex,
@@ -58,6 +59,14 @@ const ColorPickerModal = ({
       email: appUser?.email as string,
       koreaMapData: upDateKorea,
     };
+
+    await _update(appData).then(() => onSettingColorSuccess());
+  };
+
+  const onSettingColorSuccess = () => {
+    showBottomToast('success', '색칠 성공!');
+    hideModal();
+    handleClosePress();
   };
 
   return (
@@ -103,8 +112,8 @@ const ColorPickerModal = ({
             {mode ? '기본 색상' : '더 많은 색상'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} onPress={onSelectColor}>
-          <Text className="text-brandMain">선택</Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={onSettingColor}>
+          <Text className="text-brandMain">색칠하기</Text>
         </TouchableOpacity>
       </View>
     </View>

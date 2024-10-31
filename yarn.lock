@@ -3061,6 +3061,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-firebase/database@npm:^21.2.0":
+  version: 21.2.0
+  resolution: "@react-native-firebase/database@npm:21.2.0"
+  peerDependencies:
+    "@react-native-firebase/app": 21.2.0
+  checksum: b2e424c0648a18b84edcd7ce5283ca6852d8b2bd0ef23c74517dbc28cd3bf33874a80d2a965eb73fed4081f3d5e13a1b851cab62284f0a414e9e7e4795920f56
+  languageName: node
+  linkType: hard
+
 "@react-native-google-signin/google-signin@npm:^13.1.0":
   version: 13.1.0
   resolution: "@react-native-google-signin/google-signin@npm:13.1.0"
@@ -4025,6 +4034,7 @@ __metadata:
     "@gorhom/bottom-sheet": ^5.0.5
     "@react-native-firebase/app": ^21.0.0
     "@react-native-firebase/auth": ^21.0.0
+    "@react-native-firebase/database": ^21.2.0
     "@react-native-google-signin/google-signin": ^13.1.0
     "@react-native-seoul/kakao-login": ^5.4.1
     "@react-native/babel-preset": 0.75.3

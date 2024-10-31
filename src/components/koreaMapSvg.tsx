@@ -21,7 +21,6 @@ interface KoreaMapSvg {
 
 const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
   const [background, setBackground] = useState<string>('#ffffff');
-  const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
   const {getMapDataById} = useKoreaMap();
 
   return (
