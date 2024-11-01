@@ -11,8 +11,8 @@ const CustomModal = ({visible, hideModal, contents}: CustomModal) => {
       <Modal
         visible={visible}
         onDismiss={hideModal}
-        style={customStyle().modalStyle}
-        contentContainerStyle={customStyle().modalContentStyle}>
+        style={customStyle().modal}
+        contentContainerStyle={customStyle().modalContent}>
         {contents}
       </Modal>
     </Portal>

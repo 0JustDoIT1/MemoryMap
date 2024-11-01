@@ -9,7 +9,13 @@ export type StackParamList = {
   Story: undefined;
   Setting: undefined;
   Sub: undefined;
-  CropImage: {title: string; image: string};
+  CropImage: {
+    id: string;
+    title: string;
+    image: string;
+    width: number;
+    height: number;
+  };
 };
 
 export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;

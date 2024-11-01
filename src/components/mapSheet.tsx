@@ -47,10 +47,14 @@ const MapSheet = ({
       mediaType: 'photo',
     }).then(res => {
       if (res.assets) {
+        console.log('###', res.assets[0]);
         handleClosePress();
         navigation.navigate('CropImage', {
+          id: id,
           title: title,
           image: res.assets[0].uri as string,
+          width: res.assets[0].width as number,
+          height: res.assets[0].height as number,
         });
       }
     });
