@@ -9,9 +9,13 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {MapProps, StackParamList} from 'src/types/stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
+import useKoreaMap from 'src/hook/useKoreaMap';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {showBottomToast} from 'src/utils/showToast';
+import {KoreaRegionData} from 'src/types/koreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -35,6 +39,8 @@ const MapSheet = ({
   tag,
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
+  const {getMapDataById, deleteMapDataById} = useKoreaMap();
+  const regionData = getMapDataById(id);
 
   const onImagePicker = async () => {
     await launchImageLibrary({
@@ -50,6 +56,16 @@ const MapSheet = ({
     });
   };
 
+  const onDeleteBackground = async () => {
+    await deleteMapDataById(id).then(() => onDeleteBackgroundSuccess());
+  };
+
+  const onDeleteBackgroundSuccess = () => {
+    showBottomToast('info', '색칠 제거!');
+    hideModal();
+    handleClosePress();
+  };
+
   return (
     <React.Fragment>
       <BottomSheetModal
@@ -60,7 +76,27 @@ const MapSheet = ({
         <BottomSheetView className="flex-1 items-center">
           <View className="flex justify-center items-center w-full py-6 px-8">
             <View className="flex-row justify-between items-center w-full mb-2">
-              <Text className="text-xl text-black">{title}</Text>
+              <View className="flex-row justify-start items-center">
+                <Text className="text-xl text-black">{title}</Text>
+                {regionData && regionData.type === 'photo' && <View></View>}
+                {regionData && regionData.type === 'color' && (
+                  <View
+                    className="w-4 h-4 mx-2 rounded-full"
+                    style={
+                      customStyle({bgColor: regionData?.background})
+                        .mapBottomSheetCircle
+                    }></View>
+                )}
+                {regionData && regionData.type !== 'init' && (
+                  <TouchableOpacity onPress={onDeleteBackground}>
+                    <FontAwesome6
+                      name="eraser"
+                      size={20}
+                      style={customStyle().mapBottomSheetIcon}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
               <TouchableOpacity onPress={handleClosePress}>
                 <AntDesign
                   name="close"
