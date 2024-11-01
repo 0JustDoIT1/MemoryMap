@@ -2,14 +2,10 @@ import {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {returnedResults} from 'reanimated-color-picker';
-import {useRecoilState, useRecoilValue} from 'recoil';
 import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {customStyle} from 'src/style/customStyle';
-import {AppData} from 'src/types/account';
-import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
 import {_set, _update} from 'src/utils/firebase';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 import {showBottomToast} from 'src/utils/showToast';
@@ -25,14 +21,11 @@ const ColorPickerModal = ({
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {getMapDataById} = useKoreaMap();
+  const {getMapDataById, updateMapColorById} = useKoreaMap();
   const regionData = getMapDataById(id);
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(regionData.background);
-
-  const appUser = useRecoilValue(appUserState);
-  const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
 
   const onChangeMode = () => {
     setMode(!mode);
@@ -43,24 +36,9 @@ const ColorPickerModal = ({
   };
 
   const onSettingColor = async () => {
-    const updateRegion: KoreaRegionData = {
-      ...regionData,
-      background: hex,
-      type: 'color',
-    };
-    const upDateKorea: KoreaMapData = {
-      ...koreaMapData,
-      [regionData.id]: updateRegion,
-    };
-    setKoreaMapData(upDateKorea);
-
-    const appData: AppData = {
-      uid: appUser?.uid as string,
-      email: appUser?.email as string,
-      koreaMapData: upDateKorea,
-    };
-
-    await _update(appData).then(() => onSettingColorSuccess());
+    await updateMapColorById({id, color: hex}).then(() =>
+      onSettingColorSuccess(),
+    );
   };
 
   const onSettingColorSuccess = () => {
