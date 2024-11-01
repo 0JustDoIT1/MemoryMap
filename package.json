@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.0.5",
+    "@miblanchard/react-native-slider": "^2.6.0",
     "@react-native-firebase/app": "^21.0.0",
     "@react-native-firebase/auth": "^21.0.0",
     "@react-native-firebase/database": "^21.2.0",
@@ -35,6 +36,7 @@
     "react-native-svg": "^15.7.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
+    "react-native-view-shot": "^3.8.0",
     "reanimated-color-picker": "^3.0.4",
     "recoil": "^0.7.7"
   },

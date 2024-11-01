@@ -78,12 +78,12 @@ export const customStyle = (props?: CustomStyle) =>
     mapBottomSheetCircle: {
       backgroundColor: props?.bgColor,
     },
-    modalStyle: {
+    modal: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    modalContentStyle: {
+    modalContent: {
       backgroundColor: '#ffffff',
       padding: 20,
       margin: 40,
@@ -91,5 +91,19 @@ export const customStyle = (props?: CustomStyle) =>
     colorPickerPreview: {
       backgroundColor: props?.bgColor,
       color: props?.color,
+    },
+    viewShot: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    sliderContainer: {
+      width: '100%',
+    },
+    sliderTrack: {height: 10, borderRadius: 50},
+    sliderMinimumTrack: {
+      backgroundColor: props?.bgColor ? props.bgColor : colors.brandMain,
     },
   });

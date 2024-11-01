@@ -2725,6 +2725,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@miblanchard/react-native-slider@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "@miblanchard/react-native-slider@npm:2.6.0"
+  peerDependencies:
+    react: ">=16.8"
+    react-native: ">=0.59"
+  checksum: cdaaca314e94133e87a623cfe59dac950aeb6ba09946fb89f03d4c2a0cd131db80b368c320c34e5c126a10041026a83e00df3182d2346857e7b51aed96632748
+  languageName: node
+  linkType: hard
+
 "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1":
   version: 5.1.1-v1
   resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
@@ -4032,6 +4042,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
     "@gorhom/bottom-sheet": ^5.0.5
+    "@miblanchard/react-native-slider": ^2.6.0
     "@react-native-firebase/app": ^21.0.0
     "@react-native-firebase/auth": ^21.0.0
     "@react-native-firebase/database": ^21.2.0
@@ -4069,6 +4080,7 @@ __metadata:
     react-native-svg-transformer: ^1.5.0
     react-native-toast-message: ^2.2.1
     react-native-vector-icons: ^10.2.0
+    react-native-view-shot: ^3.8.0
     react-test-renderer: 18.3.1
     reanimated-color-picker: ^3.0.4
     recoil: ^0.7.7
@@ -4616,6 +4628,13 @@ __metadata:
   dependencies:
     streamx: ^2.20.0
   checksum: d4f7a303f8b0ffcbfbd52d581ff0e9687590217d6c37cc3224b8da91050ddc4d4037ae062e0fb86b883d73fb2bd81c1c33b0a006d4811fc031fdb9804141ae55
+  languageName: node
+  linkType: hard
+
+"base64-arraybuffer@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "base64-arraybuffer@npm:1.0.2"
+  checksum: 15e6400d2d028bf18be4ed97702b11418f8f8779fb8c743251c863b726638d52f69571d4cc1843224da7838abef0949c670bde46936663c45ad078e89fee5c62
   languageName: node
   linkType: hard
 
@@ -5316,6 +5335,15 @@ __metadata:
   version: 1.0.0
   resolution: "css-color-keywords@npm:1.0.0"
   checksum: 8f125e3ad477bd03c77b533044bd9e8a6f7c0da52d49bbc0bbe38327b3829d6ba04d368ca49dd9ff3b667d2fc8f1698d891c198bbf8feade1a5501bf5a296408
+  languageName: node
+  linkType: hard
+
+"css-line-break@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "css-line-break@npm:2.1.0"
+  dependencies:
+    utrie: ^1.0.2
+  checksum: 37b1fe632b03be7a287cd394cef8b5285666343443125c510df9cfb6a4734a2c71e154ec8f7bbff72d7c339e1e5872989b1c52d86162aed27d6cc114725bb4d0
   languageName: node
   linkType: hard
 
@@ -7052,6 +7080,16 @@ __metadata:
   version: 2.0.2
   resolution: "html-escaper@npm:2.0.2"
   checksum: d2df2da3ad40ca9ee3a39c5cc6475ef67c8f83c234475f24d8e9ce0dc80a2c82df8e1d6fa78ddd1e9022a586ea1bd247a615e80a5cd9273d90111ddda7d9e974
+  languageName: node
+  linkType: hard
+
+"html2canvas@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "html2canvas@npm:1.4.1"
+  dependencies:
+    css-line-break: ^2.1.0
+    text-segmentation: ^1.0.3
+  checksum: c134324af57f3262eecf982e436a4843fded3c6cf61954440ffd682527e4dd350e0c2fafd217c0b6f9a455fe345d0c67b4505689796ab160d4ca7c91c3766739
   languageName: node
   linkType: hard
 
@@ -10377,6 +10415,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-view-shot@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "react-native-view-shot@npm:3.8.0"
+  dependencies:
+    html2canvas: ^1.4.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 9e3044da325b44c90238d1eac54ab0a0a9bdab9b7b93f05409e402890c982ee854ae93ff3b6f0d7befe8f2c53df7cf0c708782c007c4c3c4a007a4844b658fde
+  languageName: node
+  linkType: hard
+
 "react-native@npm:0.75.3":
   version: 0.75.3
   resolution: "react-native@npm:0.75.3"
@@ -11768,6 +11818,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"text-segmentation@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "text-segmentation@npm:1.0.3"
+  dependencies:
+    utrie: ^1.0.2
+  checksum: 2e24632d59567c55ab49ac324815e2f7a8043e63e26b109636322ac3e30692cee8679a448fd5d0f0598a345f407afd0e34ba612e22524cf576d382d84058c013
+  languageName: node
+  linkType: hard
+
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -12177,6 +12236,15 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: c81095493225ecfc28add49c106ca4f09cdf56bc66731aa8dabc2edbbccb1e1bfe2de6a115e5c6a380d3ea166d1636410b62ef216bb07b3feb1cfde1d95d5080
+  languageName: node
+  linkType: hard
+
+"utrie@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "utrie@npm:1.0.2"
+  dependencies:
+    base64-arraybuffer: ^1.0.2
+  checksum: c96fbb7d4d8855a154327da0b18e39b7511cc70a7e4bcc3658e24f424bb884312d72b5ba777500b8858e34d365dc6b1a921dc5ca2f0d341182519c6b78e280a5
   languageName: node
   linkType: hard
 
