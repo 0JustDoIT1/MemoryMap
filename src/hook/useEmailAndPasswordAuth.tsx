@@ -1,5 +1,8 @@
 import auth from '@react-native-firebase/auth';
 import {useCallback, useState} from 'react';
+import {useSetRecoilState} from 'recoil';
+import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppUser} from 'src/types/account';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -7,6 +10,9 @@ const useEmailAndPasswordAuth = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
+
+  const setAppUser = useSetRecoilState(appUserState);
+  const setKoreaMapData = useSetRecoilState(koreaMapDataState);
 
   // Email Sign Up
   const onSignUpEmailAndPassword = useCallback(async () => {
@@ -64,6 +70,13 @@ const useEmailAndPasswordAuth = () => {
       .then(res => res);
   }, [email]);
 
+  // Sign Out
+  const onSignOut = async () => {
+    setAppUser(null);
+    setKoreaMapData(koreaMapDataInit);
+    return await auth().signOut();
+  };
+
   return {
     email,
     setEmail,
@@ -75,6 +88,7 @@ const useEmailAndPasswordAuth = () => {
     onSignInEmailAndPassword,
     onUpdateProfile,
     onSendPasswordResetEmail,
+    onSignOut,
   };
 };
 

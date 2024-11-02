@@ -8,18 +8,29 @@ import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
 import ViewShot from 'react-native-view-shot';
 import {customStyle} from 'src/style/customStyle';
+import useKoreaMap from 'src/hook/useKoreaMap';
+import {showBottomToast} from 'src/utils/showToast';
 
 const CropImage = ({navigation, route}: CropImageProps) => {
   const captureRef = useRef<ViewShot>(null);
-  const [capture, setCapture] = useState<string>('');
 
-  const onCapture = () => {
-    captureRef?.current?.capture?.().then(uri => {
-      setCapture(uri);
-    });
+  const {updateMapPhotoById} = useKoreaMap();
+
+  const onCapture = async () => {
+    return await captureRef?.current?.capture?.().then(uri => uri);
   };
 
-  console.log('###', capture);
+  const onUploadPhoto = async () => {
+    const capture = (await onCapture()) as string;
+    await updateMapPhotoById({id: route.params.id, uri: capture}).then(() =>
+      onUploadPhotoSuccess(),
+    );
+  };
+
+  const onUploadPhotoSuccess = () => {
+    showBottomToast('success', '색칠 성공!');
+    navigation.navigate('Map');
+  };
 
   const [x, setX] = useState<number[]>([0]);
   const [y, setY] = useState<number[]>([0]);
@@ -43,7 +54,9 @@ const CropImage = ({navigation, route}: CropImageProps) => {
           options={{
             fileName: route.params.id + '_',
             format: 'png',
-            quality: 1,
+            quality: 0.8,
+            width: 100,
+            height: 100,
           }}
           style={customStyle().viewShot}>
           <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 500 500">
@@ -115,7 +128,7 @@ const CropImage = ({navigation, route}: CropImageProps) => {
           <BrandContainedButton
             classes="w-full"
             text="확인"
-            onPress={onCapture}
+            onPress={onUploadPhoto}
           />
         </View>
       </View>

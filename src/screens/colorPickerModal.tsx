@@ -6,7 +6,6 @@ import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
-import {_set, _update} from 'src/utils/firebase';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 import {showBottomToast} from 'src/utils/showToast';
 

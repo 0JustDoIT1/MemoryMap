@@ -2873,6 +2873,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@react-native-async-storage/async-storage@npm:2.0.0"
+  dependencies:
+    merge-options: ^3.0.4
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.65 <1.0
+  checksum: 7007a411f13988594a3f9b5ebb29f1554ab65ff2bd90814fa8b125fa68b69c431bdfcd38769ae2dcb6505aec2bad9296f0a0fa1ac8f123007eda49c826f2d138
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:14.1.0":
   version: 14.1.0
   resolution: "@react-native-community/cli-clean@npm:14.1.0"
@@ -3077,6 +3088,15 @@ __metadata:
   peerDependencies:
     "@react-native-firebase/app": 21.3.0
   checksum: 9ab92dff66b83ef502110cd2c32a6b4ac32af48ea0405e6a5b3aa9822c9b2e0a3ef9aff459aeeef4b4daf64acb1e3e109c3c5dc105366c345c21bdf856f20ecb
+  languageName: node
+  linkType: hard
+
+"@react-native-firebase/storage@npm:^21.3.0":
+  version: 21.3.0
+  resolution: "@react-native-firebase/storage@npm:21.3.0"
+  peerDependencies:
+    "@react-native-firebase/app": 21.3.0
+  checksum: 158ca8183d39721801b1b055dfb4ce4a9b2a84818e3bd4b22c7f82cf7e77650b24dbf89fece90758416861ef8c84bee77dbd03a94da0bd07bcf91ed580c8acb5
   languageName: node
   linkType: hard
 
@@ -4043,9 +4063,11 @@ __metadata:
     "@babel/runtime": ^7.20.0
     "@gorhom/bottom-sheet": ^5.0.5
     "@miblanchard/react-native-slider": ^2.6.0
+    "@react-native-async-storage/async-storage": ^2.0.0
     "@react-native-firebase/app": ^21.0.0
     "@react-native-firebase/auth": ^21.0.0
     "@react-native-firebase/database": ^21.2.0
+    "@react-native-firebase/storage": ^21.3.0
     "@react-native-google-signin/google-signin": ^13.1.0
     "@react-native-seoul/kakao-login": ^5.4.1
     "@react-native/babel-preset": 0.75.3
@@ -7512,6 +7534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-plain-obj@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-plain-obj@npm:2.1.0"
+  checksum: cec9100678b0a9fe0248a81743041ed990c2d4c99f893d935545cfbc42876cbe86d207f3b895700c690ad2fa520e568c44afc1605044b535a7820c1d40e38daa
+  languageName: node
+  linkType: hard
+
 "is-plain-object@npm:^2.0.4":
   version: 2.0.4
   resolution: "is-plain-object@npm:2.0.4"
@@ -8676,6 +8705,15 @@ __metadata:
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: a3cba7b824ebcf24cdfcd234aa7f86f3ad6394b8d9be4c96ff756dafb8b51c7f71320785fbc2304f1af48a0467cbbd2a409efc9333025700ed523f254cb52e3d
+  languageName: node
+  linkType: hard
+
+"merge-options@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "merge-options@npm:3.0.4"
+  dependencies:
+    is-plain-obj: ^2.1.0
+  checksum: d86ddb3dd6e85d558dbf25dc944f3527b6bacb944db3fdda6e84a3f59c4e4b85231095f58b835758b9a57708342dee0f8de0dffa352974a48221487fe9f4584f
   languageName: node
   linkType: hard
 
