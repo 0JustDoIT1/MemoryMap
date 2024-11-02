@@ -1,6 +1,6 @@
 import {KoreaMapData} from 'src/types/koreaMap';
 
-export const KoreaMapDataInit: KoreaMapData = {
+export const koreaMapDataInit: KoreaMapData = {
   'KR-1': {
     id: 'KR-1',
     title: '서울',

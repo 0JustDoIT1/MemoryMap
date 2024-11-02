@@ -33,12 +33,7 @@ const useGoogleAuth = () => {
     }
   };
 
-  // Google Sign Out
-  const onSignOutGoogle = async () => {
-    return await auth().signOut();
-  };
-
-  return {onSignInGoogle, onSignOutGoogle};
+  return {onSignInGoogle};
 };
 
 export default useGoogleAuth;

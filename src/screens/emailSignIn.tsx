@@ -2,11 +2,10 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
-import {appUserState} from 'src/recoil/atom';
+import useKoreaMap from 'src/hook/useKoreaMap';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Account, AppUser} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
@@ -32,7 +31,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     },
   });
 
-  const setAppUser = useSetRecoilState(appUserState);
+  const {getDataAndSetRecoil} = useKoreaMap();
   const {setEmail, setPassword, onSignInEmailAndPassword} =
     useEmailAndPasswordAuth();
 
@@ -45,15 +44,15 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
       .catch(error => onSignInError(error));
   };
 
-  const onSignInSuccess = (result: AppUser) => {
-    setAppUser({
+  const onSignInSuccess = async (result: AppUser) => {
+    const appUserInit = {
       uid: result.uid,
       email: result.email,
       displayName: result.displayName,
-    });
+    };
+    await getDataAndSetRecoil(appUserInit);
     close();
     navigation.replace('Main');
-    return showBottomToast('success', `반갑습니다. ${result.displayName}`);
   };
 
   const onSignInError = (error: any) => {

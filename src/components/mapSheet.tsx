@@ -9,13 +9,12 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {MapProps, StackParamList} from 'src/types/stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {showBottomToast} from 'src/utils/showToast';
-import {KoreaRegionData} from 'src/types/koreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;

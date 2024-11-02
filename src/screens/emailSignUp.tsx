@@ -10,10 +10,9 @@ import {AppUser, SignUp} from 'src/types/account';
 import Feather from 'react-native-vector-icons/Feather';
 import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
-import {useSetRecoilState} from 'recoil';
-import {appUserState} from 'src/recoil/atom';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
+import useKoreaMap from 'src/hook/useKoreaMap';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
@@ -37,9 +36,10 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     },
   });
 
-  const setAppUser = useSetRecoilState(appUserState);
   const {setEmail, setPassword, setDisplayName, onSignUpEmailAndPassword} =
     useEmailAndPasswordAuth();
+  const {setDataAndSetRecoil} = useKoreaMap();
+
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
   const [passwordCheckVisible, setPasswordCheckVisible] =
     useState<boolean>(true);
@@ -53,15 +53,15 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
       .catch(error => onSignUpError(error));
   };
 
-  const onSignUpSuccess = (result: AppUser) => {
-    setAppUser({
+  const onSignUpSuccess = async (result: AppUser) => {
+    const appUserinit = {
       uid: result.uid,
       email: result.email,
       displayName: result.displayName,
-    });
+    };
+    await setDataAndSetRecoil(appUserinit);
     close();
     navigation.replace('Main');
-    return showBottomToast('success', `반갑습니다. ${result.displayName}`);
   };
 
   const onSignUpError = (error: any) => {

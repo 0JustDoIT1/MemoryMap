@@ -12,17 +12,18 @@ import EmailSignUp from './emailSignUp';
 import ResetPassword from './resetPassword';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import {useSetRecoilState} from 'recoil';
-import {appUserState, isButtonDisabledState} from 'src/recoil/atom';
+import {isButtonDisabledState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
-import {statusCodes, User} from '@react-native-google-signin/google-signin';
+import {statusCodes} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
+import useKoreaMap from 'src/hook/useKoreaMap';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const theme = useAppTheme();
 
   const {onSignInGoogle} = useGoogleAuth();
+  const {getDataAndSetRecoil} = useKoreaMap();
 
-  const setAppUser = useSetRecoilState(appUserState);
   const setIsButtonDisabled = useSetRecoilState(isButtonDisabledState);
 
   const onSignInGoogleAuth = async () => {
@@ -32,18 +33,18 @@ const SignInScreen = ({navigation}: SignInProps) => {
       .catch(error => onSignInGoogleAuthError(error));
   };
 
-  const onSignInGoogleAuthSuccess = (result: AppUser | undefined) => {
+  const onSignInGoogleAuthSuccess = async (result: AppUser | undefined) => {
     if (result) {
       const name = result.displayName
         ? result.displayName
         : result.email.split('@')[0];
-      setAppUser({
+      const appUserInit = {
         uid: result.uid,
         email: result.email,
         displayName: name,
-      });
+      };
+      await getDataAndSetRecoil(appUserInit);
       navigation.replace('Main');
-      showBottomToast('success', `반갑습니다. ${name}님!`);
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(false);

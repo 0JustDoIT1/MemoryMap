@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Defs,
   G,
@@ -9,11 +9,11 @@ import {
   Svg,
   Text,
 } from 'react-native-svg';
-import Test from 'assets/images/test.png';
 import {useRecoilState} from 'recoil';
 import {koreaMapDataState} from 'src/recoil/atom';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
+import {_download} from 'src/utils/storage';
 
 interface KoreaMapSvg {
   handleMapModalPress: (id: string) => void;
@@ -26,8 +26,12 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
   return (
     <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
       <Defs>
-        <Pattern id="image" patternUnits="userSpaceOnUse">
-          <Image width="960" height="1110" href={Test} />
+        <Pattern id="합천군_1_" patternUnits="userSpaceOnUse">
+          <Image
+            width="960"
+            height="1110"
+            href={getMapDataById('KR-13-18').cacheFile}
+          />
         </Pattern>
       </Defs>
       <G id="제주특별자치도_1_">
@@ -53,7 +57,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           onPress={() => {
             handleMapModalPress('KR-13-18');
           }}
-          fill={getMapDataById('KR-13-18').background}
+          fill="url(#합천군_1_)"
           stroke="#000000"
           strokeWidth="0.8"
           points="514.786,617.729 526.63,628.184 
@@ -2384,9 +2388,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           transform="matrix(1 0 0 1 514.1299 674.75)"
           fontFamily="GmarketSansMedium"
           fontSize="10"
-          fill={getTextColorByBackgroundColor(
-            getMapDataById('KR-13-18').background,
-          )}>
+          fill="black">
           합천
         </Text>
         <Text
@@ -3170,9 +3172,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           transform="matrix(1 0 0 1 249.7368 1030.1787)"
           fontFamily="GmarketSansMedium"
           fontSize="10"
-          fill={getTextColorByBackgroundColor(
-            getMapDataById('KR-17').background,
-          )}>
+          fill="black">
           제주도
         </Text>
         <Text
