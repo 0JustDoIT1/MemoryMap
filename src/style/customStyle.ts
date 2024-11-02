@@ -31,9 +31,6 @@ export const customStyle = (props?: CustomStyle) =>
     helperText: {
       color: props?.color,
     },
-    socialLoginButton: {
-      backgroundColor: props?.disabled ? props?.bgColor : props?.bgColor,
-    },
     socialLoginLabel: {
       color: props?.disabled ? props?.bgColor : props?.color,
     },
