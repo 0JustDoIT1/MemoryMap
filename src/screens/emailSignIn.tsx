@@ -56,14 +56,14 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
       email: result.email,
       displayName: result.displayName,
     };
+    setIsLoading(false);
     await getDataAndSetRecoil(appUserInit);
     close();
     navigation.replace('Main');
-    setIsLoading(true);
   };
 
   const onSignInError = (error: any) => {
-    setIsLoading(true);
+    setIsLoading(false);
     return showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
   };
 

@@ -65,10 +65,10 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
       email: result.email,
       displayName: result.displayName,
     };
+    setIsLoading(false);
     await setDataAndSetRecoil(appUserinit);
     close();
     navigation.replace('Main');
-    setIsLoading(false);
   };
 
   const onSignUpError = (error: any) => {
