@@ -1,10 +1,12 @@
 import {Controller, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
+import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import {isLoadingState} from 'src/recoil/atom';
 import {useAppTheme} from 'src/style/paperTheme';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -15,6 +17,7 @@ interface ResetPassword {
 const ResetPassword = ({close}: ResetPassword) => {
   const theme = useAppTheme();
 
+  const setIsLoading = useSetRecoilState(isLoadingState);
   const {setEmail, onSendPasswordResetEmail} = useEmailAndPasswordAuth();
 
   const {
@@ -28,6 +31,7 @@ const ResetPassword = ({close}: ResetPassword) => {
   });
 
   const onSendResetPassword = async (data: {email: string}) => {
+    setIsLoading(true);
     await onSendPasswordResetEmail()
       .then(res => onSendResetPasswordSuccess())
       .catch(error => onSendResetPasswordError(error));
@@ -36,14 +40,17 @@ const ResetPassword = ({close}: ResetPassword) => {
   const onSendResetPasswordSuccess = () => {
     close();
     showBottomToast('success', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
+    setIsLoading(false);
   };
 
   const onSendResetPasswordError = (error: any) => {
-    if (error.code === 'auth/too-many-requests')
+    setIsLoading(false);
+    if (error.code === 'auth/too-many-requests') {
       showBottomToast(
         'error',
         '요청이 너무 빈번합니다. 잠시 후 다시 시도해 주세요.',
       );
+    }
   };
 
   return (

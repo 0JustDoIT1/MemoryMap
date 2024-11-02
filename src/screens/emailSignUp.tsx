@@ -13,6 +13,8 @@ import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import {useSetRecoilState} from 'recoil';
+import {isLoadingState} from 'src/recoil/atom';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
@@ -36,6 +38,7 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     },
   });
 
+  const setIsLoading = useSetRecoilState(isLoadingState);
   const {setEmail, setPassword, setDisplayName, onSignUpEmailAndPassword} =
     useEmailAndPasswordAuth();
   const {setDataAndSetRecoil} = useKoreaMap();
@@ -45,8 +48,11 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     useState<boolean>(true);
 
   const onSignUpAccount = async (data: SignUp) => {
-    if (data.password !== data.passwordCheck)
+    setIsLoading(true);
+    if (data.password !== data.passwordCheck) {
+      setIsLoading(false);
       return setError('passwordCheck', {type: 'validate'});
+    }
 
     return await onSignUpEmailAndPassword()
       .then(res => onSignUpSuccess(res))
@@ -62,9 +68,11 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     await setDataAndSetRecoil(appUserinit);
     close();
     navigation.replace('Main');
+    setIsLoading(false);
   };
 
   const onSignUpError = (error: any) => {
+    setIsLoading(false);
     if (error.code === 'auth/email-already-in-use') {
       return showBottomToast('error', '이미 사용 중인 이메일입니다.');
     } else if (error.code === 'auth/invalid-email') {

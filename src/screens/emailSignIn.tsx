@@ -2,10 +2,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
+import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import {isLoadingState} from 'src/recoil/atom';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Account, AppUser} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
@@ -31,13 +33,17 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     },
   });
 
+  const setIsLoading = useSetRecoilState(isLoadingState);
   const {getDataAndSetRecoil} = useKoreaMap();
   const {setEmail, setPassword, onSignInEmailAndPassword} =
     useEmailAndPasswordAuth();
 
   const onSignInAccount = async (data: Account) => {
-    if (!data.email || !data.password)
+    setIsLoading(true);
+    if (!data.email || !data.password) {
+      setIsLoading(false);
       return setError('password', {type: 'custom'});
+    }
 
     return await onSignInEmailAndPassword()
       .then(res => onSignInSuccess(res))
@@ -53,9 +59,11 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     await getDataAndSetRecoil(appUserInit);
     close();
     navigation.replace('Main');
+    setIsLoading(true);
   };
 
   const onSignInError = (error: any) => {
+    setIsLoading(true);
     return showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
   };
 
