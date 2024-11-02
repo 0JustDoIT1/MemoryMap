@@ -1,4 +1,4 @@
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
@@ -33,12 +33,13 @@ const useKoreaMap = () => {
     const storageData = await getData(user.uid);
     if (storageData) {
       const appData: AppData = JSON.parse(storageData);
+      setAppUser(user);
       setKoreaMapData(appData.koreaMapData);
     } else {
       await _read(user.uid).then(async snapshot => {
         if (snapshot.val()) {
-          setKoreaMapData(snapshot.val()['koreaMapData']);
-          await setData(user.uid, JSON.stringify(snapshot.val()));
+          await _setStorageAndRecoil(snapshot.val());
+          setAppUser(user);
         } else {
           // 구글 로그인으로 첫 로그인인 경우
           const appDataInit: AppData = {
@@ -46,9 +47,10 @@ const useKoreaMap = () => {
             uid: user.uid,
             koreaMapData: koreaMapDataInit,
           };
-          await _update(appDataInit).then(
-            async () => await _setStorageAndRecoil(appDataInit),
-          );
+          await _update(appDataInit).then(async () => {
+            await _setStorageAndRecoil(appDataInit);
+            setAppUser(user);
+          });
         }
       });
     }
@@ -86,7 +88,7 @@ const useKoreaMap = () => {
     return result;
   };
 
-  // 지도에서 배경(색상) 업데이트 -> Firebase & Recoil
+  // 지도에서 배경(색상) 업데이트 -> Firebase & AsyncStorage & Recoil
   const updateMapColorById = async ({id, color}: UpdateMapColorById) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
@@ -110,7 +112,7 @@ const useKoreaMap = () => {
     );
   };
 
-  // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
+  // 지도에서 배경(색상or이미지) 제거 -> Firebase & AsyncStorage & Recoil
   const deleteMapDataById = async (id: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
@@ -151,6 +153,7 @@ const useKoreaMap = () => {
     return updateData;
   };
 
+  // 지도에서 배경(이미지) 업데이트 -> Firebase & AsyncStorage & Recoil
   const updateMapPhotoById = async ({id, uri}: UpdateMapPhotoById) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),

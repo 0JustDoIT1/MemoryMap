@@ -43,9 +43,9 @@ const SignInScreen = ({navigation}: SignInProps) => {
         email: result.email,
         displayName: name,
       };
+      setIsLoading(false);
       await getDataAndSetRecoil(appUserInit);
       navigation.replace('Main');
-      setIsLoading(false);
     } else {
       setIsLoading(false);
     }
