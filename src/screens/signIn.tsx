@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, View, TouchableOpacity} from 'react-native';
-import {Divider, Text} from 'react-native-paper';
+import {ActivityIndicator, Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {useAppTheme} from 'src/style/paperTheme';
@@ -11,8 +11,8 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import EmailSignUp from './emailSignUp';
 import ResetPassword from './resetPassword';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
-import {useSetRecoilState} from 'recoil';
-import {isButtonDisabledState} from 'src/recoil/atom';
+import {useRecoilState} from 'recoil';
+import {isLoadingState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
 import {statusCodes} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
@@ -24,10 +24,10 @@ const SignInScreen = ({navigation}: SignInProps) => {
   const {onSignInGoogle} = useGoogleAuth();
   const {getDataAndSetRecoil} = useKoreaMap();
 
-  const setIsButtonDisabled = useSetRecoilState(isButtonDisabledState);
+  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   const onSignInGoogleAuth = async () => {
-    setIsButtonDisabled(true);
+    setIsLoading(true);
     return await onSignInGoogle()
       .then(res => onSignInGoogleAuthSuccess(res))
       .catch(error => onSignInGoogleAuthError(error));
@@ -45,14 +45,14 @@ const SignInScreen = ({navigation}: SignInProps) => {
       };
       await getDataAndSetRecoil(appUserInit);
       navigation.replace('Main');
-      setIsButtonDisabled(false);
+      setIsLoading(false);
     } else {
-      setIsButtonDisabled(false);
+      setIsLoading(false);
     }
   };
 
   const onSignInGoogleAuthError = (error: any) => {
-    setIsButtonDisabled(false);
+    setIsLoading(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow
       return;
@@ -91,74 +91,82 @@ const SignInScreen = ({navigation}: SignInProps) => {
         <Image source={require('/assets/images/MemoryMap_Main.png')} />
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>
       </View>
-      <View className="h-1/3 flex justify-center items-center">
-        <SocialLoginButton
-          type="Google"
-          text="Google"
-          buttonColor={theme.colors.white}
-          textColor={theme.colors.black}
-          onPress={onSignInGoogleAuth}
-        />
-        <SocialLoginButton
-          type="Email"
-          text="이메일"
-          buttonClass="mt-2"
-          buttonColor={theme.colors.brandMain}
-          textColor={theme.colors.white}
-          onPress={() => {
-            handlePresentModalPress({
-              title: '계정 로그인',
-              contents: (
-                <EmailSignIn navigation={navigation} close={handleClosePress} />
-              ),
-              snap: '50%',
-            });
-          }}
-        />
-        <View className="flex-row justify-center items-center">
-          <Divider className="w-1/3 my-5 bg-blur" />
-          <Text className="text-xs mx-2 text-blur">또는</Text>
-          <Divider className="w-1/3 my-5 bg-blur" />
-        </View>
-        <View className="w-full flex items-center">
-          <TouchableOpacity
+      {isLoading ? (
+        <ActivityIndicator animating={true} color={theme.colors.brandMain} />
+      ) : (
+        <View className="h-1/3 flex justify-center items-center">
+          <SocialLoginButton
+            type="Google"
+            text="Google"
+            buttonColor={theme.colors.white}
+            textColor={theme.colors.black}
+            onPress={onSignInGoogleAuth}
+          />
+          <SocialLoginButton
+            type="Email"
+            text="이메일"
+            buttonClass="mt-2"
+            buttonColor={theme.colors.brandMain}
+            textColor={theme.colors.white}
             onPress={() => {
               handlePresentModalPress({
-                title: '회원가입',
+                title: '계정 로그인',
                 contents: (
-                  <EmailSignUp
+                  <EmailSignIn
                     navigation={navigation}
                     close={handleClosePress}
                   />
                 ),
-                snap: '70%',
-              });
-            }}>
-            <Text className="underline text-blur">이메일로 회원가입</Text>
-          </TouchableOpacity>
-        </View>
-        <View className="w-full mt-auto flex-row justify-center items-center">
-          <TouchableOpacity>
-            <Text className="text-xs text-blur">개인정보 처리방침</Text>
-          </TouchableOpacity>
-          <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
-          <TouchableOpacity>
-            <Text className="text-xs text-blur">서비스 이용약관</Text>
-          </TouchableOpacity>
-          <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
-          <TouchableOpacity
-            onPress={() => {
-              handlePresentModalPress({
-                title: '비밀번호 재설정',
-                description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
-                contents: <ResetPassword close={handleClosePress} />,
                 snap: '50%',
               });
-            }}>
-            <Text className="text-xs text-blur">비밀번호 찾기</Text>
-          </TouchableOpacity>
+            }}
+          />
+          <View className="flex-row justify-center items-center">
+            <Divider className="w-1/3 my-5 bg-blur" />
+            <Text className="text-xs mx-2 text-blur">또는</Text>
+            <Divider className="w-1/3 my-5 bg-blur" />
+          </View>
+          <View className="w-full flex items-center">
+            <TouchableOpacity
+              onPress={() => {
+                handlePresentModalPress({
+                  title: '회원가입',
+                  contents: (
+                    <EmailSignUp
+                      navigation={navigation}
+                      close={handleClosePress}
+                    />
+                  ),
+                  snap: '70%',
+                });
+              }}>
+              <Text className="underline text-blur">이메일로 회원가입</Text>
+            </TouchableOpacity>
+          </View>
+          <View className="w-full mt-auto flex-row justify-center items-center">
+            <TouchableOpacity>
+              <Text className="text-xs text-blur">개인정보 처리방침</Text>
+            </TouchableOpacity>
+            <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
+            <TouchableOpacity>
+              <Text className="text-xs text-blur">서비스 이용약관</Text>
+            </TouchableOpacity>
+            <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
+            <TouchableOpacity
+              onPress={() => {
+                handlePresentModalPress({
+                  title: '비밀번호 재설정',
+                  description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
+                  contents: <ResetPassword close={handleClosePress} />,
+                  snap: '50%',
+                });
+              }}>
+              <Text className="text-xs text-blur">비밀번호 찾기</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
+
       <CustomBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
         snapPoints={snapPoints}

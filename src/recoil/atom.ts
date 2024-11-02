@@ -10,8 +10,8 @@ export const appUserState = atom<AppUser | null>({
   default: null,
 });
 
-export const isButtonDisabledState = atom<boolean>({
-  key: 'isButtonDisabled',
+export const isLoadingState = atom<boolean>({
+  key: 'isLoading',
   default: false,
 });
 

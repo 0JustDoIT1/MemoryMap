@@ -1,7 +1,7 @@
 import {GestureResponderEvent, Image} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {useRecoilValue} from 'recoil';
-import {isButtonDisabledState} from 'src/recoil/atom';
+import {isLoadingState} from 'src/recoil/atom';
 import GoogleImage from 'assets/images/google_logo.png';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customStyle} from 'src/style/customStyle';
@@ -23,7 +23,7 @@ const SocialLoginButton = ({
   textColor,
   onPress,
 }: SocialLoginButton) => {
-  const isButtonDisabled = useRecoilValue(isButtonDisabledState);
+  const isButtonDisabled = useRecoilValue(isLoadingState);
   const icon = (type: string) => {
     if (type === 'Google')
       return (
@@ -79,18 +79,11 @@ const SocialLoginButton = ({
       className={`w-full py-1 ${buttonClass}`}
       buttonColor={buttonColor}
       textColor={textColor}
-      style={
-        customStyle({disabled: isButtonDisabled, bgColor: buttonColor})
-          .socialLoginButton
-      }
       onPress={onPress}
       disabled={isButtonDisabled}>
       <Text
         className="text-sm font-roboto"
-        style={
-          customStyle({disabled: isButtonDisabled, color: textColor})
-            .socialLoginLabel
-        }>
+        style={customStyle({color: textColor}).socialLoginLabel}>
         {text} 계정으로 로그인
       </Text>
     </Button>
