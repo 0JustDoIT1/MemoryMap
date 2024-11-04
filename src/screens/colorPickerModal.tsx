@@ -35,9 +35,7 @@ const ColorPickerModal = ({
   };
 
   const onSettingColor = async () => {
-    await updateMapColorById({id, color: hex}).then(() =>
-      onSettingColorSuccess(),
-    );
+    await updateMapColorById(id, hex).then(() => onSettingColorSuccess());
   };
 
   const onSettingColorSuccess = () => {

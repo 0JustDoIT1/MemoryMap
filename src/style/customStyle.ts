@@ -6,7 +6,6 @@ import {StyleSheet} from 'react-native';
 interface CustomStyle {
   bgColor?: string;
   color?: string;
-  disabled?: boolean;
 }
 
 const colors = {
@@ -32,7 +31,7 @@ export const customStyle = (props?: CustomStyle) =>
       color: props?.color,
     },
     socialLoginLabel: {
-      color: props?.disabled ? props?.bgColor : props?.color,
+      color: props?.color,
     },
     successToast: {
       backgroundColor: colors.success,
