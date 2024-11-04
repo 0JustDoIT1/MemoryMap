@@ -115,23 +115,6 @@ const useKoreaMap = () => {
     return await _update(appData).then(() => setKoreaMapData(updateData));
   };
 
-  const updateDataWithCache = (
-    id: string,
-    data: KoreaRegionData,
-    uri: string,
-  ) => {
-    const regionDataWithCache: KoreaRegionData = {
-      ...data,
-      cacheFile: uri,
-    };
-    const updateData: KoreaMapData = {
-      ...koreaMapData,
-      [id]: regionDataWithCache,
-    };
-
-    return updateData;
-  };
-
   // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
   const updateMapPhotoById = async (id: string, uri: string) => {
     const regionData: KoreaRegionData = {

@@ -55,8 +55,8 @@ const CropImage = ({navigation, route}: CropImageProps) => {
             fileName: route.params.id + '_',
             format: 'png',
             quality: 1,
-            width: 100,
-            height: 100,
+            width: 95,
+            height: 95,
           }}
           style={customStyle().viewShot}>
           <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 500 500">
