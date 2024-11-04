@@ -50,35 +50,37 @@ const MapSheet = ({
   };
 
   const onImagePicker = async () => {
-    ImageCropPicker.openPicker({
-      cropping: true,
-      freeStyleCropEnabled: true,
-      mediaType: 'photo',
-    }).then(async image => {
-      if (image) {
-        handleClosePress();
-        await updateMapPhotoById(id, image.path).then(() =>
-          onUploadPhotoSuccess(),
-        );
-      }
-    });
-    // await launchImageLibrary({
+    // ImageCropPicker.openPicker({
+    //   width: 300,
+    //   height: 300,
+    //   cropping: true,
     //   mediaType: 'photo',
-    // }).then(async res => {
-    //   if (res.assets) {
+    // }).then(async image => {
+    //   if (image) {
+    //     console.log('!!!', image.width, image.height);
     //     handleClosePress();
-    //     await updateMapPhotoById(id, res.assets[0].uri as string).then(() =>
+    //     await updateMapPhotoById(id, image.path).then(() =>
     //       onUploadPhotoSuccess(),
     //     );
-    //     // navigation.navigate('CropImage', {
-    //     //   id: id,
-    //     //   title: title,
-    //     //   image: res.assets[0].uri as string,
-    //     //   width: res.assets[0].width as number,
-    //     //   height: res.assets[0].height as number,
-    //     // });
     //   }
     // });
+    await launchImageLibrary({
+      mediaType: 'photo',
+    }).then(async res => {
+      if (res.assets) {
+        handleClosePress();
+        // await updateMapPhotoById(id, res.assets[0].uri as string).then(() =>
+        //   onUploadPhotoSuccess(),
+        // );
+        navigation.navigate('CropImage', {
+          id: id,
+          title: title,
+          image: res.assets[0].uri as string,
+          width: res.assets[0].width as number,
+          height: res.assets[0].height as number,
+        });
+      }
+    });
   };
 
   const onDeleteBackground = async () => {

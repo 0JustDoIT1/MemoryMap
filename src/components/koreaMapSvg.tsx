@@ -26,32 +26,42 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
   const {getMapBackgroundById} = useKoreaMap();
 
   const [test, setTest] = useState<string>('');
+  const [hi, setHi] = useState<string>('');
 
   const test2 = async () => {
     await _download('cyIXur34OxWpFSExPDhF1NHrfHh1', 'KR-13-18').then(value =>
       setTest(value),
     );
+    await _download('cyIXur34OxWpFSExPDhF1NHrfHh1', 'KR-17').then(value =>
+      setHi(value),
+    );
   };
 
   useEffect(() => {
     test2();
-  }, [test]);
-
-  console.log('@@@', test);
+  }, []);
 
   return (
     <React.Fragment>
       <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
         <Defs>
           <Pattern
+            id="KR-17"
+            patternUnits="userSpaceOnUse"
+            x="205"
+            y="965"
+            width="135"
+            height="135">
+            <Image width={135} height={135} href={hi} />
+          </Pattern>
+          <Pattern
             id="KR-13-18"
             patternUnits="userSpaceOnUse"
-            x="-15"
-            y="8"
-            width="100"
-            height="100"
-            viewBox="0 0 100 100">
-            <Image width={100} height={100} href={test} />
+            x="480"
+            y="615"
+            width="95"
+            height="95">
+            <Image width={95} height={95} href={test} />
           </Pattern>
         </Defs>
         <G id="제주특별자치도_1_">
@@ -87,8 +97,10 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           />
           <Polygon
             id="거창군_1_"
-            onPress={() => {}}
-            fill={background}
+            onPress={() => {
+              handleMapModalPress('KR-13-17');
+            }}
+            fill={getMapBackgroundById('KR-13-17')}
             stroke="#000000"
             strokeWidth="0.8"
             points="481.779,602.357 483.164,606.894 
