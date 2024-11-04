@@ -23,7 +23,7 @@ interface KoreaMapSvg {
 
 const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
   const [background, setBackground] = useState<string>('#ffffff');
-  const {getMapDataById} = useKoreaMap();
+  const {getMapBackgroundById} = useKoreaMap();
 
   const [test, setTest] = useState<string>('');
 
@@ -35,7 +35,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
 
   useEffect(() => {
     test2();
-  }, []);
+  }, [test]);
 
   console.log('@@@', test);
 
@@ -44,7 +44,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
       <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
         <Defs>
           <Pattern
-            id="합천군_1_"
+            id="KR-13-18"
             patternUnits="userSpaceOnUse"
             x="-15"
             y="8"
@@ -60,7 +60,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             onPress={() => {
               handleMapModalPress('KR-17');
             }}
-            fill={getMapDataById('KR-17').background}
+            fill={getMapBackgroundById('KR-17')}
             stroke="#000000"
             strokeWidth="1"
             strokeMiterlimit="10"
@@ -77,7 +77,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             onPress={() => {
               handleMapModalPress('KR-13-18');
             }}
-            fill="url(#합천군_1_)"
+            fill={getMapBackgroundById('KR-13-18')}
             stroke="#000000"
             strokeWidth="0.8"
             points="514.786,617.729 526.63,628.184 
