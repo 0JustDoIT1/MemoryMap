@@ -3,7 +3,6 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
 import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
-import {getData, setData} from 'src/utils/asyncStorage';
 import {_read, _update} from 'src/utils/database';
 import {_upload} from 'src/utils/storage';
 
@@ -11,42 +10,28 @@ const useKoreaMap = () => {
   const [appUser, setAppUser] = useRecoilState(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
 
-  // AppData를 async-storage와 recoil에 저장하는 함수(공통)
-  const _setStorageAndRecoil = async (data: AppData) => {
-    await setData(data.uid, JSON.stringify(data));
-    setKoreaMapData(data.koreaMapData);
-  };
-
   // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
-  // async-storage에 값이 있으면 그 값을 불러오고, 없으면 firebase에서 불러옴
   const getDataAndSetRecoil = async (user: AppUser) => {
-    const storageData = await getData(user.uid);
-    if (storageData) {
-      const appData: AppData = JSON.parse(storageData);
-      setAppUser(user);
-      setKoreaMapData(appData.koreaMapData);
-    } else {
-      await _read(user.uid).then(async snapshot => {
-        if (snapshot.val()) {
-          await _setStorageAndRecoil(snapshot.val());
+    await _read(user.uid).then(async snapshot => {
+      if (snapshot.val()) {
+        setKoreaMapData(snapshot.val()['koreaMapData']);
+        setAppUser(user);
+      } else {
+        // 구글 로그인으로 첫 로그인인 경우
+        const appDataInit: AppData = {
+          email: user.email,
+          uid: user.uid,
+          koreaMapData: koreaMapDataInit,
+        };
+        await _update(appDataInit).then(async () => {
+          setKoreaMapData(koreaMapDataInit);
           setAppUser(user);
-        } else {
-          // 구글 로그인으로 첫 로그인인 경우
-          const appDataInit: AppData = {
-            email: user.email,
-            uid: user.uid,
-            koreaMapData: koreaMapDataInit,
-          };
-          await _update(appDataInit).then(async () => {
-            await _setStorageAndRecoil(appDataInit);
-            setAppUser(user);
-          });
-        }
-      });
-    }
+        });
+      }
+    });
   };
 
-  // 회원가입 시 초기 데이터를 async-storage/firebase/recoil에 세팅
+  // 회원가입 시 초기 데이터를 firebase/recoil에 세팅
   const setDataAndSetRecoil = async (user: AppUser) => {
     const appDataInit: AppData = {
       email: user.email,
@@ -55,12 +40,12 @@ const useKoreaMap = () => {
     };
 
     await _update(appDataInit).then(async () => {
-      await _setStorageAndRecoil(appDataInit);
+      setKoreaMapData(koreaMapDataInit);
       setAppUser(user);
     });
   };
 
-  // id로 해당 지역 데이터 얻어오기
+  // id로 해당 지역 데이터 가져오기
   const getMapDataById = (id: string): KoreaRegionData => {
     let result: any;
 
@@ -78,7 +63,15 @@ const useKoreaMap = () => {
     return result;
   };
 
-  // 지도에서 배경(색상) 업데이트 -> Firebase & AsyncStorage & Recoil
+  // id로 해당 지역 배경 가져오기
+  const getMapBackgroundById = (id: string): string => {
+    const region = getMapDataById(id);
+
+    if (region.type === 'photo') return `url(#${id})`;
+    else return region.background;
+  };
+
+  // 지도에서 배경(색상) 업데이트 -> Firebase & Recoil
   const updateMapColorById = async (id: string, color: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
@@ -97,12 +90,10 @@ const useKoreaMap = () => {
       koreaMapData: updateData,
     };
 
-    return await _update(appData).then(
-      async () => await _setStorageAndRecoil(appData),
-    );
+    return await _update(appData).then(() => setKoreaMapData(updateData));
   };
 
-  // 지도에서 배경(색상or이미지) 제거 -> Firebase & AsyncStorage & Recoil
+  // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
   const deleteMapDataById = async (id: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
@@ -121,9 +112,7 @@ const useKoreaMap = () => {
       koreaMapData: updateData,
     };
 
-    return await _update(appData).then(
-      async () => await _setStorageAndRecoil(appData),
-    );
+    return await _update(appData).then(() => setKoreaMapData(updateData));
   };
 
   const updateDataWithCache = (
@@ -143,11 +132,11 @@ const useKoreaMap = () => {
     return updateData;
   };
 
-  // 지도에서 배경(이미지) 업데이트 -> Firebase & AsyncStorage & Recoil
+  // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
   const updateMapPhotoById = async (id: string, uri: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
-      background: `${id}.png`,
+      background: id,
       type: 'photo',
     };
 
@@ -163,8 +152,8 @@ const useKoreaMap = () => {
     };
 
     await _update(appData).then(async () => {
-      await _upload(appData.uid, id, uri).then(
-        async () => await _setStorageAndRecoil(appData),
+      await _upload(appData.uid, id, uri).then(() =>
+        setKoreaMapData(updateData),
       );
     });
   };
@@ -173,6 +162,7 @@ const useKoreaMap = () => {
     getDataAndSetRecoil,
     setDataAndSetRecoil,
     getMapDataById,
+    getMapBackgroundById,
     updateMapColorById,
     deleteMapDataById,
     updateMapPhotoById,

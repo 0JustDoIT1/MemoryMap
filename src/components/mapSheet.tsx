@@ -15,6 +15,7 @@ import ColorPickerModal from 'src/screens/colorPickerModal';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {showBottomToast} from 'src/utils/showToast';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -41,22 +42,43 @@ const MapSheet = ({
   const {getMapDataById, deleteMapDataById} = useKoreaMap();
   const regionData = getMapDataById(id);
 
+  const {updateMapPhotoById} = useKoreaMap();
+
+  const onUploadPhotoSuccess = () => {
+    showBottomToast('success', '색칠 성공!');
+    navigation.navigate('Map');
+  };
+
   const onImagePicker = async () => {
-    await launchImageLibrary({
+    ImageCropPicker.openPicker({
+      cropping: true,
+      freeStyleCropEnabled: true,
       mediaType: 'photo',
-    }).then(res => {
-      if (res.assets) {
-        console.log('###', res.assets[0]);
+    }).then(async image => {
+      if (image) {
         handleClosePress();
-        navigation.navigate('CropImage', {
-          id: id,
-          title: title,
-          image: res.assets[0].uri as string,
-          width: res.assets[0].width as number,
-          height: res.assets[0].height as number,
-        });
+        await updateMapPhotoById(id, image.path).then(() =>
+          onUploadPhotoSuccess(),
+        );
       }
     });
+    // await launchImageLibrary({
+    //   mediaType: 'photo',
+    // }).then(async res => {
+    //   if (res.assets) {
+    //     handleClosePress();
+    //     await updateMapPhotoById(id, res.assets[0].uri as string).then(() =>
+    //       onUploadPhotoSuccess(),
+    //     );
+    //     // navigation.navigate('CropImage', {
+    //     //   id: id,
+    //     //   title: title,
+    //     //   image: res.assets[0].uri as string,
+    //     //   width: res.assets[0].width as number,
+    //     //   height: res.assets[0].height as number,
+    //     // });
+    //   }
+    // });
   };
 
   const onDeleteBackground = async () => {

@@ -24,7 +24,9 @@ const ColorPickerModal = ({
   const regionData = getMapDataById(id);
 
   const [mode, setMode] = useState<boolean>(false);
-  const [hex, setHex] = useState<string>(regionData.background);
+  const [hex, setHex] = useState<string>(
+    regionData.type === 'color' ? regionData.background : '#ffffff',
+  );
 
   const onChangeMode = () => {
     setMode(!mode);
@@ -49,12 +51,16 @@ const ColorPickerModal = ({
       <Text className="text-lg mb-4">색상 선택</Text>
       {mode ? (
         <CustomColorPannel
-          value={regionData.background}
+          value={
+            regionData.type === 'color' ? regionData.background : '#ffffff'
+          }
           onChange={onColorSelect}
         />
       ) : (
         <CustomColorSwatch
-          value={regionData.background}
+          value={
+            regionData.type === 'color' ? regionData.background : '#ffffff'
+          }
           onChange={onColorSelect}
         />
       )}
@@ -63,11 +69,14 @@ const ColorPickerModal = ({
           className="w-1/2 text-center py-1"
           style={
             customStyle({
-              bgColor: regionData.background,
-              color: getTextColorByBackgroundColor(regionData.background),
+              bgColor:
+                regionData.type === 'color' ? regionData.background : '#ffffff',
+              color: getTextColorByBackgroundColor(
+                regionData.type === 'color' ? regionData.background : '#ffffff',
+              ),
             }).colorPickerPreview
           }>
-          {regionData.background}
+          {regionData.type === 'color' ? regionData.background : '#ffffff'}
         </Text>
         <Text
           className="w-1/2 text-center py-1"
