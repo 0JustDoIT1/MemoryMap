@@ -22,7 +22,7 @@ const CropImage = ({navigation, route}: CropImageProps) => {
 
   const onUploadPhoto = async () => {
     const capture = (await onCapture()) as string;
-    await updateMapPhotoById({id: route.params.id, uri: capture}).then(() =>
+    await updateMapPhotoById(route.params.id, capture).then(() =>
       onUploadPhotoSuccess(),
     );
   };
@@ -54,7 +54,7 @@ const CropImage = ({navigation, route}: CropImageProps) => {
           options={{
             fileName: route.params.id + '_',
             format: 'png',
-            quality: 0.8,
+            quality: 1,
             width: 100,
             height: 100,
           }}

@@ -56,10 +56,10 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
       email: result.email,
       displayName: result.displayName,
     };
-    setIsLoading(false);
     await getDataAndSetRecoil(appUserInit);
     close();
     navigation.replace('Main');
+    setIsLoading(false);
   };
 
   const onSignInError = (error: any) => {

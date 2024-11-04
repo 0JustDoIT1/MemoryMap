@@ -7,16 +7,6 @@ import {getData, setData} from 'src/utils/asyncStorage';
 import {_read, _update} from 'src/utils/database';
 import {_upload} from 'src/utils/storage';
 
-interface UpdateMapColorById {
-  id: string;
-  color: string;
-}
-
-interface UpdateMapPhotoById {
-  id: string;
-  uri: string;
-}
-
 const useKoreaMap = () => {
   const [appUser, setAppUser] = useRecoilState(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
@@ -89,7 +79,7 @@ const useKoreaMap = () => {
   };
 
   // 지도에서 배경(색상) 업데이트 -> Firebase & AsyncStorage & Recoil
-  const updateMapColorById = async ({id, color}: UpdateMapColorById) => {
+  const updateMapColorById = async (id: string, color: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
       background: color,
@@ -154,7 +144,7 @@ const useKoreaMap = () => {
   };
 
   // 지도에서 배경(이미지) 업데이트 -> Firebase & AsyncStorage & Recoil
-  const updateMapPhotoById = async ({id, uri}: UpdateMapPhotoById) => {
+  const updateMapPhotoById = async (id: string, uri: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
       background: `${id}.png`,
@@ -173,7 +163,7 @@ const useKoreaMap = () => {
     };
 
     await _update(appData).then(async () => {
-      await _upload({uid: appData.uid, id, uri}).then(
+      await _upload(appData.uid, id, uri).then(
         async () => await _setStorageAndRecoil(appData),
       );
     });
