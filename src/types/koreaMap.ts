@@ -8,5 +8,6 @@ export interface KoreaRegionData {
   value: string[];
   type: 'init' | 'photo' | 'color';
   background: string;
+  imageStyle?: {x: number; y: number; scale: number; rotation: number};
   story: number;
 }

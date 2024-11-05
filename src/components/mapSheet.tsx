@@ -14,8 +14,10 @@ import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import {useAppTheme} from 'src/style/paperTheme';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -38,9 +40,13 @@ const MapSheet = ({
   title,
   tag,
 }: MapSheet) => {
+  const theme = useAppTheme();
   const {visible, showModal, hideModal} = useModal();
-  const {getMapDataById, deleteMapDataById} = useKoreaMap();
+  const {getMapDataById, getSvgDataById, deleteMapDataById} = useKoreaMap();
   const regionData = getMapDataById(id);
+  const svgData = getSvgDataById(id);
+
+  console.log('###', svgData);
 
   const {updateMapPhotoById} = useKoreaMap();
 
@@ -78,6 +84,8 @@ const MapSheet = ({
           image: res.assets[0].uri as string,
           width: res.assets[0].width as number,
           height: res.assets[0].height as number,
+          svgStyle: svgData.svgStyle,
+          svgPolygon: svgData.svgPolygon as string,
         });
       }
     });
@@ -105,10 +113,18 @@ const MapSheet = ({
             <View className="flex-row justify-between items-center w-full mb-2">
               <View className="flex-row justify-start items-center">
                 <Text className="text-xl text-black">{title}</Text>
-                {regionData && regionData.type === 'photo' && <View></View>}
+                {regionData && regionData.type === 'photo' && (
+                  <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-black">
+                    <FontAwesome
+                      name="photo"
+                      size={12}
+                      style={customStyle().mapBottomSheetPhotoIcon}
+                    />
+                  </View>
+                )}
                 {regionData && regionData.type === 'color' && (
                   <View
-                    className="w-4 h-4 mx-2 rounded-full"
+                    className="w-5 h-5 mx-2 rounded-full"
                     style={
                       customStyle({bgColor: regionData?.background})
                         .mapBottomSheetCircle

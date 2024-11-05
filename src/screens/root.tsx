@@ -4,10 +4,10 @@ import {Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {_read} from 'src/utils/database';
-import useKoreaMap from 'src/hook/useKoreaMap';
+import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 
 const Root = ({navigation}: RootProps) => {
-  const {getDataAndSetRecoil} = useKoreaMap();
+  const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
 
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
     if (user) {

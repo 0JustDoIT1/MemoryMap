@@ -16,13 +16,13 @@ import {isLoadingState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
 import {statusCodes} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
-import useKoreaMap from 'src/hook/useKoreaMap';
+import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const theme = useAppTheme();
 
+  const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
-  const {getDataAndSetRecoil} = useKoreaMap();
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
