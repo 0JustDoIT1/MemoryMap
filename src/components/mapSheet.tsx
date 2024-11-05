@@ -17,7 +17,6 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {useAppTheme} from 'src/style/paperTheme';
 import CustomAlert from './alert';
 import useDialog from 'src/hook/useDialog';
 
@@ -42,14 +41,11 @@ const MapSheet = ({
   title,
   tag,
 }: MapSheet) => {
-  const theme = useAppTheme();
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {getMapDataById, getSvgDataById, deleteMapDataById} = useKoreaMap();
   const regionData = getMapDataById(id);
   const svgData = getSvgDataById(id);
-
-  console.log('###', svgData);
 
   const {updateMapPhotoById} = useKoreaMap();
 
@@ -118,7 +114,7 @@ const MapSheet = ({
               <View className="flex-row justify-start items-center">
                 <Text className="text-xl text-black">{title}</Text>
                 {regionData && regionData.type === 'photo' && (
-                  <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-black">
+                  <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
                     <FontAwesome
                       name="photo"
                       size={12}
