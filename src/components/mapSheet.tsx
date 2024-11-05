@@ -1,6 +1,6 @@
 import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
-import {TouchableOpacity, View} from 'react-native';
+import {Alert, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
@@ -9,7 +9,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {MapProps, StackParamList} from 'src/types/stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React from 'react';
+import React, {useState} from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
 import useKoreaMap from 'src/hook/useKoreaMap';
@@ -18,6 +18,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {useAppTheme} from 'src/style/paperTheme';
+import CustomAlert from './alert';
+import useDialog from 'src/hook/useDialog';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -42,6 +44,7 @@ const MapSheet = ({
 }: MapSheet) => {
   const theme = useAppTheme();
   const {visible, showModal, hideModal} = useModal();
+  const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {getMapDataById, getSvgDataById, deleteMapDataById} = useKoreaMap();
   const regionData = getMapDataById(id);
   const svgData = getSvgDataById(id);
@@ -93,6 +96,7 @@ const MapSheet = ({
 
   const onDeleteBackground = async () => {
     await deleteMapDataById(id).then(() => onDeleteBackgroundSuccess());
+    hideDialog();
   };
 
   const onDeleteBackgroundSuccess = () => {
@@ -131,7 +135,7 @@ const MapSheet = ({
                     }></View>
                 )}
                 {regionData && regionData.type !== 'init' && (
-                  <TouchableOpacity onPress={onDeleteBackground}>
+                  <TouchableOpacity onPress={showDialog}>
                     <FontAwesome6
                       name="eraser"
                       size={20}
@@ -182,6 +186,13 @@ const MapSheet = ({
             handleClosePress={handleClosePress}
           />
         }
+      />
+      <CustomAlert
+        visible={visibleDialog}
+        title="배경을 제거하시겠습니까?"
+        buttonText="삭제"
+        buttonOnPress={onDeleteBackground}
+        hideAlert={hideDialog}
       />
     </React.Fragment>
   );
