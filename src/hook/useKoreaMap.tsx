@@ -5,7 +5,7 @@ import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
 import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
 import {_read, _update} from 'src/utils/database';
-import {_upload} from 'src/utils/storage';
+import {_download, _upload} from 'src/utils/storage';
 
 const useKoreaMap = () => {
   const appUser = useRecoilValue(appUserState);
@@ -49,6 +49,13 @@ const useKoreaMap = () => {
     return result;
   };
 
+  // id로 해당 지역 배경 가져오기
+  const getMapBackgroundById = (id: string): string => {
+    const region = getMapDataById(id);
+
+    return region.background;
+  };
+
   // type에 맞는 id 배열로 반환
   const getTypePhotoToIdArray = (type: 'init' | 'color' | 'photo') => {
     const arr: string[] = [];
@@ -56,14 +63,6 @@ const useKoreaMap = () => {
       if (value.type === type) arr.push(value.id);
     });
     setIdArray(arr);
-  };
-
-  // id로 해당 지역 배경 가져오기
-  const getMapBackgroundById = (id: string): string => {
-    const region = getMapDataById(id);
-
-    if (region.type === 'photo') return `url(#${id})`;
-    else return region.background;
   };
 
   // 지도에서 배경(색상) 업데이트 -> Firebase & Recoil
@@ -74,29 +73,7 @@ const useKoreaMap = () => {
       type: 'color',
     };
     delete regionData.imageStyle;
-
-    const updateData: KoreaMapData = {
-      ...koreaMapData,
-      [id]: regionData,
-    };
-
-    const appData: AppData = {
-      uid: appUser?.uid as string,
-      email: appUser?.email as string,
-      koreaMapData: updateData,
-    };
-
-    return await _update(appData).then(() => setKoreaMapData(updateData));
-  };
-
-  // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
-  const deleteMapDataById = async (id: string) => {
-    const regionData: KoreaRegionData = {
-      ...getMapDataById(id),
-      background: '#ffffff',
-      type: 'init',
-    };
-    delete regionData.imageStyle;
+    delete regionData.imageUrl;
 
     const updateData: KoreaMapData = {
       ...koreaMapData,
@@ -118,12 +95,44 @@ const useKoreaMap = () => {
     uri: string,
     imageStyle: {x: number; y: number; scale: number; rotation: number},
   ) => {
+    await _upload(appUser?.uid as string, id, uri).then(
+      async res =>
+        await _download(appUser?.uid as string, id).then(async res => {
+          const regionData: KoreaRegionData = {
+            ...getMapDataById(id),
+            background: `url(#${id})`,
+            type: 'photo',
+            imageStyle: imageStyle,
+            imageUrl: res,
+          };
+
+          const updateData: KoreaMapData = {
+            ...koreaMapData,
+            [id]: regionData,
+          };
+
+          const appData: AppData = {
+            uid: appUser?.uid as string,
+            email: appUser?.email as string,
+            koreaMapData: updateData,
+          };
+
+          await _update(appData).then(async () => {
+            setKoreaMapData(updateData);
+          });
+        }),
+    );
+  };
+
+  // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
+  const deleteMapDataById = async (id: string) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
-      background: id,
-      type: 'photo',
-      imageStyle: imageStyle,
+      background: '#ffffff',
+      type: 'init',
     };
+    delete regionData.imageStyle;
+    delete regionData.imageUrl;
 
     const updateData: KoreaMapData = {
       ...koreaMapData,
@@ -136,11 +145,7 @@ const useKoreaMap = () => {
       koreaMapData: updateData,
     };
 
-    await _update(appData).then(async () => {
-      await _upload(appData.uid, id, uri).then(() =>
-        setKoreaMapData(updateData),
-      );
-    });
+    return await _update(appData).then(() => setKoreaMapData(updateData));
   };
 
   return {
@@ -150,8 +155,8 @@ const useKoreaMap = () => {
     getMapBackgroundById,
     getTypePhotoToIdArray,
     updateMapColorById,
-    deleteMapDataById,
     updateMapPhotoById,
+    deleteMapDataById,
   };
 };
 

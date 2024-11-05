@@ -35,15 +35,20 @@ const CropImage = ({navigation, route}: CropImageProps) => {
 
   console.log('!!!', image, width, height, x[0], y[0], scale[0], rotate[0]);
 
-  console.log('###', route.params.svgStyle, route.params.svgPolygon);
+  console.log('###', route.params.svgStyle, width, height);
 
   const onUploadPhoto = async () => {
     const sWidth = route.params.svgStyle?.width as number;
-    const ratio = sWidth / width;
+    const sHeight = route.params.svgStyle?.height as number;
+    const xRatio = sWidth / width;
+    const yRatio = sHeight / height;
+
+    console.log('a', x[0], y[0]);
+    console.log('흠', x[0] * xRatio, y[0] * yRatio);
 
     const imageStyle = {
-      x: x[0] * ratio,
-      y: y[0] * ratio,
+      x: x[0] * xRatio,
+      y: y[0] * yRatio,
       scale: scale[0],
       rotation: rotate[0],
     };
@@ -65,6 +70,10 @@ const CropImage = ({navigation, route}: CropImageProps) => {
         setImage(res.assets[0].uri as string);
         setWidth(res.assets[0].width as number);
         setHeight(res.assets[0].height as number);
+        setX([0]);
+        setY([0]);
+        setScale([1]);
+        setRotate([0]);
       }
     });
   };
@@ -95,6 +104,7 @@ const CropImage = ({navigation, route}: CropImageProps) => {
         </Svg>
         <TouchableOpacity
           className="absolute bottom-0 right-10 p-1 rounded-full bg-brandLight"
+          activeOpacity={0.8}
           onPress={onImagePicker}>
           <Ionicons
             name="refresh"

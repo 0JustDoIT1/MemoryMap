@@ -21,15 +21,13 @@ const SvgPattern = () => {
           id={item}
           patternUnits="userSpaceOnUse"
           x={getSvgDataById(item).svgStyle?.x}
-          y={getSvgDataById(item).svgStyle?.y}>
+          y={getSvgDataById(item).svgStyle?.y as number}>
           <Image
             width={getSvgDataById(item).svgStyle?.width}
             height={getSvgDataById(item).svgStyle?.height}
-            href={
-              'file:///data/user/0/com.memorymap/cache/rn_image_picker_lib_temp_38eff628-74ca-46b3-8d21-68df127b3430.jpg'
-            }
+            href={getMapDataById(item).imageUrl}
             translateX={getMapDataById(item).imageStyle?.x}
-            translateY={getMapDataById(item).imageStyle?.y}
+            translateY={getMapDataById(item).imageStyle?.y as number}
             scale={getMapDataById(item).imageStyle?.scale}
             rotation={getMapDataById(item).imageStyle?.rotation}
           />
