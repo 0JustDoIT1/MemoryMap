@@ -105,4 +105,5 @@ export const customStyle = (props?: CustomStyle) =>
     sliderMinimumTrack: {
       backgroundColor: props?.bgColor ? props.bgColor : colors.brandMain,
     },
+    alert: {backgroundColor: '#F9F9F9'},
   });
