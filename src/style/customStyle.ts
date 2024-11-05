@@ -105,5 +105,17 @@ export const customStyle = (props?: CustomStyle) =>
     sliderMinimumTrack: {
       backgroundColor: props?.bgColor ? props.bgColor : colors.brandMain,
     },
+    fabMain: {
+      borderRadius: 100,
+      backgroundColor: colors.brandMain,
+      marginBottom: 65,
+    },
+    fab: {
+      borderRadius: 100,
+      backgroundColor: colors.brandMain,
+    },
+    fabContainer: {
+      marginRight: 8,
+    },
     alert: {backgroundColor: '#F9F9F9'},
   });
