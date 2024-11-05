@@ -1,4 +1,5 @@
-import {useRecoilState} from 'recoil';
+import {useState} from 'react';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
@@ -7,8 +8,10 @@ import {_read, _update} from 'src/utils/database';
 import {_upload} from 'src/utils/storage';
 
 const useKoreaMap = () => {
-  const [appUser, setAppUser] = useRecoilState(appUserState);
+  const appUser = useRecoilValue(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
+
+  const [idArray, setIdArray] = useState<string[]>([]);
 
   // id로 해당 지역 데이터 가져오기
   const getMapDataById = (id: string): KoreaRegionData => {
@@ -44,6 +47,15 @@ const useKoreaMap = () => {
     DFS(KoreaRegionList, 'id', id);
 
     return result;
+  };
+
+  // type에 맞는 id 배열로 반환
+  const getTypePhotoToIdArray = (type: 'init' | 'color' | 'photo') => {
+    const arr: string[] = [];
+    Object.values(koreaMapData).forEach(value => {
+      if (value.type === type) arr.push(value.id);
+    });
+    setIdArray(arr);
   };
 
   // id로 해당 지역 배경 가져오기
@@ -132,9 +144,11 @@ const useKoreaMap = () => {
   };
 
   return {
+    idArray,
     getMapDataById,
     getSvgDataById,
     getMapBackgroundById,
+    getTypePhotoToIdArray,
     updateMapColorById,
     deleteMapDataById,
     updateMapPhotoById,
