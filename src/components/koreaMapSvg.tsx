@@ -2,6 +2,7 @@ import React from 'react';
 import {G, Path, Polygon, Svg, Text} from 'react-native-svg';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {_download} from 'src/utils/storage';
+import SvgPattern from './svgPattern';
 
 interface KoreaMapSvg {
   handleMapModalPress: (id: string) => void;
@@ -13,6 +14,7 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
   return (
     <React.Fragment>
       <Svg id="Layer_1" width="130%" height="130%" viewBox="0 2.25 960 1110">
+        <SvgPattern />
         <G id="제주특별자치도_1_">
           <Polygon
             id="제주도_1_"
