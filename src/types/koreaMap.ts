@@ -9,5 +9,6 @@ export interface KoreaRegionData {
   type: 'init' | 'photo' | 'color';
   background: string;
   imageStyle?: {x: number; y: number; scale: number; rotation: number};
+  imageUrl?: string;
   story: number;
 }
