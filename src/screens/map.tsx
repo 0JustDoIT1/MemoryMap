@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
@@ -6,11 +6,16 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import ViewShot from 'react-native-view-shot';
+import CustomFAB from 'src/components/fab';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
 import MapSheet from 'src/components/mapSheet';
+import useFAB from 'src/hook/useFAB';
 import useMapSheet from 'src/hook/useMapSheet';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
+import RNFS from 'react-native-fs';
+import {useIsFocused} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -18,7 +23,22 @@ const clamp = (val: number, min: number, max: number) => {
   return Math.min(Math.max(val, min), max);
 };
 
-const MapScreen = ({navigation}: MapProps) => {
+const MapScreen = ({navigation, route}: MapProps) => {
+  const viewShotRef = useRef<ViewShot>(null);
+
+  const {
+    mapSheetModalRef,
+    snapPoints,
+    title,
+    tag,
+    id,
+    handleMapModalPress,
+    handleClosePress,
+    renderBackdrop,
+  } = useMapSheet();
+  const {open, onChangeFAB} = useFAB();
+  const isFocused = useIsFocused();
+
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
   const prevTranslationX = useSharedValue(0);
@@ -90,29 +110,36 @@ const MapScreen = ({navigation}: MapProps) => {
 
   const composed = Gesture.Simultaneous(pinch, pan);
 
-  const {
-    mapSheetModalRef,
-    snapPoints,
-    title,
-    tag,
-    id,
-    handleMapModalPress,
-    handleClosePress,
-    renderBackdrop,
-  } = useMapSheet();
+  const onCaptureMap = async () => {
+    await viewShotRef.current
+      ?.capture?.()
+      .then(async uri => await saveScreenShot(uri));
+  };
 
-  const onChangeBackground = () => {
-    // if (background === 'url(#image)') setBackground('#ffffff');
-    // else setBackground('url(#image)');
+  const saveScreenShot = async (uri: string) => {
+    const path = `${RNFS.PicturesDirectoryPath}/MemoryMap.jpg`;
+    // console.log('###', path);
+    // await RNFS.writeFile(path, uri);
   };
 
   return (
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
-      <GestureDetector gesture={composed}>
-        <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-          <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
-        </Animated.View>
-      </GestureDetector>
+      <ViewShot
+        ref={viewShotRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
+        <GestureDetector gesture={composed}>
+          <Animated.View style={[customStyle().mapBox, animatedStyles]}>
+            <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
+          </Animated.View>
+        </GestureDetector>
+      </ViewShot>
       <MapSheet
         navigation={navigation}
         mapSheetModalRef={mapSheetModalRef}
@@ -122,6 +149,17 @@ const MapScreen = ({navigation}: MapProps) => {
         id={id}
         title={title}
         tag={tag}
+      />
+      <CustomFAB
+        open={open}
+        visible={isFocused}
+        onChangeFAB={onChangeFAB}
+        icon1="camera"
+        label1="지도 저장"
+        onPress1={onCaptureMap}
+        icon2="refresh"
+        label2="지도 초기화"
+        onPress2={() => {}}
       />
     </SafeAreaView>
   );
