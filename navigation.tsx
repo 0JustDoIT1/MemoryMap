@@ -40,7 +40,7 @@ const Main = () => {
         headerShadowVisible: false,
         headerTintColor: '#000000',
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontFamily: 'GmarketSansMedium',
         },
         headerTitleAlign: 'center',
         headerTitle: 'MemoryMap',
@@ -111,7 +111,7 @@ const Navigation = () => {
             headerShadowVisible: false,
             headerTintColor: '#000000',
             headerTitleStyle: {
-              fontWeight: 'bold',
+              fontFamily: 'GmarketSansMedium',
             },
             headerTitleAlign: 'center',
             headerTitle: route.params.title,
