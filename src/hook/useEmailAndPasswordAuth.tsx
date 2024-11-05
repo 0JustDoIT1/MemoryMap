@@ -3,7 +3,8 @@ import {useCallback, useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
-import {AppUser} from 'src/types/account';
+import {AppData, AppUser} from 'src/types/account';
+import {_read, _update} from 'src/utils/database';
 import {showBottomToast} from 'src/utils/showToast';
 
 const useEmailAndPasswordAuth = () => {
@@ -43,6 +44,41 @@ const useEmailAndPasswordAuth = () => {
         return result;
       });
   }, [email, password]);
+
+  // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
+  const getDataAndSetRecoil = async (user: AppUser) => {
+    await _read(user.uid).then(async snapshot => {
+      if (snapshot.val()) {
+        setKoreaMapData(snapshot.val()['koreaMapData']);
+        setAppUser(user);
+      } else {
+        // 구글 로그인으로 첫 로그인인 경우
+        const appDataInit: AppData = {
+          email: user.email,
+          uid: user.uid,
+          koreaMapData: koreaMapDataInit,
+        };
+        await _update(appDataInit).then(async () => {
+          setKoreaMapData(koreaMapDataInit);
+          setAppUser(user);
+        });
+      }
+    });
+  };
+
+  // 회원가입 시 초기 데이터를 firebase/recoil에 세팅
+  const setDataAndSetRecoil = async (user: AppUser) => {
+    const appDataInit: AppData = {
+      email: user.email,
+      uid: user.uid,
+      koreaMapData: koreaMapDataInit,
+    };
+
+    await _update(appDataInit).then(async () => {
+      setKoreaMapData(koreaMapDataInit);
+      setAppUser(user);
+    });
+  };
 
   // Profile Update (displayName)
   const onUpdateProfile = useCallback(
@@ -87,6 +123,8 @@ const useEmailAndPasswordAuth = () => {
     onSignUpEmailAndPassword,
     onSignInEmailAndPassword,
     onUpdateProfile,
+    getDataAndSetRecoil,
+    setDataAndSetRecoil,
     onSendPasswordResetEmail,
     onSignOut,
   };

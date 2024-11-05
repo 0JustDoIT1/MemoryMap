@@ -2,35 +2,15 @@ import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Svg, {Defs, Image, Pattern, Polygon} from 'react-native-svg';
 import {CropImageProps} from 'src/types/stack';
-import {useRef, useState} from 'react';
+import {useState} from 'react';
 import {BrandContainedButton} from 'src/components/button';
 import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
-import ViewShot from 'react-native-view-shot';
-import {customStyle} from 'src/style/customStyle';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {showBottomToast} from 'src/utils/showToast';
 
 const CropImage = ({navigation, route}: CropImageProps) => {
-  const captureRef = useRef<ViewShot>(null);
-
   const {updateMapPhotoById} = useKoreaMap();
-
-  const onCapture = async () => {
-    return await captureRef?.current?.capture?.().then(uri => uri);
-  };
-
-  const onUploadPhoto = async () => {
-    const capture = (await onCapture()) as string;
-    await updateMapPhotoById(route.params.id, capture).then(() =>
-      onUploadPhotoSuccess(),
-    );
-  };
-
-  const onUploadPhotoSuccess = () => {
-    showBottomToast('success', '색칠 성공!');
-    navigation.navigate('Map');
-  };
 
   const [x, setX] = useState<number[]>([0]);
   const [y, setY] = useState<number[]>([0]);
@@ -46,43 +26,65 @@ const CropImage = ({navigation, route}: CropImageProps) => {
   const minRotate = -360;
   const maxRotate = 360;
 
+  console.log(
+    '!!!',
+    route.params.image,
+    route.params.width,
+    route.params.height,
+    x[0],
+    y[0],
+    scale[0],
+    rotate[0],
+  );
+
+  console.log('###', route.params.svgStyle, route.params.svgPolygon);
+
+  const onUploadPhoto = async () => {
+    const sWidth = route.params.svgStyle?.width as number;
+    const ratio = sWidth / route.params.width;
+
+    const imageStyle = {
+      x: x[0] * ratio,
+      y: y[0] * ratio,
+      scale: scale[0],
+      rotation: rotate[0],
+    };
+    await updateMapPhotoById(
+      route.params.id,
+      route.params.image,
+      imageStyle,
+    ).then(() => onUploadPhotoSuccess());
+  };
+
+  const onUploadPhotoSuccess = () => {
+    showBottomToast('success', '사진 넣기 성공!');
+    navigation.navigate('Map');
+  };
+
   return (
     <SafeAreaView className="relative flex-1 justify-start items-center w-screen h-screen bg-white dark:bg-black">
       <View className="w-full h-1/2">
-        <ViewShot
-          ref={captureRef}
-          options={{
-            fileName: route.params.id + '_',
-            format: 'png',
-            quality: 1,
-            width: 95,
-            height: 95,
-          }}
-          style={customStyle().viewShot}>
-          <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 500 500">
-            <Defs>
-              <Pattern id="image" patternUnits="userSpaceOnUse">
-                <Image
-                  x="-50%"
-                  y="-50%"
-                  href={route.params.image}
-                  width={route.params.width}
-                  height={route.params.height}
-                  translateX={x[0]}
-                  translateY={y[0]}
-                  scale={scale[0]}
-                  rotation={rotate[0]}
-                />
-              </Pattern>
-            </Defs>
-            <Polygon
-              fill="url(#image)"
-              stroke="#000000"
-              strokeWidth="1"
-              points="177.16200256347656,1 242.22900390625,58.43701171875 278.9079895019531,159.489013671875 242.91900634765625,170.56396484375 240.84500122070312,192.0059814453125 301.06298828125,207.2440185546875 368.885986328125,189.241943359375 409.718994140625,201.011962890625 420.78900146484375,234.22900390625 409.718994140625,317.2779541015625 435.33599853515625,342.2020263671875 337.04901123046875,345.6650390625 277.52398681640625,382.3409423828125 277.52398681640625,429.405029296875 267.8290100097656,467.4739990234375 173.02699279785156,500 146.718994140625,448.0880126953125 83.04598999023438,412.0980224609375 63.66400146484375,340.1280517578125 98.96499633789062,214.166015625 142.56199645996094,165.717041015625 179.93600463867188,159.489013671875 128.72300720214844,49.4320068359375 "
-            />
-          </Svg>
-        </ViewShot>
+        <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 960 1110">
+          <Defs>
+            <Pattern id="image" patternUnits="userSpaceOnUse">
+              <Image
+                href={route.params.image}
+                width={route.params.width}
+                height={route.params.height}
+                translateX={x[0]}
+                translateY={y[0]}
+                scale={scale[0]}
+                rotation={rotate[0]}
+              />
+            </Pattern>
+          </Defs>
+          <Polygon
+            fill="url(#image)"
+            stroke="#000000"
+            strokeWidth="2"
+            points={route.params.svgPolygon}
+          />
+        </Svg>
       </View>
 
       <View className="w-full h-1/2 flex justify-center items-center">

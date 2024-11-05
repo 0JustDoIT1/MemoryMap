@@ -12,7 +12,6 @@ import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
-import useKoreaMap from 'src/hook/useKoreaMap';
 import {useSetRecoilState} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
 
@@ -39,9 +38,13 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
   });
 
   const setIsLoading = useSetRecoilState(isLoadingState);
-  const {setEmail, setPassword, setDisplayName, onSignUpEmailAndPassword} =
-    useEmailAndPasswordAuth();
-  const {setDataAndSetRecoil} = useKoreaMap();
+  const {
+    setEmail,
+    setPassword,
+    setDisplayName,
+    onSignUpEmailAndPassword,
+    setDataAndSetRecoil,
+  } = useEmailAndPasswordAuth();
 
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
   const [passwordCheckVisible, setPasswordCheckVisible] =

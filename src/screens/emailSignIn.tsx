@@ -6,7 +6,6 @@ import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
-import useKoreaMap from 'src/hook/useKoreaMap';
 import {isLoadingState} from 'src/recoil/atom';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Account, AppUser} from 'src/types/account';
@@ -34,8 +33,7 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
   });
 
   const setIsLoading = useSetRecoilState(isLoadingState);
-  const {getDataAndSetRecoil} = useKoreaMap();
-  const {setEmail, setPassword, onSignInEmailAndPassword} =
+  const {setEmail, setPassword, onSignInEmailAndPassword, getDataAndSetRecoil} =
     useEmailAndPasswordAuth();
 
   const onSignInAccount = async (data: Account) => {

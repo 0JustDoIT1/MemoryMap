@@ -1,7 +1,7 @@
 import {useRecoilState} from 'recoil';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
-import {AppData, AppUser} from 'src/types/account';
+import {AppData} from 'src/types/account';
 import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
 import {_read, _update} from 'src/utils/database';
 import {_upload} from 'src/utils/storage';
@@ -9,41 +9,6 @@ import {_upload} from 'src/utils/storage';
 const useKoreaMap = () => {
   const [appUser, setAppUser] = useRecoilState(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
-
-  // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
-  const getDataAndSetRecoil = async (user: AppUser) => {
-    await _read(user.uid).then(async snapshot => {
-      if (snapshot.val()) {
-        setKoreaMapData(snapshot.val()['koreaMapData']);
-        setAppUser(user);
-      } else {
-        // 구글 로그인으로 첫 로그인인 경우
-        const appDataInit: AppData = {
-          email: user.email,
-          uid: user.uid,
-          koreaMapData: koreaMapDataInit,
-        };
-        await _update(appDataInit).then(async () => {
-          setKoreaMapData(koreaMapDataInit);
-          setAppUser(user);
-        });
-      }
-    });
-  };
-
-  // 회원가입 시 초기 데이터를 firebase/recoil에 세팅
-  const setDataAndSetRecoil = async (user: AppUser) => {
-    const appDataInit: AppData = {
-      email: user.email,
-      uid: user.uid,
-      koreaMapData: koreaMapDataInit,
-    };
-
-    await _update(appDataInit).then(async () => {
-      setKoreaMapData(koreaMapDataInit);
-      setAppUser(user);
-    });
-  };
 
   // id로 해당 지역 데이터 가져오기
   const getMapDataById = (id: string): KoreaRegionData => {
@@ -63,6 +28,24 @@ const useKoreaMap = () => {
     return result;
   };
 
+  // id로 해당 지역 svg 데이터 가져오기
+  const getSvgDataById = (id: string): RegionList => {
+    let result: any;
+
+    // 객체 속 원하는 값 찾기 (Depth First Search 방식, 중첩 객체도 가능)
+    const DFS = (obj: any, name: any, val: any) => {
+      if (obj[name] === val) result = obj;
+      else
+        Object.values(obj).forEach(value => {
+          if (typeof value === 'object') DFS(value, name, val);
+        });
+    };
+
+    DFS(KoreaRegionList, 'id', id);
+
+    return result;
+  };
+
   // id로 해당 지역 배경 가져오기
   const getMapBackgroundById = (id: string): string => {
     const region = getMapDataById(id);
@@ -78,6 +61,7 @@ const useKoreaMap = () => {
       background: color,
       type: 'color',
     };
+    delete regionData.imageStyle;
 
     const updateData: KoreaMapData = {
       ...koreaMapData,
@@ -100,6 +84,7 @@ const useKoreaMap = () => {
       background: '#ffffff',
       type: 'init',
     };
+    delete regionData.imageStyle;
 
     const updateData: KoreaMapData = {
       ...koreaMapData,
@@ -116,11 +101,16 @@ const useKoreaMap = () => {
   };
 
   // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
-  const updateMapPhotoById = async (id: string, uri: string) => {
+  const updateMapPhotoById = async (
+    id: string,
+    uri: string,
+    imageStyle: {x: number; y: number; scale: number; rotation: number},
+  ) => {
     const regionData: KoreaRegionData = {
       ...getMapDataById(id),
       background: id,
       type: 'photo',
+      imageStyle: imageStyle,
     };
 
     const updateData: KoreaMapData = {
@@ -142,9 +132,8 @@ const useKoreaMap = () => {
   };
 
   return {
-    getDataAndSetRecoil,
-    setDataAndSetRecoil,
     getMapDataById,
+    getSvgDataById,
     getMapBackgroundById,
     updateMapColorById,
     deleteMapDataById,
