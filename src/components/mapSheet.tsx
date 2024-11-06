@@ -16,7 +16,6 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
-import ImageCropPicker from 'react-native-image-crop-picker';
 import CustomAlert from './alert';
 import useDialog from 'src/hook/useDialog';
 
