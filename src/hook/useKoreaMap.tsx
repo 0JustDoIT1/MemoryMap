@@ -1,11 +1,12 @@
 import {useState} from 'react';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue, useResetRecoilState} from 'recoil';
+import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
 import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
 import {_read, _update} from 'src/utils/database';
-import {_download, _upload} from 'src/utils/storage';
+import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
 
 const useKoreaMap = () => {
   const appUser = useRecoilValue(appUserState);
@@ -86,7 +87,10 @@ const useKoreaMap = () => {
       koreaMapData: updateData,
     };
 
-    return await _update(appData).then(() => setKoreaMapData(updateData));
+    if (getMapDataById(id).type === 'photo') {
+      await _delete(appData.uid, id).then();
+    }
+    await _update(appData).then(() => setKoreaMapData(updateData));
   };
 
   // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
@@ -145,7 +149,23 @@ const useKoreaMap = () => {
       koreaMapData: updateData,
     };
 
-    return await _update(appData).then(() => setKoreaMapData(updateData));
+    if (getMapDataById(id).type === 'photo') {
+      await _delete(appData.uid, id).then();
+    }
+    await _update(appData).then(() => setKoreaMapData(updateData));
+  };
+
+  // 지도 정보 초기화
+  const resetMapData = async () => {
+    const appData: AppData = {
+      uid: appUser?.uid as string,
+      email: appUser?.email as string,
+      koreaMapData: koreaMapDataInit,
+    };
+
+    return await _deleteAll(appData.uid).then(async () => {
+      await _update(appData).then(() => setKoreaMapData(koreaMapDataInit));
+    });
   };
 
   return {
@@ -157,6 +177,7 @@ const useKoreaMap = () => {
     updateMapColorById,
     updateMapPhotoById,
     deleteMapDataById,
+    resetMapData,
   };
 };
 
