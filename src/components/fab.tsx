@@ -27,36 +27,34 @@ const CustomFAB = ({
   const theme = useAppTheme();
 
   return (
-    <Portal>
-      <FAB.Group
-        open={open}
-        visible
-        icon={open ? 'close' : 'plus'}
-        fabStyle={customStyle().fab}
-        color="#ffffff"
-        actions={[
-          {
-            icon: icon1,
-            label: label1,
-            onPress: onPress1,
-            color: '#ffffff',
-            labelTextColor: theme.colors.brandMain,
-            containerStyle: customStyle().fabContainer,
-            style: customStyle().fab,
-          },
-          {
-            icon: icon2,
-            label: label2,
-            onPress: onPress2,
-            color: '#ffffff',
-            labelTextColor: theme.colors.brandMain,
-            containerStyle: customStyle().fabContainer,
-            style: customStyle().fab,
-          },
-        ]}
-        onStateChange={onChangeFAB}
-      />
-    </Portal>
+    <FAB.Group
+      open={open}
+      visible
+      icon={open ? 'close' : 'plus'}
+      fabStyle={customStyle().fab}
+      color="#ffffff"
+      actions={[
+        {
+          icon: icon1,
+          label: label1,
+          onPress: onPress1,
+          color: '#ffffff',
+          labelTextColor: theme.colors.brandMain,
+          containerStyle: customStyle().fabContainer,
+          style: customStyle().fab,
+        },
+        {
+          icon: icon2,
+          label: label2,
+          onPress: onPress2,
+          color: '#ffffff',
+          labelTextColor: theme.colors.brandMain,
+          containerStyle: customStyle().fabContainer,
+          style: customStyle().fab,
+        },
+      ]}
+      onStateChange={onChangeFAB}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
 import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
-import {Alert, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
@@ -9,7 +9,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {MapProps, StackParamList} from 'src/types/stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React, {useState} from 'react';
+import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
 import useKoreaMap from 'src/hook/useKoreaMap';
@@ -46,36 +46,12 @@ const MapSheet = ({
   const regionData = getMapDataById(id);
   const svgData = getSvgDataById(id);
 
-  const {updateMapPhotoById} = useKoreaMap();
-
-  const onUploadPhotoSuccess = () => {
-    showBottomToast('success', '색칠 성공!');
-    navigation.navigate('Map');
-  };
-
   const onImagePicker = async () => {
-    // ImageCropPicker.openPicker({
-    //   width: 300,
-    //   height: 300,
-    //   cropping: true,
-    //   mediaType: 'photo',
-    // }).then(async image => {
-    //   if (image) {
-    //     console.log('!!!', image.width, image.height);
-    //     handleClosePress();
-    //     await updateMapPhotoById(id, image.path).then(() =>
-    //       onUploadPhotoSuccess(),
-    //     );
-    //   }
-    // });
     await launchImageLibrary({
       mediaType: 'photo',
     }).then(async res => {
       if (res.assets) {
         handleClosePress();
-        // await updateMapPhotoById(id, res.assets[0].uri as string).then(() =>
-        //   onUploadPhotoSuccess(),
-        // );
         navigation.navigate('CropImage', {
           id: id,
           title: title,

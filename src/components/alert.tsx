@@ -23,18 +23,20 @@ const CustomAlert = ({
         visible={visible}
         onDismiss={hideAlert}
         style={customStyle().alert}>
-        <Dialog.Title className="text-base text-center">{title}</Dialog.Title>
+        <Dialog.Title className="text-base text-center py-1">
+          {title}
+        </Dialog.Title>
         <Dialog.Content className="p-0 border-t-[0.5px] border-blur">
           <View className="flex-row justify-center items-center">
             <TouchableOpacity
-              className="w-1/2 flex justify-center items-center p-3"
+              className="w-1/2 flex justify-center items-center py-4"
               onPress={hideAlert}
               activeOpacity={0.8}>
               <Text className="text-blue-500">취소</Text>
             </TouchableOpacity>
             <View className="h-full border-r-[0.5px] border-blur"></View>
             <TouchableOpacity
-              className="w-1/2 flex justify-center items-center p-3"
+              className="w-1/2 flex justify-center items-center py-4"
               onPress={buttonOnPress}
               activeOpacity={0.8}>
               <Text className="text-error">{buttonText}</Text>
