@@ -5,7 +5,6 @@ import {useAppTheme} from 'src/style/paperTheme';
 
 interface CustomFAB {
   open: boolean;
-  visible: boolean;
   onChangeFAB: () => void;
   icon1: IconSource;
   icon2: IconSource;
@@ -17,7 +16,6 @@ interface CustomFAB {
 
 const CustomFAB = ({
   open,
-  visible,
   onChangeFAB,
   icon1,
   label1,
@@ -32,9 +30,9 @@ const CustomFAB = ({
     <Portal>
       <FAB.Group
         open={open}
-        visible={visible}
+        visible
         icon={open ? 'close' : 'plus'}
-        fabStyle={customStyle().fabMain}
+        fabStyle={customStyle().fab}
         color="#ffffff"
         actions={[
           {

@@ -94,9 +94,10 @@ export const customStyle = (props?: CustomStyle) =>
     viewShot: {
       width: '100%',
       height: '100%',
-      display: 'flex',
+      flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: '#ffffff',
     },
     sliderContainer: {
       width: '100%',
@@ -104,11 +105,6 @@ export const customStyle = (props?: CustomStyle) =>
     sliderTrack: {height: 10, borderRadius: 50},
     sliderMinimumTrack: {
       backgroundColor: props?.bgColor ? props.bgColor : colors.brandMain,
-    },
-    fabMain: {
-      borderRadius: 100,
-      backgroundColor: colors.brandMain,
-      marginBottom: 65,
     },
     fab: {
       borderRadius: 100,

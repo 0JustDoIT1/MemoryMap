@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -14,8 +14,10 @@ import useFAB from 'src/hook/useFAB';
 import useMapSheet from 'src/hook/useMapSheet';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
-import RNFS from 'react-native-fs';
-import {useIsFocused} from '@react-navigation/native';
+import {hasAndroidPermission} from 'src/utils/getCheckPermission';
+import {showBottomToast} from 'src/utils/showToast';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import {Portal} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -37,7 +39,6 @@ const MapScreen = ({navigation, route}: MapProps) => {
     renderBackdrop,
   } = useMapSheet();
   const {open, onChangeFAB} = useFAB();
-  const isFocused = useIsFocused();
 
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
@@ -117,51 +118,47 @@ const MapScreen = ({navigation, route}: MapProps) => {
   };
 
   const saveScreenShot = async (uri: string) => {
-    const path = `${RNFS.PicturesDirectoryPath}/MemoryMap.jpg`;
-    // console.log('###', path);
-    // await RNFS.writeFile(path, uri);
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+      return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
+    }
+    return await CameraRoll.saveAsset(uri);
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
-      <ViewShot
-        ref={viewShotRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
-        <GestureDetector gesture={composed}>
-          <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
-          </Animated.View>
-        </GestureDetector>
-      </ViewShot>
-      <MapSheet
-        navigation={navigation}
-        mapSheetModalRef={mapSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        id={id}
-        title={title}
-        tag={tag}
-      />
-      <CustomFAB
-        open={open}
-        visible={isFocused}
-        onChangeFAB={onChangeFAB}
-        icon1="camera"
-        label1="지도 저장"
-        onPress1={onCaptureMap}
-        icon2="refresh"
-        label2="지도 초기화"
-        onPress2={() => {}}
-      />
-    </SafeAreaView>
+    <Portal.Host>
+      <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
+        <ViewShot
+          ref={viewShotRef}
+          style={customStyle().viewShot}
+          options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
+          <GestureDetector gesture={composed}>
+            <Animated.View style={[customStyle().mapBox, animatedStyles]}>
+              <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
+            </Animated.View>
+          </GestureDetector>
+        </ViewShot>
+        <MapSheet
+          navigation={navigation}
+          mapSheetModalRef={mapSheetModalRef}
+          snapPoints={snapPoints}
+          handleClosePress={handleClosePress}
+          renderBackdrop={renderBackdrop}
+          id={id}
+          title={title}
+          tag={tag}
+        />
+        <CustomFAB
+          open={open}
+          onChangeFAB={onChangeFAB}
+          icon1="camera"
+          label1="지도 저장"
+          onPress1={onCaptureMap}
+          icon2="refresh"
+          label2="지도 초기화"
+          onPress2={() => {}}
+        />
+      </SafeAreaView>
+    </Portal.Host>
   );
 };
 
