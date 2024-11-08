@@ -1,54 +1,68 @@
 import {TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Svg, {Defs, Image, Pattern, Polygon} from 'react-native-svg';
+import Svg, {Defs, Image, Path, Pattern, Polygon} from 'react-native-svg';
 import {CropImageProps} from 'src/types/stack';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {BrandContainedButton} from 'src/components/button';
 import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
-import useKoreaMap from 'src/hook/useKoreaMap';
 import {showBottomToast} from 'src/utils/showToast';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {customStyle} from 'src/style/customStyle';
 import {launchImageLibrary} from 'react-native-image-picker';
+import useKoreaMap from 'src/hook/useKoreaMap';
 
 const CropImage = ({navigation, route}: CropImageProps) => {
-  const {updateMapPhotoById} = useKoreaMap();
+  const {updateMapPhotoById, getSvgDataById} = useKoreaMap();
 
+  const svgData = getSvgDataById(route.params.id);
   const [image, setImage] = useState<string>(route.params.image);
-  const [width, setWidth] = useState<number>(route.params.width);
-  const [height, setHeight] = useState<number>(route.params.height);
 
   const [x, setX] = useState<number[]>([0]);
   const [y, setY] = useState<number[]>([0]);
   const [scale, setScale] = useState<number[]>([1]);
   const [rotate, setRotate] = useState<number[]>([0]);
 
-  const minX = -Math.round(width / 2);
-  const maxX = Math.round(width / 2);
-  const minY = -Math.round(height / 2);
-  const maxY = Math.round(height / 2);
+  // transform 값
+  const minX = -480;
+  const maxX = 480;
+  const minY = -555;
+  const maxY = 555;
   const minScale = 0.1;
   const maxScale = 2;
   const minRotate = -360;
   const maxRotate = 360;
 
-  console.log('!!!', image, width, height, x[0], y[0], scale[0], rotate[0]);
+  // 각 지역 svg 실제 크기
+  const svgW = svgData.svgStyle?.width as number;
+  const svgH = svgData.svgStyle?.height as number;
 
-  console.log('###', route.params.svgStyle, width, height);
+  const setImageWidthHeight = () => {
+    if (svgW > svgH) {
+      console.log('여기');
+      const ratio = svgH / svgW;
+      const diff = 1110 - 960 * ratio;
+      return {width: 960 + diff, height: 1110};
+    } else {
+      console.log('저기');
+      const ratio = svgW / svgH;
+      const diff = 960 - 1110 * ratio;
+      return {width: 960, height: 1110 + diff};
+    }
+  };
+
+  console.log('@@@', svgW, svgH, setImageWidthHeight());
 
   const onUploadPhoto = async () => {
-    const sWidth = route.params.svgStyle?.width as number;
-    const sHeight = route.params.svgStyle?.height as number;
-    const xRatio = sWidth / width;
-    const yRatio = sHeight / height;
-
-    console.log('a', x[0], y[0]);
-    console.log('흠', x[0] * xRatio, y[0] * yRatio);
+    // 지역 svg 실제 크기와 svg ViewBox의 비율
+    const ratioWidth = svgW / 960;
+    const ratioHeight = svgH / 1110;
+    const x1 = x[0] * ratioWidth;
+    const y1 = y[0] * ratioHeight;
 
     const imageStyle = {
-      x: x[0] * xRatio,
-      y: y[0] * yRatio,
+      x: x1,
+      y: y1,
       scale: scale[0],
       rotation: rotate[0],
     };
@@ -62,14 +76,15 @@ const CropImage = ({navigation, route}: CropImageProps) => {
     navigation.navigate('Map');
   };
 
-  const onImagePicker = async () => {
+  const onReImagePicker = async () => {
     await launchImageLibrary({
+      maxWidth: 250,
+      maxHeight: 250,
       mediaType: 'photo',
+      quality: 0.7,
     }).then(async res => {
       if (res.assets) {
         setImage(res.assets[0].uri as string);
-        setWidth(res.assets[0].width as number);
-        setHeight(res.assets[0].height as number);
         setX([0]);
         setY([0]);
         setScale([1]);
@@ -85,9 +100,10 @@ const CropImage = ({navigation, route}: CropImageProps) => {
           <Defs>
             <Pattern id="image" patternUnits="userSpaceOnUse">
               <Image
+                width={setImageWidthHeight().width}
+                height={setImageWidthHeight().height}
+                preserveAspectRatio="xMidyMid slice"
                 href={image}
-                width={width}
-                height={height}
                 translateX={x[0]}
                 translateY={y[0]}
                 scale={scale[0]}
@@ -95,17 +111,27 @@ const CropImage = ({navigation, route}: CropImageProps) => {
               />
             </Pattern>
           </Defs>
-          <Polygon
-            fill="url(#image)"
-            stroke="#000000"
-            strokeWidth="2"
-            points={route.params.svgPolygon}
-          />
+          {svgData.svgType === 'path' && (
+            <Path
+              fill="url(#image)"
+              stroke="#000000"
+              strokeWidth="2"
+              d={svgData.svgPath}
+            />
+          )}
+          {svgData.svgType === 'polygon' && (
+            <Polygon
+              fill="url(#image)"
+              stroke="#000000"
+              strokeWidth="2"
+              points={svgData.svgPath}
+            />
+          )}
         </Svg>
         <TouchableOpacity
           className="absolute bottom-0 right-10 p-1 rounded-full bg-brandLight"
           activeOpacity={0.8}
-          onPress={onImagePicker}>
+          onPress={onReImagePicker}>
           <Ionicons
             name="refresh"
             size={20}

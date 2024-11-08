@@ -1,3 +1,4 @@
+import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
@@ -48,4 +49,6 @@ const CustomAlert = ({
   );
 };
 
-export default CustomAlert;
+const MemoizedCustomAlert = React.memo(CustomAlert);
+
+export default MemoizedCustomAlert;

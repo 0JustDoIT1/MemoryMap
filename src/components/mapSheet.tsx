@@ -12,12 +12,13 @@ import useModal from 'src/hook/useModal';
 import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
-import useKoreaMap from 'src/hook/useKoreaMap';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
 import CustomAlert from './alert';
 import useDialog from 'src/hook/useDialog';
+import useKoreaMap from 'src/hook/useKoreaMap';
+import MemoizedCustomAlert from './alert';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -42,13 +43,16 @@ const MapSheet = ({
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {getMapDataById, getSvgDataById, deleteMapDataById} = useKoreaMap();
+  const {getMapDataById, deleteMapDataById} = useKoreaMap();
+
   const regionData = getMapDataById(id);
-  const svgData = getSvgDataById(id);
 
   const onImagePicker = async () => {
     await launchImageLibrary({
+      maxWidth: 250,
+      maxHeight: 250,
       mediaType: 'photo',
+      quality: 0.7,
     }).then(async res => {
       if (res.assets) {
         handleClosePress();
@@ -56,10 +60,6 @@ const MapSheet = ({
           id: id,
           title: title,
           image: res.assets[0].uri as string,
-          width: res.assets[0].width as number,
-          height: res.assets[0].height as number,
-          svgStyle: svgData.svgStyle,
-          svgPolygon: svgData.svgPolygon as string,
         });
       }
     });
@@ -158,7 +158,7 @@ const MapSheet = ({
           />
         }
       />
-      <CustomAlert
+      <MemoizedCustomAlert
         visible={visibleDialog}
         title="배경을 제거하시겠습니까?"
         buttonText="삭제"
@@ -169,4 +169,6 @@ const MapSheet = ({
   );
 };
 
-export default MapSheet;
+const MemoizedMapSheet = React.memo(MapSheet);
+
+export default MemoizedMapSheet;

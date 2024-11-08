@@ -13,10 +13,6 @@ export type StackParamList = {
     id: string;
     title: string;
     image: string;
-    width: number;
-    height: number;
-    svgStyle?: {width: number; height: number; x: number; y: number};
-    svgPolygon: string;
   };
 };
 
