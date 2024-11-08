@@ -7,9 +7,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ViewShot from 'react-native-view-shot';
-import CustomFAB from 'src/components/fab';
-import KoreaMapSvg from 'src/components/koreaMapSvg';
-import MapSheet from 'src/components/mapSheet';
 import useFAB from 'src/hook/useFAB';
 import useMapSheet from 'src/hook/useMapSheet';
 import {customStyle} from 'src/style/customStyle';
@@ -17,9 +14,12 @@ import {MapProps} from 'src/types/stack';
 import {hasAndroidPermission} from 'src/utils/getCheckPermission';
 import {showBottomToast} from 'src/utils/showToast';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import CustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import MemoizedKoreaMap from 'src/components/koreaMapSvg';
+import MemoizedMapSheet from 'src/components/mapSheet';
+import MemoizedCustomAlert from 'src/components/alert';
+import MemoizedCustomFAB from 'src/components/fab';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -28,6 +28,7 @@ const clamp = (val: number, min: number, max: number) => {
 };
 
 const MapScreen = ({navigation, route}: MapProps) => {
+  console.log('맵');
   const viewShotRef = useRef<ViewShot>(null);
 
   const {
@@ -143,11 +144,11 @@ const MapScreen = ({navigation, route}: MapProps) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <KoreaMapSvg handleMapModalPress={handleMapModalPress} />
+            <MemoizedKoreaMap handleMapModalPress={handleMapModalPress} />
           </Animated.View>
         </GestureDetector>
       </ViewShot>
-      <MapSheet
+      <MemoizedMapSheet
         navigation={navigation}
         mapSheetModalRef={mapSheetModalRef}
         snapPoints={snapPoints}
@@ -157,7 +158,7 @@ const MapScreen = ({navigation, route}: MapProps) => {
         title={title}
         tag={tag}
       />
-      <CustomFAB
+      <MemoizedCustomFAB
         open={open}
         onChangeFAB={onChangeFAB}
         icon1="camera"
@@ -167,7 +168,7 @@ const MapScreen = ({navigation, route}: MapProps) => {
         label2="지도 초기화"
         onPress2={showDialog}
       />
-      <CustomAlert
+      <MemoizedCustomAlert
         visible={visibleDialog}
         title="지도를 초기화하시겠습니까?"
         buttonText="초기화"

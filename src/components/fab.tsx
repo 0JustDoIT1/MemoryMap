@@ -1,3 +1,4 @@
+import React from 'react';
 import {FAB, Portal} from 'react-native-paper';
 import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
 import {customStyle} from 'src/style/customStyle';
@@ -58,4 +59,6 @@ const CustomFAB = ({
   );
 };
 
-export default CustomFAB;
+const MemoizedCustomFAB = React.memo(CustomFAB);
+
+export default MemoizedCustomFAB;

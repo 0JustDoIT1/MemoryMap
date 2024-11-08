@@ -1,40 +1,43 @@
-import {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
-import {useRecoilValue} from 'recoil';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import {koreaMapDataState} from 'src/recoil/atom';
 
 const SvgPattern = () => {
-  const koreaMapData = useRecoilValue(koreaMapDataState);
-  const {idArray, getSvgDataById, getMapDataById, getTypePhotoToIdArray} =
-    useKoreaMap();
+  const {koreaMapData, getSvgDataById, getTypeToIdArray} = useKoreaMap();
+  const [idArray, setIdArray] = useState<string[]>([]);
 
   useEffect(() => {
-    getTypePhotoToIdArray('photo');
+    const arr = getTypeToIdArray('photo');
+    if (arr !== idArray) setIdArray(arr);
   }, [koreaMapData]);
 
   return (
     <Defs>
-      {idArray.map(item => (
-        <Pattern
-          key={item}
-          id={item}
-          patternUnits="userSpaceOnUse"
-          x={getSvgDataById(item).svgStyle?.x}
-          y={getSvgDataById(item).svgStyle?.y as number}>
-          <Image
-            width={getSvgDataById(item).svgStyle?.width}
-            height={getSvgDataById(item).svgStyle?.height}
-            href={getMapDataById(item).imageUrl}
-            translateX={getMapDataById(item).imageStyle?.x}
-            translateY={getMapDataById(item).imageStyle?.y as number}
-            scale={getMapDataById(item).imageStyle?.scale}
-            rotation={getMapDataById(item).imageStyle?.rotation}
-          />
-        </Pattern>
-      ))}
+      {idArray.map(item => {
+        return (
+          <Pattern
+            key={item}
+            id={item}
+            patternUnits="userSpaceOnUse"
+            x={getSvgDataById(item).svgStyle?.x}
+            y={getSvgDataById(item).svgStyle?.y}>
+            <Image
+              width={getSvgDataById(item).svgStyle?.width}
+              height={getSvgDataById(item).svgStyle?.height}
+              preserveAspectRatio="xMidyMid slice"
+              href={koreaMapData[item].imageUrl}
+              translateX={koreaMapData[item].imageStyle?.x}
+              translateY={koreaMapData[item].imageStyle?.y}
+              scale={koreaMapData[item].imageStyle?.scale}
+              rotation={koreaMapData[item].imageStyle?.rotation}
+            />
+          </Pattern>
+        );
+      })}
     </Defs>
   );
 };
 
-export default SvgPattern;
+const MemoizationSvgPattern = React.memo(SvgPattern);
+
+export default MemoizationSvgPattern;

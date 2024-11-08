@@ -21,6 +21,7 @@ const ColorPickerModal = ({
   handleClosePress,
 }: ColorPickerModal) => {
   const {getMapDataById, updateMapColorById} = useKoreaMap();
+
   const regionData = getMapDataById(id);
 
   const [mode, setMode] = useState<boolean>(false);

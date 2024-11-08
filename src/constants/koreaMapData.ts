@@ -1,5 +1,6 @@
 import {KoreaMapData} from 'src/types/koreaMap';
 
+//163
 export const koreaMapDataInit: KoreaMapData = {
   'KR-1': {
     id: 'KR-1',
@@ -1157,7 +1158,7 @@ export const koreaMapDataInit: KoreaMapData = {
     story: 0,
   },
   'KR-13-4': {
-    id: 'KR-13-14',
+    id: 'KR-13-4',
     title: '사천',
     value: ['경상남도', '사천시'],
     type: 'init',
