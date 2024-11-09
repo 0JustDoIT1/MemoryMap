@@ -39,14 +39,12 @@ const CropImage = ({navigation, route}: CropImageProps) => {
 
   const setImageWidthHeight = () => {
     if (svgW > svgH) {
-      console.log('여기');
       const ratio = svgH / svgW;
-      const diff = 1110 - 960 * ratio;
+      const diff = Math.abs(1110 - 960 * ratio);
       return {width: 960 + diff, height: 1110};
     } else {
-      console.log('저기');
       const ratio = svgW / svgH;
-      const diff = 960 - 1110 * ratio;
+      const diff = Math.abs(960 - 1110 * ratio);
       return {width: 960, height: 1110 + diff};
     }
   };

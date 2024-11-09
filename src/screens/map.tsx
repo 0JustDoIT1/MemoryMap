@@ -126,7 +126,13 @@ const MapScreen = ({navigation, route}: MapProps) => {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
     }
-    return await CameraRoll.saveAsset(uri);
+    return await CameraRoll.saveAsset(uri).then(() =>
+      onSaveScreenShotSuccess(),
+    );
+  };
+
+  const onSaveScreenShotSuccess = () => {
+    showBottomToast('success', '갤러리에 저장되었습니다!');
   };
 
   const onResetMap = async () => {
