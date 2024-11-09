@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 
@@ -29,19 +29,17 @@ const CustomAlert = ({
         </Dialog.Title>
         <Dialog.Content className="p-0 border-t-[0.5px] border-blur">
           <View className="flex-row justify-center items-center">
-            <TouchableOpacity
+            <Pressable
               className="w-1/2 flex justify-center items-center py-4"
-              onPress={hideAlert}
-              activeOpacity={0.8}>
+              onPress={hideAlert}>
               <Text className="text-blue-500">취소</Text>
-            </TouchableOpacity>
+            </Pressable>
             <View className="h-full border-r-[0.5px] border-blur"></View>
-            <TouchableOpacity
+            <Pressable
               className="w-1/2 flex justify-center items-center py-4"
-              onPress={buttonOnPress}
-              activeOpacity={0.8}>
+              onPress={buttonOnPress}>
               <Text className="text-error">{buttonText}</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </Dialog.Content>
       </Dialog>

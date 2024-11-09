@@ -1,6 +1,6 @@
 import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
@@ -37,7 +37,7 @@ const CustomBottomSheet = ({
           <View
             className={`flex-row justify-center items-center w-full ${titleMarginBottom}`}>
             <Text className="text-xl text-outline">{title}</Text>
-            <TouchableOpacity
+            <Pressable
               className="absolute top-50 right-0"
               onPress={handleClosePress}>
               <AntDesign
@@ -45,7 +45,7 @@ const CustomBottomSheet = ({
                 size={32}
                 style={customStyle().bottomSheetIcon}
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
           {description && (
             <Text className="text-xs text-outline text-center mb-8">

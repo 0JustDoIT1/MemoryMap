@@ -2,6 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import BootSplash from 'react-native-bootsplash';
 
 import {StackParamList} from 'src/types/stack';
@@ -13,6 +14,7 @@ import SettingScreen from 'src/screens/setting';
 import Root from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
 import CropImage from 'src/screens/cropImage';
+import {Pressable} from 'react-native';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -66,13 +68,22 @@ const Main = () => {
       <Tab.Screen
         name="Story"
         component={StoryScreen}
-        options={{
+        options={({navigation}) => ({
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'book' : 'book-outline';
             return <Ionicons name={name} size={size} color={color} />;
           },
+          headerRight: () => (
+            <Pressable
+              className="px-4"
+              onPress={() => {
+                navigation.navigate('');
+              }}>
+              <Entypo name="pencil" size={20} color="#000000" />
+            </Pressable>
+          ),
           // tabBarLabel: '스토리',
-        }}
+        })}
       />
       <Tab.Screen
         name="Setting"

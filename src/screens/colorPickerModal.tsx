@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {returnedResults} from 'reanimated-color-picker';
 import CustomColorPannel from 'src/components/colorPannel';
@@ -92,14 +92,14 @@ const ColorPickerModal = ({
       </View>
 
       <View className="mt-4 flex-row justify-between items-center">
-        <TouchableOpacity activeOpacity={0.8} onPress={onChangeMode}>
+        <Pressable onPress={onChangeMode}>
           <Text className="text-brandMain">
             {mode ? '기본 색상' : '더 많은 색상'}
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} onPress={onSettingColor}>
+        </Pressable>
+        <Pressable onPress={onSettingColor}>
           <Text className="text-brandMain">색칠하기</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
