@@ -1,8 +1,8 @@
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Svg, {Defs, Image, Path, Pattern, Polygon} from 'react-native-svg';
 import {CropImageProps} from 'src/types/stack';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {BrandContainedButton} from 'src/components/button';
 import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
@@ -126,16 +126,15 @@ const CropImage = ({navigation, route}: CropImageProps) => {
             />
           )}
         </Svg>
-        <TouchableOpacity
+        <Pressable
           className="absolute bottom-0 right-10 p-1 rounded-full bg-brandLight"
-          activeOpacity={0.8}
           onPress={onReImagePicker}>
           <Ionicons
             name="refresh"
             size={20}
             style={customStyle().mapBottomSheetPhotoIcon}
           />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View className="w-full h-1/2 flex justify-center items-center">

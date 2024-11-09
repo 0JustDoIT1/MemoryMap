@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, View, TouchableOpacity} from 'react-native';
+import {Image, View, Pressable} from 'react-native';
 import {ActivityIndicator, Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
@@ -127,7 +127,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
             <Divider className="w-1/3 my-5 bg-blur" />
           </View>
           <View className="w-full flex items-center">
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 handlePresentModalPress({
                   title: '회원가입',
@@ -141,18 +141,18 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 });
               }}>
               <Text className="underline text-blur">이메일로 회원가입</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <View className="w-full mt-auto flex-row justify-center items-center">
-            <TouchableOpacity>
+            <Pressable>
               <Text className="text-xs text-blur">개인정보 처리방침</Text>
-            </TouchableOpacity>
+            </Pressable>
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
-            <TouchableOpacity>
+            <Pressable>
               <Text className="text-xs text-blur">서비스 이용약관</Text>
-            </TouchableOpacity>
+            </Pressable>
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 handlePresentModalPress({
                   title: '비밀번호 재설정',
@@ -162,7 +162,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 });
               }}>
               <Text className="text-xs text-blur">비밀번호 찾기</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       )}

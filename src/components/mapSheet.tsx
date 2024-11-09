@@ -1,6 +1,6 @@
 import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
@@ -15,7 +15,6 @@ import ColorPickerModal from 'src/screens/colorPickerModal';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
-import CustomAlert from './alert';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedCustomAlert from './alert';
@@ -106,22 +105,22 @@ const MapSheet = ({
                     }></View>
                 )}
                 {regionData && regionData.type !== 'init' && (
-                  <TouchableOpacity onPress={showDialog}>
+                  <Pressable onPress={showDialog}>
                     <FontAwesome6
                       name="eraser"
                       size={20}
                       style={customStyle().mapBottomSheetIcon}
                     />
-                  </TouchableOpacity>
+                  </Pressable>
                 )}
               </View>
-              <TouchableOpacity onPress={handleClosePress}>
+              <Pressable onPress={handleClosePress}>
                 <AntDesign
                   name="close"
                   size={32}
                   style={customStyle().mapBottomSheetIcon}
                 />
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View className="w-full flex-row justify-start items-center">
               {tag.length > 0 &&

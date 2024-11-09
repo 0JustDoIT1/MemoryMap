@@ -1,4 +1,4 @@
-import {GestureResponderEvent, Image} from 'react-native';
+import {GestureResponderEvent, Image, Pressable} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {useRecoilValue} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
@@ -45,7 +45,7 @@ const SocialLoginButton = ({
   };
 
   return (
-    // <TouchableHighlight
+    // <Pressable
     //   className={`w-full py-4 rounded-lg ${buttonClass}`}
     //   underlayColor={underlayColor}
     //   onPress={onPress}
@@ -72,7 +72,7 @@ const SocialLoginButton = ({
     //       {text} 계정으로 로그인
     //     </Text>
     //   </View>
-    // </TouchableHighlight>
+    // </Pressable>
     <Button
       mode="elevated"
       icon={() => icon(type)}
