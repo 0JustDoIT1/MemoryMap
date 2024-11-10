@@ -12,9 +12,9 @@ const Root = ({navigation}: RootProps) => {
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
     if (user) {
       const appUserInit = {
-        uid: user.uid as string,
-        email: user.email as string,
-        displayName: user.displayName as string,
+        uid: user.uid!,
+        email: user.email!,
+        displayName: user.displayName!,
       };
       await getDataAndSetRecoil(appUserInit);
       navigation.replace('Main');

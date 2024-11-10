@@ -13,8 +13,8 @@ const SvgPattern = () => {
 
   return (
     <Defs>
-      {idArray.map(item => {
-        return (
+      {idArray.length >= 1 &&
+        idArray.map(item => (
           <Pattern
             key={item}
             id={item}
@@ -32,8 +32,7 @@ const SvgPattern = () => {
               rotation={koreaMapData[item].imageStyle?.rotation}
             />
           </Pattern>
-        );
-      })}
+        ))}
     </Defs>
   );
 };

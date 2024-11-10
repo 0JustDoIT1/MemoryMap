@@ -58,7 +58,7 @@ const MapSheet = ({
         navigation.navigate('CropImage', {
           id: id,
           title: title,
-          image: res.assets[0].uri as string,
+          image: res.assets[0].uri!,
         });
       }
     });
