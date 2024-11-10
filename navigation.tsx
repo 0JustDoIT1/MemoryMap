@@ -1,8 +1,13 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import BootSplash from 'react-native-bootsplash';
 
 import {StackParamList} from 'src/types/stack';
@@ -15,6 +20,9 @@ import Root from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
 import CropImage from 'src/screens/cropImage';
 import {Pressable} from 'react-native';
+import AddStory from 'src/screens/addStory';
+import {launchImageLibrary} from 'react-native-image-picker';
+import SelectRegion from 'src/screens/selectRegion';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -77,9 +85,9 @@ const Main = () => {
             <Pressable
               className="px-4"
               onPress={() => {
-                navigation.navigate('');
+                navigation.navigate('AddStory', {title: '스토리 작성'});
               }}>
-              <Entypo name="pencil" size={20} color="#000000" />
+              <FontAwesome name="pencil-square-o" size={24} color="#000000" />
             </Pressable>
           ),
           // tabBarLabel: '스토리',
@@ -101,6 +109,27 @@ const Main = () => {
 };
 
 const Navigation = () => {
+  const theme = useAppTheme();
+
+  const onReImagePicker = async (
+    navigation: NativeStackNavigationProp<
+      StackParamList,
+      'CropImage',
+      undefined
+    >,
+  ) => {
+    await launchImageLibrary({
+      maxWidth: 250,
+      maxHeight: 250,
+      mediaType: 'photo',
+      quality: 0.7,
+    }).then(async res => {
+      if (res.assets) {
+        navigation.setParams({image: res.assets[0] as string});
+      }
+    });
+  };
+
   return (
     <NavigationContainer
       onReady={() => {
@@ -117,6 +146,28 @@ const Navigation = () => {
         <Stack.Screen
           name="CropImage"
           component={CropImage}
+          options={({navigation, route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#000000',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: route.params.title,
+            headerBackButtonMenuEnabled: true,
+            headerRight: () => (
+              <Pressable
+                className="px-4"
+                onPress={() => onReImagePicker(navigation)}>
+                <MaterialIcons name="refresh" size={24} color="#000000" />
+              </Pressable>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="AddStory"
+          component={AddStory}
           options={({route}) => ({
             headerShown: true,
             headerShadowVisible: false,
@@ -128,6 +179,22 @@ const Navigation = () => {
             headerTitle: route.params.title,
             headerBackButtonMenuEnabled: true,
           })}
+        />
+        <Stack.Screen
+          name="SelectRegion"
+          component={SelectRegion}
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '지역 선택',
+            headerBackButtonMenuEnabled: true,
+            headerStyle: {backgroundColor: theme.colors.brandLight},
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

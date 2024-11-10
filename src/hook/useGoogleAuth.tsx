@@ -23,9 +23,9 @@ const useGoogleAuth = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const res = await auth().signInWithCredential(googleCredential);
       const result: AppUser = {
-        uid: res.user.uid as string,
-        email: res.user.email as string,
-        displayName: res.user.displayName as string,
+        uid: res.user.uid!,
+        email: res.user.email!,
+        displayName: res.user.displayName!,
       };
       return result;
     } else if (type === 'cancelled') {

@@ -94,8 +94,8 @@ const useKoreaMap = () => {
       };
 
       const appData: AppData = {
-        uid: appUser?.uid as string,
-        email: appUser?.email as string,
+        uid: appUser?.uid!,
+        email: appUser?.email!,
         koreaMapData: updateData,
       };
 
@@ -114,9 +114,9 @@ const useKoreaMap = () => {
       uri: string,
       imageStyle: {x: number; y: number; scale: number; rotation: number},
     ) => {
-      await _upload(appUser?.uid as string, id, uri).then(
+      await _upload(appUser?.uid!, id, uri).then(
         async res =>
-          await _download(appUser?.uid as string, id).then(async res => {
+          await _download(appUser?.uid!, id).then(async res => {
             const regionData: KoreaRegionData = {
               ...getMapDataById(id),
               background: `url(#${id})`,
@@ -131,8 +131,8 @@ const useKoreaMap = () => {
             };
 
             const appData: AppData = {
-              uid: appUser?.uid as string,
-              email: appUser?.email as string,
+              uid: appUser?.uid!,
+              email: appUser?.email!,
               koreaMapData: updateData,
             };
 
@@ -162,8 +162,8 @@ const useKoreaMap = () => {
       };
 
       const appData: AppData = {
-        uid: appUser?.uid as string,
-        email: appUser?.email as string,
+        uid: appUser?.uid!,
+        email: appUser?.email!,
         koreaMapData: updateData,
       };
 
@@ -178,8 +178,8 @@ const useKoreaMap = () => {
   // 지도 정보 초기화
   const resetMapData = useCallback(async () => {
     const appData: AppData = {
-      uid: appUser?.uid as string,
-      email: appUser?.email as string,
+      uid: appUser?.uid!,
+      email: appUser?.email!,
       koreaMapData: koreaMapDataInit,
     };
 
@@ -187,6 +187,36 @@ const useKoreaMap = () => {
       await _update(appData).then(() => setKoreaMapData(koreaMapDataInit));
     });
   }, [appUser]);
+
+  // 지도 색칠된 지역(color & photo) 리스트 가져오기
+  const getColorRegionList = useCallback(() => {
+    interface Result {
+      [key: string]: string[];
+    }
+
+    const result: Result = {};
+
+    const colorList = Object.values(koreaMapData).filter(
+      region => region.type !== 'init',
+    );
+
+    colorList.forEach((region, index) => {
+      let value =
+        region.value.length === 1
+          ? []
+          : [region.value[region.value.length - 1]];
+
+      if (index === 0) result[region.value[0]] = value;
+      else {
+        const exist = result[region.value[0]];
+        if (exist)
+          result[region.value[0]].push(region.value[region.value.length - 1]);
+        else result[region.value[0]] = value;
+      }
+    });
+
+    return result;
+  }, [koreaMapData]);
 
   return {
     koreaMapData,
@@ -198,6 +228,7 @@ const useKoreaMap = () => {
     updateMapPhotoById,
     deleteMapDataById,
     resetMapData,
+    getColorRegionList,
   };
 };
 

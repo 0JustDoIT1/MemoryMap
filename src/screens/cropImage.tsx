@@ -1,15 +1,12 @@
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Svg, {Defs, Image, Path, Pattern, Polygon} from 'react-native-svg';
 import {CropImageProps} from 'src/types/stack';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {BrandContainedButton} from 'src/components/button';
 import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
 import {showBottomToast} from 'src/utils/showToast';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {customStyle} from 'src/style/customStyle';
-import {launchImageLibrary} from 'react-native-image-picker';
 import useKoreaMap from 'src/hook/useKoreaMap';
 
 const CropImage = ({navigation, route}: CropImageProps) => {
@@ -23,6 +20,14 @@ const CropImage = ({navigation, route}: CropImageProps) => {
   const [scale, setScale] = useState<number[]>([1]);
   const [rotate, setRotate] = useState<number[]>([0]);
 
+  useEffect(() => {
+    setImage(route.params.image);
+    setX([0]);
+    setY([0]);
+    setScale([1]);
+    setRotate([0]);
+  }, [route.params.image]);
+
   // transform 값
   const minX = -480;
   const maxX = 480;
@@ -34,8 +39,8 @@ const CropImage = ({navigation, route}: CropImageProps) => {
   const maxRotate = 360;
 
   // 각 지역 svg 실제 크기
-  const svgW = svgData.svgStyle?.width as number;
-  const svgH = svgData.svgStyle?.height as number;
+  const svgW = svgData.svgStyle?.width!;
+  const svgH = svgData.svgStyle?.height!;
 
   const setImageWidthHeight = () => {
     if (svgW > svgH) {
@@ -48,8 +53,6 @@ const CropImage = ({navigation, route}: CropImageProps) => {
       return {width: 960, height: 1110 + diff};
     }
   };
-
-  console.log('@@@', svgW, svgH, setImageWidthHeight());
 
   const onUploadPhoto = async () => {
     // 지역 svg 실제 크기와 svg ViewBox의 비율
@@ -74,25 +77,8 @@ const CropImage = ({navigation, route}: CropImageProps) => {
     navigation.navigate('Map');
   };
 
-  const onReImagePicker = async () => {
-    await launchImageLibrary({
-      maxWidth: 250,
-      maxHeight: 250,
-      mediaType: 'photo',
-      quality: 0.7,
-    }).then(async res => {
-      if (res.assets) {
-        setImage(res.assets[0].uri as string);
-        setX([0]);
-        setY([0]);
-        setScale([1]);
-        setRotate([0]);
-      }
-    });
-  };
-
   return (
-    <SafeAreaView className="relative flex-1 justify-start items-center w-screen h-screen bg-white dark:bg-black">
+    <SafeAreaView className="relative flex-1 justify-start items-center w-screen h-screen bg-white p-2">
       <View className="relative w-full h-1/2">
         <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 960 1110">
           <Defs>
@@ -126,15 +112,6 @@ const CropImage = ({navigation, route}: CropImageProps) => {
             />
           )}
         </Svg>
-        <Pressable
-          className="absolute bottom-0 right-10 p-1 rounded-full bg-brandLight"
-          onPress={onReImagePicker}>
-          <Ionicons
-            name="refresh"
-            size={20}
-            style={customStyle().mapBottomSheetPhotoIcon}
-          />
-        </Pressable>
       </View>
 
       <View className="w-full h-1/2 flex justify-center items-center">

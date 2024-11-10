@@ -12,7 +12,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white dark:bg-black">
+    <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white p-2">
       <BrandContainedButton text="로그아웃" onPress={onSignOutAuth} />
     </SafeAreaView>
   );
