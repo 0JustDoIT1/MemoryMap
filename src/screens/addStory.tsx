@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -16,6 +16,21 @@ const AddStory = ({navigation, route}: AddStoryProps) => {
     [koreaMapData],
   );
 
+  const [regionId, setRegionId] = useState<string>('');
+  const [regionTitle, setRegionTitle] = useState<string>('');
+
+  useEffect(() => {
+    if (route.params.region) {
+      setRegionId(route.params.region!);
+      setRegionTitle(
+        koreaMapData[route.params.region!].value[
+          koreaMapData[route.params.region!].value.length - 1
+        ],
+      );
+    }
+  }, [route.params.region]);
+
+  // 지역 선택 페이지로 전환
   const onPressRegion = () => {
     navigation.navigate('SelectRegion');
   };
@@ -31,11 +46,7 @@ const AddStory = ({navigation, route}: AddStoryProps) => {
               label="지역을 선택해 주세요."
               activeOutlineColor={theme.colors.brandMain}
               editable={false}
-              // value={value}
-              // onChangeText={text => {
-              //   onChange(text);
-              //   setEmail(text);
-              // }}
+              value={regionTitle}
             />
           </Pressable>
           <View className="w-full flex-row justify-between items-center mt-2">

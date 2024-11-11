@@ -17,6 +17,7 @@ export type StackParamList = {
   AddStory: {
     title: string;
     id?: string;
+    region?: string;
   };
   SelectRegion: undefined;
 };
