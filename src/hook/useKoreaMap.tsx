@@ -4,7 +4,11 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
-import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
+import {
+  GetColorRegionList,
+  KoreaMapData,
+  KoreaRegionData,
+} from 'src/types/koreaMap';
 import {_update} from 'src/utils/database';
 import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
 
@@ -190,27 +194,34 @@ const useKoreaMap = () => {
 
   // 지도 색칠된 지역(color & photo) 리스트 가져오기
   const getColorRegionList = useCallback(() => {
-    interface Result {
-      [key: string]: string[];
-    }
-
-    const result: Result = {};
+    const result: GetColorRegionList = {};
 
     const colorList = Object.values(koreaMapData).filter(
       region => region.type !== 'init',
     );
 
     colorList.forEach((region, index) => {
+      const regionName = region.value[region.value.length - 1];
+
       let value =
         region.value.length === 1
-          ? []
-          : [region.value[region.value.length - 1]];
+          ? {
+              child: false,
+              sub: [{id: region.id, title: regionName}],
+            }
+          : {
+              child: true,
+              sub: [{id: region.id, title: regionName}],
+            };
 
       if (index === 0) result[region.value[0]] = value;
       else {
         const exist = result[region.value[0]];
         if (exist)
-          result[region.value[0]].push(region.value[region.value.length - 1]);
+          result[region.value[0]].sub.push({
+            id: region.id,
+            title: regionName,
+          });
         else result[region.value[0]] = value;
       }
     });
