@@ -2,7 +2,7 @@ import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useCallback, useMemo, useRef, useState} from 'react';
 
 interface SettingBottomSheet {
-  title: string;
+  title?: string;
   description?: string;
   contents: React.JSX.Element;
   snap: string;
@@ -11,7 +11,9 @@ interface SettingBottomSheet {
 const useCustomBottomSheet = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const [bottomSheetTitle, setBottomSheetTitle] = useState<string>('');
+  const [bottomSheetTitle, setBottomSheetTitle] = useState<string | undefined>(
+    '',
+  );
   const [bottomSheetDescription, setBottomSheetDescription] = useState<
     string | undefined
   >('');

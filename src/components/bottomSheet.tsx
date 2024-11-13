@@ -10,7 +10,7 @@ interface CustomBottomSheet {
   snapPoints: string[];
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
-  title: string;
+  title?: string;
   description?: string;
   contents: React.JSX.Element;
 }
@@ -34,19 +34,21 @@ const CustomBottomSheet = ({
       backdropComponent={renderBackdrop}>
       <BottomSheetView className="flex-1 items-center">
         <View className="flex justify-center items-center w-full py-6 px-8">
-          <View
-            className={`flex-row justify-center items-center w-full ${titleMarginBottom}`}>
-            <Text className="text-xl text-outline">{title}</Text>
-            <Pressable
-              className="absolute top-50 right-0"
-              onPress={handleClosePress}>
-              <AntDesign
-                name="close"
-                size={32}
-                style={customStyle().bottomSheetIcon}
-              />
-            </Pressable>
-          </View>
+          {title && (
+            <View
+              className={`flex-row justify-center items-center w-full ${titleMarginBottom}`}>
+              <Text className="text-xl text-outline">{title}</Text>
+              <Pressable
+                className="absolute top-50 right-0"
+                onPress={handleClosePress}>
+                <AntDesign
+                  name="close"
+                  size={32}
+                  style={customStyle().bottomSheetIcon}
+                />
+              </Pressable>
+            </View>
+          )}
           {description && (
             <Text className="text-xs text-outline text-center mb-8">
               {description}
