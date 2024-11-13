@@ -10,6 +10,9 @@ import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import BrandCalendar from 'src/components/calendar';
 import {dateToFormatString} from 'src/utils/dateFormat';
+import {BrandContainedButton} from 'src/components/button';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const AddStory = ({navigation, route}: AddStoryProps) => {
   const theme = useAppTheme();
@@ -157,6 +160,55 @@ const AddStory = ({navigation, route}: AddStoryProps) => {
           <Text>색칠된 지역이 없습니다.</Text>
         </View>
       )}
+      <View className="mt-8">
+        <Text className="text-md ml-2">여행 기분은 어떠셨나요?</Text>
+        <View className="w-full mt-2 flex-row justify-between items-center">
+          <View className="flex items-center">
+            <MaterialCommunityIcons
+              name="emoticon-excited-outline"
+              size={60}
+              color={theme.colors.excite}
+            />
+            <Text className="text-excite">최고</Text>
+          </View>
+          <View className="flex items-center">
+            <MaterialCommunityIcons
+              name="emoticon-happy-outline"
+              size={60}
+              color={theme.colors.happy}
+            />
+            <Text className="text-happy">좋음</Text>
+          </View>
+          <View className="flex items-center">
+            <MaterialCommunityIcons
+              name="emoticon-neutral-outline"
+              size={60}
+              color={theme.colors.info}
+            />
+            <Text className="text-neutral">보통</Text>
+          </View>
+          <View className="flex items-center">
+            <MaterialCommunityIcons
+              name="emoticon-sad-outline"
+              size={60}
+              color={theme.colors.sad}
+            />
+            <Text className="text-sad">나쁨</Text>
+          </View>
+          <View className="flex items-center">
+            <MaterialCommunityIcons
+              name="emoticon-dead-outline"
+              size={60}
+              color={theme.colors.dead}
+            />
+            <Text className="text-dead">끔찍함</Text>
+          </View>
+        </View>
+      </View>
+
+      <View className="w-full mt-auto">
+        <BrandContainedButton classes="w-full" text="저장" />
+      </View>
 
       <CustomBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
