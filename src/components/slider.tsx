@@ -26,7 +26,7 @@ const CustomSlider = ({
       trackStyle={customStyle().sliderTrack}
       minimumTrackStyle={customStyle().sliderMinimumTrack}
       renderThumbComponent={() => (
-        <View className="w-6 h-6 rounded-full border border-gray-300 bg-white shadow-sm shadow-black" />
+        <View className="w-6 h-6 rounded-full border border-gray-400 bg-white shadow-sm shadow-black" />
       )}
       minimumValue={min}
       maximumValue={max}

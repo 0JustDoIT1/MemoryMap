@@ -1,16 +1,15 @@
 import {useState} from 'react';
 import {Pressable, View} from 'react-native';
-import CalendarPicker, {
-  ChangedDate,
-  DateParsable,
-} from 'react-native-calendar-picker';
-import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Divider, Text} from 'react-native-paper';
+import DateTimePicker from 'react-native-ui-datepicker';
+import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
+import 'dayjs/locale/ko';
+import {customStyle} from 'src/style/customStyle';
 
 interface BrandCalendar {
-  selectedStartDate: DateParsable;
-  selectedEndDate: DateParsable;
+  selectedStartDate: DateType;
+  selectedEndDate: DateType;
   onDatePicker: (startDate: Date, endDate: Date) => void;
   close?: () => void;
 }
@@ -23,65 +22,49 @@ const BrandCalendar = ({
 }: BrandCalendar) => {
   const theme = useAppTheme();
 
-  const [startDate, setStartDate] = useState<DateParsable>(selectedStartDate);
-  const [endDate, setEndDate] = useState<DateParsable>(selectedEndDate);
+  const [startDate, setStartDate] = useState<DateType>(selectedStartDate);
+  const [endDate, setEndDate] = useState<DateType>(selectedEndDate);
 
-  const onDateChange = (date: Date, type: ChangedDate) => {
-    if (type === 'END_DATE') {
-      setEndDate(date);
-    }
-    if (type === 'START_DATE') {
-      setStartDate(date);
-      setEndDate('');
-    }
+  const onDateChange = ({
+    startDate,
+    endDate,
+  }: {
+    startDate: DateType;
+    endDate: DateType;
+  }) => {
+    setStartDate(startDate);
+    setEndDate(endDate);
   };
 
+  console.log('기간', startDate, endDate);
+
   const onDateReset = () => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const onSelectDate = () => {
-    if (startDate !== '' && endDate !== '')
-      onDatePicker(startDate as Date, endDate as Date);
+    if (startDate && endDate) onDatePicker(startDate as Date, endDate as Date);
   };
 
   return (
     <View className="flex justify-center">
-      <CalendarPicker
-        allowRangeSelection={true}
-        weekdays={['일', '월', '화', '수', '목', '금', '토']}
-        months={[
-          '1월',
-          '2월',
-          '3월',
-          '4월',
-          '5월',
-          '6월',
-          '7월',
-          '8월',
-          '9월',
-          '10월',
-          '11월',
-          '12월',
-        ]}
-        nextTitleStyle={customStyle().calendarNextTitleStyle}
-        previousTitleStyle={customStyle().calendarPreviousTitleStyle}
-        yearTitleStyle={customStyle().calendarYearTitleStyle}
-        monthTitleStyle={customStyle().calendarMonthTitleStyle}
-        textStyle={customStyle().calendarTextStyle}
-        previousTitle="&lt;"
-        nextTitle="&gt;"
-        todayBackgroundColor={theme.colors.info}
-        selectedDayColor={theme.colors.brandMain}
-        selectedDayTextColor="#FFFFFF"
-        selectedStartDate={startDate}
-        selectedEndDate={endDate}
-        onDateChange={onDateChange}
-      />
-
-      <View className="px-4">
-        <Divider className="w-full my-4 bg-blur" />
+      <View>
+        <DateTimePicker
+          mode="range"
+          locale="ko"
+          startDate={startDate}
+          endDate={endDate}
+          onChange={params => onDateChange(params)}
+          selectedItemColor={theme.colors.brandMain}
+          headerButtonColor={theme.colors.gray}
+          calendarTextStyle={customStyle().calendarText}
+          headerTextStyle={customStyle().calendarHeaderText}
+          weekDaysTextStyle={customStyle().calendarText}
+          selectedTextStyle={customStyle().calendarSelectedText}
+        />
+      </View>
+      <View>
         <View className="flex-row justify-between items-center">
           <View className="w-1/2">
             <Pressable className="p-2" onPress={onDateReset}>
@@ -95,8 +78,13 @@ const BrandCalendar = ({
             <Pressable
               className="p-2"
               onPress={onSelectDate}
-              disabled={startDate === '' || endDate === ''}>
-              <Text className="text-brandMain">선택</Text>
+              disabled={!startDate || !endDate}>
+              <Text
+                className={`${
+                  !startDate || !endDate ? 'text-gray-400' : 'text-brandMain'
+                }`}>
+                선택
+              </Text>
             </Pressable>
           </View>
         </View>

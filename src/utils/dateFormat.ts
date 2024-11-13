@@ -1,6 +1,7 @@
-import {format} from 'date-fns';
+import {DateType} from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
 
-export const dateToFormatString = (date: string, formatStr: string) => {
-  if (date !== '') return format(new Date(date), formatStr);
-  else return '';
+export const dateToFormatString = (date: DateType, format: string) => {
+  if (!date) return '';
+  return dayjs(date).format(format);
 };

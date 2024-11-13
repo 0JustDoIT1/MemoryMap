@@ -9,6 +9,9 @@ interface CustomStyle {
 }
 
 const colors = {
+  white: '#ffffff',
+  black: '#000000',
+  gray: '#6b7280',
   brandLight: '#FF7C6C',
   brandMain: '#FF624F',
   brandDark: '#FF4832',
@@ -61,7 +64,7 @@ export const customStyle = (props?: CustomStyle) =>
     },
     toastContent: {paddingHorizontal: 5},
     toastText1: {
-      color: '#ffffff',
+      color: colors.white,
     },
     bottomSheetIcon: {
       color: colors.outline,
@@ -74,10 +77,10 @@ export const customStyle = (props?: CustomStyle) =>
       height: '100%',
     },
     mapBottomSheetPhotoIcon: {
-      color: '#ffffff',
+      color: colors.white,
     },
     mapBottomSheetIcon: {
-      color: '#000000',
+      color: colors.black,
     },
     mapBottomSheetCircle: {
       backgroundColor: props?.bgColor,
@@ -88,7 +91,7 @@ export const customStyle = (props?: CustomStyle) =>
       alignItems: 'center',
     },
     modalContent: {
-      backgroundColor: '#ffffff',
+      backgroundColor: colors.white,
       padding: 20,
       margin: 40,
     },
@@ -102,7 +105,7 @@ export const customStyle = (props?: CustomStyle) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#ffffff',
+      backgroundColor: colors.white,
     },
     sliderContainer: {
       width: '100%',
@@ -119,22 +122,18 @@ export const customStyle = (props?: CustomStyle) =>
       marginRight: 8,
     },
     alert: {backgroundColor: '#F9F9F9'},
-    calendarNextTitleStyle: {
-      marginHorizontal: 20,
-      fontSize: 20,
-    },
-    calendarPreviousTitleStyle: {
-      marginHorizontal: 20,
-      fontSize: 20,
-    },
-    calendarMonthTitleStyle: {
-      fontSize: 20,
-    },
-    calendarYearTitleStyle: {
-      fontSize: 20,
-    },
-    calendarTextStyle: {
+    calendarText: {
       fontFamily: 'GmarketSansMedium',
-      color: '#000000',
+    },
+    calendarHeaderText: {
+      fontFamily: 'GmarketSansMedium',
+      color: colors.gray,
+    },
+    calendarSelectedText: {
+      color: colors.white,
+      fontFamily: 'GmarketSansMedium',
+    },
+    storyPointIconText: {
+      color: props?.color,
     },
   });
