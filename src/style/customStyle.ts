@@ -114,4 +114,22 @@ export const customStyle = (props?: CustomStyle) =>
       marginRight: 8,
     },
     alert: {backgroundColor: '#F9F9F9'},
+    calendarNextTitleStyle: {
+      marginHorizontal: 20,
+      fontSize: 20,
+    },
+    calendarPreviousTitleStyle: {
+      marginHorizontal: 20,
+      fontSize: 20,
+    },
+    calendarMonthTitleStyle: {
+      fontSize: 20,
+    },
+    calendarYearTitleStyle: {
+      fontSize: 20,
+    },
+    calendarTextStyle: {
+      fontFamily: 'GmarketSansMedium',
+      color: '#000000',
+    },
   });
