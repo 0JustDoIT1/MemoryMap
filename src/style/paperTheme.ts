@@ -22,11 +22,6 @@ export const PaperTheme = {
     error: '#ff0000',
     info: '#5bc0de',
     blur: '#9CA3AF',
-    excite: '#41C450',
-    happy: '#9ACD32',
-    neutral: '#41C4AE',
-    sad: '#FF7224',
-    dead: '#FF4343',
   },
 };
 
