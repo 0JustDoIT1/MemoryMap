@@ -23,11 +23,6 @@ const colors = {
   backdrop: 'rgba(51, 47, 55, 0.4)',
   outline: '#968e98',
   blur: '#9CA3AF',
-  excite: '#41C450',
-  happy: '#9ACD32',
-  neutral: '#41C4AE',
-  sad: '#FF7224',
-  dead: '#FF4343',
 };
 
 export const customStyle = (props?: CustomStyle) =>
