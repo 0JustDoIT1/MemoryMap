@@ -12,6 +12,7 @@ export const PaperTheme = {
     ...MD3LightTheme.colors,
     white: '#ffffff',
     black: '#000000',
+    gray: '#6b7280',
     brandLight: '#FF7C6C',
     brandMain: '#FF624F',
     brandDark: '#FF4832',
