@@ -38,13 +38,19 @@ const ColorPickerModal = ({
   };
 
   const onSettingColor = async () => {
-    await updateMapColorById(id, hex).then(() => onSettingColorSuccess());
+    await updateMapColorById(id, hex)
+      .then(() => onSettingColorSuccess())
+      .catch(error => onSettingColorError(error));
   };
 
   const onSettingColorSuccess = () => {
-    showBottomToast('success', '색칠 성공!');
+    showBottomToast('success', '색칠 완료!');
     hideModal();
     handleClosePress();
+  };
+
+  const onSettingColorError = (error: any) => {
+    showBottomToast('error', '색칠에 실패했습니다.');
   };
 
   return (

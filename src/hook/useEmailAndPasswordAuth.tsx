@@ -2,9 +2,17 @@ import auth from '@react-native-firebase/auth';
 import {useCallback, useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
-import {appUserState, koreaMapDataState} from 'src/recoil/atom';
+import {StoryCountInit} from 'src/constants/storyData';
+import {
+  appUserState,
+  koreaMapDataState,
+  storyCountState,
+  storyState,
+} from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
-import {_read, _update} from 'src/utils/database';
+import {AppStory} from 'src/types/story';
+import {_getCollection, _setCollection} from 'src/utils/firestore';
+import {_read, _update} from 'src/utils/realtime';
 import {showBottomToast} from 'src/utils/showToast';
 
 const useEmailAndPasswordAuth = () => {
@@ -14,6 +22,8 @@ const useEmailAndPasswordAuth = () => {
 
   const setAppUser = useSetRecoilState(appUserState);
   const setKoreaMapData = useSetRecoilState(koreaMapDataState);
+  const setStory = useSetRecoilState(storyState);
+  const setStoryCount = useSetRecoilState(storyCountState);
 
   // Email Sign Up
   const onSignUpEmailAndPassword = useCallback(async () => {
@@ -46,39 +56,61 @@ const useEmailAndPasswordAuth = () => {
   }, [email, password]);
 
   // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
-  const getDataAndSetRecoil = async (user: AppUser) => {
+  const getDataAndSetRecoil = useCallback(async (user: AppUser) => {
     await _read(user.uid).then(async snapshot => {
       if (snapshot.val()) {
-        setKoreaMapData(snapshot.val()['koreaMapData']);
-        setAppUser(user);
+        await _getCollection(user.uid).then(res => {
+          setKoreaMapData(snapshot.val()['koreaMapData']);
+          setAppUser(user);
+          setStory(res?.story);
+          setStoryCount(snapshot.val()['count']);
+        });
       } else {
         // 구글 로그인으로 첫 로그인인 경우
         const appDataInit: AppData = {
           email: user.email,
           uid: user.uid,
           koreaMapData: koreaMapDataInit,
+          count: StoryCountInit,
         };
         await _update(appDataInit).then(async () => {
-          setKoreaMapData(koreaMapDataInit);
-          setAppUser(user);
+          const appStoryInit: AppStory = {
+            uid: user.uid,
+            story: [],
+          };
+          await _setCollection(appStoryInit).then(() => {
+            setKoreaMapData(koreaMapDataInit);
+            setAppUser(user);
+            setStory([]);
+            setStoryCount(StoryCountInit);
+          });
         });
       }
     });
-  };
+  }, []);
 
   // 회원가입 시 초기 데이터를 firebase/recoil에 세팅
-  const setDataAndSetRecoil = async (user: AppUser) => {
+  const setDataAndSetRecoil = useCallback(async (user: AppUser) => {
     const appDataInit: AppData = {
       email: user.email,
       uid: user.uid,
       koreaMapData: koreaMapDataInit,
+      count: StoryCountInit,
     };
 
     await _update(appDataInit).then(async () => {
-      setKoreaMapData(koreaMapDataInit);
-      setAppUser(user);
+      const appStoryInit: AppStory = {
+        uid: user.uid,
+        story: [],
+      };
+      await _setCollection(appStoryInit).then(() => {
+        setKoreaMapData(koreaMapDataInit);
+        setAppUser(user);
+        setStory([]);
+        setStoryCount(StoryCountInit);
+      });
     });
-  };
+  }, []);
 
   // Profile Update (displayName)
   const onUpdateProfile = useCallback(
@@ -107,11 +139,14 @@ const useEmailAndPasswordAuth = () => {
   }, [email]);
 
   // Sign Out
-  const onSignOut = async () => {
+  const onSignOut = useCallback(async () => {
     setAppUser(null);
     setKoreaMapData(koreaMapDataInit);
+    setStory([]);
+    setStoryCount(StoryCountInit);
+
     return await auth().signOut();
-  };
+  }, []);
 
   return {
     email,

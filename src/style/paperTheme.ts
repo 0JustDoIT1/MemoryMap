@@ -19,7 +19,7 @@ export const PaperTheme = {
     brandBase: '#FF9A8E',
     brandAccent: '#FF290F',
     success: '#22bb33',
-    error: '#ff0000',
+    error: '#FF2424',
     info: '#5bc0de',
     blur: '#9CA3AF',
   },

@@ -67,14 +67,18 @@ const CropImage = ({navigation, route}: CropImageProps) => {
       scale: scale[0],
       rotation: rotate[0],
     };
-    await updateMapPhotoById(route.params.id, image, imageStyle).then(() =>
-      onUploadPhotoSuccess(),
-    );
+    await updateMapPhotoById(route.params.id, image, imageStyle)
+      .then(() => onUploadPhotoSuccess())
+      .catch(error => onUploadPhotoError(error));
   };
 
   const onUploadPhotoSuccess = () => {
-    showBottomToast('success', '사진 넣기 성공!');
+    showBottomToast('success', '사진 추가!');
     navigation.navigate('Map');
+  };
+
+  const onUploadPhotoError = (error: any) => {
+    showBottomToast('error', '사진 넣기에 실패했습니다.');
   };
 
   return (

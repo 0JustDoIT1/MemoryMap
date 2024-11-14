@@ -1,11 +1,12 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {useAppTheme} from 'src/style/paperTheme';
-import {Divider, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
 import 'dayjs/locale/ko';
 import {customStyle} from 'src/style/customStyle';
+import {dateToDB} from 'src/utils/dateFormat';
 
 interface BrandCalendar {
   selectedStartDate: DateType;
@@ -36,15 +37,14 @@ const BrandCalendar = ({
     setEndDate(endDate);
   };
 
-  console.log('기간', startDate, endDate);
-
   const onDateReset = () => {
     setStartDate(null);
     setEndDate(null);
   };
 
   const onSelectDate = () => {
-    if (startDate && endDate) onDatePicker(startDate as Date, endDate as Date);
+    if (startDate && endDate)
+      onDatePicker(dateToDB(startDate), dateToDB(endDate));
   };
 
   return (
@@ -93,4 +93,6 @@ const BrandCalendar = ({
   );
 };
 
-export default BrandCalendar;
+const MemoizedCalendar = React.memo(BrandCalendar);
+
+export default MemoizedCalendar;

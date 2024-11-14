@@ -20,7 +20,7 @@ import Root from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
 import CropImage from 'src/screens/cropImage';
 import {Pressable} from 'react-native';
-import AddStory from 'src/screens/addStory';
+import AddStory from 'src/screens/editStory';
 import {launchImageLibrary} from 'react-native-image-picker';
 import SelectRegion from 'src/screens/selectRegion';
 

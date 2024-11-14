@@ -1,20 +1,26 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
-import {appUserState, koreaMapDataState} from 'src/recoil/atom';
+import {StoryCountInit} from 'src/constants/storyData';
+import {
+  appUserState,
+  koreaMapDataState,
+  storyCountState,
+} from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
 import {
   GetColorRegionList,
   KoreaMapData,
   KoreaRegionData,
 } from 'src/types/koreaMap';
-import {_update} from 'src/utils/database';
+import {_update} from 'src/utils/realtime';
 import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
 
 const useKoreaMap = () => {
   const appUser = useRecoilValue(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
+  const [storyCount, setStoryCount] = useRecoilState(storyCountState);
 
   // id로 해당 지역 데이터 가져오기
   const getMapDataById = useCallback(
@@ -101,6 +107,7 @@ const useKoreaMap = () => {
         uid: appUser?.uid!,
         email: appUser?.email!,
         koreaMapData: updateData,
+        count: StoryCountInit,
       };
 
       if (getMapDataById(id).type === 'photo') {
@@ -138,6 +145,7 @@ const useKoreaMap = () => {
               uid: appUser?.uid!,
               email: appUser?.email!,
               koreaMapData: updateData,
+              count: StoryCountInit,
             };
 
             await _update(appData).then(async () => {
@@ -169,6 +177,7 @@ const useKoreaMap = () => {
         uid: appUser?.uid!,
         email: appUser?.email!,
         koreaMapData: updateData,
+        count: StoryCountInit,
       };
 
       if (getMapDataById(id).type === 'photo') {
@@ -185,6 +194,7 @@ const useKoreaMap = () => {
       uid: appUser?.uid!,
       email: appUser?.email!,
       koreaMapData: koreaMapDataInit,
+      count: StoryCountInit,
     };
 
     return await _deleteAll(appData.uid).then(async () => {
@@ -229,6 +239,32 @@ const useKoreaMap = () => {
     return result;
   }, [koreaMapData]);
 
+  // 스토리 숫자 계산
+  const onCountStory = useCallback(
+    async (id: string, count: number) => {
+      const updateData: KoreaMapData = {
+        ...koreaMapData,
+        [id]: {...koreaMapData[id], story: koreaMapData[id].story + count},
+      };
+
+      const mainId = `${id.split('-')[0]}-${id.split('-')[1]}`;
+      const newCount = {...storyCount, [mainId]: storyCount[mainId] + count};
+
+      const appData: AppData = {
+        uid: appUser?.uid!,
+        email: appUser?.email!,
+        koreaMapData: updateData,
+        count: newCount,
+      };
+
+      await _update(appData).then(() => {
+        setKoreaMapData(updateData);
+        setStoryCount(newCount);
+      });
+    },
+    [koreaMapData],
+  );
+
   return {
     koreaMapData,
     getMapDataById,
@@ -240,6 +276,7 @@ const useKoreaMap = () => {
     deleteMapDataById,
     resetMapData,
     getColorRegionList,
+    onCountStory,
   };
 };
 

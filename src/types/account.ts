@@ -23,4 +23,9 @@ export interface AppData {
   uid: string;
   email: string;
   koreaMapData: KoreaMapData;
+  count: StoryCount;
+}
+
+export interface StoryCount {
+  [key: string]: number;
 }

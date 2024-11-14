@@ -116,30 +116,48 @@ const MapScreen = ({navigation, route}: MapProps) => {
 
   const composed = Gesture.Simultaneous(pinch, pan);
 
+  // 지도 스크린샵 캡처
   const onCaptureMap = async () => {
     await viewShotRef.current
       ?.capture?.()
-      .then(async uri => await onSaveScreenShot(uri));
+      .then(async uri => await onSaveScreenShot(uri))
+      .catch(error => onCaptureMapError(error));
   };
 
+  const onCaptureMapError = (error: any) => {
+    showBottomToast('error', '지도 캡처에 실패했습니다.');
+  };
+
+  // 스크린샷 갤러리에 저장
   const onSaveScreenShot = async (uri: string) => {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
     }
-    return await CameraRoll.saveAsset(uri).then(() =>
-      onSaveScreenShotSuccess(),
-    );
+    return await CameraRoll.saveAsset(uri)
+      .then(() => onSaveScreenShotSuccess())
+      .catch(error => onSaveScreenShotError(error));
   };
 
   const onSaveScreenShotSuccess = () => {
     showBottomToast('success', '갤러리에 저장되었습니다!');
   };
 
+  const onSaveScreenShotError = (error: any) => {
+    showBottomToast('error', '사진 저장에 실패했습니다.');
+  };
+
+  // 지도 정보 초기화
   const onResetMap = async () => {
-    await resetMapData().then(() => {
-      hideDialog();
-      showBottomToast('info', '지도를 새로 채워보세요!');
-    });
+    await resetMapData()
+      .then(() => {
+        hideDialog();
+        showBottomToast('info', '지도를 새로 채워보세요!');
+      })
+      .catch(error => onResetMapError(error));
+  };
+
+  const onResetMapError = (error: any) => {
+    showBottomToast('error', '지도 초기화에 실패했습니다.');
   };
 
   return (
@@ -154,16 +172,18 @@ const MapScreen = ({navigation, route}: MapProps) => {
           </Animated.View>
         </GestureDetector>
       </ViewShot>
-      <MemoizedMapSheet
-        navigation={navigation}
-        mapSheetModalRef={mapSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        id={id}
-        title={title}
-        tag={tag}
-      />
+      {id && (
+        <MemoizedMapSheet
+          navigation={navigation}
+          mapSheetModalRef={mapSheetModalRef}
+          snapPoints={snapPoints}
+          handleClosePress={handleClosePress}
+          renderBackdrop={renderBackdrop}
+          id={id}
+          title={title}
+          tag={tag}
+        />
+      )}
       <MemoizedCustomFAB
         open={open}
         onChangeFAB={onChangeFAB}

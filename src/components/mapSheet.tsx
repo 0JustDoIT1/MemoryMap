@@ -46,6 +46,7 @@ const MapSheet = ({
 
   const regionData = getMapDataById(id);
 
+  // 사진 선택
   const onImagePicker = async () => {
     await launchImageLibrary({
       maxWidth: 250,
@@ -64,13 +65,22 @@ const MapSheet = ({
     });
   };
 
+  // 배경 제거
   const onDeleteBackground = async () => {
-    await deleteMapDataById(id).then(() => onDeleteBackgroundSuccess());
+    await deleteMapDataById(id)
+      .then(() => onDeleteBackgroundSuccess())
+      .catch(error => onDeleteBackgroundError(error));
     hideDialog();
   };
 
   const onDeleteBackgroundSuccess = () => {
     showBottomToast('info', '색칠 제거!');
+    hideModal();
+    handleClosePress();
+  };
+
+  const onDeleteBackgroundError = (error: any) => {
+    showBottomToast('error', '색칠 제거에 실패했습니다.');
     hideModal();
     handleClosePress();
   };
@@ -122,18 +132,20 @@ const MapSheet = ({
                 />
               </Pressable>
             </View>
-            <View className="w-full flex-row justify-start items-center">
+            <View className="w-full flex-row justify-start items-center mb-8">
               {tag.length > 0 &&
                 tag.map(item => (
                   <Text
                     key={item}
-                    className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
+                    className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
                     {item}
                   </Text>
                 ))}
-              <Text className="py-1 px-2 mr-1 mb-8 text-xs text-outline text-center border border-outline rounded-xl">
-                # 스토리 0건
-              </Text>
+              {regionData.type !== 'init' && (
+                <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
+                  # 스토리 {regionData.story}건
+                </Text>
+              )}
             </View>
             <View className="w-full">
               <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
