@@ -18,7 +18,7 @@ const colors = {
   brandBase: '#FF9A8E',
   brandAccent: '#FF290F',
   success: '#22bb33',
-  error: '#ff0000',
+  error: '#FF2424',
   info: '#5bc0de',
   backdrop: 'rgba(51, 47, 55, 0.4)',
   outline: '#968e98',
@@ -130,5 +130,12 @@ export const customStyle = (props?: CustomStyle) =>
     },
     storyPointIconText: {
       color: props?.color,
+    },
+    storyFlatListContainer: {
+      display: 'flex',
+      gap: 4,
+    },
+    storyFlatListColumnWrapper: {
+      gap: 4,
     },
   });

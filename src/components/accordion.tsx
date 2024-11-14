@@ -92,4 +92,6 @@ const CustomAccordion = ({
   );
 };
 
-export default CustomAccordion;
+const MemoizedAccordion = React.memo(CustomAccordion);
+
+export default MemoizedAccordion;

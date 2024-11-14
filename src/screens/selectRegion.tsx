@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import CustomAccordion from 'src/components/accordion';
+import MemoizedAccordion from 'src/components/accordion';
 import {SelectRegionProps} from 'src/types/stack';
 
 const SelectRegion = ({navigation, route}: SelectRegionProps) => {
@@ -26,7 +26,7 @@ const SelectRegion = ({navigation, route}: SelectRegionProps) => {
         data={regionMain}
         keyExtractor={item => item}
         renderItem={({item}) => (
-          <CustomAccordion
+          <MemoizedAccordion
             title={item}
             item={regionList}
             onSelect={onSelectRegion}
