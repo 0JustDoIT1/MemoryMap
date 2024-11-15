@@ -94,10 +94,10 @@ export const customStyle = (props?: CustomStyle) =>
       backgroundColor: props?.bgColor,
       color: props?.color,
     },
-    viewShot: {
+    mapViewShot: {
       width: '100%',
       height: '100%',
-      flex: 1,
+      display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: colors.white,
@@ -131,11 +131,24 @@ export const customStyle = (props?: CustomStyle) =>
     storyPointIconText: {
       color: props?.color,
     },
-    storyFlatListContainer: {
-      display: 'flex',
-      gap: 4,
+    storyPointIcon: {
+      textShadowColor: props?.color,
+      shadowOpacity: 0.7,
+      textShadowRadius: 2,
     },
-    storyFlatListColumnWrapper: {
-      gap: 4,
+    storyPointView: {
+      backgroundColor: props?.bgColor,
+    },
+    storyFlatListContainer: {
+      gap: 8,
+    },
+    storyPointText: {
+      color: colors.black,
+      backgroundColor: `${props?.bgColor}80`,
+    },
+    storyViewShot: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: colors.white,
     },
   });

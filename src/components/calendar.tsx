@@ -4,7 +4,6 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
-import 'dayjs/locale/ko';
 import {customStyle} from 'src/style/customStyle';
 import {dateToDB} from 'src/utils/dateFormat';
 

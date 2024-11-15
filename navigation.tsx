@@ -20,9 +20,10 @@ import Root from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
 import CropImage from 'src/screens/cropImage';
 import {Pressable} from 'react-native';
-import AddStory from 'src/screens/editStory';
+import EditStory from 'src/screens/editStory';
 import {launchImageLibrary} from 'react-native-image-picker';
 import SelectRegion from 'src/screens/selectRegion';
+import ViewStory from 'src/screens/viewStory';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -85,7 +86,7 @@ const Main = () => {
             <Pressable
               className="px-4"
               onPress={() => {
-                navigation.navigate('AddStory', {title: '스토리 작성'});
+                navigation.navigate('EditStory', {title: '스토리 작성'});
               }}>
               <FontAwesome name="pencil-square-o" size={24} color="#000000" />
             </Pressable>
@@ -166,8 +167,8 @@ const Navigation = () => {
           })}
         />
         <Stack.Screen
-          name="AddStory"
-          component={AddStory}
+          name="EditStory"
+          component={EditStory}
           options={({route}) => ({
             headerShown: true,
             headerShadowVisible: false,
@@ -177,6 +178,21 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: route.params.title,
+            headerBackButtonMenuEnabled: true,
+          })}
+        />
+        <Stack.Screen
+          name="ViewStory"
+          component={ViewStory}
+          options={({route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#000000',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '스토리',
             headerBackButtonMenuEnabled: true,
           })}
         />

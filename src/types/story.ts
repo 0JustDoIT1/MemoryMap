@@ -1,15 +1,20 @@
 export interface Story {
-  id: string;
-  startDate: Date;
-  endDate: Date;
+  _id: string;
+  regionId: string;
+  startDate: string;
+  endDate: string;
   title: string;
   contents: string;
   point: number;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface StoryObject {
+  [key: string]: Story;
 }
 
 export interface AppStory {
   uid: string;
-  story: Story[];
+  story: StoryObject;
 }

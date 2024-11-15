@@ -11,7 +11,7 @@ import {
 } from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
 import {AppStory} from 'src/types/story';
-import {_getCollection, _setCollection} from 'src/utils/firestore';
+import {_getDoc, _setDoc} from 'src/utils/firestore';
 import {_read, _update} from 'src/utils/realtime';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -59,7 +59,7 @@ const useEmailAndPasswordAuth = () => {
   const getDataAndSetRecoil = useCallback(async (user: AppUser) => {
     await _read(user.uid).then(async snapshot => {
       if (snapshot.val()) {
-        await _getCollection(user.uid).then(res => {
+        await _getDoc(user.uid).then(res => {
           setKoreaMapData(snapshot.val()['koreaMapData']);
           setAppUser(user);
           setStory(res?.story);
@@ -76,12 +76,12 @@ const useEmailAndPasswordAuth = () => {
         await _update(appDataInit).then(async () => {
           const appStoryInit: AppStory = {
             uid: user.uid,
-            story: [],
+            story: {},
           };
-          await _setCollection(appStoryInit).then(() => {
+          await _setDoc(appStoryInit).then(() => {
             setKoreaMapData(koreaMapDataInit);
             setAppUser(user);
-            setStory([]);
+            setStory(null);
             setStoryCount(StoryCountInit);
           });
         });
@@ -101,12 +101,12 @@ const useEmailAndPasswordAuth = () => {
     await _update(appDataInit).then(async () => {
       const appStoryInit: AppStory = {
         uid: user.uid,
-        story: [],
+        story: {},
       };
-      await _setCollection(appStoryInit).then(() => {
+      await _setDoc(appStoryInit).then(() => {
         setKoreaMapData(koreaMapDataInit);
         setAppUser(user);
-        setStory([]);
+        setStory(null);
         setStoryCount(StoryCountInit);
       });
     });
@@ -142,7 +142,7 @@ const useEmailAndPasswordAuth = () => {
   const onSignOut = useCallback(async () => {
     setAppUser(null);
     setKoreaMapData(koreaMapDataInit);
-    setStory([]);
+    setStory(null);
     setStoryCount(StoryCountInit);
 
     return await auth().signOut();
