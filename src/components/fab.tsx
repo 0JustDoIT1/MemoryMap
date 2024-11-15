@@ -1,5 +1,5 @@
 import React from 'react';
-import {FAB, Portal} from 'react-native-paper';
+import {FAB} from 'react-native-paper';
 import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';

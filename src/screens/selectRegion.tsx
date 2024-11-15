@@ -16,11 +16,11 @@ const SelectRegion = ({navigation, route}: SelectRegionProps) => {
   );
 
   const onSelectRegion = (value: string) => {
-    navigation.navigate('AddStory', {title: '스토리 작성', region: value});
+    navigation.navigate('EditStory', {title: '스토리 작성', id: value});
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-start items-center bg-brandLight p-6">
+    <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-brandLight p-6">
       <FlatList
         className="w-full"
         data={regionMain}

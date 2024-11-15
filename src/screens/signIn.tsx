@@ -86,7 +86,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
   } = useCustomBottomSheet();
 
   return (
-    <SafeAreaView className="flex-1 justify-center p-8 bg-white">
+    <SafeAreaView className="flex-1 justify-center w-screen h-screen p-8 bg-white">
       <View className="h-2/3 flex justify-center items-center">
         <Image source={require('/assets/images/MemoryMap_Main.png')} />
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>

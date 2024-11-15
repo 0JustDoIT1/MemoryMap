@@ -14,10 +14,13 @@ export type StackParamList = {
     title: string;
     image: string;
   };
-  AddStory: {
+  EditStory: {
     title: string;
     id?: string;
-    region?: string;
+    story?: string;
+  };
+  ViewStory: {
+    story: string;
   };
   SelectRegion: undefined;
 };
@@ -32,7 +35,14 @@ export type CropImageProps = NativeStackScreenProps<
   StackParamList,
   'CropImage'
 >;
-export type AddStoryProps = NativeStackScreenProps<StackParamList, 'AddStory'>;
+export type EditStoryProps = NativeStackScreenProps<
+  StackParamList,
+  'EditStory'
+>;
+export type ViewStoryProps = NativeStackScreenProps<
+  StackParamList,
+  'ViewStory'
+>;
 export type SelectRegionProps = NativeStackScreenProps<
   StackParamList,
   'SelectRegion'

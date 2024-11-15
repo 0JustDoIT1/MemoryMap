@@ -240,7 +240,7 @@ const useKoreaMap = () => {
   }, [koreaMapData]);
 
   // 스토리 숫자 계산
-  const onCountStory = useCallback(
+  const countingStory = useCallback(
     async (id: string, count: number) => {
       const updateData: KoreaMapData = {
         ...koreaMapData,
@@ -276,7 +276,7 @@ const useKoreaMap = () => {
     deleteMapDataById,
     resetMapData,
     getColorRegionList,
-    onCountStory,
+    countingStory,
   };
 };
 

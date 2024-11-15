@@ -3,11 +3,11 @@ import {AppStory} from 'src/types/story';
 
 const collection = firestore().collection('users');
 
-export const _setCollection = async (data: AppStory) => {
+export const _setDoc = async (data: AppStory) => {
   await collection.doc(data.uid).set(data);
 };
 
-export const _getCollection = async (uid: string) => {
+export const _getDoc = async (uid: string) => {
   console.log('몇번?');
   const doc = await collection.doc(uid).get();
 

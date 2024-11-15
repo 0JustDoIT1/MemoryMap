@@ -3,7 +3,7 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {StoryCountInit} from 'src/constants/storyData';
 import {AppUser, StoryCount} from 'src/types/account';
 import {KoreaMapData} from 'src/types/koreaMap';
-import {Story} from 'src/types/story';
+import {Story, StoryObject} from 'src/types/story';
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
@@ -20,9 +20,9 @@ export const koreaMapDataState = atom<KoreaMapData>({
 });
 
 // 어플 스토리 데이터 Recoil
-export const storyState = atom<Story[] | null>({
+export const storyState = atom<StoryObject | null>({
   key: 'story',
-  default: [],
+  default: null,
 });
 
 // 어플 스토리 수 Recoil (상위 지역만 / 하위 지역은 맵 데이터에 들어가 있음)

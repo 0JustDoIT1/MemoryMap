@@ -20,6 +20,7 @@ import MemoizedKoreaMap from 'src/components/koreaMapSvg';
 import MemoizedMapSheet from 'src/components/mapSheet';
 import MemoizedCustomAlert from 'src/components/alert';
 import MemoizedCustomFAB from 'src/components/fab';
+import {onCaptureMap} from 'src/utils/screenshot';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -116,36 +117,6 @@ const MapScreen = ({navigation, route}: MapProps) => {
 
   const composed = Gesture.Simultaneous(pinch, pan);
 
-  // 지도 스크린샵 캡처
-  const onCaptureMap = async () => {
-    await viewShotRef.current
-      ?.capture?.()
-      .then(async uri => await onSaveScreenShot(uri))
-      .catch(error => onCaptureMapError(error));
-  };
-
-  const onCaptureMapError = (error: any) => {
-    showBottomToast('error', '지도 캡처에 실패했습니다.');
-  };
-
-  // 스크린샷 갤러리에 저장
-  const onSaveScreenShot = async (uri: string) => {
-    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
-      return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
-    }
-    return await CameraRoll.saveAsset(uri)
-      .then(() => onSaveScreenShotSuccess())
-      .catch(error => onSaveScreenShotError(error));
-  };
-
-  const onSaveScreenShotSuccess = () => {
-    showBottomToast('success', '갤러리에 저장되었습니다!');
-  };
-
-  const onSaveScreenShotError = (error: any) => {
-    showBottomToast('error', '사진 저장에 실패했습니다.');
-  };
-
   // 지도 정보 초기화
   const onResetMap = async () => {
     await resetMapData()
@@ -164,7 +135,7 @@ const MapScreen = ({navigation, route}: MapProps) => {
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white">
       <ViewShot
         ref={viewShotRef}
-        style={customStyle().viewShot}
+        style={customStyle().mapViewShot}
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
@@ -189,7 +160,7 @@ const MapScreen = ({navigation, route}: MapProps) => {
         onChangeFAB={onChangeFAB}
         icon1="camera"
         label1="지도 저장"
-        onPress1={onCaptureMap}
+        onPress1={() => onCaptureMap(viewShotRef)}
         icon2="refresh"
         label2="지도 초기화"
         onPress2={showDialog}
