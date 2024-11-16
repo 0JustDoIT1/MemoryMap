@@ -39,9 +39,10 @@ const useMapSheet = () => {
       setTitle(title);
       setTag(tagList);
       setId(result.id);
+
       mapSheetModalRef.current?.present();
     },
-    [title, tag, id, snapPoints],
+    [mapSheetModalRef, title, tag, id, snapPoints],
   );
 
   // Bottom Sheet close event
@@ -50,7 +51,7 @@ const useMapSheet = () => {
   // Bottom Sheet close event when background touch
   const renderBackdrop = useCallback(
     (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
-    [],
+    [mapSheetModalRef],
   );
 
   return {

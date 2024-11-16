@@ -33,7 +33,13 @@ const useCustomBottomSheet = () => {
       setPoint(snap);
       bottomSheetModalRef.current?.present();
     },
-    [bottomSheetTitle, bottomSheetDescription, bottomSheetContents, point],
+    [
+      bottomSheetModalRef,
+      bottomSheetTitle,
+      bottomSheetDescription,
+      bottomSheetContents,
+      point,
+    ],
   );
 
   // Bottom Sheet close event
@@ -42,7 +48,7 @@ const useCustomBottomSheet = () => {
   // Bottom Sheet close event when background touch
   const renderBackdrop = useCallback(
     (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
-    [],
+    [bottomSheetModalRef],
   );
 
   return {

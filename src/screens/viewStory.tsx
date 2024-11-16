@@ -25,13 +25,9 @@ const ViewStory = ({navigation, route}: ViewStoryProps) => {
 
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {koreaMapData} = useKoreaMap();
+  const {getRegionTitleById} = useKoreaMap();
   const {deleteStory} = useStory();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-
-  let region = koreaMapData[story.regionId].value[0];
-  if (koreaMapData[story.regionId].value.length > 1)
-    region += ` ${koreaMapData[story.regionId].value[1]}`;
 
   const startDateString = dateToFormatString(
     story.startDate,
@@ -71,7 +67,9 @@ const ViewStory = ({navigation, route}: ViewStoryProps) => {
                 bgColor: emoji.color,
               }).storyPointView
             }>
-            <Text className="text-xl text-white">{region}</Text>
+            <Text className="text-xl text-white">
+              {getRegionTitleById(story.regionId)}
+            </Text>
             <Text className="text-sm text-white mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
           <View className="w-full h-4/5 flex items-center border border-t-0 border-gray-400 rounded-b-lg">

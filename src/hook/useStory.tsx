@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {DateType} from 'react-native-ui-datepicker';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {appUserState, storyState} from 'src/recoil/atom';
@@ -23,84 +23,53 @@ const useStory = () => {
   const [point, setPoint] = useState<number>(0);
 
   // 스토리 데이터 검증 및 DB 타입에 맞게 가공
-  const onSettingStoryData = useCallback(
-    (edit: boolean, id?: string) => {
-      if (
-        regionId === '' ||
-        !selectedStartDate ||
-        !selectedEndDate ||
-        title === '' ||
-        contents === '' ||
-        point === 0
-      )
-        throw Error;
+  const onSettingStoryData = (edit: boolean, id?: string) => {
+    if (
+      regionId === '' ||
+      !selectedStartDate ||
+      !selectedEndDate ||
+      title === '' ||
+      contents === '' ||
+      point === 0
+    )
+      throw new Error('스토리 미완성');
 
-      let storyData: Partial<Story> = {
-        regionId: regionId,
-        startDate: selectedStartDate.toString(),
-        endDate: selectedEndDate.toString(),
-        title: title,
-        contents: contents,
-        point: point,
+    let storyData: Partial<Story> = {
+      regionId: regionId,
+      startDate: selectedStartDate.toString(),
+      endDate: selectedEndDate.toString(),
+      title: title,
+      contents: contents,
+      point: point,
+    };
+
+    if (edit && id && id !== '') {
+      storyData = {
+        ...storyData,
+        _id: story![id]._id,
+        createdAt: story![id].createdAt,
+        updatedAt: new Date().toString(),
       };
+    } else {
+      storyData = {
+        ...storyData,
+        _id: `${regionId}_${Number(new Date())}`,
+        createdAt: new Date().toString(),
+      };
+    }
 
-      if (edit && id) {
-        storyData = {
-          ...storyData,
-          _id: story![id]._id,
-          createdAt: story![id].createdAt,
-          updatedAt: new Date().toString(),
-        };
-      } else {
-        storyData = {
-          ...storyData,
-          _id: `${regionId}_${Number(new Date())}`,
-          createdAt: new Date().toString(),
-        };
-      }
-
-      return storyData as Story;
-    },
-    [regionId, selectedStartDate, selectedEndDate, title, contents, point],
-  );
+    return storyData as Story;
+  };
 
   // 스토리 저장 및 수정
-  const updateStory = useCallback(
-    async (edit: boolean, id?: string) => {
-      const data = onSettingStoryData(edit, id);
+  const updateStory = async (edit: boolean, id?: string) => {
+    const data = onSettingStoryData(edit, id);
 
-      if (data) {
-        const newStory = {
-          ...story!,
-          [data._id]: data,
-        };
-
-        const appStory: AppStory = {
-          uid: appUser?.uid!,
-          story: newStory,
-        };
-
-        await _setDoc(appStory).then(async () => {
-          if (edit) {
-            setStory(appStory.story);
-          } else {
-            await countingStory(data.regionId, 1).then(() => {
-              setStory(appStory.story);
-            });
-          }
-        });
-      }
-    },
-    [story],
-  );
-
-  const deleteStory = useCallback(
-    async (regionId: string, id: string) => {
+    if (data) {
       const newStory = {
-        ...story,
+        ...story!,
+        [data._id]: data,
       };
-
-      delete newStory[id];
 
       const appStory: AppStory = {
         uid: appUser?.uid!,
@@ -108,13 +77,35 @@ const useStory = () => {
       };
 
       await _setDoc(appStory).then(async () => {
-        await countingStory(regionId, -1).then(() => {
+        if (edit) {
           setStory(appStory.story);
-        });
+        } else {
+          await countingStory(data.regionId, 1).then(() => {
+            setStory(appStory.story);
+          });
+        }
       });
-    },
-    [story],
-  );
+    }
+  };
+
+  const deleteStory = async (regionId: string, id: string) => {
+    const newStory = {
+      ...story,
+    };
+
+    delete newStory[id];
+
+    const appStory: AppStory = {
+      uid: appUser?.uid!,
+      story: newStory,
+    };
+
+    await _setDoc(appStory).then(async () => {
+      await countingStory(regionId, -1).then(() => {
+        setStory(appStory.story);
+      });
+    });
+  };
 
   return {
     story,

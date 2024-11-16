@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {FlatList, Pressable, View} from 'react-native';
 import {ActivityIndicator, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,56 +11,96 @@ import {StoryProps} from 'src/types/stack';
 import {Story} from 'src/types/story';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import {sorting} from 'src/utils/sort';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {randomNumber} from 'src/utils/math';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomModal from 'src/components/modal';
+import useModal from 'src/hook/useModal';
+import MemoizedAccordion from 'src/components/accordion';
 
-const StoryScreen = ({navigation}: StoryProps) => {
+const StoryScreen = ({navigation, route}: StoryProps) => {
   const theme = useAppTheme();
 
   const {story} = useStory();
-  const {koreaMapData} = useKoreaMap();
+  const {koreaMapData, getRegionTitleById, getColorRegionList} = useKoreaMap();
+  const {visible, showModal, hideModal} = useModal();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const limit = 10;
-  const [storyAll, setStoryAll] = useState<Story[]>([]);
   const [storyList, setStoryList] = useState<Story[]>([]);
   const [index, setIndex] = useState<number>(0);
+  const [filter, setFilter] = useState<string>('');
+  const [sort, setSort] = useState<number>(-1);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const regionList = useMemo(() => getColorRegionList(), [koreaMapData]);
+
+  const regionMain = useMemo(
+    () => Object.keys(getColorRegionList()).sort(),
+    [koreaMapData],
+  );
 
   // All State Init
   useEffect(() => {
     const focusScreen = navigation.addListener('focus', () => {
-      setIsLoading(true);
-      setIndex(0);
-      setStoryList([]);
+      onRefreshList();
     });
     return focusScreen;
   }, [navigation]);
 
-  // Init List Setting
+  // Setting All Story List By Filter
+  const settingAllStoryList = () => {
+    if (story) {
+      let newArr: Story[];
+      const storyArr = Object.values(story);
+
+      if (filter === '') newArr = storyArr;
+      else newArr = storyArr.filter(item => item.regionId === filter);
+
+      newArr = newArr.sort((a, b) => sorting(a, b, 'createdAt', sort));
+
+      setStoryList(storyList.concat(newArr!.splice(index, index + limit)));
+      setIndex(index + limit);
+    } else {
+      setStoryList([]);
+    }
+    setRefreshing(false);
+  };
+
+  // Init Story List Setting
   useEffect(() => {
-    if (story)
-      setStoryAll(
-        Object.values(story).sort((a, b) => sorting(a, b, 'createdAt')),
-      );
-    if (index === 0 && storyList.length === 0) {
-      onAddStoryList();
+    if (index === 0 && storyList.length === 0 && isLoading) {
+      settingAllStoryList();
       setIsLoading(false);
     }
-  }, [index, storyList, story]);
+  }, [index, storyList, isLoading]);
 
-  // Add Story when reached end flatlist
-  const onAddStoryList = () => {
-    setStoryList(storyList.concat(storyAll!.splice(index, index + limit)));
-    setIndex(index + limit);
+  // 리스트 옵션 초기화
+  const onRefreshList = () => {
+    setIndex(0);
+    setStoryList([]);
+    setIsLoading(true);
+    setRefreshing(true);
+  };
+
+  // 리스트 정렬
+  const onSortList = () => {
+    if (!story || JSON.stringify(story) !== '{}') {
+      setSort(sort * -1);
+      onRefreshList();
+    }
+  };
+
+  // 리스트 필터에서 지역선택
+  const onSelectFilter = (value: string) => {
+    hideModal();
+    setFilter(value);
+    onRefreshList();
   };
 
   // Redering Component
   const renderItem = (item: Story) => {
-    let region = koreaMapData[item.regionId].value[0];
-    if (koreaMapData[item.regionId].value.length > 1)
-      region += ` ${koreaMapData[item.regionId].value[1]}`;
-
     const startDateString = dateToFormatString(
       item.startDate,
       'YYYY.MM.DD (ddd)',
@@ -83,7 +123,9 @@ const StoryScreen = ({navigation}: StoryProps) => {
             }).storyPointView
           }>
           <View>
-            <Text className="text-white">{region}</Text>
+            <Text className="text-white">
+              {getRegionTitleById(item.regionId)}
+            </Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
           <Text className="text-2xl">{emoji.icon[randomNumber(0, 2)]}</Text>
@@ -102,29 +144,98 @@ const StoryScreen = ({navigation}: StoryProps) => {
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white p-4">
       {isLoading ? (
         <ActivityIndicator animating={true} color={theme.colors.brandMain} />
-      ) : storyList.length >= 1 ? (
-        <FlatList
-          className="w-full"
-          contentContainerStyle={customStyle().storyFlatListContainer}
-          data={storyList}
-          keyExtractor={item => item.createdAt?.toString()!}
-          onEndReached={onAddStoryList}
-          onEndReachedThreshold={0.5}
-          renderItem={({item}) => renderItem(item)}
-        />
       ) : (
-        <NotFound
-          icon={
-            <MaterialCommunityIcons
-              name="file-search-outline"
-              size={90}
-              color={theme.colors.outline}
+        <View className="w-full h-full">
+          <View className="w-full flex-row justify-between items-center mb-2">
+            <View className="flex-row">
+              <Pressable
+                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
+                onPress={() => {
+                  if (!story || JSON.stringify(story) !== '{}') showModal();
+                }}>
+                <Text className="text-sm text-brandMain mx-1">필터</Text>
+                <MaterialCommunityIcons
+                  name="filter-outline"
+                  size={15}
+                  color={theme.colors.brandMain}
+                />
+              </Pressable>
+              <Pressable
+                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
+                onPress={onSortList}>
+                <Text className="text-sm text-brandMain mx-1">
+                  {sort === -1 ? '최신순' : '날짜순'}
+                </Text>
+                <MaterialCommunityIcons
+                  name="filter-variant"
+                  size={15}
+                  color={theme.colors.brandMain}
+                />
+              </Pressable>
+            </View>
+            <View className="flex-row">
+              <Pressable
+                className="flex-row justify-between items-center p-2 bg-brandLight rounded-md"
+                onPress={() => {
+                  if (filter !== '') onSelectFilter('');
+                }}>
+                <Text className="text-sm text-white mx-1">
+                  {filter === '' ? '전체' : getRegionTitleById(filter)}
+                </Text>
+                {filter !== '' && (
+                  <MaterialCommunityIcons
+                    name="window-close"
+                    size={15}
+                    color={theme.colors.white}
+                  />
+                )}
+              </Pressable>
+            </View>
+          </View>
+          {storyList.length >= 1 ? (
+            <FlatList
+              className="w-full"
+              contentContainerStyle={customStyle().storyFlatListContainer}
+              data={storyList}
+              keyExtractor={item => item.createdAt?.toString()!}
+              onEndReached={settingAllStoryList}
+              onEndReachedThreshold={0.5}
+              renderItem={({item}) => renderItem(item)}
+              refreshing={refreshing}
             />
-          }
-          title="스토리가 없습니다."
-          description="지도에서 색칠한 후에 스토리를 작성해 주세요."
-        />
+          ) : (
+            <NotFound
+              icon={
+                <MaterialCommunityIcons
+                  name="file-search-outline"
+                  size={90}
+                  color={theme.colors.outline}
+                />
+              }
+              title="작성한 스토리가 없습니다."
+            />
+          )}
+        </View>
       )}
+      <CustomModal
+        visible={visible}
+        hideModal={hideModal}
+        contents={
+          <View className="w-56 max-h-full">
+            <FlatList
+              data={regionMain}
+              keyExtractor={item => item}
+              renderItem={({item}) => (
+                <MemoizedAccordion
+                  title={item}
+                  item={regionList}
+                  onSelect={onSelectFilter}
+                />
+              )}
+            />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };
