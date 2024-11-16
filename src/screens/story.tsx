@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, Pressable, View} from 'react-native';
 import {ActivityIndicator, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -22,7 +22,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
   const theme = useAppTheme();
 
   const {story} = useStory();
-  const {koreaMapData, getRegionTitleById, getColorRegionList} = useKoreaMap();
+  const {regionList, regionMain, getRegionTitleById} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,14 +34,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
   const [sort, setSort] = useState<number>(-1);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const regionList = useMemo(() => getColorRegionList(), [koreaMapData]);
-
-  const regionMain = useMemo(
-    () => Object.keys(getColorRegionList()).sort(),
-    [koreaMapData],
-  );
-
-  // All State Init
+  // Refresh List when focus screen
   useEffect(() => {
     const focusScreen = navigation.addListener('focus', () => {
       onRefreshList();
@@ -58,7 +51,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
       if (filter === '') newArr = storyArr;
       else newArr = storyArr.filter(item => item.regionId === filter);
 
-      newArr = newArr.sort((a, b) => sorting(a, b, 'createdAt', sort));
+      newArr = newArr.sort((a, b) => sorting(a, b, sort, 'createdAt'));
 
       setStoryList(storyList.concat(newArr!.splice(index, index + limit)));
       setIndex(index + limit);
@@ -84,12 +77,17 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
     setRefreshing(true);
   };
 
+  // 필터 버튼 클릭
+  const onPressFilter = () => {
+    if (!story || JSON.stringify(story) === '{}') return;
+    showModal();
+  };
+
   // 리스트 정렬
   const onSortList = () => {
-    if (!story || JSON.stringify(story) !== '{}') {
-      setSort(sort * -1);
-      onRefreshList();
-    }
+    if (!story || JSON.stringify(story) === '{}') return;
+    setSort(sort * -1);
+    onRefreshList();
   };
 
   // 리스트 필터에서 지역선택
@@ -146,13 +144,11 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
         <ActivityIndicator animating={true} color={theme.colors.brandMain} />
       ) : (
         <View className="w-full h-full">
-          <View className="w-full flex-row justify-between items-center mb-2">
+          <View className="w-full h-[8%] flex-row justify-between items-center">
             <View className="flex-row">
               <Pressable
                 className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={() => {
-                  if (!story || JSON.stringify(story) !== '{}') showModal();
-                }}>
+                onPress={onPressFilter}>
                 <Text className="text-sm text-brandMain mx-1">필터</Text>
                 <MaterialCommunityIcons
                   name="filter-outline"
@@ -194,7 +190,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
           </View>
           {storyList.length >= 1 ? (
             <FlatList
-              className="w-full"
+              className="w-full h-[90%]"
               contentContainerStyle={customStyle().storyFlatListContainer}
               data={storyList}
               keyExtractor={item => item.createdAt?.toString()!}
@@ -204,16 +200,18 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
               refreshing={refreshing}
             />
           ) : (
-            <NotFound
-              icon={
-                <MaterialCommunityIcons
-                  name="file-search-outline"
-                  size={90}
-                  color={theme.colors.outline}
-                />
-              }
-              title="작성한 스토리가 없습니다."
-            />
+            <View className="w-full h-[90%]">
+              <NotFound
+                icon={
+                  <MaterialCommunityIcons
+                    name="file-search-outline"
+                    size={90}
+                    color={theme.colors.outline}
+                  />
+                }
+                title="작성한 스토리가 없습니다."
+              />
+            </View>
           )}
         </View>
       )}

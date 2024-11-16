@@ -13,3 +13,7 @@ export const _getDoc = async (uid: string) => {
 
   return doc.data();
 };
+
+export const _deleteDoc = async (uid: string) => {
+  await collection.doc(uid).delete();
+};

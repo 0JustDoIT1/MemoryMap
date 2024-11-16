@@ -18,6 +18,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedCustomAlert from './alert';
+import {getDataToBottomSheet} from 'src/utils/koreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -26,8 +27,6 @@ interface MapSheet extends Omit<MapProps, 'route'> {
   handleClosePress: () => void;
   renderBackdrop: (props: any) => React.JSX.Element;
   id: string;
-  title: string;
-  tag: string[];
 }
 
 const MapSheet = ({
@@ -37,12 +36,12 @@ const MapSheet = ({
   handleClosePress,
   renderBackdrop,
   id,
-  title,
-  tag,
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {koreaMapData, deleteMapDataById} = useKoreaMap();
+
+  const regionData = getDataToBottomSheet(id);
 
   // 사진 선택
   const onImagePicker = async () => {
@@ -56,7 +55,7 @@ const MapSheet = ({
         handleClosePress();
         navigation.navigate('CropImage', {
           id: id,
-          title: title,
+          title: regionData!.title,
           image: res.assets[0].uri!,
         });
       }
@@ -91,69 +90,76 @@ const MapSheet = ({
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}>
         <BottomSheetView className="flex-1 items-center">
-          <View className="flex justify-center items-center w-full py-6 px-8">
-            <View className="flex-row justify-between items-center w-full mb-2">
-              <View className="flex-row justify-start items-center">
-                <Text className="text-xl text-black">{title}</Text>
-                {koreaMapData[id] && koreaMapData[id].type === 'photo' && (
-                  <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
-                    <FontAwesome
-                      name="photo"
-                      size={12}
-                      style={customStyle().mapBottomSheetPhotoIcon}
-                    />
-                  </View>
-                )}
-                {koreaMapData[id] && koreaMapData[id].type === 'color' && (
-                  <View
-                    className="w-5 h-5 mx-2 rounded-full"
-                    style={
-                      customStyle({bgColor: koreaMapData[id]?.background})
-                        .mapBottomSheetCircle
-                    }></View>
-                )}
-                {koreaMapData[id] && koreaMapData[id].type !== 'init' && (
-                  <Pressable onPress={showDialog}>
-                    <FontAwesome6
-                      name="eraser"
-                      size={20}
-                      style={customStyle().mapBottomSheetIcon}
-                    />
-                  </Pressable>
+          {regionData && (
+            <View className="flex justify-center items-center w-full py-6 px-8">
+              <View className="flex-row justify-between items-center w-full mb-2">
+                <View className="flex-row justify-start items-center">
+                  <Text className="text-xl text-black">
+                    {regionData?.title}
+                  </Text>
+                  {koreaMapData[id] && koreaMapData[id].type === 'photo' && (
+                    <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
+                      <FontAwesome
+                        name="photo"
+                        size={12}
+                        style={customStyle().mapBottomSheetPhotoIcon}
+                      />
+                    </View>
+                  )}
+                  {koreaMapData[id] && koreaMapData[id].type === 'color' && (
+                    <View
+                      className="w-5 h-5 mx-2 rounded-full"
+                      style={
+                        customStyle({bgColor: koreaMapData[id]?.background})
+                          .mapBottomSheetCircle
+                      }></View>
+                  )}
+                  {koreaMapData[id] && koreaMapData[id].type !== 'init' && (
+                    <Pressable onPress={showDialog}>
+                      <FontAwesome6
+                        name="eraser"
+                        size={20}
+                        style={customStyle().mapBottomSheetIcon}
+                      />
+                    </Pressable>
+                  )}
+                </View>
+                <Pressable onPress={handleClosePress}>
+                  <AntDesign
+                    name="close"
+                    size={32}
+                    style={customStyle().mapBottomSheetIcon}
+                  />
+                </Pressable>
+              </View>
+              <View className="w-full flex-row justify-start items-center mb-8">
+                {regionData?.tagList.length > 0 &&
+                  regionData?.tagList.map(item => (
+                    <Text
+                      key={item}
+                      className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
+                      {item}
+                    </Text>
+                  ))}
+                {koreaMapData[id].type !== 'init' && (
+                  <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
+                    # 스토리 {koreaMapData[id].story}건
+                  </Text>
                 )}
               </View>
-              <Pressable onPress={handleClosePress}>
-                <AntDesign
-                  name="close"
-                  size={32}
-                  style={customStyle().mapBottomSheetIcon}
+              <View className="w-full">
+                <BrandContainedButton
+                  text="사진 넣기"
+                  onPress={onImagePicker}
                 />
-              </Pressable>
+                <BrandOutlinedButton
+                  text="색칠 하기"
+                  classes="mt-1"
+                  onPress={showModal}
+                />
+              </View>
             </View>
-            <View className="w-full flex-row justify-start items-center mb-8">
-              {tag.length > 0 &&
-                tag.map(item => (
-                  <Text
-                    key={item}
-                    className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                    {item}
-                  </Text>
-                ))}
-              {koreaMapData[id].type !== 'init' && (
-                <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                  # 스토리 {koreaMapData[id].story}건
-                </Text>
-              )}
-            </View>
-            <View className="w-full">
-              <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
-              <BrandOutlinedButton
-                text="색칠 하기"
-                classes="mt-1"
-                onPress={showModal}
-              />
-            </View>
-          </View>
+          )}
         </BottomSheetView>
       </BottomSheetModal>
       <CustomModal
@@ -170,6 +176,7 @@ const MapSheet = ({
       <MemoizedCustomAlert
         visible={visibleDialog}
         title="배경을 제거하시겠습니까?"
+        description="해당 지역 스토리도 전부 삭제됩니다."
         buttonText="삭제"
         buttonOnPress={onDeleteBackground}
         hideAlert={hideDialog}

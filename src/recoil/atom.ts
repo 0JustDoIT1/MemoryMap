@@ -1,7 +1,7 @@
 import {atom, RecoilEnv} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
-import {StoryCountInit} from 'src/constants/storyData';
-import {AppUser, StoryCount} from 'src/types/account';
+import {RegionCountInit} from 'src/constants/regionCount';
+import {AppUser, RegionCount} from 'src/types/account';
 import {KoreaMapData} from 'src/types/koreaMap';
 import {Story, StoryObject} from 'src/types/story';
 
@@ -26,9 +26,9 @@ export const storyState = atom<StoryObject | null>({
 });
 
 // 어플 스토리 수 Recoil (상위 지역만 / 하위 지역은 맵 데이터에 들어가 있음)
-export const storyCountState = atom<StoryCount>({
-  key: 'storyCount',
-  default: StoryCountInit,
+export const regionCountState = atom<RegionCount>({
+  key: 'regionCount',
+  default: RegionCountInit,
 });
 
 // 버튼 클릭 상태 Recoil

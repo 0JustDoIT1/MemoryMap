@@ -1,7 +1,6 @@
 import {Slider} from '@miblanchard/react-native-slider';
 import {View} from 'react-native';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
 
 interface CustomSlider {
   min: number;
@@ -18,8 +17,6 @@ const CustomSlider = ({
   onValueChange,
   color,
 }: CustomSlider) => {
-  const theme = useAppTheme();
-
   return (
     <Slider
       containerStyle={customStyle().sliderContainer}

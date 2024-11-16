@@ -24,23 +24,22 @@ const useCustomBottomSheet = () => {
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['40%', point], [point]);
 
+  const settingBottomSheet = ({
+    title,
+    description,
+    contents,
+    snap,
+  }: SettingBottomSheet) => {
+    setBottomSheetTitle(title);
+    setBottomSheetDescription(description);
+    setBottomSheetContents(contents);
+    setPoint(snap);
+  };
+
   // Bottom Sheet present event
-  const handlePresentModalPress = useCallback(
-    ({title, description, contents, snap}: SettingBottomSheet) => {
-      setBottomSheetTitle(title);
-      setBottomSheetDescription(description);
-      setBottomSheetContents(contents);
-      setPoint(snap);
-      bottomSheetModalRef.current?.present();
-    },
-    [
-      bottomSheetModalRef,
-      bottomSheetTitle,
-      bottomSheetDescription,
-      bottomSheetContents,
-      point,
-    ],
-  );
+  const handlePresentPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
 
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
@@ -57,7 +56,8 @@ const useCustomBottomSheet = () => {
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
-    handlePresentModalPress,
+    settingBottomSheet,
+    handlePresentPress,
     handleClosePress,
     renderBackdrop,
   };

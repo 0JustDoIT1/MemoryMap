@@ -2,11 +2,11 @@ import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
-import {StoryCountInit} from 'src/constants/storyData';
+import {RegionCountInit} from 'src/constants/regionCount';
 import {
   appUserState,
   koreaMapDataState,
-  storyCountState,
+  regionCountState,
   storyState,
 } from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
@@ -23,7 +23,7 @@ const useEmailAndPasswordAuth = () => {
   const setAppUser = useSetRecoilState(appUserState);
   const setKoreaMapData = useSetRecoilState(koreaMapDataState);
   const setStory = useSetRecoilState(storyState);
-  const setStoryCount = useSetRecoilState(storyCountState);
+  const setRegionCount = useSetRecoilState(regionCountState);
 
   // Email Sign Up
   const onSignUpEmailAndPassword = async () => {
@@ -63,7 +63,7 @@ const useEmailAndPasswordAuth = () => {
           setKoreaMapData(snapshot.val()['koreaMapData']);
           setAppUser(user);
           setStory(res?.story);
-          setStoryCount(snapshot.val()['count']);
+          setRegionCount(snapshot.val()['regionCount']);
         });
       } else {
         // 구글 로그인으로 첫 로그인인 경우
@@ -71,7 +71,7 @@ const useEmailAndPasswordAuth = () => {
           email: user.email,
           uid: user.uid,
           koreaMapData: koreaMapDataInit,
-          count: StoryCountInit,
+          regionCount: RegionCountInit,
         };
         await _update(appDataInit).then(async () => {
           const appStoryInit: AppStory = {
@@ -82,7 +82,7 @@ const useEmailAndPasswordAuth = () => {
             setKoreaMapData(koreaMapDataInit);
             setAppUser(user);
             setStory(null);
-            setStoryCount(StoryCountInit);
+            setRegionCount(RegionCountInit);
           });
         });
       }
@@ -95,7 +95,7 @@ const useEmailAndPasswordAuth = () => {
       email: user.email,
       uid: user.uid,
       koreaMapData: koreaMapDataInit,
-      count: StoryCountInit,
+      regionCount: RegionCountInit,
     };
 
     await _update(appDataInit).then(async () => {
@@ -107,7 +107,7 @@ const useEmailAndPasswordAuth = () => {
         setKoreaMapData(koreaMapDataInit);
         setAppUser(user);
         setStory(null);
-        setStoryCount(StoryCountInit);
+        setRegionCount(RegionCountInit);
       });
     });
   };
@@ -118,13 +118,7 @@ const useEmailAndPasswordAuth = () => {
       .currentUser?.updateProfile({
         displayName: displayName,
       })
-      .then(res => {
-        if (update) return showBottomToast('success', `프로필을 변경했습니다.`);
-        else return displayName;
-      })
-      .catch(error =>
-        showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.'),
-      );
+      .then(res => displayName);
   };
 
   // Send Password Reset Email
@@ -139,7 +133,7 @@ const useEmailAndPasswordAuth = () => {
     setAppUser(null);
     setKoreaMapData(koreaMapDataInit);
     setStory(null);
-    setStoryCount(StoryCountInit);
+    setRegionCount(RegionCountInit);
 
     return await auth().signOut();
   };

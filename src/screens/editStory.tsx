@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -25,7 +25,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const theme = useAppTheme();
 
-  const {koreaMapData, getRegionTitleById, getColorRegionList} = useKoreaMap();
+  const {regionMain, getRegionTitleById} = useKoreaMap();
   const {
     regionId,
     setRegionId,
@@ -41,13 +41,19 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     setSelectedEndDate,
     point,
     setPoint,
-    updateStory,
+    updateStoryById,
   } = useStory();
-
-  const regionMain = useMemo(
-    () => Object.keys(getColorRegionList()),
-    [koreaMapData],
-  );
+  const {
+    bottomSheetModalRef,
+    snapPoints,
+    bottomSheetTitle,
+    bottomSheetDescription,
+    bottomSheetContents,
+    settingBottomSheet,
+    handlePresentPress,
+    handleClosePress,
+    renderBackdrop,
+  } = useCustomBottomSheet();
 
   const [edit, setEdit] = useState<boolean>(false);
   const [id, setId] = useState<string>('');
@@ -74,21 +80,10 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     }
   }, [route.params.id, route.params.story]);
 
-  const {
-    bottomSheetModalRef,
-    snapPoints,
-    bottomSheetTitle,
-    bottomSheetDescription,
-    bottomSheetContents,
-    handlePresentModalPress,
-    handleClosePress,
-    renderBackdrop,
-  } = useCustomBottomSheet();
-
   // 날짜 선택 시 bottomSheet open
   const onPressDate = () => {
     Keyboard.dismiss();
-    handlePresentModalPress({
+    settingBottomSheet({
       contents: (
         <MemoizedCalendar
           selectedStartDate={selectedStartDate}
@@ -99,6 +94,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
       ),
       snap: '70%',
     });
+    handlePresentPress();
   };
 
   // 점수 선택에 따라 크기 변화
@@ -124,7 +120,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
 
   // 스토리 저장 및 수정
   const onUpdateStory = async () => {
-    await updateStory(edit, id)
+    await updateStoryById(edit, id)
       .then(() => onUpdateStorySuccess())
       .catch(error => onUpdateStoryError(error));
   };
