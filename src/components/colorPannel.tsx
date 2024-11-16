@@ -2,7 +2,6 @@ import {View} from 'react-native';
 import ColorPicker, {
   HueSlider,
   Panel1,
-  Preview,
   returnedResults,
 } from 'reanimated-color-picker';
 interface CustomColorPannel {
@@ -16,9 +15,6 @@ const CustomColorPannel = ({value, onChange}: CustomColorPannel) => {
         <Panel1 style={{width: '85%'}} thumbSize={15} />
         <HueSlider vertical thumbShape="pill" thumbColor="#000000" />
       </View>
-      {/* <View className="bg-black mt-4 p-[1px] rounded-lg">
-        <Preview style={{borderRadius: 8}} />
-      </View> */}
     </ColorPicker>
   );
 };

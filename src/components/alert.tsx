@@ -6,6 +6,7 @@ import {customStyle} from 'src/style/customStyle';
 interface CustomAlert {
   visible: boolean;
   title: string;
+  description?: string;
   buttonText: string;
   buttonOnPress: () => void;
   hideAlert: () => void;
@@ -14,6 +15,7 @@ interface CustomAlert {
 const CustomAlert = ({
   visible,
   title,
+  description,
   buttonText,
   hideAlert,
   buttonOnPress,
@@ -24,10 +26,15 @@ const CustomAlert = ({
         visible={visible}
         onDismiss={hideAlert}
         style={customStyle().alert}>
-        <Dialog.Title className="text-base text-center py-1">
-          {title}
-        </Dialog.Title>
-        <Dialog.Content className="p-0 border-t-[0.5px] border-blur">
+        <View className="flex justify-center items-center pt-2 pb-6">
+          <Text className="text-base text-center">{title}</Text>
+          {description && (
+            <Text className="text-xs text-center mt-1 text-error">
+              {description}
+            </Text>
+          )}
+        </View>
+        <View className="border-t-[0.5px] border-blur">
           <View className="flex-row justify-center items-center">
             <Pressable
               className="w-1/2 flex justify-center items-center py-4"
@@ -41,7 +48,7 @@ const CustomAlert = ({
               <Text className="text-error">{buttonText}</Text>
             </Pressable>
           </View>
-        </Dialog.Content>
+        </View>
       </Dialog>
     </Portal>
   );

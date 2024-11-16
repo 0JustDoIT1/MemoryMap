@@ -26,7 +26,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
 
   const {getRegionTitleById} = useKoreaMap();
-  const {deleteStory} = useStory();
+  const {deleteStoryById} = useStory();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
   const startDateString = dateToFormatString(
@@ -39,7 +39,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
 
   // 스토리 제거
   const onDeleteStory = async () => {
-    await deleteStory(story.regionId, story._id)
+    await deleteStoryById(story.regionId, story._id)
       .then(() => onDeleteStorySuccess())
       .catch(error => onDeleteStoryError(error));
   };

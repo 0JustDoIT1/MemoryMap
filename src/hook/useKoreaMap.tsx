@@ -1,25 +1,88 @@
+import {useMemo} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
-import {StoryCountInit} from 'src/constants/storyData';
+import {RegionCountInit} from 'src/constants/regionCount';
 import {
   appUserState,
   koreaMapDataState,
-  storyCountState,
+  regionCountState,
+  storyState,
 } from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
-import {
-  GetColorRegionList,
-  KoreaMapData,
-  KoreaRegionData,
-} from 'src/types/koreaMap';
+import {GetColorRegionList} from 'src/types/koreaMap';
 import {_update} from 'src/utils/realtime';
+import {sorting} from 'src/utils/sort';
 import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
+import {AppStory} from 'src/types/story';
+import {_deleteDoc, _setDoc} from 'src/utils/firestore';
+import {
+  deleteDataById,
+  updateDataByTypeColor,
+  updateDataByTypePhoto,
+  updateRegionCountById,
+} from 'src/utils/koreaMap';
+import {getDeleteStoryCount, deleteStoryByRegionId} from 'src/utils/story';
 
 const useKoreaMap = () => {
   const appUser = useRecoilValue(appUserState);
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
-  const [storyCount, setStoryCount] = useRecoilState(storyCountState);
+  const [story, setStory] = useRecoilState(storyState);
+  const [regionCount, setRegionCount] = useRecoilState(regionCountState);
+
+  // 지도 색칠된 지역(color & photo) 리스트 가져오기
+  const getColorRegionList = useMemo(() => {
+    const result: GetColorRegionList = {};
+
+    const colorList = Object.values(koreaMapData).filter(
+      region => region.type !== 'init',
+    );
+
+    colorList.forEach((region, index) => {
+      const regionName = region.value[region.value.length - 1];
+
+      let value =
+        region.value.length === 1
+          ? {
+              child: false,
+              sub: [{id: region.id, title: regionName}],
+            }
+          : {
+              child: true,
+              sub: [{id: region.id, title: regionName}],
+            };
+
+      if (index === 0) result[region.value[0]] = value;
+      else {
+        const exist = result[region.value[0]];
+        if (exist)
+          result[region.value[0]].sub.push({
+            id: region.id,
+            title: regionName,
+          });
+        else result[region.value[0]] = value;
+      }
+    });
+
+    return result;
+  }, [koreaMapData]);
+
+  // 지도 색칠된 지역 list
+  const regionList = useMemo(() => getColorRegionList, [koreaMapData]);
+
+  // 지도 색칠된 지역 list 중 Main Array
+  const regionMain = useMemo(
+    () => Object.keys(getColorRegionList).sort(),
+    [koreaMapData],
+  );
+
+  // 색칠된 지역 숫자
+  const regionCountNumber = useMemo(() => {
+    const colorList = Object.values(koreaMapData).filter(
+      region => region.type !== 'init',
+    );
+    return colorList.length;
+  }, [koreaMapData]);
 
   // id로 해당 지역명 (title이 아닌 value로 구성한 값) 반환
   const getRegionTitleById = (id: string) => {
@@ -63,30 +126,38 @@ const useKoreaMap = () => {
 
   // 지도에서 배경(색상) 업데이트 -> Firebase & Recoil
   const updateMapColorById = async (id: string, color: string) => {
-    const regionData: KoreaRegionData = {
-      ...koreaMapData[id],
-      background: color,
-      type: 'color',
-    };
-    delete regionData.imageStyle;
-    delete regionData.imageUrl;
-
-    const updateData: KoreaMapData = {
-      ...koreaMapData,
-      [id]: regionData,
-    };
+    const updateKoreaMapData = updateDataByTypeColor(koreaMapData, id, color);
+    const count =
+      koreaMapData[id].type === 'photo'
+        ? 0
+        : koreaMapData[id].type === 'color'
+        ? 0
+        : 1;
+    const updateRegionCount = updateRegionCountById(regionCount, id, count, 0);
 
     const appData: AppData = {
       uid: appUser?.uid!,
       email: appUser?.email!,
-      koreaMapData: updateData,
-      count: StoryCountInit,
+      koreaMapData: updateKoreaMapData,
+      regionCount: updateRegionCount,
     };
 
-    if (koreaMapData[id].type === 'photo') {
-      await _delete(appData.uid, id).then();
+    let response: boolean = false;
+
+    // 타입이 photo인 경우, 기존 사진 제거
+    if (updateKoreaMapData[id].type === 'photo') {
+      await _delete(appUser?.uid!, id).then(() => (response = true));
+    } else {
+      response = true;
     }
-    await _update(appData).then(() => setKoreaMapData(updateData));
+
+    // 사진 제거 이후(없다면 바로) 데이터 업데이트
+    if (response) {
+      await _update(appData).then(() => {
+        setKoreaMapData(appData.koreaMapData);
+        setRegionCount(appData.regionCount);
+      });
+    } else throw new Error('색칠 에러');
   };
 
   // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
@@ -98,28 +169,35 @@ const useKoreaMap = () => {
     await _upload(appUser?.uid!, id, uri).then(
       async res =>
         await _download(appUser?.uid!, id).then(async res => {
-          const regionData: KoreaRegionData = {
-            ...koreaMapData[id],
-            background: `url(#${id})`,
-            type: 'photo',
-            imageStyle: imageStyle,
-            imageUrl: res,
-          };
-
-          const updateData: KoreaMapData = {
-            ...koreaMapData,
-            [id]: regionData,
-          };
+          const updateKoreaMapData = updateDataByTypePhoto(
+            koreaMapData,
+            id,
+            res,
+            imageStyle,
+          );
+          const count =
+            koreaMapData[id].type === 'photo'
+              ? 0
+              : koreaMapData[id].type === 'color'
+              ? 0
+              : 1;
+          const updateRegionCount = updateRegionCountById(
+            regionCount,
+            id,
+            count,
+            0,
+          );
 
           const appData: AppData = {
             uid: appUser?.uid!,
             email: appUser?.email!,
-            koreaMapData: updateData,
-            count: StoryCountInit,
+            koreaMapData: updateKoreaMapData,
+            regionCount: updateRegionCount,
           };
 
           await _update(appData).then(async () => {
-            setKoreaMapData(updateData);
+            setKoreaMapData(appData.koreaMapData);
+            setRegionCount(appData.regionCount);
           });
         }),
     );
@@ -127,30 +205,42 @@ const useKoreaMap = () => {
 
   // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
   const deleteMapDataById = async (id: string) => {
-    const regionData: KoreaRegionData = {
-      ...koreaMapData[id],
-      background: '#ffffff',
-      type: 'init',
-    };
-    delete regionData.imageStyle;
-    delete regionData.imageUrl;
+    const updateKoreaMapData = deleteDataById(koreaMapData, id);
+    const updateStory = deleteStoryByRegionId(story!, id);
+    const updateRegionCount = updateRegionCountById(
+      regionCount,
+      id,
+      -1,
+      getDeleteStoryCount(story!, updateStory),
+    );
 
-    const updateData: KoreaMapData = {
-      ...koreaMapData,
-      [id]: regionData,
+    const appStory: AppStory = {
+      uid: appUser?.uid!,
+      story: updateStory,
     };
 
     const appData: AppData = {
       uid: appUser?.uid!,
       email: appUser?.email!,
-      koreaMapData: updateData,
-      count: StoryCountInit,
+      koreaMapData: updateKoreaMapData,
+      regionCount: updateRegionCount,
     };
 
+    let response: boolean = false;
+
     if (koreaMapData[id].type === 'photo') {
-      await _delete(appData.uid, id).then();
+      await _delete(appUser?.uid!, id).then(() => (response = true));
+    } else {
+      response = true;
     }
-    await _update(appData).then(() => setKoreaMapData(updateData));
+
+    await _update(appData).then(async () => {
+      await _setDoc(appStory).then(async () => {
+        setStory(appStory.story);
+        setKoreaMapData(appData.koreaMapData);
+        setRegionCount(appData.regionCount);
+      });
+    });
   };
 
   // 지도 정보 초기화
@@ -159,76 +249,32 @@ const useKoreaMap = () => {
       uid: appUser?.uid!,
       email: appUser?.email!,
       koreaMapData: koreaMapDataInit,
-      count: StoryCountInit,
+      regionCount: RegionCountInit,
     };
 
     return await _deleteAll(appData.uid).then(async () => {
-      await _update(appData).then(() => setKoreaMapData(koreaMapDataInit));
+      await _update(appData).then(async () => {
+        await _deleteDoc(appData.uid).then(() => {
+          setKoreaMapData(koreaMapDataInit);
+          setRegionCount(RegionCountInit);
+          setStory(null);
+        });
+      });
     });
   };
 
-  // 지도 색칠된 지역(color & photo) 리스트 가져오기
-  const getColorRegionList = () => {
-    const result: GetColorRegionList = {};
-
-    const colorList = Object.values(koreaMapData).filter(
-      region => region.type !== 'init',
-    );
-
-    colorList.forEach((region, index) => {
-      const regionName = region.value[region.value.length - 1];
-
-      let value =
-        region.value.length === 1
-          ? {
-              child: false,
-              sub: [{id: region.id, title: regionName}],
-            }
-          : {
-              child: true,
-              sub: [{id: region.id, title: regionName}],
-            };
-
-      if (index === 0) result[region.value[0]] = value;
-      else {
-        const exist = result[region.value[0]];
-        if (exist)
-          result[region.value[0]].sub.push({
-            id: region.id,
-            title: regionName,
-          });
-        else result[region.value[0]] = value;
-      }
-    });
-
-    return result;
-  };
-
-  // 스토리 숫자 계산
-  const countingStory = async (id: string, count: number) => {
-    const updateData: KoreaMapData = {
-      ...koreaMapData,
-      [id]: {...koreaMapData[id], story: koreaMapData[id].story + count},
-    };
-
-    const mainId = `${id.split('-')[0]}-${id.split('-')[1]}`;
-    const newCount = {...storyCount, [mainId]: storyCount[mainId] + count};
-
-    const appData: AppData = {
-      uid: appUser?.uid!,
-      email: appUser?.email!,
-      koreaMapData: updateData,
-      count: newCount,
-    };
-
-    await _update(appData).then(() => {
-      setKoreaMapData(updateData);
-      setStoryCount(newCount);
-    });
+  // 색칠된 상위지역 카운트 중 가장 큰 지역 id
+  const mostColoredRegion = () => {
+    const test = Object.values(regionCount).sort((a, b) => sorting(a, b, 1));
+    // console.log('test', Math.max(test));
   };
 
   return {
     koreaMapData,
+    regionList,
+    regionMain,
+    regionCountNumber,
+    mostColoredRegion,
     getRegionTitleById,
     getSvgDataById,
     getTypeToIdArray,
@@ -236,8 +282,6 @@ const useKoreaMap = () => {
     updateMapPhotoById,
     deleteMapDataById,
     resetMapData,
-    getColorRegionList,
-    countingStory,
   };
 };
 

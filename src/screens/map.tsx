@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -8,16 +8,12 @@ import Animated, {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ViewShot from 'react-native-view-shot';
 import useFAB from 'src/hook/useFAB';
-import useMapSheet from 'src/hook/useMapSheet';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
-import {hasAndroidPermission} from 'src/utils/getCheckPermission';
 import {showBottomToast} from 'src/utils/showToast';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedKoreaMap from 'src/components/koreaMapSvg';
-import MemoizedMapSheet from 'src/components/mapSheet';
 import MemoizedCustomAlert from 'src/components/alert';
 import MemoizedCustomFAB from 'src/components/fab';
 import {onCaptureMap} from 'src/utils/screenshot';
@@ -32,16 +28,6 @@ const MapScreen = ({navigation, route}: MapProps) => {
   console.log('맵');
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {
-    mapSheetModalRef,
-    snapPoints,
-    title,
-    tag,
-    id,
-    handleMapModalPress,
-    handleClosePress,
-    renderBackdrop,
-  } = useMapSheet();
   const {open, onChangeFAB} = useFAB();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapData} = useKoreaMap();
@@ -139,22 +125,10 @@ const MapScreen = ({navigation, route}: MapProps) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <MemoizedKoreaMap handleMapModalPress={handleMapModalPress} />
+            <MemoizedKoreaMap navigation={navigation} />
           </Animated.View>
         </GestureDetector>
       </ViewShot>
-      {id && (
-        <MemoizedMapSheet
-          navigation={navigation}
-          mapSheetModalRef={mapSheetModalRef}
-          snapPoints={snapPoints}
-          handleClosePress={handleClosePress}
-          renderBackdrop={renderBackdrop}
-          id={id}
-          title={title}
-          tag={tag}
-        />
-      )}
       <MemoizedCustomFAB
         open={open}
         onChangeFAB={onChangeFAB}
@@ -168,6 +142,7 @@ const MapScreen = ({navigation, route}: MapProps) => {
       <MemoizedCustomAlert
         visible={visibleDialog}
         title="지도를 초기화하시겠습니까?"
+        description="스토리도 전부 삭제됩니다."
         buttonText="초기화"
         buttonOnPress={onResetMap}
         hideAlert={hideDialog}

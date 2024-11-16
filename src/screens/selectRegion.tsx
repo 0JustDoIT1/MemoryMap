@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useKoreaMap from 'src/hook/useKoreaMap';
@@ -6,14 +6,7 @@ import MemoizedAccordion from 'src/components/accordion';
 import {SelectRegionProps} from 'src/types/stack';
 
 const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
-  const {koreaMapData, getColorRegionList} = useKoreaMap();
-
-  const regionList = useMemo(() => getColorRegionList(), [koreaMapData]);
-
-  const regionMain = useMemo(
-    () => Object.keys(getColorRegionList()).sort(),
-    [koreaMapData],
-  );
+  const {regionList, regionMain} = useKoreaMap();
 
   const onSelectRegion = (value: string) => {
     navigation.navigate('EditStory', {title: '스토리 작성', id: value});

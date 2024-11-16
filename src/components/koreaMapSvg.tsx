@@ -1,15 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {G, Path, Polygon, Svg, Text} from 'react-native-svg';
 import {_download} from 'src/utils/storage';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizationSvgPattern from './svgPattern';
+import MemoizedMapSheet from './mapSheet';
+import useMapSheet from 'src/hook/useMapSheet';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackParamList} from 'src/types/stack';
 
 interface KoreaMapSvg {
-  handleMapModalPress: (id: string) => void;
+  navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
 }
 
-const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
+const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
+  const {
+    mapSheetModalRef,
+    snapPoints,
+    handlePresentPress,
+    handleClosePress,
+    renderBackdrop,
+  } = useMapSheet();
   const {koreaMapData} = useKoreaMap();
+  const [id, setId] = useState<string>('');
   console.log('!!!');
 
   return (
@@ -20,7 +32,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="제주도_1_"
             onPress={() => {
-              handleMapModalPress('KR-17');
+              setId('KR-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-17'].background}
             stroke="#000000"
@@ -37,7 +50,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="합천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-18');
+              setId('KR-13-18');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-18'].background}
             stroke="#000000"
@@ -50,7 +64,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="거창군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-17');
+              setId('KR-13-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-17'].background}
             stroke="#000000"
@@ -64,7 +79,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="함양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-16');
+              setId('KR-13-16');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-16'].background}
             stroke="#000000"
@@ -77,7 +93,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="산청군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-15');
+              setId('KR-13-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-15'].background}
             stroke="#000000"
@@ -90,7 +107,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="하동군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-14');
+              setId('KR-13-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-14'].background}
             stroke="#000000"
@@ -104,7 +122,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="남해군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-13');
+              setId('KR-13-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-13'].background}
             stroke="#000000"
@@ -120,7 +139,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="고성군_2_"
             onPress={() => {
-              handleMapModalPress('KR-13-12');
+              setId('KR-13-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-12'].background}
             stroke="#000000"
@@ -135,7 +155,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="창녕군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-11');
+              setId('KR-13-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-11'].background}
             stroke="#000000"
@@ -148,7 +169,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="함안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-10');
+              setId('KR-13-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-10'].background}
             stroke="#000000"
@@ -160,7 +182,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="의령군_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-9');
+              setId('KR-13-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-9'].background}
             stroke="#000000"
@@ -173,7 +196,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="양산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-8');
+              setId('KR-13-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-8'].background}
             stroke="#000000"
@@ -186,7 +210,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="거제시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-7');
+              setId('KR-13-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-7'].background}
             stroke="#000000"
@@ -202,7 +227,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="밀양시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-6');
+              setId('KR-13-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-6'].background}
             stroke="#000000"
@@ -215,7 +241,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="김해시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-5');
+              setId('KR-13-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-5'].background}
             stroke="#000000"
@@ -227,7 +254,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="사천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-4');
+              setId('KR-13-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-4'].background}
             stroke="#000000"
@@ -241,7 +269,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="통영시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-3');
+              setId('KR-13-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-3'].background}
             stroke="#000000"
@@ -261,7 +290,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="진주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-2');
+              setId('KR-13-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-2'].background}
             stroke="#000000"
@@ -275,7 +305,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="창원시_1_"
             onPress={() => {
-              handleMapModalPress('KR-13-1');
+              setId('KR-13-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-13-1'].background}
             stroke="#000000"
@@ -298,7 +329,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="울진군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-22');
+              setId('KR-12-22');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-22'].background}
             stroke="#000000"
@@ -311,7 +343,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="봉화군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-21');
+              setId('KR-12-21');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-21'].background}
             stroke="#000000"
@@ -327,7 +360,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="예천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-20');
+              setId('KR-12-20');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-20'].background}
             stroke="#000000"
@@ -341,7 +375,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="칠곡군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-19');
+              setId('KR-12-19');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-19'].background}
             stroke="#000000"
@@ -355,7 +390,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="성주군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-18');
+              setId('KR-12-18');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-18'].background}
             stroke="#000000"
@@ -368,7 +404,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="고령군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-17');
+              setId('KR-12-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-17'].background}
             stroke="#000000"
@@ -381,7 +418,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="청도군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-16');
+              setId('KR-12-16');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-16'].background}
             stroke="#000000"
@@ -395,7 +433,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="영덕군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-15');
+              setId('KR-12-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-15'].background}
             stroke="#000000"
@@ -407,7 +446,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="영양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-14');
+              setId('KR-12-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-14'].background}
             stroke="#000000"
@@ -421,7 +461,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="청송군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-13');
+              setId('KR-12-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-13'].background}
             stroke="#000000"
@@ -434,7 +475,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="의성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-12');
+              setId('KR-12-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-12'].background}
             stroke="#000000"
@@ -448,7 +490,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="군위군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-11');
+              setId('KR-12-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-11'].background}
             stroke="#000000"
@@ -464,7 +507,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="경산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-10');
+              setId('KR-12-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-10'].background}
             stroke="#000000"
@@ -477,7 +521,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="문경시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-9');
+              setId('KR-12-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-9'].background}
             stroke="#000000"
@@ -492,7 +537,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="상주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-8');
+              setId('KR-12-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-8'].background}
             stroke="#000000"
@@ -506,7 +552,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="영천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-7');
+              setId('KR-12-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-7'].background}
             stroke="#000000"
@@ -520,7 +567,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="영주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-6');
+              setId('KR-12-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-6'].background}
             stroke="#000000"
@@ -534,7 +582,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="구미시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-5');
+              setId('KR-12-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-5'].background}
             stroke="#000000"
@@ -548,7 +597,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="안동시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-4');
+              setId('KR-12-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-4'].background}
             stroke="#000000"
@@ -564,7 +614,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="김천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-3');
+              setId('KR-12-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-3'].background}
             stroke="#000000"
@@ -578,7 +629,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="경주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-2');
+              setId('KR-12-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-2'].background}
             stroke="#000000"
@@ -591,7 +643,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="포항시_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-1');
+              setId('KR-12-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-1'].background}
             stroke="#000000"
@@ -608,7 +661,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="울릉군_1_"
             onPress={() => {
-              handleMapModalPress('KR-12-23');
+              setId('KR-12-23');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-12-23'].background}
             stroke="#000000"
@@ -623,7 +677,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="신안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-22');
+              setId('KR-10-22');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-22'].background}
             stroke="#000000"
@@ -654,7 +709,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="진도군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-21');
+              setId('KR-10-21');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-21'].background}
             stroke="#000000"
@@ -669,7 +725,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="완도군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-20');
+              setId('KR-10-20');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-20'].background}
             stroke="#000000"
@@ -694,7 +751,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="장성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-19');
+              setId('KR-10-19');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-19'].background}
             stroke="#000000"
@@ -708,7 +766,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="영광군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-18');
+              setId('KR-10-18');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-18'].background}
             stroke="#000000"
@@ -721,7 +780,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="함평군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-17');
+              setId('KR-10-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-17'].background}
             stroke="#000000"
@@ -734,7 +794,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="무안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-16');
+              setId('KR-10-16');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-16'].background}
             stroke="#000000"
@@ -750,7 +811,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="영암군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-15');
+              setId('KR-10-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-15'].background}
             stroke="#000000"
@@ -764,7 +826,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="해남군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-14');
+              setId('KR-10-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-14'].background}
             stroke="#000000"
@@ -781,7 +844,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="강진군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-13');
+              setId('KR-10-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-13'].background}
             stroke="#000000"
@@ -794,7 +858,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="장흥군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-12');
+              setId('KR-10-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-12'].background}
             stroke="#000000"
@@ -808,7 +873,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="화순군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-11');
+              setId('KR-10-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-11'].background}
             stroke="#000000"
@@ -822,7 +888,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="보성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-10');
+              setId('KR-10-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-10'].background}
             stroke="#000000"
@@ -836,7 +903,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="고흥군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-9');
+              setId('KR-10-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-9'].background}
             stroke="#000000"
@@ -856,7 +924,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="구례군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-8');
+              setId('KR-10-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-8'].background}
             stroke="#000000"
@@ -868,7 +937,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="곡성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-7');
+              setId('KR-10-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-7'].background}
             stroke="#000000"
@@ -881,7 +951,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="담양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-6');
+              setId('KR-10-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-6'].background}
             stroke="#000000"
@@ -894,7 +965,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="광양시_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-5');
+              setId('KR-10-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-5'].background}
             stroke="#000000"
@@ -906,7 +978,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="나주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-4');
+              setId('KR-10-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-4'].background}
             stroke="#000000"
@@ -920,7 +993,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="순천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-3');
+              setId('KR-10-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-3'].background}
             stroke="#000000"
@@ -934,7 +1008,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="여수시_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-2');
+              setId('KR-10-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-2'].background}
             stroke="#000000"
@@ -952,7 +1027,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="목포시_1_"
             onPress={() => {
-              handleMapModalPress('KR-10-1');
+              setId('KR-10-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-10-1'].background}
             stroke="#000000"
@@ -965,7 +1041,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="부안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-14');
+              setId('KR-9-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-14'].background}
             stroke="#000000"
@@ -978,7 +1055,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="고창군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-13');
+              setId('KR-9-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-13'].background}
             stroke="#000000"
@@ -992,7 +1070,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="순창군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-12');
+              setId('KR-9-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-12'].background}
             stroke="#000000"
@@ -1008,7 +1087,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="장수군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-10');
+              setId('KR-9-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-10'].background}
             stroke="#000000"
@@ -1023,7 +1103,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="무주군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-9');
+              setId('KR-9-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-9'].background}
             stroke="#000000"
@@ -1036,7 +1117,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="진안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-8');
+              setId('KR-9-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-8'].background}
             stroke="#000000"
@@ -1050,7 +1132,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="완주군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-7');
+              setId('KR-9-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-7'].background}
             stroke="#000000"
@@ -1065,7 +1148,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="김제시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-6');
+              setId('KR-9-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-6'].background}
             stroke="#000000"
@@ -1078,7 +1162,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="남원시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-5');
+              setId('KR-9-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-5'].background}
             stroke="#000000"
@@ -1094,7 +1179,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="정읍시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-4');
+              setId('KR-9-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-4'].background}
             stroke="#000000"
@@ -1109,7 +1195,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="익산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-3');
+              setId('KR-9-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-3'].background}
             stroke="#000000"
@@ -1121,7 +1208,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="군산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-2');
+              setId('KR-9-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-2'].background}
             stroke="#000000"
@@ -1133,7 +1221,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="전주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-1');
+              setId('KR-9-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-1'].background}
             stroke="#000000"
@@ -1145,7 +1234,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="임실군_1_"
             onPress={() => {
-              handleMapModalPress('KR-9-11');
+              setId('KR-9-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-9-11'].background}
             stroke="#000000"
@@ -1164,7 +1254,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="태안군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-15');
+              setId('KR-6-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-15'].background}
             stroke="#000000"
@@ -1182,7 +1273,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="예산군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-14');
+              setId('KR-6-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-14'].background}
             stroke="#000000"
@@ -1195,7 +1287,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="홍성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-13');
+              setId('KR-6-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-13'].background}
             stroke="#000000"
@@ -1208,7 +1301,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="청양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-12');
+              setId('KR-6-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-12'].background}
             stroke="#000000"
@@ -1220,7 +1314,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="서천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-11');
+              setId('KR-6-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-11'].background}
             stroke="#000000"
@@ -1233,7 +1328,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="부여군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-10');
+              setId('KR-6-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-10'].background}
             stroke="#000000"
@@ -1246,7 +1342,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="금산군_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-9');
+              setId('KR-6-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-9'].background}
             stroke="#000000"
@@ -1260,7 +1357,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="당진시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-8');
+              setId('KR-6-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-8'].background}
             stroke="#000000"
@@ -1273,7 +1371,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="계룡시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-7');
+              setId('KR-6-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-7'].background}
             stroke="#000000"
@@ -1284,7 +1383,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="논산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-6');
+              setId('KR-6-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-6'].background}
             stroke="#000000"
@@ -1297,7 +1397,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="서산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-5');
+              setId('KR-6-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-5'].background}
             stroke="#000000"
@@ -1311,7 +1412,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="아산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-4');
+              setId('KR-6-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-4'].background}
             stroke="#000000"
@@ -1324,7 +1426,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="보령시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-3');
+              setId('KR-6-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-3'].background}
             stroke="#000000"
@@ -1339,7 +1442,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="공주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-2');
+              setId('KR-6-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-2'].background}
             stroke="#000000"
@@ -1353,7 +1457,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="천안시_1_"
             onPress={() => {
-              handleMapModalPress('KR-6-1');
+              setId('KR-6-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-6-1'].background}
             stroke="#000000"
@@ -1369,7 +1474,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="단양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-11');
+              setId('KR-5-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-11'].background}
             stroke="#000000"
@@ -1382,7 +1488,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="음성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-10');
+              setId('KR-5-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-10'].background}
             stroke="#000000"
@@ -1396,7 +1503,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="괴산군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-9');
+              setId('KR-5-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-9'].background}
             stroke="#000000"
@@ -1410,7 +1518,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="진천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-8');
+              setId('KR-5-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-8'].background}
             stroke="#000000"
@@ -1422,7 +1531,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="증평군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-7');
+              setId('KR-5-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-7'].background}
             stroke="#000000"
@@ -1434,7 +1544,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="영동군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-6');
+              setId('KR-5-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-6'].background}
             stroke="#000000"
@@ -1447,7 +1558,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="옥천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-5');
+              setId('KR-5-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-5'].background}
             stroke="#000000"
@@ -1460,7 +1572,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="보은군_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-4');
+              setId('KR-5-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-4'].background}
             stroke="#000000"
@@ -1473,7 +1586,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="제천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-3');
+              setId('KR-5-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-3'].background}
             stroke="#000000"
@@ -1488,7 +1602,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="충주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-2');
+              setId('KR-5-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-2'].background}
             stroke="#000000"
@@ -1502,7 +1617,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="청주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-5-1');
+              setId('KR-5-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-5-1'].background}
             stroke="#000000"
@@ -1520,7 +1636,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="양양군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-18');
+              setId('KR-4-18');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-18'].background}
             stroke="#000000"
@@ -1533,7 +1650,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="고성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-17');
+              setId('KR-4-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-17'].background}
             stroke="#000000"
@@ -1545,7 +1663,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="인제군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-16');
+              setId('KR-4-16');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-16'].background}
             stroke="#000000"
@@ -1561,7 +1680,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="양구군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-15');
+              setId('KR-4-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-15'].background}
             stroke="#000000"
@@ -1574,7 +1694,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="화천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-14');
+              setId('KR-4-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-14'].background}
             stroke="#000000"
@@ -1587,7 +1708,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="정선군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-12');
+              setId('KR-4-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-12'].background}
             stroke="#000000"
@@ -1602,7 +1724,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="평창군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-11');
+              setId('KR-4-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-11'].background}
             stroke="#000000"
@@ -1618,7 +1741,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="영월군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-10');
+              setId('KR-4-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-10'].background}
             stroke="#000000"
@@ -1635,7 +1759,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="횡성군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-9');
+              setId('KR-4-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-9'].background}
             stroke="#000000"
@@ -1649,7 +1774,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="홍천군_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-8');
+              setId('KR-4-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-8'].background}
             stroke="#000000"
@@ -1665,7 +1791,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="삼척시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-7');
+              setId('KR-4-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-7'].background}
             stroke="#000000"
@@ -1678,7 +1805,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="속초시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-6');
+              setId('KR-4-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-6'].background}
             stroke="#000000"
@@ -1689,7 +1817,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="태백시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-5');
+              setId('KR-4-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-5'].background}
             stroke="#000000"
@@ -1702,7 +1831,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="동해시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-4');
+              setId('KR-4-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-4'].background}
             stroke="#000000"
@@ -1714,7 +1844,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="강릉시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-3');
+              setId('KR-4-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-3'].background}
             stroke="#000000"
@@ -1728,7 +1859,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="원주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-2');
+              setId('KR-4-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-2'].background}
             stroke="#000000"
@@ -1742,7 +1874,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="춘천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-4-1');
+              setId('KR-4-1');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-4-1'].background}
             stroke="#000000"
@@ -1759,7 +1892,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             <Path
               id="철원군_1_"
               onPress={() => {
-                handleMapModalPress('KR-4-13');
+                setId('KR-4-13');
+                handlePresentPress();
               }}
               fill={koreaMapData['KR-4-13'].background}
               stroke="#000000"
@@ -1776,7 +1910,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="양평군_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-31');
+              setId('KR-2-31');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-31'].background}
             stroke="#000000"
@@ -1790,7 +1925,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="여주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-28');
+              setId('KR-2-28');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-28'].background}
             stroke="#000000"
@@ -1804,7 +1940,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="양주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-26');
+              setId('KR-2-26');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-26'].background}
             stroke="#000000"
@@ -1817,7 +1954,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="광주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-25');
+              setId('KR-2-25');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-25'].background}
             stroke="#000000"
@@ -1830,7 +1968,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="화성시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-24');
+              setId('KR-2-24');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-24'].background}
             stroke="#000000"
@@ -1847,7 +1986,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="김포시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-23');
+              setId('KR-2-23');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-23'].background}
             stroke="#000000"
@@ -1860,7 +2000,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="안성시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-22');
+              setId('KR-2-22');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-22'].background}
             stroke="#000000"
@@ -1873,7 +2014,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="이천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-21');
+              setId('KR-2-21');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-21'].background}
             stroke="#000000"
@@ -1887,7 +2029,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="파주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-20');
+              setId('KR-2-20');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-20'].background}
             stroke="#000000"
@@ -1899,7 +2042,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="하남시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-18');
+              setId('KR-2-18');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-18'].background}
             stroke="#000000"
@@ -1910,7 +2054,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="의왕시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-17');
+              setId('KR-2-17');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-17'].background}
             stroke="#000000"
@@ -1922,7 +2067,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="군포시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-16');
+              setId('KR-2-16');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-16'].background}
             stroke="#000000"
@@ -1933,7 +2079,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="시흥시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-15');
+              setId('KR-2-15');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-15'].background}
             stroke="#000000"
@@ -1945,7 +2092,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="오산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-14');
+              setId('KR-2-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-14'].background}
             stroke="#000000"
@@ -1956,7 +2104,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="남양주시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-13');
+              setId('KR-2-13');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-13'].background}
             stroke="#000000"
@@ -1968,7 +2117,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="과천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-11');
+              setId('KR-2-11');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-11'].background}
             stroke="#000000"
@@ -1979,7 +2129,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="고양시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-10');
+              setId('KR-2-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-10'].background}
             stroke="#000000"
@@ -1992,7 +2143,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="평택시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-8');
+              setId('KR-2-8');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-8'].background}
             stroke="#000000"
@@ -2005,7 +2157,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="광명시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-6');
+              setId('KR-2-6');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-6'].background}
             stroke="#000000"
@@ -2016,7 +2169,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="부천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-5');
+              setId('KR-2-5');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-5'].background}
             stroke="#000000"
@@ -2027,7 +2181,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="안양시_2_"
             onPress={() => {
-              handleMapModalPress('KR-2-4');
+              setId('KR-2-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-4'].background}
             stroke="#000000"
@@ -2039,7 +2194,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="의정부시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-3');
+              setId('KR-2-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-3'].background}
             stroke="#000000"
@@ -2050,7 +2206,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="성남시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-2');
+              setId('KR-2-2');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-2'].background}
             stroke="#000000"
@@ -2062,7 +2219,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="안양시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-4');
+              setId('KR-2-4');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-4'].background}
             stroke="#000000"
@@ -2074,7 +2232,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="동두천시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-7');
+              setId('KR-2-7');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-7'].background}
             stroke="#000000"
@@ -2085,7 +2244,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="용인시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-19');
+              setId('KR-2-19');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-19'].background}
             stroke="#000000"
@@ -2099,7 +2259,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="구리시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-12');
+              setId('KR-2-12');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-12'].background}
             stroke="#000000"
@@ -2110,7 +2271,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Polygon
             id="안산시_1_"
             onPress={() => {
-              handleMapModalPress('KR-2-9');
+              setId('KR-2-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-2-9'].background}
             stroke="#000000"
@@ -2124,7 +2286,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             <Path
               id="연천군_1_"
               onPress={() => {
-                handleMapModalPress('KR-2-29');
+                setId('KR-2-29');
+                handlePresentPress();
               }}
               fill={koreaMapData['KR-2-29'].background}
               stroke="#000000"
@@ -2140,7 +2303,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             <Polygon
               id="포천시_1_"
               onPress={() => {
-                handleMapModalPress('KR-2-27');
+                setId('KR-2-27');
+                handlePresentPress();
               }}
               fill={koreaMapData['KR-2-27'].background}
               stroke="#000000"
@@ -2157,7 +2321,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
             <Polygon
               id="가평군_1_"
               onPress={() => {
-                handleMapModalPress('KR-2-30');
+                setId('KR-2-30');
+                handlePresentPress();
               }}
               fill={koreaMapData['KR-2-30'].background}
               stroke="#000000"
@@ -2173,7 +2338,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="세종특별자치시_1_"
           onPress={() => {
-            handleMapModalPress('KR-8');
+            setId('KR-8');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-8'].background}
           stroke="#000000"
@@ -2188,7 +2354,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="울산광역시_1_"
           onPress={() => {
-            handleMapModalPress('KR-16');
+            setId('KR-16');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-16'].background}
           stroke="#000000"
@@ -2205,7 +2372,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="대전광역시_1_"
           onPress={() => {
-            handleMapModalPress('KR-7');
+            setId('KR-7');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-7'].background}
           stroke="#000000"
@@ -2220,7 +2388,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="광주광역시_1_"
           onPress={() => {
-            handleMapModalPress('KR-11');
+            setId('KR-11');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-11'].background}
           stroke="#000000"
@@ -2233,7 +2402,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="대구광역시_1_"
           onPress={() => {
-            handleMapModalPress('KR-15');
+            setId('KR-15');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-15'].background}
           stroke="#000000"
@@ -2249,7 +2419,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="강화군_1_"
             onPress={() => {
-              handleMapModalPress('KR-3-9');
+              setId('KR-3-9');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-3-9'].background}
             stroke="#000000"
@@ -2267,7 +2438,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="옹진군_1_"
             onPress={() => {
-              handleMapModalPress('KR-3-10');
+              setId('KR-3-10');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-3-10'].background}
             stroke="#000000"
@@ -2280,7 +2452,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="인천_구_1_"
             onPress={() => {
-              handleMapModalPress('KR-3');
+              setId('KR-3');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-3'].background}
             stroke="#000000"
@@ -2301,7 +2474,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           <Path
             id="부산광역시_1_"
             onPress={() => {
-              handleMapModalPress('KR-14');
+              setId('KR-14');
+              handlePresentPress();
             }}
             fill={koreaMapData['KR-14'].background}
             stroke="#000000"
@@ -2320,7 +2494,8 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
         <Polygon
           id="서울특별시_1_"
           onPress={() => {
-            handleMapModalPress('KR-1');
+            setId('KR-1');
+            handlePresentPress();
           }}
           fill={koreaMapData['KR-1'].background}
           stroke="#000000"
@@ -3482,6 +3657,14 @@ const KoreaMapSvg = ({handleMapModalPress}: KoreaMapSvg) => {
           </Text>
         </G>
       </Svg>
+      <MemoizedMapSheet
+        navigation={navigation}
+        mapSheetModalRef={mapSheetModalRef}
+        snapPoints={snapPoints}
+        renderBackdrop={renderBackdrop}
+        handleClosePress={handleClosePress}
+        id={id}
+      />
     </React.Fragment>
   );
 };

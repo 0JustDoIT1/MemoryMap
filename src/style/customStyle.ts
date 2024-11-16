@@ -1,11 +1,16 @@
 // React-Native-Paper Component에는 Nativewind의 ClassName이 부분적으로
 // 작동이 잘 안되서 Inline Style로 적용
 
-import {StyleSheet} from 'react-native';
+import {DimensionValue, StyleSheet} from 'react-native';
 
 interface CustomStyle {
+  width?: DimensionValue;
   bgColor?: string;
   color?: string;
+  margin?: {
+    marginLeft?: DimensionValue;
+    marginRight?: DimensionValue;
+  };
 }
 
 const colors = {
@@ -150,5 +155,34 @@ export const customStyle = (props?: CustomStyle) =>
       width: '100%',
       height: '100%',
       backgroundColor: colors.white,
+    },
+    progressBar: {
+      width: '100%',
+      height: 15,
+      backgroundColor: props?.bgColor,
+      borderTopLeftRadius: 50,
+      borderBottomLeftRadius: 50,
+      borderTopRightRadius: 50,
+      borderBottomRightRadius: 50,
+    },
+    progressBarFill: {
+      height: 15,
+      backgroundColor: props?.bgColor,
+      borderTopLeftRadius: 50,
+      borderBottomLeftRadius: 50,
+      borderTopRightRadius: props?.width === '100%' ? 50 : 0,
+      borderBottomRightRadius: props?.width === '100%' ? 50 : 0,
+    },
+    progressBarTitle: {
+      fontSize: 15,
+      marginRight: 'auto',
+      marginBottom: 8,
+      color: props?.color,
+    },
+    progressBarText: {
+      ...props?.margin,
+      fontSize: 10,
+      marginTop: 5,
+      color: props?.color,
     },
   });

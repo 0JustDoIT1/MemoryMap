@@ -1,17 +1,26 @@
 import {useState} from 'react';
 import {DateType} from 'react-native-ui-datepicker';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {appUserState, storyState} from 'src/recoil/atom';
+import {
+  appUserState,
+  koreaMapDataState,
+  regionCountState,
+  storyState,
+} from 'src/recoil/atom';
 import {AppStory, Story} from 'src/types/story';
 import {_setDoc} from 'src/utils/firestore';
 import {_update} from 'src/utils/realtime';
 import useKoreaMap from './useKoreaMap';
+import {KoreaMapData} from 'src/types/koreaMap';
+import {AppData} from 'src/types/account';
+import {addStoryCountInKoreaMapData, countingStory} from 'src/utils/story';
+import {updateRegionCountById} from 'src/utils/koreaMap';
 
 const useStory = () => {
-  const [story, setStory] = useRecoilState(storyState);
   const appUser = useRecoilValue(appUserState);
-
-  const {countingStory} = useKoreaMap();
+  const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
+  const [story, setStory] = useRecoilState(storyState);
+  const [regionCount, setRegionCount] = useRecoilState(regionCountState);
 
   const [regionId, setRegionId] = useState<string>('');
   const [regionTitle, setRegionTitle] = useState<string>('');
@@ -62,46 +71,80 @@ const useStory = () => {
   };
 
   // 스토리 저장 및 수정
-  const updateStory = async (edit: boolean, id?: string) => {
+  const updateStoryById = async (edit: boolean, id?: string) => {
     const data = onSettingStoryData(edit, id);
 
     if (data) {
-      const newStory = {
+      const updateStory = {
         ...story!,
         [data._id]: data,
       };
 
+      const updateKoreaMapData: KoreaMapData = addStoryCountInKoreaMapData(
+        koreaMapData,
+        data.regionId,
+        1,
+      );
+
+      const updateCount = updateRegionCountById(
+        regionCount,
+        data.regionId,
+        0,
+        1,
+      );
+
       const appStory: AppStory = {
         uid: appUser?.uid!,
-        story: newStory,
+        story: updateStory,
       };
 
+      const appData: AppData = {
+        uid: appUser?.uid!,
+        email: appUser?.email!,
+        koreaMapData: updateKoreaMapData,
+        regionCount: updateCount,
+      };
       await _setDoc(appStory).then(async () => {
-        if (edit) {
-          setStory(appStory.story);
-        } else {
-          await countingStory(data.regionId, 1).then(() => {
-            setStory(appStory.story);
+        if (!edit) {
+          await _update(appData).then(() => {
+            setKoreaMapData(appData.koreaMapData);
+            setRegionCount(appData.regionCount);
           });
         }
+        setStory(appStory.story);
       });
     }
   };
 
-  const deleteStory = async (regionId: string, id: string) => {
-    const newStory = {
+  // 특정 스토리 삭제
+  const deleteStoryById = async (regionId: string, id: string) => {
+    const updateStory = {
       ...story,
     };
-
-    delete newStory[id];
+    delete updateStory[id];
+    const updateKoreaMapData: KoreaMapData = addStoryCountInKoreaMapData(
+      koreaMapData,
+      regionId,
+      -1,
+    );
+    const updateCount = updateRegionCountById(regionCount, regionId, 0, -1);
 
     const appStory: AppStory = {
       uid: appUser?.uid!,
-      story: newStory,
+      story: updateStory,
+    };
+
+    const appData: AppData = {
+      uid: appUser?.uid!,
+      email: appUser?.email!,
+      koreaMapData: updateKoreaMapData,
+      regionCount: updateCount,
     };
 
     await _setDoc(appStory).then(async () => {
-      await countingStory(regionId, -1).then(() => {
+      await _update(appData).then(() => {
+        setKoreaMapData(appData.koreaMapData);
+        setRegionCount(appData.regionCount);
         setStory(appStory.story);
       });
     });
@@ -123,8 +166,9 @@ const useStory = () => {
     setSelectedEndDate,
     point,
     setPoint,
-    updateStory,
-    deleteStory,
+    updateStoryById,
+    deleteStoryById,
+    countingStory,
   };
 };
 

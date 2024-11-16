@@ -23,6 +23,17 @@ const SignInScreen = ({navigation}: SignInProps) => {
 
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
+  const {
+    bottomSheetModalRef,
+    snapPoints,
+    bottomSheetTitle,
+    bottomSheetDescription,
+    bottomSheetContents,
+    settingBottomSheet,
+    handlePresentPress,
+    handleClosePress,
+    renderBackdrop,
+  } = useCustomBottomSheet();
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
@@ -74,17 +85,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
     }
   };
 
-  const {
-    bottomSheetModalRef,
-    snapPoints,
-    bottomSheetTitle,
-    bottomSheetDescription,
-    bottomSheetContents,
-    handlePresentModalPress,
-    handleClosePress,
-    renderBackdrop,
-  } = useCustomBottomSheet();
-
   return (
     <SafeAreaView className="flex-1 justify-center w-screen h-screen p-8 bg-white">
       <View className="h-2/3 flex justify-center items-center">
@@ -109,7 +109,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
             buttonColor={theme.colors.brandMain}
             textColor={theme.colors.white}
             onPress={() => {
-              handlePresentModalPress({
+              settingBottomSheet({
                 title: '계정 로그인',
                 contents: (
                   <EmailSignInScreen
@@ -119,6 +119,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 ),
                 snap: '50%',
               });
+              handlePresentPress();
             }}
           />
           <View className="flex-row justify-center items-center">
@@ -129,7 +130,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
           <View className="w-full flex items-center">
             <Pressable
               onPress={() => {
-                handlePresentModalPress({
+                settingBottomSheet({
                   title: '회원가입',
                   contents: (
                     <EmailSignUpScreen
@@ -139,6 +140,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                   ),
                   snap: '70%',
                 });
+                handlePresentPress();
               }}>
               <Text className="underline text-blur">이메일로 회원가입</Text>
             </Pressable>
@@ -154,12 +156,13 @@ const SignInScreen = ({navigation}: SignInProps) => {
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
             <Pressable
               onPress={() => {
-                handlePresentModalPress({
+                settingBottomSheet({
                   title: '비밀번호 재설정',
                   description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
                   contents: <ResetPasswordScreen close={handleClosePress} />,
                   snap: '50%',
                 });
+                handlePresentPress();
               }}>
               <Text className="text-xs text-blur">비밀번호 찾기</Text>
             </Pressable>
