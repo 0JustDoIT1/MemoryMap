@@ -20,13 +20,11 @@ const ColorPickerModal = ({
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {getMapDataById, updateMapColorById} = useKoreaMap();
-
-  const regionData = getMapDataById(id);
+  const {koreaMapData, getRegionTitleById, updateMapColorById} = useKoreaMap();
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
-    regionData.type === 'color' ? regionData.background : '#ffffff',
+    koreaMapData[id].type === 'color' ? koreaMapData[id].background : '#ffffff',
   );
 
   const onChangeMode = () => {
@@ -44,7 +42,9 @@ const ColorPickerModal = ({
   };
 
   const onSettingColorSuccess = () => {
-    showBottomToast('success', '색칠 완료!');
+    const text = `${getRegionTitleById(id)} 색칠 완료!`;
+
+    showBottomToast('success', text);
     hideModal();
     handleClosePress();
   };
@@ -59,14 +59,18 @@ const ColorPickerModal = ({
       {mode ? (
         <CustomColorPannel
           value={
-            regionData.type === 'color' ? regionData.background : '#ffffff'
+            koreaMapData[id].type === 'color'
+              ? koreaMapData[id].background
+              : '#ffffff'
           }
           onChange={onColorSelect}
         />
       ) : (
         <CustomColorSwatch
           value={
-            regionData.type === 'color' ? regionData.background : '#ffffff'
+            koreaMapData[id].type === 'color'
+              ? koreaMapData[id].background
+              : '#ffffff'
           }
           onChange={onColorSelect}
         />
@@ -77,13 +81,19 @@ const ColorPickerModal = ({
           style={
             customStyle({
               bgColor:
-                regionData.type === 'color' ? regionData.background : '#ffffff',
+                koreaMapData[id].type === 'color'
+                  ? koreaMapData[id].background
+                  : '#ffffff',
               color: getTextColorByBackgroundColor(
-                regionData.type === 'color' ? regionData.background : '#ffffff',
+                koreaMapData[id].type === 'color'
+                  ? koreaMapData[id].background
+                  : '#ffffff',
               ),
             }).colorPickerPreview
           }>
-          {regionData.type === 'color' ? regionData.background : '#ffffff'}
+          {koreaMapData[id].type === 'color'
+            ? koreaMapData[id].background
+            : '#ffffff'}
         </Text>
         <Text
           className="w-1/2 text-center py-1"

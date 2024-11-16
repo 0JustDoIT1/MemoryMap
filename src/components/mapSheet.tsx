@@ -42,9 +42,7 @@ const MapSheet = ({
 }: MapSheet) => {
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {getMapDataById, deleteMapDataById} = useKoreaMap();
-
-  const regionData = getMapDataById(id);
+  const {koreaMapData, deleteMapDataById} = useKoreaMap();
 
   // 사진 선택
   const onImagePicker = async () => {
@@ -97,7 +95,7 @@ const MapSheet = ({
             <View className="flex-row justify-between items-center w-full mb-2">
               <View className="flex-row justify-start items-center">
                 <Text className="text-xl text-black">{title}</Text>
-                {regionData && regionData.type === 'photo' && (
+                {koreaMapData[id] && koreaMapData[id].type === 'photo' && (
                   <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
                     <FontAwesome
                       name="photo"
@@ -106,15 +104,15 @@ const MapSheet = ({
                     />
                   </View>
                 )}
-                {regionData && regionData.type === 'color' && (
+                {koreaMapData[id] && koreaMapData[id].type === 'color' && (
                   <View
                     className="w-5 h-5 mx-2 rounded-full"
                     style={
-                      customStyle({bgColor: regionData?.background})
+                      customStyle({bgColor: koreaMapData[id]?.background})
                         .mapBottomSheetCircle
                     }></View>
                 )}
-                {regionData && regionData.type !== 'init' && (
+                {koreaMapData[id] && koreaMapData[id].type !== 'init' && (
                   <Pressable onPress={showDialog}>
                     <FontAwesome6
                       name="eraser"
@@ -141,9 +139,9 @@ const MapSheet = ({
                     {item}
                   </Text>
                 ))}
-              {regionData.type !== 'init' && (
+              {koreaMapData[id].type !== 'init' && (
                 <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                  # 스토리 {regionData.story}건
+                  # 스토리 {koreaMapData[id].story}건
                 </Text>
               )}
             </View>

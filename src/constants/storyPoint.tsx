@@ -27,5 +27,5 @@ export const storyPointEmoji: StoryPointEmoji = {
 };
 
 export const storyPointEmojiArray = Object.values(storyPointEmoji).sort(
-  (a, b) => sorting(a, b, 'point'),
+  (a, b) => sorting(a, b, 'point', -1),
 );

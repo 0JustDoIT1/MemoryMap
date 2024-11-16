@@ -1,4 +1,3 @@
-import {useCallback} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {KoreaRegionList, RegionList} from 'src/constants/regionList';
@@ -22,39 +21,17 @@ const useKoreaMap = () => {
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
   const [storyCount, setStoryCount] = useRecoilState(storyCountState);
 
-  // id로 해당 지역 데이터 가져오기
-  const getMapDataById = useCallback(
-    (id: string): KoreaRegionData => {
-      let result: any;
+  // id로 해당 지역명 (title이 아닌 value로 구성한 값) 반환
+  const getRegionTitleById = (id: string) => {
+    let title = koreaMapData[id].value[0];
+    if (koreaMapData[id].value.length > 1)
+      title += ` ${koreaMapData[id].value[1]}`;
 
-      // 객체 속 원하는 값 찾기 (Depth First Search 방식, 중첩 객체도 가능)
-      const DFS = (obj: any, name: any, val: any) => {
-        if (obj[name] === val) result = obj;
-        else
-          Object.values(obj).forEach(value => {
-            if (typeof value === 'object') DFS(value, name, val);
-          });
-      };
-
-      DFS(koreaMapData, 'id', id);
-
-      return result;
-    },
-    [koreaMapData],
-  );
-
-  // id로 해당 지역 배경 가져오기
-  const getMapBackgroundById = useCallback(
-    (id: string): string => {
-      const region = getMapDataById(id);
-
-      return region.background;
-    },
-    [koreaMapData],
-  );
+    return title;
+  };
 
   // id로 해당 지역 svg 데이터 가져오기
-  const getSvgDataById = useCallback((id: string): RegionList => {
+  const getSvgDataById = (id: string): RegionList => {
     let result: any;
 
     // 객체 속 원하는 값 찾기 (Depth First Search 방식, 중첩 객체도 가능)
@@ -69,127 +46,115 @@ const useKoreaMap = () => {
     DFS(KoreaRegionList, 'id', id);
 
     return result;
-  }, []);
+  };
 
   // type === photo 에 맞는 id 배열로 반환
-  const getTypeToIdArray = useCallback(
-    (type: 'init' | 'color' | 'photo') => {
-      const arr: string[] = [];
+  const getTypeToIdArray = (type: 'init' | 'color' | 'photo') => {
+    const arr: string[] = [];
 
-      Object.values(koreaMapData).forEach(value => {
-        if (value.type === type) {
-          arr.push(value.id);
-        }
-      });
+    Object.values(koreaMapData).forEach(value => {
+      if (value.type === type) {
+        arr.push(value.id);
+      }
+    });
 
-      return arr;
-    },
-    [koreaMapData],
-  );
+    return arr;
+  };
 
   // 지도에서 배경(색상) 업데이트 -> Firebase & Recoil
-  const updateMapColorById = useCallback(
-    async (id: string, color: string) => {
-      const regionData: KoreaRegionData = {
-        ...getMapDataById(id),
-        background: color,
-        type: 'color',
-      };
-      delete regionData.imageStyle;
-      delete regionData.imageUrl;
+  const updateMapColorById = async (id: string, color: string) => {
+    const regionData: KoreaRegionData = {
+      ...koreaMapData[id],
+      background: color,
+      type: 'color',
+    };
+    delete regionData.imageStyle;
+    delete regionData.imageUrl;
 
-      const updateData: KoreaMapData = {
-        ...koreaMapData,
-        [id]: regionData,
-      };
+    const updateData: KoreaMapData = {
+      ...koreaMapData,
+      [id]: regionData,
+    };
 
-      const appData: AppData = {
-        uid: appUser?.uid!,
-        email: appUser?.email!,
-        koreaMapData: updateData,
-        count: StoryCountInit,
-      };
+    const appData: AppData = {
+      uid: appUser?.uid!,
+      email: appUser?.email!,
+      koreaMapData: updateData,
+      count: StoryCountInit,
+    };
 
-      if (getMapDataById(id).type === 'photo') {
-        await _delete(appData.uid, id).then();
-      }
-      await _update(appData).then(() => setKoreaMapData(updateData));
-    },
-    [appUser, koreaMapData],
-  );
+    if (koreaMapData[id].type === 'photo') {
+      await _delete(appData.uid, id).then();
+    }
+    await _update(appData).then(() => setKoreaMapData(updateData));
+  };
 
   // 지도에서 배경(이미지) 업데이트 -> Firebase & Recoil
-  const updateMapPhotoById = useCallback(
-    async (
-      id: string,
-      uri: string,
-      imageStyle: {x: number; y: number; scale: number; rotation: number},
-    ) => {
-      await _upload(appUser?.uid!, id, uri).then(
-        async res =>
-          await _download(appUser?.uid!, id).then(async res => {
-            const regionData: KoreaRegionData = {
-              ...getMapDataById(id),
-              background: `url(#${id})`,
-              type: 'photo',
-              imageStyle: imageStyle,
-              imageUrl: res,
-            };
+  const updateMapPhotoById = async (
+    id: string,
+    uri: string,
+    imageStyle: {x: number; y: number; scale: number; rotation: number},
+  ) => {
+    await _upload(appUser?.uid!, id, uri).then(
+      async res =>
+        await _download(appUser?.uid!, id).then(async res => {
+          const regionData: KoreaRegionData = {
+            ...koreaMapData[id],
+            background: `url(#${id})`,
+            type: 'photo',
+            imageStyle: imageStyle,
+            imageUrl: res,
+          };
 
-            const updateData: KoreaMapData = {
-              ...koreaMapData,
-              [id]: regionData,
-            };
+          const updateData: KoreaMapData = {
+            ...koreaMapData,
+            [id]: regionData,
+          };
 
-            const appData: AppData = {
-              uid: appUser?.uid!,
-              email: appUser?.email!,
-              koreaMapData: updateData,
-              count: StoryCountInit,
-            };
+          const appData: AppData = {
+            uid: appUser?.uid!,
+            email: appUser?.email!,
+            koreaMapData: updateData,
+            count: StoryCountInit,
+          };
 
-            await _update(appData).then(async () => {
-              setKoreaMapData(updateData);
-            });
-          }),
-      );
-    },
-    [appUser, koreaMapData],
-  );
+          await _update(appData).then(async () => {
+            setKoreaMapData(updateData);
+          });
+        }),
+    );
+  };
 
   // 지도에서 배경(색상or이미지) 제거 -> Firebase & Recoil
-  const deleteMapDataById = useCallback(
-    async (id: string) => {
-      const regionData: KoreaRegionData = {
-        ...getMapDataById(id),
-        background: '#ffffff',
-        type: 'init',
-      };
-      delete regionData.imageStyle;
-      delete regionData.imageUrl;
+  const deleteMapDataById = async (id: string) => {
+    const regionData: KoreaRegionData = {
+      ...koreaMapData[id],
+      background: '#ffffff',
+      type: 'init',
+    };
+    delete regionData.imageStyle;
+    delete regionData.imageUrl;
 
-      const updateData: KoreaMapData = {
-        ...koreaMapData,
-        [id]: regionData,
-      };
+    const updateData: KoreaMapData = {
+      ...koreaMapData,
+      [id]: regionData,
+    };
 
-      const appData: AppData = {
-        uid: appUser?.uid!,
-        email: appUser?.email!,
-        koreaMapData: updateData,
-        count: StoryCountInit,
-      };
+    const appData: AppData = {
+      uid: appUser?.uid!,
+      email: appUser?.email!,
+      koreaMapData: updateData,
+      count: StoryCountInit,
+    };
 
-      if (getMapDataById(id).type === 'photo') {
-        await _delete(appData.uid, id).then();
-      }
-      await _update(appData).then(() => setKoreaMapData(updateData));
-    },
-    [appUser, koreaMapData],
-  );
+    if (koreaMapData[id].type === 'photo') {
+      await _delete(appData.uid, id).then();
+    }
+    await _update(appData).then(() => setKoreaMapData(updateData));
+  };
 
   // 지도 정보 초기화
-  const resetMapData = useCallback(async () => {
+  const resetMapData = async () => {
     const appData: AppData = {
       uid: appUser?.uid!,
       email: appUser?.email!,
@@ -200,10 +165,10 @@ const useKoreaMap = () => {
     return await _deleteAll(appData.uid).then(async () => {
       await _update(appData).then(() => setKoreaMapData(koreaMapDataInit));
     });
-  }, [appUser]);
+  };
 
   // 지도 색칠된 지역(color & photo) 리스트 가져오기
-  const getColorRegionList = useCallback(() => {
+  const getColorRegionList = () => {
     const result: GetColorRegionList = {};
 
     const colorList = Object.values(koreaMapData).filter(
@@ -237,38 +202,34 @@ const useKoreaMap = () => {
     });
 
     return result;
-  }, [koreaMapData]);
+  };
 
   // 스토리 숫자 계산
-  const countingStory = useCallback(
-    async (id: string, count: number) => {
-      const updateData: KoreaMapData = {
-        ...koreaMapData,
-        [id]: {...koreaMapData[id], story: koreaMapData[id].story + count},
-      };
+  const countingStory = async (id: string, count: number) => {
+    const updateData: KoreaMapData = {
+      ...koreaMapData,
+      [id]: {...koreaMapData[id], story: koreaMapData[id].story + count},
+    };
 
-      const mainId = `${id.split('-')[0]}-${id.split('-')[1]}`;
-      const newCount = {...storyCount, [mainId]: storyCount[mainId] + count};
+    const mainId = `${id.split('-')[0]}-${id.split('-')[1]}`;
+    const newCount = {...storyCount, [mainId]: storyCount[mainId] + count};
 
-      const appData: AppData = {
-        uid: appUser?.uid!,
-        email: appUser?.email!,
-        koreaMapData: updateData,
-        count: newCount,
-      };
+    const appData: AppData = {
+      uid: appUser?.uid!,
+      email: appUser?.email!,
+      koreaMapData: updateData,
+      count: newCount,
+    };
 
-      await _update(appData).then(() => {
-        setKoreaMapData(updateData);
-        setStoryCount(newCount);
-      });
-    },
-    [koreaMapData],
-  );
+    await _update(appData).then(() => {
+      setKoreaMapData(updateData);
+      setStoryCount(newCount);
+    });
+  };
 
   return {
     koreaMapData,
-    getMapDataById,
-    getMapBackgroundById,
+    getRegionTitleById,
     getSvgDataById,
     getTypeToIdArray,
     updateMapColorById,

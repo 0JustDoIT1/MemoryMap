@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth';
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {StoryCountInit} from 'src/constants/storyData';
@@ -26,7 +26,7 @@ const useEmailAndPasswordAuth = () => {
   const setStoryCount = useSetRecoilState(storyCountState);
 
   // Email Sign Up
-  const onSignUpEmailAndPassword = useCallback(async () => {
+  const onSignUpEmailAndPassword = async () => {
     return await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async res => {
@@ -38,10 +38,10 @@ const useEmailAndPasswordAuth = () => {
         };
         return result;
       });
-  }, [email, password]);
+  };
 
   // Email Sign In
-  const onSignInEmailAndPassword = useCallback(async () => {
+  const onSignInEmailAndPassword = async () => {
     return await auth()
       .signInWithEmailAndPassword(email, password)
       .then(res => {
@@ -53,10 +53,10 @@ const useEmailAndPasswordAuth = () => {
 
         return result;
       });
-  }, [email, password]);
+  };
 
   // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
-  const getDataAndSetRecoil = useCallback(async (user: AppUser) => {
+  const getDataAndSetRecoil = async (user: AppUser) => {
     await _read(user.uid).then(async snapshot => {
       if (snapshot.val()) {
         await _getDoc(user.uid).then(res => {
@@ -87,10 +87,10 @@ const useEmailAndPasswordAuth = () => {
         });
       }
     });
-  }, []);
+  };
 
   // 회원가입 시 초기 데이터를 firebase/recoil에 세팅
-  const setDataAndSetRecoil = useCallback(async (user: AppUser) => {
+  const setDataAndSetRecoil = async (user: AppUser) => {
     const appDataInit: AppData = {
       email: user.email,
       uid: user.uid,
@@ -110,43 +110,39 @@ const useEmailAndPasswordAuth = () => {
         setStoryCount(StoryCountInit);
       });
     });
-  }, []);
+  };
 
   // Profile Update (displayName)
-  const onUpdateProfile = useCallback(
-    async (update: boolean) => {
-      return await auth()
-        .currentUser?.updateProfile({
-          displayName: displayName,
-        })
-        .then(res => {
-          if (update)
-            return showBottomToast('success', `프로필을 변경했습니다.`);
-          else return displayName;
-        })
-        .catch(error =>
-          showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.'),
-        );
-    },
-    [displayName],
-  );
+  const onUpdateProfile = async (update: boolean) => {
+    return await auth()
+      .currentUser?.updateProfile({
+        displayName: displayName,
+      })
+      .then(res => {
+        if (update) return showBottomToast('success', `프로필을 변경했습니다.`);
+        else return displayName;
+      })
+      .catch(error =>
+        showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.'),
+      );
+  };
 
   // Send Password Reset Email
-  const onSendPasswordResetEmail = useCallback(async () => {
+  const onSendPasswordResetEmail = async () => {
     return await auth()
       .sendPasswordResetEmail(email)
       .then(res => res);
-  }, [email]);
+  };
 
   // Sign Out
-  const onSignOut = useCallback(async () => {
+  const onSignOut = async () => {
     setAppUser(null);
     setKoreaMapData(koreaMapDataInit);
     setStory(null);
     setStoryCount(StoryCountInit);
 
     return await auth().signOut();
-  }, []);
+  };
 
   return {
     email,

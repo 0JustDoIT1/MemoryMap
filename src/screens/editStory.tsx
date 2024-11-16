@@ -25,7 +25,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const EditStory = ({navigation, route}: EditStoryProps) => {
   const theme = useAppTheme();
 
-  const {koreaMapData, getColorRegionList} = useKoreaMap();
+  const {koreaMapData, getRegionTitleById, getColorRegionList} = useKoreaMap();
   const {
     regionId,
     setRegionId,
@@ -57,20 +57,14 @@ const EditStory = ({navigation, route}: EditStoryProps) => {
     if (route.params.id) {
       const region = route.params.id;
       setRegionId(region);
-      setRegionTitle(
-        koreaMapData[region].value[koreaMapData[region].value.length - 1],
-      );
+      setRegionTitle(getRegionTitleById(region));
     }
 
     if (route.params.story) {
       const story: Story = JSON.parse(route.params.story);
       setId(story._id);
       setRegionId(story.regionId);
-      setRegionTitle(
-        koreaMapData[story.regionId].value[
-          koreaMapData[story.regionId].value.length - 1
-        ],
-      );
+      setRegionTitle(getRegionTitleById(story.regionId));
       setTitle(story.title);
       setContents(story.contents);
       setSelectedStartDate(story.startDate);
@@ -136,8 +130,12 @@ const EditStory = ({navigation, route}: EditStoryProps) => {
   };
 
   const onUpdateStorySuccess = () => {
+    const text = `${getRegionTitleById(regionId)} 스토리 ${
+      edit ? '수정' : '추가'
+    }`;
+
     navigation.navigate('Story');
-    showBottomToast('success', '스토리 추가!');
+    showBottomToast('success', text);
   };
 
   const onUpdateStoryError = (error: any) => {
@@ -219,7 +217,7 @@ const EditStory = ({navigation, route}: EditStoryProps) => {
         />
       )}
       <View className="mt-8">
-        <Text className="text-md ml-2">여행은 즐거우셨나요?</Text>
+        <Text className="text-sm ml-2">여행은 즐거우셨나요?</Text>
         <View className="w-full mt-4 flex-row justify-between items-center">
           {storyPointEmojiArray.map(item => {
             return (

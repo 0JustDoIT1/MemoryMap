@@ -17,7 +17,11 @@ const NotFound = ({icon, title, description, onPress}: NotFound) => {
       </View>
       <View className="mt-6">
         <Text className="text-lg text-outline text-center">{title}</Text>
-        <Text className="text-sm text-outline text-center">{description}</Text>
+        {description && (
+          <Text className="text-sm text-outline text-center">
+            {description}
+          </Text>
+        )}
       </View>
       {onPress && (
         <View className="mt-8">

@@ -1,10 +1,15 @@
-export const sorting = (a: any, b: any, sort: string) => {
-  if (sort === 'createdAt') {
-    const aDate = new Date(a[sort]) as Date;
-    const bDate = new Date(b[sort]) as Date;
+export const sorting = (a: any, b: any, option: string, sort: number) => {
+  let newA;
+  let newB;
 
-    return bDate.getTime() - aDate.getTime();
+  if (option === 'createdAt') {
+    newA = new Date(a[option]).getTime();
+    newB = new Date(b[option]).getTime();
+  } else {
+    newA = a[option];
+    newB = b[option];
   }
-  if (a[sort] > b[sort]) return -1;
-  else return 1;
+
+  if (sort === 1) return newA - newB;
+  else return newB - newA;
 };
