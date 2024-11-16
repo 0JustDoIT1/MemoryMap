@@ -22,7 +22,7 @@ import {Story} from 'src/types/story';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const EditStory = ({navigation, route}: EditStoryProps) => {
+const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const theme = useAppTheme();
 
   const {koreaMapData, getRegionTitleById, getColorRegionList} = useKoreaMap();
@@ -275,4 +275,4 @@ const EditStory = ({navigation, route}: EditStoryProps) => {
   );
 };
 
-export default EditStory;
+export default EditStoryScreen;

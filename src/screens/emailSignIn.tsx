@@ -17,7 +17,7 @@ interface EmailSignIn extends Omit<SignInProps, 'route'> {
   close: () => void;
 }
 
-const EmailSignIn = ({navigation, close}: EmailSignIn) => {
+const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
   const theme = useAppTheme();
 
   const {
@@ -118,4 +118,4 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
   );
 };
 
-export default EmailSignIn;
+export default EmailSignInScreen;

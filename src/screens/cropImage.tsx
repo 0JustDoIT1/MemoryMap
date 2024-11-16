@@ -9,7 +9,7 @@ import {Text} from 'react-native-paper';
 import {showBottomToast} from 'src/utils/showToast';
 import useKoreaMap from 'src/hook/useKoreaMap';
 
-const CropImage = ({navigation, route}: CropImageProps) => {
+const CropImageScreen = ({navigation, route}: CropImageProps) => {
   const {updateMapPhotoById, getSvgDataById} = useKoreaMap();
 
   const svgData = getSvgDataById(route.params.id);
@@ -169,4 +169,4 @@ const CropImage = ({navigation, route}: CropImageProps) => {
   );
 };
 
-export default CropImage;
+export default CropImageScreen;

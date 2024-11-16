@@ -4,9 +4,7 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import BootSplash from 'react-native-bootsplash';
 
@@ -16,14 +14,15 @@ import MapScreen from 'src/screens/map';
 import SignInScreen from 'src/screens/signIn';
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
-import Root from 'src/screens/root';
+import RootScreen from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
-import CropImage from 'src/screens/cropImage';
+import CropImageScreen from 'src/screens/cropImage';
 import {Pressable} from 'react-native';
-import EditStory from 'src/screens/editStory';
+import EditStoryScreen from 'src/screens/editStory';
 import {launchImageLibrary} from 'react-native-image-picker';
-import SelectRegion from 'src/screens/selectRegion';
-import ViewStory from 'src/screens/viewStory';
+import SelectRegionScreen from 'src/screens/selectRegion';
+import ViewStoryScreen from 'src/screens/viewStory';
+import DashboardScreen from 'src/screens/dashboard';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -68,10 +67,25 @@ const Main = () => {
         component={MapScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
-            const name = focused ? 'image' : 'image-outline';
-            return <Ionicons name={name} size={size} color={color} />;
+            const name = focused ? 'map' : 'map-outline';
+            return (
+              <MaterialCommunityIcons name={name} size={size} color={color} />
+            );
           },
           // tabBarLabel: '여행지도',
+        }}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          tabBarIcon: ({focused, size, color}) => {
+            const name = focused ? 'view-dashboard' : 'view-dashboard-outline';
+            return (
+              <MaterialCommunityIcons name={name} size={size} color={color} />
+            );
+          },
+          // tabBarLabel: '대쉬보드',
         }}
       />
       <Tab.Screen
@@ -80,7 +94,9 @@ const Main = () => {
         options={({navigation}) => ({
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'book' : 'book-outline';
-            return <Ionicons name={name} size={size} color={color} />;
+            return (
+              <MaterialCommunityIcons name={name} size={size} color={color} />
+            );
           },
           headerRight: () => (
             <Pressable
@@ -88,7 +104,11 @@ const Main = () => {
               onPress={() => {
                 navigation.navigate('EditStory', {title: '스토리 작성'});
               }}>
-              <FontAwesome name="pencil-square-o" size={24} color="#000000" />
+              <MaterialCommunityIcons
+                name="pencil-box-outline"
+                size={24}
+                color="#000000"
+              />
             </Pressable>
           ),
           // tabBarLabel: '스토리',
@@ -99,8 +119,10 @@ const Main = () => {
         component={SettingScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
-            const name = focused ? 'options' : 'options-outline';
-            return <Ionicons name={name} size={size} color={color} />;
+            const name = focused ? 'cog' : 'cog-outline';
+            return (
+              <MaterialCommunityIcons name={name} size={size} color={color} />
+            );
           },
           // tabBarLabel: '설정',
         }}
@@ -141,12 +163,12 @@ const Navigation = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="Root" component={Root} />
+        <Stack.Screen name="Root" component={RootScreen} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen
           name="CropImage"
-          component={CropImage}
+          component={CropImageScreen}
           options={({navigation, route}) => ({
             headerShown: true,
             headerShadowVisible: false,
@@ -161,14 +183,18 @@ const Navigation = () => {
               <Pressable
                 className="px-4"
                 onPress={() => onReImagePicker(navigation)}>
-                <MaterialIcons name="refresh" size={24} color="#000000" />
+                <MaterialCommunityIcons
+                  name="refresh"
+                  size={24}
+                  color="#000000"
+                />
               </Pressable>
             ),
           })}
         />
         <Stack.Screen
           name="EditStory"
-          component={EditStory}
+          component={EditStoryScreen}
           options={({route}) => ({
             headerShown: true,
             headerShadowVisible: false,
@@ -183,7 +209,7 @@ const Navigation = () => {
         />
         <Stack.Screen
           name="ViewStory"
-          component={ViewStory}
+          component={ViewStoryScreen}
           options={({route}) => ({
             headerShown: true,
             headerShadowVisible: false,
@@ -198,7 +224,7 @@ const Navigation = () => {
         />
         <Stack.Screen
           name="SelectRegion"
-          component={SelectRegion}
+          component={SelectRegionScreen}
           options={{
             headerShown: true,
             headerShadowVisible: false,
