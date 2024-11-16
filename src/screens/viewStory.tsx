@@ -17,7 +17,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureMap} from 'src/utils/screenshot';
 
-const ViewStory = ({navigation, route}: ViewStoryProps) => {
+const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const story = useMemo<Story>(
     () => JSON.parse(route.params.story),
     [route.params.story],
@@ -130,4 +130,4 @@ const ViewStory = ({navigation, route}: ViewStoryProps) => {
   );
 };
 
-export default ViewStory;
+export default ViewStoryScreen;

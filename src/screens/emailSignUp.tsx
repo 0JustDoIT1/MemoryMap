@@ -20,7 +20,7 @@ interface EmailSignUp extends Omit<SignInProps, 'route'> {
   close: () => void;
 }
 
-const EmailSignUp = ({navigation, close}: EmailSignUp) => {
+const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
   const theme = useAppTheme();
 
   const {
@@ -216,4 +216,4 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
   );
 };
 
-export default EmailSignUp;
+export default EmailSignUpScreen;

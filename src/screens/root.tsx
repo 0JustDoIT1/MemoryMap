@@ -6,7 +6,7 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {_read} from 'src/utils/realtime';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 
-const Root = ({navigation}: RootProps) => {
+const RootScreen = ({navigation}: RootProps) => {
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
 
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
@@ -38,4 +38,4 @@ const Root = ({navigation}: RootProps) => {
   );
 };
 
-export default Root;
+export default RootScreen;

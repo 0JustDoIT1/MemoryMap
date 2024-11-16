@@ -6,10 +6,10 @@ import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {useAppTheme} from 'src/style/paperTheme';
 import {SignInProps} from 'src/types/stack';
 import SocialLoginButton from 'src/components/socialLogin';
-import EmailSignIn from './emailSignIn';
+import EmailSignInScreen from './emailSignIn';
 import CustomBottomSheet from 'src/components/bottomSheet';
-import EmailSignUp from './emailSignUp';
-import ResetPassword from './resetPassword';
+import EmailSignUpScreen from './emailSignUp';
+import ResetPasswordScreen from './resetPassword';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import {useRecoilState} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
@@ -112,7 +112,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
               handlePresentModalPress({
                 title: '계정 로그인',
                 contents: (
-                  <EmailSignIn
+                  <EmailSignInScreen
                     navigation={navigation}
                     close={handleClosePress}
                   />
@@ -132,7 +132,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 handlePresentModalPress({
                   title: '회원가입',
                   contents: (
-                    <EmailSignUp
+                    <EmailSignUpScreen
                       navigation={navigation}
                       close={handleClosePress}
                     />
@@ -157,7 +157,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
                 handlePresentModalPress({
                   title: '비밀번호 재설정',
                   description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
-                  contents: <ResetPassword close={handleClosePress} />,
+                  contents: <ResetPasswordScreen close={handleClosePress} />,
                   snap: '50%',
                 });
               }}>
