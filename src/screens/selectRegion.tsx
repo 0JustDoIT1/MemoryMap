@@ -25,6 +25,7 @@ const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
             onSelect={onSelectRegion}
           />
         )}
+        showsHorizontalScrollIndicator={false}
       />
     </SafeAreaView>
   );

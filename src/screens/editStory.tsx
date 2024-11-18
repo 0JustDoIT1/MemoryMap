@@ -19,14 +19,16 @@ import useStory from 'src/hook/useStory';
 import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Story} from 'src/types/story';
+import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const theme = useAppTheme();
 
-  const {regionMain, getRegionTitleById} = useKoreaMap();
+  const {regionMain} = useKoreaMap();
   const {
+    koreaMapData,
     regionId,
     setRegionId,
     regionTitle,
@@ -63,14 +65,14 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     if (route.params.id) {
       const region = route.params.id;
       setRegionId(region);
-      setRegionTitle(getRegionTitleById(region));
+      setRegionTitle(getRegionTitleById(koreaMapData, region));
     }
 
     if (route.params.story) {
       const story: Story = JSON.parse(route.params.story);
       setId(story._id);
       setRegionId(story.regionId);
-      setRegionTitle(getRegionTitleById(story.regionId));
+      setRegionTitle(getRegionTitleById(koreaMapData, story.regionId));
       setTitle(story.title);
       setContents(story.contents);
       setSelectedStartDate(story.startDate);
@@ -126,7 +128,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   };
 
   const onUpdateStorySuccess = () => {
-    const text = `${getRegionTitleById(regionId)} 스토리 ${
+    const text = `${getRegionTitleById(koreaMapData, regionId)} 스토리 ${
       edit ? '수정' : '추가'
     }`;
 

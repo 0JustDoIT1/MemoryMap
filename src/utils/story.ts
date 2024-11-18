@@ -22,6 +22,8 @@ export const addStoryCountInKoreaMapData = (
 
 // regionId에 속하는 지역들 삭제한 후, json형태로 반환 (StoryObject)
 export const deleteStoryByRegionId = (data: StoryObject, regionId: string) => {
+  let storyJson: StoryObject = {};
+
   const story = {
     ...data,
   };
@@ -29,10 +31,11 @@ export const deleteStoryByRegionId = (data: StoryObject, regionId: string) => {
   const filterStoryArr = Object.values(story).filter(
     item => item.regionId !== regionId,
   );
-  const filterStoryString = JSON.stringify(filterStoryArr);
-  const filterStoryJson = JSON.parse(filterStoryString);
+  filterStoryArr.forEach(item => {
+    storyJson[item._id] = {...item};
+  });
 
-  return filterStoryJson as StoryObject;
+  return storyJson;
 };
 
 // 스토리 갯수 카운팅

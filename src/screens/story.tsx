@@ -17,12 +17,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
 import MemoizedAccordion from 'src/components/accordion';
+import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const StoryScreen = ({navigation, route}: StoryProps) => {
   const theme = useAppTheme();
 
   const {story} = useStory();
-  const {regionList, regionMain, getRegionTitleById} = useKoreaMap();
+  const {koreaMapData, regionList, regionMain} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -122,7 +123,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
           }>
           <View>
             <Text className="text-white">
-              {getRegionTitleById(item.regionId)}
+              {getRegionTitleById(koreaMapData, item.regionId)}
             </Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
@@ -176,7 +177,9 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                   if (filter !== '') onSelectFilter('');
                 }}>
                 <Text className="text-sm text-white mx-1">
-                  {filter === '' ? '전체' : getRegionTitleById(filter)}
+                  {filter === ''
+                    ? '전체'
+                    : getRegionTitleById(koreaMapData, filter)}
                 </Text>
                 {filter !== '' && (
                   <MaterialCommunityIcons
@@ -198,6 +201,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
               onEndReachedThreshold={0.5}
               renderItem={({item}) => renderItem(item)}
               refreshing={refreshing}
+              showsHorizontalScrollIndicator={false}
             />
           ) : (
             <View className="w-full h-[90%]">
@@ -230,6 +234,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                   onSelect={onSelectFilter}
                 />
               )}
+              showsHorizontalScrollIndicator={false}
             />
           </View>
         }

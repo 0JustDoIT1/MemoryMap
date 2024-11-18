@@ -1,5 +1,5 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {DimensionValue, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Animated, {
@@ -8,7 +8,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
 import {StackParamList} from 'src/types/stack';
 
 interface CustomProgressBar {

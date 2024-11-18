@@ -12,7 +12,6 @@ import {
 import {AppData} from 'src/types/account';
 import {GetColorRegionList} from 'src/types/koreaMap';
 import {_update} from 'src/utils/realtime';
-import {sorting} from 'src/utils/sort';
 import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
 import {AppStory} from 'src/types/story';
 import {_deleteDoc, _setDoc} from 'src/utils/firestore';
@@ -75,23 +74,6 @@ const useKoreaMap = () => {
     () => Object.keys(getColorRegionList).sort(),
     [koreaMapData],
   );
-
-  // 색칠된 지역 숫자
-  const regionCountNumber = useMemo(() => {
-    const colorList = Object.values(koreaMapData).filter(
-      region => region.type !== 'init',
-    );
-    return colorList.length;
-  }, [koreaMapData]);
-
-  // id로 해당 지역명 (title이 아닌 value로 구성한 값) 반환
-  const getRegionTitleById = (id: string) => {
-    let title = koreaMapData[id].value[0];
-    if (koreaMapData[id].value.length > 1)
-      title += ` ${koreaMapData[id].value[1]}`;
-
-    return title;
-  };
 
   // id로 해당 지역 svg 데이터 가져오기
   const getSvgDataById = (id: string): RegionList => {
@@ -263,19 +245,10 @@ const useKoreaMap = () => {
     });
   };
 
-  // 색칠된 상위지역 카운트 중 가장 큰 지역 id
-  const mostColoredRegion = () => {
-    const test = Object.values(regionCount).sort((a, b) => sorting(a, b, 1));
-    // console.log('test', Math.max(test));
-  };
-
   return {
     koreaMapData,
     regionList,
     regionMain,
-    regionCountNumber,
-    mostColoredRegion,
-    getRegionTitleById,
     getSvgDataById,
     getTypeToIdArray,
     updateMapColorById,

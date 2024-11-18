@@ -53,8 +53,8 @@ const Main = () => {
           fontFamily: 'GmarketSansMedium',
         },
         headerTitleAlign: 'center',
-        headerTitle: 'MemoryMap',
         tabBarStyle: {
+          height: 49,
           backgroundColor: theme.colors.brandMain,
         },
         tabBarActiveTintColor: '#ffffff',
@@ -72,20 +72,7 @@ const Main = () => {
               <MaterialCommunityIcons name={name} size={size} color={color} />
             );
           },
-          // tabBarLabel: '여행지도',
-        }}
-      />
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{
-          tabBarIcon: ({focused, size, color}) => {
-            const name = focused ? 'view-dashboard' : 'view-dashboard-outline';
-            return (
-              <MaterialCommunityIcons name={name} size={size} color={color} />
-            );
-          },
-          // tabBarLabel: '대쉬보드',
+          headerTitle: '여행지도',
         }}
       />
       <Tab.Screen
@@ -111,8 +98,21 @@ const Main = () => {
               />
             </Pressable>
           ),
-          // tabBarLabel: '스토리',
+          headerTitle: '스토리',
         })}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused, size, color}) => {
+            const name = focused ? 'view-dashboard' : 'view-dashboard-outline';
+            return (
+              <MaterialCommunityIcons name={name} size={size} color={color} />
+            );
+          },
+        }}
       />
       <Tab.Screen
         name="Setting"
@@ -124,7 +124,7 @@ const Main = () => {
               <MaterialCommunityIcons name={name} size={size} color={color} />
             );
           },
-          // tabBarLabel: '설정',
+          headerTitle: '설정',
         }}
       />
     </Tab.Navigator>

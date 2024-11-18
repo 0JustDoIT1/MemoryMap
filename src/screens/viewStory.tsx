@@ -16,6 +16,7 @@ import useStory from 'src/hook/useStory';
 import {showBottomToast} from 'src/utils/showToast';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureMap} from 'src/utils/screenshot';
+import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const story = useMemo<Story>(
@@ -25,7 +26,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
 
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {getRegionTitleById} = useKoreaMap();
+  const {koreaMapData} = useKoreaMap();
   const {deleteStoryById} = useStory();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
@@ -68,7 +69,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
               }).storyPointView
             }>
             <Text className="text-xl text-white">
-              {getRegionTitleById(story.regionId)}
+              {getRegionTitleById(koreaMapData, story.regionId)}
             </Text>
             <Text className="text-sm text-white mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
