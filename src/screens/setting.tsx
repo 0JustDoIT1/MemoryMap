@@ -26,7 +26,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
 
   return (
     <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-white">
-      <View className="w-full flex-row justify-start items-center py-3 px-4">
+      <View className="w-full flex-row justify-start items-center p-4">
         <View>
           <MaterialCommunityIcons
             name="account-circle"
@@ -39,7 +39,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <Text className="text-gray-500">{appUser?.email}</Text>
         </View>
       </View>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -52,7 +52,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -65,7 +65,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -78,7 +78,20 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
+      <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
+        <View className="w-1/2 flex-row justify-start items-center">
+          <MaterialCommunityIcons
+            name="palette-outline"
+            size={30}
+            color={theme.colors.black}
+          />
+          <View className="ml-3">
+            <Text>앱 색상</Text>
+          </View>
+        </View>
+      </Pressable>
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -91,7 +104,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -104,7 +117,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -117,7 +130,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-2" />
+      <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-4"
         onPress={onSignOutAuth}>
