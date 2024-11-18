@@ -10,7 +10,6 @@ import {
 import {AppStory, Story} from 'src/types/story';
 import {_setDoc} from 'src/utils/firestore';
 import {_update} from 'src/utils/realtime';
-import useKoreaMap from './useKoreaMap';
 import {KoreaMapData} from 'src/types/koreaMap';
 import {AppData} from 'src/types/account';
 import {addStoryCountInKoreaMapData, countingStory} from 'src/utils/story';
@@ -151,6 +150,7 @@ const useStory = () => {
   };
 
   return {
+    koreaMapData,
     story,
     regionId,
     setRegionId,

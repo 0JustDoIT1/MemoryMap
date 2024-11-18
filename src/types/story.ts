@@ -14,6 +14,10 @@ export interface StoryObject {
   [key: string]: Story;
 }
 
+export interface PointWithCount {
+  [key: string]: {id: string; point: number; count?: number};
+}
+
 export interface AppStory {
   uid: string;
   story: StoryObject;

@@ -158,7 +158,7 @@ export const customStyle = (props?: CustomStyle) =>
     },
     progressBar: {
       width: '100%',
-      height: 15,
+      height: 17,
       backgroundColor: props?.bgColor,
       borderTopLeftRadius: 50,
       borderBottomLeftRadius: 50,
@@ -166,7 +166,7 @@ export const customStyle = (props?: CustomStyle) =>
       borderBottomRightRadius: 50,
     },
     progressBarFill: {
-      height: 15,
+      height: 17,
       backgroundColor: props?.bgColor,
       borderTopLeftRadius: 50,
       borderBottomLeftRadius: 50,
@@ -185,4 +185,8 @@ export const customStyle = (props?: CustomStyle) =>
       marginTop: 5,
       color: props?.color,
     },
+    dashboardRound: {
+      backgroundColor: `${props?.bgColor}50`,
+    },
+    dashboardImage: {width: 110, height: 110},
   });

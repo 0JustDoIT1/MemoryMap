@@ -3,6 +3,7 @@ import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
 import {countingStory} from './story';
 import {KoreaRegionList} from 'src/constants/regionList';
 
+// 지도 바텀 시트 데이터 넣기
 export const getDataToBottomSheet = (id: string) => {
   if (id !== '') {
     let result: any;
@@ -123,4 +124,19 @@ const countingColor = (data: RegionCount, id: string, count: number) => {
   };
 
   return updateCount;
+};
+
+// id로 해당 지역명 (title이 아닌 value로 구성한 값) 반환
+export const getRegionTitleById = (data: KoreaMapData, id: string) => {
+  let title = data[id].value[0];
+  if (data[id].value.length > 1) title += ` ${data[id].value[1]}`;
+
+  return title;
+};
+
+// 총 지역 리스트(지도 데이터 x)에서 값 가져오기
+export const getTitleByRegionList = (id: string) => {
+  let title = KoreaRegionList[id].value[0];
+
+  return title;
 };

@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
-import {useSetRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {RegionCountInit} from 'src/constants/regionCount';
 import {
@@ -13,14 +13,13 @@ import {AppData, AppUser} from 'src/types/account';
 import {AppStory} from 'src/types/story';
 import {_getDoc, _setDoc} from 'src/utils/firestore';
 import {_read, _update} from 'src/utils/realtime';
-import {showBottomToast} from 'src/utils/showToast';
 
 const useEmailAndPasswordAuth = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
 
-  const setAppUser = useSetRecoilState(appUserState);
+  const [appUser, setAppUser] = useRecoilState(appUserState);
   const setKoreaMapData = useSetRecoilState(koreaMapDataState);
   const setStory = useSetRecoilState(storyState);
   const setRegionCount = useSetRecoilState(regionCountState);
@@ -130,15 +129,18 @@ const useEmailAndPasswordAuth = () => {
 
   // Sign Out
   const onSignOut = async () => {
-    setAppUser(null);
-    setKoreaMapData(koreaMapDataInit);
-    setStory(null);
-    setRegionCount(RegionCountInit);
-
-    return await auth().signOut();
+    await auth()
+      .signOut()
+      .then(() => {
+        setAppUser(null);
+        setKoreaMapData(koreaMapDataInit);
+        setStory(null);
+        setRegionCount(RegionCountInit);
+      });
   };
 
   return {
+    appUser,
     email,
     setEmail,
     password,

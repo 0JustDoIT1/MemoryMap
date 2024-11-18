@@ -7,6 +7,7 @@ import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
+import {getRegionTitleById} from 'src/utils/koreaMap';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface ColorPickerModal {
@@ -20,7 +21,7 @@ const ColorPickerModal = ({
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {koreaMapData, getRegionTitleById, updateMapColorById} = useKoreaMap();
+  const {koreaMapData, updateMapColorById} = useKoreaMap();
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
@@ -42,7 +43,7 @@ const ColorPickerModal = ({
   };
 
   const onSettingColorSuccess = () => {
-    const text = `${getRegionTitleById(id)} 색칠 완료!`;
+    const text = `${getRegionTitleById(koreaMapData, id)} 색칠 완료!`;
 
     showBottomToast('success', text);
     hideModal();

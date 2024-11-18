@@ -22,7 +22,7 @@ const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
   } = useMapSheet();
   const {koreaMapData} = useKoreaMap();
   const [id, setId] = useState<string>('');
-  console.log('!!!');
+  console.log('지도svg');
 
   return (
     <React.Fragment>
