@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import {DateType} from 'react-native-ui-datepicker';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
   appUserState,
