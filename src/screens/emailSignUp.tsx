@@ -1,5 +1,5 @@
 import {Controller, useForm} from 'react-hook-form';
-import {View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
@@ -51,6 +51,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
     useState<boolean>(true);
 
   const onSignUpAccount = async (data: SignUp) => {
+    Keyboard.dismiss();
     setIsLoading(true);
     if (data.password !== data.passwordCheck) {
       setIsLoading(false);
@@ -63,12 +64,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
   };
 
   const onSignUpSuccess = async (result: AppUser) => {
-    const appUserinit = {
-      uid: result.uid,
-      email: result.email,
-      displayName: result.displayName,
-    };
-    await setDataAndSetRecoil(appUserinit);
+    await setDataAndSetRecoil(result);
     close();
     navigation.replace('Main');
     setIsLoading(false);

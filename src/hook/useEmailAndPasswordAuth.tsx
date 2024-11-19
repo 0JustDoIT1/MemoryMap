@@ -34,6 +34,7 @@ const useEmailAndPasswordAuth = () => {
           uid: res.user.uid!,
           email: res.user.email!,
           displayName: name!,
+          createdAt: res.user.metadata.creationTime!,
         };
         return result;
       });
@@ -48,6 +49,7 @@ const useEmailAndPasswordAuth = () => {
           uid: res.user.uid!,
           email: res.user.email!,
           displayName: res.user.displayName!,
+          createdAt: res.user.metadata.creationTime!,
         };
 
         return result;

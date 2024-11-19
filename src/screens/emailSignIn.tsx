@@ -1,6 +1,6 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Controller, useForm} from 'react-hook-form';
-import {View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
@@ -37,6 +37,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
     useEmailAndPasswordAuth();
 
   const onSignInAccount = async (data: Account) => {
+    Keyboard.dismiss();
     setIsLoading(true);
     if (!data.email || !data.password) {
       setIsLoading(false);
@@ -49,12 +50,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
   };
 
   const onSignInSuccess = async (result: AppUser) => {
-    const appUserInit = {
-      uid: result.uid,
-      email: result.email,
-      displayName: result.displayName,
-    };
-    await getDataAndSetRecoil(appUserInit);
+    await getDataAndSetRecoil(result);
     close();
     navigation.replace('Main');
     setIsLoading(false);

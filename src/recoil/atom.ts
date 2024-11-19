@@ -3,7 +3,7 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {RegionCountInit} from 'src/constants/regionCount';
 import {AppUser, RegionCount} from 'src/types/account';
 import {KoreaMapData} from 'src/types/koreaMap';
-import {Story, StoryObject} from 'src/types/story';
+import {StoryObject} from 'src/types/story';
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
