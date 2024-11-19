@@ -49,10 +49,11 @@ const SignInScreen = ({navigation}: SignInProps) => {
       const name = result.displayName
         ? result.displayName
         : result.email.split('@')[0];
-      const appUserInit = {
+      const appUserInit: AppUser = {
         uid: result.uid,
         email: result.email,
         displayName: name,
+        createdAt: result.createdAt,
       };
       await getDataAndSetRecoil(appUserInit);
       navigation.replace('Main');

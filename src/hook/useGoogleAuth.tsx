@@ -26,6 +26,7 @@ const useGoogleAuth = () => {
         uid: res.user.uid!,
         email: res.user.email!,
         displayName: res.user.displayName!,
+        createdAt: res.user.metadata.creationTime!,
       };
       return result;
     } else if (type === 'cancelled') {
