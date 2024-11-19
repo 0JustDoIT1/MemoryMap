@@ -1,0 +1,16 @@
+export const customColor = {
+  white: '#ffffff',
+  black: '#000000',
+  gray: '#6b7280',
+  brandLight: '#FF7C6C',
+  brandMain: '#FF624F',
+  brandDark: '#FF4832',
+  brandBase: '#FF9A8E',
+  brandAccent: '#FF290F',
+  success: '#22bb33',
+  error: '#FF2424',
+  info: '#5bc0de',
+  backdrop: 'rgba(51, 47, 55, 0.4)',
+  outline: '#968e98',
+  blur: '#9CA3AF',
+};

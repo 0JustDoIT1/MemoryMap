@@ -7,7 +7,6 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import {randomNumber} from 'src/utils/math';
 import Feather from 'react-native-vector-icons/Feather';
 import {Story} from 'src/types/story';
 import MemoizedCustomAlert from 'src/components/alert';
@@ -79,9 +78,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
           <View className="w-full h-4/5 flex items-center border border-t-0 border-gray-400 rounded-b-lg">
             <ScrollView showsVerticalScrollIndicator={false}>
               <View className="flex items-center mt-8 mx-4">
-                <Text className="text-9xl pt-4">
-                  {emoji.icon[randomNumber(0, 2)]}
-                </Text>
+                <Text className="text-9xl pt-4">{emoji.icon}</Text>
                 <Text
                   className="text-base px-5 py-1 rounded-lg"
                   style={

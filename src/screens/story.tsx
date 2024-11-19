@@ -12,7 +12,6 @@ import {Story} from 'src/types/story';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
 import {sorting} from 'src/utils/sort';
 import {useAppTheme} from 'src/style/paperTheme';
-import {randomNumber} from 'src/utils/math';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
@@ -130,7 +129,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
             </Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
-          <Text className="text-2xl">{emoji.icon[randomNumber(0, 2)]}</Text>
+          <Text className="text-2xl">{emoji.icon}</Text>
         </View>
         <View className="p-3 border border-t-0 border-gray-400 rounded-b-lg bg-white shadow-sm shadow-black">
           <Text className="text-black">{item.title}</Text>

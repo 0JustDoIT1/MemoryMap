@@ -2,6 +2,7 @@
 // 작동이 잘 안되서 Inline Style로 적용
 
 import {DimensionValue, StyleSheet} from 'react-native';
+import {customColor} from './customColor';
 
 interface CustomStyle {
   width?: DimensionValue;
@@ -13,27 +14,10 @@ interface CustomStyle {
   };
 }
 
-const colors = {
-  white: '#ffffff',
-  black: '#000000',
-  gray: '#6b7280',
-  brandLight: '#FF7C6C',
-  brandMain: '#FF624F',
-  brandDark: '#FF4832',
-  brandBase: '#FF9A8E',
-  brandAccent: '#FF290F',
-  success: '#22bb33',
-  error: '#FF2424',
-  info: '#5bc0de',
-  backdrop: 'rgba(51, 47, 55, 0.4)',
-  outline: '#968e98',
-  blur: '#9CA3AF',
-};
-
 export const customStyle = (props?: CustomStyle) =>
   StyleSheet.create({
     brandOutlinedButton: {
-      borderColor: colors.brandMain,
+      borderColor: customColor.brandMain,
     },
     helperText: {
       color: props?.color,
@@ -42,32 +26,32 @@ export const customStyle = (props?: CustomStyle) =>
       color: props?.color,
     },
     successToast: {
-      backgroundColor: colors.success,
-      borderLeftColor: colors.success,
+      backgroundColor: customColor.success,
+      borderLeftColor: customColor.success,
       display: 'flex',
       alignItems: 'center',
       paddingLeft: 10,
     },
     errorToast: {
-      backgroundColor: colors.error,
-      borderLeftColor: colors.error,
+      backgroundColor: customColor.error,
+      borderLeftColor: customColor.error,
       display: 'flex',
       alignItems: 'center',
       paddingLeft: 10,
     },
     infoToast: {
-      backgroundColor: colors.info,
-      borderLeftColor: colors.info,
+      backgroundColor: customColor.info,
+      borderLeftColor: customColor.info,
       display: 'flex',
       alignItems: 'center',
       paddingLeft: 10,
     },
     toastContent: {paddingHorizontal: 5},
     toastText1: {
-      color: colors.white,
+      color: customColor.white,
     },
     bottomSheetIcon: {
-      color: colors.outline,
+      color: customColor.outline,
     },
     mapBox: {
       display: 'flex',
@@ -77,10 +61,10 @@ export const customStyle = (props?: CustomStyle) =>
       height: '100%',
     },
     mapBottomSheetPhotoIcon: {
-      color: colors.white,
+      color: customColor.white,
     },
     mapBottomSheetIcon: {
-      color: colors.black,
+      color: customColor.black,
     },
     mapBottomSheetCircle: {
       backgroundColor: props?.bgColor,
@@ -91,7 +75,7 @@ export const customStyle = (props?: CustomStyle) =>
       alignItems: 'center',
     },
     modalContent: {
-      backgroundColor: colors.white,
+      backgroundColor: customColor.white,
       padding: 20,
       margin: 40,
     },
@@ -105,18 +89,18 @@ export const customStyle = (props?: CustomStyle) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.white,
+      backgroundColor: customColor.white,
     },
     sliderContainer: {
       width: '100%',
     },
     sliderTrack: {height: 10, borderRadius: 50},
     sliderMinimumTrack: {
-      backgroundColor: props?.bgColor ? props.bgColor : colors.brandMain,
+      backgroundColor: props?.bgColor ? props.bgColor : customColor.brandMain,
     },
     fab: {
       borderRadius: 100,
-      backgroundColor: colors.brandMain,
+      backgroundColor: customColor.brandMain,
     },
     fabContainer: {
       marginRight: 8,
@@ -127,10 +111,10 @@ export const customStyle = (props?: CustomStyle) =>
     },
     calendarHeaderText: {
       fontFamily: 'GmarketSansMedium',
-      color: colors.gray,
+      color: customColor.gray,
     },
     calendarSelectedText: {
-      color: colors.white,
+      color: customColor.white,
       fontFamily: 'GmarketSansMedium',
     },
     storyPointIconText: {
@@ -148,13 +132,13 @@ export const customStyle = (props?: CustomStyle) =>
       gap: 8,
     },
     storyPointText: {
-      color: colors.black,
+      color: customColor.black,
       backgroundColor: `${props?.bgColor}80`,
     },
     storyViewShot: {
       width: '100%',
       height: '100%',
-      backgroundColor: colors.white,
+      backgroundColor: customColor.white,
     },
     progressBar: {
       width: '100%',

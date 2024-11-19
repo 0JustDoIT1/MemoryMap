@@ -233,7 +233,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
                   color={item.color}
                   style={customStyle({color: item.color}).storyPointIcon}
                 /> */}
-                <Text className="text-5xl pt-2">{item.icon[0]}</Text>
+                <Text className="text-5xl pt-2">{item.icon}</Text>
                 <Text
                   className="mt-1"
                   style={customStyle({color: item.color}).storyPointIconText}>

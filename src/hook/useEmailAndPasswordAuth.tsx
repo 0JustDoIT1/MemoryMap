@@ -29,11 +29,10 @@ const useEmailAndPasswordAuth = () => {
     return await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async res => {
-        const name = await onUpdateProfile(false);
         const result: AppUser = {
           uid: res.user.uid!,
           email: res.user.email!,
-          displayName: name!,
+          displayName: displayName,
           createdAt: res.user.metadata.creationTime!,
         };
         return result;
@@ -114,7 +113,7 @@ const useEmailAndPasswordAuth = () => {
   };
 
   // Profile Update (displayName)
-  const onUpdateProfile = async (update: boolean) => {
+  const onUpdateProfile = async () => {
     return await auth()
       .currentUser?.updateProfile({
         displayName: displayName,
