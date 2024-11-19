@@ -9,7 +9,7 @@ import useStory from 'src/hook/useStory';
 import {customStyle} from 'src/style/customStyle';
 import {StoryProps} from 'src/types/stack';
 import {Story} from 'src/types/story';
-import {dateToFormatString} from 'src/utils/dateFormat';
+import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
 import {sorting} from 'src/utils/sort';
 import {useAppTheme} from 'src/style/paperTheme';
 import {randomNumber} from 'src/utils/math';
@@ -101,15 +101,18 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
   // Redering Component
   const renderItem = (item: Story) => {
     const startDateString = dateToFormatString(
-      item.startDate,
+      timestampToDate(item.startDate),
       'YYYY.MM.DD (ddd)',
     );
-    const endDateString = dateToFormatString(item.endDate, 'YYYY.MM.DD (ddd)');
+    const endDateString = dateToFormatString(
+      timestampToDate(item.endDate),
+      'YYYY.MM.DD (ddd)',
+    );
 
     const emoji = storyPointEmoji[item.point];
 
     const onDetailList = () => {
-      navigation.navigate('ViewStory', {story: JSON.stringify(item)});
+      navigation.navigate('ViewStory', {storyId: item._id});
     };
 
     return (

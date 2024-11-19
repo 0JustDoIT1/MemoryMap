@@ -14,6 +14,7 @@ import {KoreaMapData} from 'src/types/koreaMap';
 import {AppData} from 'src/types/account';
 import {addStoryCountInKoreaMapData, countingStory} from 'src/utils/story';
 import {updateRegionCountById} from 'src/utils/koreaMap';
+import {dateToTimestamp} from 'src/utils/dateFormat';
 
 const useStory = () => {
   const appUser = useRecoilValue(appUserState);
@@ -26,8 +27,8 @@ const useStory = () => {
 
   const [title, setTitle] = useState<string>('');
   const [contents, setContents] = useState<string>('');
-  const [selectedStartDate, setSelectedStartDate] = useState<DateType>(null);
-  const [selectedEndDate, setSelectedEndDate] = useState<DateType>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [point, setPoint] = useState<number>(0);
 
   // 스토리 데이터 검증 및 DB 타입에 맞게 가공
@@ -44,8 +45,8 @@ const useStory = () => {
 
     let storyData: Partial<Story> = {
       regionId: regionId,
-      startDate: selectedStartDate.toString(),
-      endDate: selectedEndDate.toString(),
+      startDate: dateToTimestamp(selectedStartDate),
+      endDate: dateToTimestamp(selectedEndDate),
       title: title,
       contents: contents,
       point: point,
@@ -56,13 +57,13 @@ const useStory = () => {
         ...storyData,
         _id: story![id]._id,
         createdAt: story![id].createdAt,
-        updatedAt: new Date().toString(),
+        updatedAt: dateToTimestamp(new Date()),
       };
     } else {
       storyData = {
         ...storyData,
         _id: `${regionId}_${Number(new Date())}`,
-        createdAt: new Date().toString(),
+        createdAt: dateToTimestamp(new Date()),
       };
     }
 
@@ -113,6 +114,10 @@ const useStory = () => {
         setStory(appStory.story);
       });
     }
+  };
+
+  const getStoryById = (storyId: string) => {
+    return story![storyId];
   };
 
   // 특정 스토리 삭제
@@ -167,6 +172,7 @@ const useStory = () => {
     point,
     setPoint,
     updateStoryById,
+    getStoryById,
     deleteStoryById,
     countingStory,
   };

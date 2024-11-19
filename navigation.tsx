@@ -23,6 +23,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
+import AccountInfo from 'src/screens/accountInfo';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -234,6 +235,22 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '지역 선택',
+            headerBackButtonMenuEnabled: true,
+            headerStyle: {backgroundColor: theme.colors.brandLight},
+          }}
+        />
+        <Stack.Screen
+          name="AccountInfo"
+          component={AccountInfo}
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '개인/보안',
             headerBackButtonMenuEnabled: true,
             headerStyle: {backgroundColor: theme.colors.brandLight},
           }}

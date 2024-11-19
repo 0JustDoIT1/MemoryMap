@@ -1,13 +1,15 @@
+import {Timestamp} from '@react-native-firebase/firestore';
+
 export interface Story {
   _id: string;
   regionId: string;
-  startDate: string;
-  endDate: string;
+  startDate: Timestamp;
+  endDate: Timestamp;
   title: string;
   contents: string;
   point: number;
-  createdAt: string;
-  updatedAt?: string;
+  createdAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface StoryObject {

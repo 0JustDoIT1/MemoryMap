@@ -2,11 +2,9 @@ import React from 'react';
 import {Pressable, View} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BrandContainedButton} from 'src/components/button';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {SettingProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
-import {DataTable} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 
@@ -14,6 +12,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const theme = useAppTheme();
   const {appUser, onSignOut} = useEmailAndPasswordAuth();
 
+  // 로그 아웃
   const onSignOutAuth = async () => {
     await onSignOut()
       .then(() => navigation.replace('Auth'))
@@ -22,6 +21,10 @@ const SettingScreen = ({navigation}: SettingProps) => {
 
   const onSignOutAuthError = (error: any) => {
     showBottomToast('error', '로그아웃에 실패했습니다.');
+  };
+
+  const onPressAccount = () => {
+    navigation.navigate('AccountInfo');
   };
 
   return (
@@ -40,7 +43,9 @@ const SettingScreen = ({navigation}: SettingProps) => {
         </View>
       </View>
       <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
+      <Pressable
+        className="w-full flex-row justify-between items-center py-3 px-4"
+        onPress={onPressAccount}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="account-lock-outline"
