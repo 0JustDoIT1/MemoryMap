@@ -9,7 +9,7 @@ import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import MemoizedCalendar from 'src/components/calendar';
 import {BrandDynamicButton} from 'src/components/button';
-import {dateToFormatString} from 'src/utils/dateFormat';
+import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
 import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
 import {storyPointEmojiArray} from 'src/constants/storyPoint';
 import {customStyle} from 'src/style/customStyle';
@@ -75,8 +75,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
       setRegionTitle(getRegionTitleById(koreaMapData, story.regionId));
       setTitle(story.title);
       setContents(story.contents);
-      setSelectedStartDate(story.startDate);
-      setSelectedEndDate(story.endDate);
+      setSelectedStartDate(timestampToDate(story.startDate));
+      setSelectedEndDate(timestampToDate(story.endDate));
       setPoint(story.point);
       setEdit(true);
     }
@@ -88,8 +88,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     settingBottomSheet({
       contents: (
         <MemoizedCalendar
-          selectedStartDate={selectedStartDate}
-          selectedEndDate={selectedEndDate}
+          selectedStartDate={selectedStartDate!}
+          selectedEndDate={selectedEndDate!}
           onDatePicker={onDatePicker}
           close={handleClosePress}
         />

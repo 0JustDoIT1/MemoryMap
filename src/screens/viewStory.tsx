@@ -6,7 +6,7 @@ import {storyPointEmoji} from 'src/constants/storyPoint';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
-import {dateToFormatString} from 'src/utils/dateFormat';
+import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
 import {randomNumber} from 'src/utils/math';
 import Feather from 'react-native-vector-icons/Feather';
 import {Story} from 'src/types/story';
@@ -19,22 +19,25 @@ import {onCaptureMap} from 'src/utils/screenshot';
 import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
-  const story = useMemo<Story>(
-    () => JSON.parse(route.params.story),
-    [route.params.story],
-  );
-
   const viewShotRef = useRef<ViewShot>(null);
 
   const {koreaMapData} = useKoreaMap();
-  const {deleteStoryById} = useStory();
+  const {deleteStoryById, getStoryById} = useStory();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
+  const story = useMemo<Story>(
+    () => getStoryById(route.params.storyId),
+    [route.params.storyId],
+  );
+
   const startDateString = dateToFormatString(
-    story.startDate,
+    timestampToDate(story.startDate),
     'YYYY.MM.DD (ddd)',
   );
-  const endDateString = dateToFormatString(story.endDate, 'YYYY.MM.DD (ddd)');
+  const endDateString = dateToFormatString(
+    timestampToDate(story.endDate),
+    'YYYY.MM.DD (ddd)',
+  );
 
   const emoji = storyPointEmoji[story.point];
 

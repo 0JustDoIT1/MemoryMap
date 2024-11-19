@@ -5,11 +5,11 @@ import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
 import {customStyle} from 'src/style/customStyle';
-import {dateToDB} from 'src/utils/dateFormat';
+import {dateTypeToDate} from 'src/utils/dateFormat';
 
 interface BrandCalendar {
-  selectedStartDate: DateType;
-  selectedEndDate: DateType;
+  selectedStartDate: Date;
+  selectedEndDate: Date;
   onDatePicker: (startDate: Date, endDate: Date) => void;
   close?: () => void;
 }
@@ -43,7 +43,7 @@ const BrandCalendar = ({
 
   const onSelectDate = () => {
     if (startDate && endDate)
-      onDatePicker(dateToDB(startDate), dateToDB(endDate));
+      onDatePicker(dateTypeToDate(startDate), dateTypeToDate(endDate));
   };
 
   return (

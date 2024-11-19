@@ -21,9 +21,10 @@ export type StackParamList = {
     story?: string;
   };
   ViewStory: {
-    story: string;
+    storyId: string;
   };
   SelectRegion: undefined;
+  AccountInfo: undefined;
 };
 
 export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
@@ -51,4 +52,8 @@ export type ViewStoryProps = NativeStackScreenProps<
 export type SelectRegionProps = NativeStackScreenProps<
   StackParamList,
   'SelectRegion'
+>;
+export type AccountInfoProps = NativeStackScreenProps<
+  StackParamList,
+  'AccountInfo'
 >;
