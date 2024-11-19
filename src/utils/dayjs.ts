@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-require('date-time-format-timezone');
 
 dayjs.locale('ko');
 

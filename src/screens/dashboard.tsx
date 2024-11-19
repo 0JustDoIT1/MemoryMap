@@ -100,7 +100,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             )}
           </View>
           <View className="flex-row items-end mt-4">
-            <Text className="text-3xl text-gray-500">
+            <Text className="text-2xl text-gray-500">
               {mostColoredRegion().regionTitle}
             </Text>
 
@@ -127,7 +127,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             )}
           </View>
           <View className="flex-row items-end mt-4">
-            <Text className="text-3xl text-gray-500">
+            <Text className="text-2xl text-gray-500">
               {mostStoryRegion().regionTitle}
             </Text>
 
@@ -154,7 +154,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             )}
           </View>
           <View className="flex-row items-end mt-4">
-            <Text className="text-3xl text-gray-500">
+            <Text className="text-2xl text-gray-500">
               {maxPointRegion().regionTitle}
             </Text>
 

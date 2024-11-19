@@ -7,6 +7,9 @@ import {SettingProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
+import {Linking} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import {LinkingEmail} from 'src/constants/linkingEmail';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const {appUser, onSignOut} = useEmailAndPasswordAuth();
@@ -22,8 +25,17 @@ const SettingScreen = ({navigation}: SettingProps) => {
     showBottomToast('error', '로그아웃에 실패했습니다.');
   };
 
+  // 개인/보안 버튼
   const onPressAccount = () => {
     navigation.navigate('AccountInfo');
+  };
+
+  const onPressContactUs = async () => {
+    const deviceName = await DeviceInfo.getDeviceName();
+    const version = DeviceInfo.getVersion();
+    const email = appUser?.email!;
+    console.log('###', version);
+    Linking.openURL(LinkingEmail(deviceName, version, email));
   };
 
   return (
@@ -96,7 +108,9 @@ const SettingScreen = ({navigation}: SettingProps) => {
         </View>
       </Pressable>
       <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-4">
+      <Pressable
+        className="w-full flex-row justify-between items-center py-3 px-4"
+        onPress={onPressContactUs}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="email-outline"
