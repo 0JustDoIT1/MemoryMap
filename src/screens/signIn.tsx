@@ -3,7 +3,7 @@ import {Image, View, Pressable} from 'react-native';
 import {ActivityIndicator, Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {SignInProps} from 'src/types/stack';
 import SocialLoginButton from 'src/components/socialLogin';
 import EmailSignInScreen from './emailSignIn';
@@ -19,8 +19,6 @@ import {AppUser} from 'src/types/account';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 
 const SignInScreen = ({navigation}: SignInProps) => {
-  const theme = useAppTheme();
-
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
   const {
@@ -93,22 +91,22 @@ const SignInScreen = ({navigation}: SignInProps) => {
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>
       </View>
       {isLoading ? (
-        <ActivityIndicator animating={true} color={theme.colors.brandMain} />
+        <ActivityIndicator animating={true} color={customColor.brandMain} />
       ) : (
         <View className="h-1/3 flex justify-center items-center">
           <SocialLoginButton
             type="Google"
             text="Google"
-            buttonColor={theme.colors.white}
-            textColor={theme.colors.black}
+            buttonColor={customColor.white}
+            textColor={customColor.black}
             onPress={onSignInGoogleAuth}
           />
           <SocialLoginButton
             type="Email"
             text="이메일"
             buttonClass="mt-2"
-            buttonColor={theme.colors.brandMain}
-            textColor={theme.colors.white}
+            buttonColor={customColor.brandMain}
+            textColor={customColor.white}
             onPress={() => {
               settingBottomSheet({
                 title: '계정 로그인',

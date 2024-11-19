@@ -3,7 +3,7 @@ import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {EditStoryProps} from 'src/types/stack';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import CustomBottomSheet from 'src/components/bottomSheet';
@@ -24,8 +24,6 @@ import {getRegionTitleById} from 'src/utils/koreaMap';
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
-  const theme = useAppTheme();
-
   const {regionMain} = useKoreaMap();
   const {
     koreaMapData,
@@ -149,7 +147,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
               className={`w-full ${edit ? 'bg-gray-300' : 'bg-white'}`}
               mode="outlined"
               label={edit ? '' : '지역을 선택해 주세요.'}
-              activeOutlineColor={theme.colors.brandMain}
+              activeOutlineColor={customColor.brandMain}
               editable={false}
               value={regionTitle}
             />
@@ -160,7 +158,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
                 className="w-full bg-white"
                 mode="outlined"
                 label="From"
-                activeOutlineColor={theme.colors.brandMain}
+                activeOutlineColor={customColor.brandMain}
                 editable={false}
                 value={dateToFormatString(selectedStartDate, 'YYYY.MM.DD')}
               />
@@ -170,7 +168,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
                 className="w-full bg-white"
                 mode="outlined"
                 label="To"
-                activeOutlineColor={theme.colors.brandMain}
+                activeOutlineColor={customColor.brandMain}
                 editable={false}
                 value={dateToFormatString(selectedEndDate, 'YYYY.MM.DD')}
               />
@@ -182,7 +180,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
               mode="outlined"
               label="제목"
               placeholder="(10자)"
-              activeOutlineColor={theme.colors.brandMain}
+              activeOutlineColor={customColor.brandMain}
               value={title}
               maxLength={10}
               onChangeText={setTitle}
@@ -192,7 +190,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
               mode="outlined"
               label="내용"
               placeholder="(100자)"
-              activeOutlineColor={theme.colors.brandMain}
+              activeOutlineColor={customColor.brandMain}
               multiline={true}
               value={contents}
               maxLength={100}
@@ -206,7 +204,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
             <MaterialCommunityIcons
               name="map-search-outline"
               size={90}
-              color={theme.colors.outline}
+              color={customColor.outline}
             />
           }
           title="색칠된 지역이 없습니다."
@@ -227,12 +225,6 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
                   Keyboard.dismiss();
                   setPoint(item.point);
                 }}>
-                {/* <MaterialCommunityIcons
-                  name={point === item.point ? item.icon : iconOutlined}
-                  size={55}
-                  color={item.color}
-                  style={customStyle({color: item.color}).storyPointIcon}
-                /> */}
                 <Text className="text-5xl pt-2">{item.icon}</Text>
                 <Text
                   className="mt-1"

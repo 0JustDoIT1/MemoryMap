@@ -1,7 +1,7 @@
 import {GestureResponderEvent} from 'react-native';
 import {ActivityIndicator, Button} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 
 interface ButtonType {
   text: string;
@@ -17,12 +17,11 @@ export const BrandContainedButton = ({
   isDisabled,
   onPress,
 }: ButtonType) => {
-  const theme = useAppTheme();
   return (
     <Button
       mode="contained"
       className={classes}
-      buttonColor={theme.colors.brandMain}
+      buttonColor={customColor.brandMain}
       onPress={onPress}
       disabled={isDisabled}>
       {isDisabled ? <ActivityIndicator /> : text}
@@ -36,13 +35,12 @@ export const BrandOutlinedButton = ({
   isDisabled,
   onPress,
 }: ButtonType) => {
-  const theme = useAppTheme();
   return (
     <Button
       mode="outlined"
       className={classes}
       style={customStyle().brandOutlinedButton}
-      textColor={theme.colors.brandMain}
+      textColor={customColor.brandMain}
       onPress={onPress}
       disabled={isDisabled}>
       {isDisabled ? <ActivityIndicator /> : text}
@@ -56,12 +54,11 @@ export const FormContainedButton = ({
   isDisabled,
   onSubmit,
 }: ButtonType) => {
-  const theme = useAppTheme();
   return (
     <Button
       mode="contained"
       className={classes}
-      buttonColor={theme.colors.brandMain}
+      buttonColor={customColor.brandMain}
       onPress={onSubmit}
       disabled={isDisabled}>
       {isDisabled ? <ActivityIndicator /> : text}
@@ -75,13 +72,12 @@ export const FormOutlinedButton = ({
   isDisabled,
   onSubmit,
 }: ButtonType) => {
-  const theme = useAppTheme();
   return (
     <Button
       mode="outlined"
       className={classes}
       style={customStyle().brandOutlinedButton}
-      textColor={theme.colors.brandMain}
+      textColor={customColor.brandMain}
       onPress={onSubmit}
       disabled={isDisabled}>
       {isDisabled ? <ActivityIndicator /> : text}
@@ -95,12 +91,11 @@ export const BrandDynamicButton = ({
   isDisabled,
   onPress,
 }: ButtonType) => {
-  const theme = useAppTheme();
   return (
     <Button
       mode="contained"
       className={classes}
-      buttonColor={isDisabled ? theme.colors.blur : theme.colors.brandMain}
+      buttonColor={isDisabled ? customColor.blur : customColor.brandMain}
       onPress={onPress}
       disabled={isDisabled}>
       {text}

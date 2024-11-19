@@ -11,8 +11,13 @@ import {
 } from 'src/recoil/atom';
 import {AppData} from 'src/types/account';
 import {GetColorRegionList} from 'src/types/koreaMap';
-import {_update} from 'src/utils/realtime';
-import {_delete, _deleteAll, _download, _upload} from 'src/utils/storage';
+import {_updateRealtime} from 'src/utils/realtime';
+import {
+  _deleteStorage,
+  _deleteAllStorage,
+  _downloadStorage,
+  _uploadStorage,
+} from 'src/utils/storage';
 import {AppStory} from 'src/types/story';
 import {_deleteDoc, _setDoc} from 'src/utils/firestore';
 import {
@@ -128,14 +133,14 @@ const useKoreaMap = () => {
 
     // 타입이 photo인 경우, 기존 사진 제거
     if (updateKoreaMapData[id].type === 'photo') {
-      await _delete(appUser?.uid!, id).then(() => (response = true));
+      await _deleteStorage(appUser?.uid!, id).then(() => (response = true));
     } else {
       response = true;
     }
 
     // 사진 제거 이후(없다면 바로) 데이터 업데이트
     if (response) {
-      await _update(appData).then(() => {
+      await _updateRealtime(appData).then(() => {
         setKoreaMapData(appData.koreaMapData);
         setRegionCount(appData.regionCount);
       });
@@ -148,9 +153,9 @@ const useKoreaMap = () => {
     uri: string,
     imageStyle: {x: number; y: number; scale: number; rotation: number},
   ) => {
-    await _upload(appUser?.uid!, id, uri).then(
+    await _uploadStorage(appUser?.uid!, id, uri).then(
       async res =>
-        await _download(appUser?.uid!, id).then(async res => {
+        await _downloadStorage(appUser?.uid!, id).then(async res => {
           const updateKoreaMapData = updateDataByTypePhoto(
             koreaMapData,
             id,
@@ -177,7 +182,7 @@ const useKoreaMap = () => {
             regionCount: updateRegionCount,
           };
 
-          await _update(appData).then(async () => {
+          await _updateRealtime(appData).then(async () => {
             setKoreaMapData(appData.koreaMapData);
             setRegionCount(appData.regionCount);
           });
@@ -211,12 +216,12 @@ const useKoreaMap = () => {
     let response: boolean = false;
 
     if (koreaMapData[id].type === 'photo') {
-      await _delete(appUser?.uid!, id).then(() => (response = true));
+      await _deleteStorage(appUser?.uid!, id).then(() => (response = true));
     } else {
       response = true;
     }
 
-    await _update(appData).then(async () => {
+    await _updateRealtime(appData).then(async () => {
       await _setDoc(appStory).then(async () => {
         setStory(appStory.story);
         setKoreaMapData(appData.koreaMapData);
@@ -234,8 +239,8 @@ const useKoreaMap = () => {
       regionCount: RegionCountInit,
     };
 
-    return await _deleteAll(appData.uid).then(async () => {
-      await _update(appData).then(async () => {
+    return await _deleteAllStorage(appData.uid).then(async () => {
+      await _updateRealtime(appData).then(async () => {
         await _deleteDoc(appData.uid).then(() => {
           setKoreaMapData(koreaMapDataInit);
           setRegionCount(RegionCountInit);

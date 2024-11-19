@@ -6,10 +6,9 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {SettingProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 
 const SettingScreen = ({navigation}: SettingProps) => {
-  const theme = useAppTheme();
   const {appUser, onSignOut} = useEmailAndPasswordAuth();
 
   // 로그 아웃
@@ -34,7 +33,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="account-circle"
             size={50}
-            color={theme.colors.gray}
+            color={customColor.gray}
           />
         </View>
         <View className="ml-3">
@@ -50,7 +49,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="account-lock-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>개인/보안</Text>
@@ -63,7 +62,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="lock-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>잠금화면 설정</Text>
@@ -76,7 +75,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="advertisements-off"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>광고 제거</Text>
@@ -89,7 +88,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="palette-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>앱 색상</Text>
@@ -102,7 +101,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="email-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>문의하기</Text>
@@ -115,7 +114,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="message-reply-text-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>리뷰 작성하기</Text>
@@ -128,7 +127,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="information-outline"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>앱 버전</Text>
@@ -143,7 +142,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           <MaterialCommunityIcons
             name="location-enter"
             size={30}
-            color={theme.colors.black}
+            color={customColor.black}
           />
           <View className="ml-3">
             <Text>로그 아웃</Text>

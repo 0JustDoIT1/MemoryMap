@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {G, Path, Polygon, Svg, Text} from 'react-native-svg';
-import {_download} from 'src/utils/storage';
+import {_downloadStorage} from 'src/utils/storage';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizationSvgPattern from './svgPattern';
 import MemoizedMapSheet from './mapSheet';

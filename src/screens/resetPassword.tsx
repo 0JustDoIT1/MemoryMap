@@ -7,7 +7,7 @@ import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {isLoadingState} from 'src/recoil/atom';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface ResetPassword {
@@ -15,8 +15,6 @@ interface ResetPassword {
 }
 
 const ResetPasswordScreen = ({close}: ResetPassword) => {
-  const theme = useAppTheme();
-
   const setIsLoading = useSetRecoilState(isLoadingState);
   const {setEmail, onSendPasswordResetEmail} = useEmailAndPasswordAuth();
 
@@ -70,7 +68,7 @@ const ResetPasswordScreen = ({close}: ResetPassword) => {
             className="w-full bg-white"
             mode="flat"
             label="이메일"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={text => {
               onChange(text);
