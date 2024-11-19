@@ -11,7 +11,7 @@ import {StoryProps} from 'src/types/stack';
 import {Story} from 'src/types/story';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
 import {sorting} from 'src/utils/sort';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
@@ -19,8 +19,6 @@ import MemoizedAccordion from 'src/components/accordion';
 import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const StoryScreen = ({navigation, route}: StoryProps) => {
-  const theme = useAppTheme();
-
   const {story} = useStory();
   const {koreaMapData, regionList, regionMain} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
@@ -144,7 +142,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
   return (
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white p-4">
       {isLoading ? (
-        <ActivityIndicator animating={true} color={theme.colors.brandMain} />
+        <ActivityIndicator animating={true} color={customColor.brandMain} />
       ) : (
         <View className="w-full h-full">
           <View className="w-full h-[8%] flex-row justify-between items-center">
@@ -156,7 +154,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                 <MaterialCommunityIcons
                   name="filter-outline"
                   size={15}
-                  color={theme.colors.brandMain}
+                  color={customColor.brandMain}
                 />
               </Pressable>
               <Pressable
@@ -168,7 +166,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                 <MaterialCommunityIcons
                   name="filter-variant"
                   size={15}
-                  color={theme.colors.brandMain}
+                  color={customColor.brandMain}
                 />
               </Pressable>
             </View>
@@ -187,7 +185,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                   <MaterialCommunityIcons
                     name="window-close"
                     size={15}
-                    color={theme.colors.white}
+                    color={customColor.white}
                   />
                 )}
               </Pressable>
@@ -212,7 +210,7 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
                   <MaterialCommunityIcons
                     name="file-search-outline"
                     size={90}
-                    color={theme.colors.outline}
+                    color={customColor.outline}
                   />
                 }
                 title="작성한 스토리가 없습니다."

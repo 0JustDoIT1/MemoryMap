@@ -4090,6 +4090,7 @@ __metadata:
     react-native-dotenv: ^3.4.11
     react-native-gesture-handler: ^2.20.2
     react-native-image-picker: ^7.1.2
+    react-native-keychain: ^9.2.1
     react-native-paper: ^5.12.5
     react-native-reanimated: ^3.16.1
     react-native-safe-area-context: ^4.11.0
@@ -10313,6 +10314,13 @@ __metadata:
     react: ">=18.2.0"
     react-native: ">=0.73.0"
   checksum: 243f7726c710d3bf6e44aa4d9df7bcaaffd1a49c7663422da0e4a3946852e671e4b69146bdb9ff0244c533e3d9ac0c84ae2add76c48067331cb9fbb3b9d23a2b
+  languageName: node
+  linkType: hard
+
+"react-native-keychain@npm:^9.2.1":
+  version: 9.2.1
+  resolution: "react-native-keychain@npm:9.2.1"
+  checksum: 241a038bcaca1f50a1a1125a7bf9bb2b77192655ec62892eb423f6776c242327676029e1ba5d8de9bc18ab36b8e9700a6118166c4b097ce0966f85d51bd52699
   languageName: node
   linkType: hard
 

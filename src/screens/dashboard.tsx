@@ -6,12 +6,10 @@ import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
 
 const DashboardScreen = ({navigation}: DashboardProps) => {
-  const theme = useAppTheme();
-
   const koreaMapRegionCount = Object.values(koreaMapDataInit).length;
 
   const {
@@ -58,9 +56,9 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
               navigation={navigation}
               percent={percent}
               percentView={true}
-              color={theme.colors.brandMain}
-              bgColor={theme.colors.white}
-              textColor={theme.colors.white}
+              color={customColor.brandMain}
+              bgColor={customColor.white}
+              textColor={customColor.white}
             />
           </View>
 

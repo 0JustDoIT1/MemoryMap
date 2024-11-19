@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Pressable, View} from 'react-native';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
@@ -20,8 +20,6 @@ const BrandCalendar = ({
   onDatePicker,
   close,
 }: BrandCalendar) => {
-  const theme = useAppTheme();
-
   const [startDate, setStartDate] = useState<DateType>(selectedStartDate);
   const [endDate, setEndDate] = useState<DateType>(selectedEndDate);
 
@@ -55,8 +53,8 @@ const BrandCalendar = ({
           startDate={startDate}
           endDate={endDate}
           onChange={params => onDateChange(params)}
-          selectedItemColor={theme.colors.brandMain}
-          headerButtonColor={theme.colors.gray}
+          selectedItemColor={customColor.brandMain}
+          headerButtonColor={customColor.gray}
           calendarTextStyle={customStyle().calendarText}
           headerTextStyle={customStyle().calendarHeaderText}
           weekDaysTextStyle={customStyle().calendarText}

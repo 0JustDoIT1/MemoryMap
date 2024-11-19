@@ -4,6 +4,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {WebClientId} from '@env';
 import {AppUser} from 'src/types/account';
+import {setSecureValue} from 'src/utils/keyChain';
 
 const useGoogleAuth = () => {
   // Google Sign In Configure
@@ -22,13 +23,17 @@ const useGoogleAuth = () => {
 
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const res = await auth().signInWithCredential(googleCredential);
-      const result: AppUser = {
-        uid: res.user.uid!,
-        email: res.user.email!,
-        displayName: res.user.displayName!,
-        createdAt: res.user.metadata.creationTime!,
-      };
-      return result;
+
+      return await setSecureValue(res.user.uid!, idToken!).then(() => {
+        const result: AppUser = {
+          uid: res.user.uid!,
+          email: res.user.email!,
+          displayName: res.user.displayName!,
+          createdAt: res.user.metadata.creationTime!,
+        };
+
+        return result;
+      });
     } else if (type === 'cancelled') {
       return;
     }

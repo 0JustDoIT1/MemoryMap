@@ -9,7 +9,7 @@ import {
 } from 'src/recoil/atom';
 import {AppStory, Story} from 'src/types/story';
 import {_setDoc} from 'src/utils/firestore';
-import {_update} from 'src/utils/realtime';
+import {_updateRealtime} from 'src/utils/realtime';
 import {KoreaMapData} from 'src/types/koreaMap';
 import {AppData} from 'src/types/account';
 import {addStoryCountInKoreaMapData, countingStory} from 'src/utils/story';
@@ -106,7 +106,7 @@ const useStory = () => {
       };
       await _setDoc(appStory).then(async () => {
         if (!edit) {
-          await _update(appData).then(() => {
+          await _updateRealtime(appData).then(() => {
             setKoreaMapData(appData.koreaMapData);
             setRegionCount(appData.regionCount);
           });
@@ -146,7 +146,7 @@ const useStory = () => {
     };
 
     await _setDoc(appStory).then(async () => {
-      await _update(appData).then(() => {
+      await _updateRealtime(appData).then(() => {
         setKoreaMapData(appData.koreaMapData);
         setRegionCount(appData.regionCount);
         setStory(appStory.story);

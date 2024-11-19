@@ -3,7 +3,7 @@ import {RootProps} from 'src/types/stack';
 import {Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {_read} from 'src/utils/realtime';
+import {_readRealtime} from 'src/utils/realtime';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {AppUser} from 'src/types/account';
 

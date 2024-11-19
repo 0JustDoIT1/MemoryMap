@@ -2,7 +2,7 @@ import React from 'react';
 import {FAB} from 'react-native-paper';
 import {IconSource} from 'react-native-paper/lib/typescript/components/Icon';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 
 interface CustomFAB {
   open: boolean;
@@ -25,8 +25,6 @@ const CustomFAB = ({
   onPress1,
   onPress2,
 }: CustomFAB) => {
-  const theme = useAppTheme();
-
   return (
     <FAB.Group
       open={open}
@@ -40,7 +38,7 @@ const CustomFAB = ({
           label: label1,
           onPress: onPress1,
           color: '#ffffff',
-          labelTextColor: theme.colors.brandMain,
+          labelTextColor: customColor.brandMain,
           containerStyle: customStyle().fabContainer,
           style: customStyle().fab,
         },
@@ -49,7 +47,7 @@ const CustomFAB = ({
           label: label2,
           onPress: onPress2,
           color: '#ffffff',
-          labelTextColor: theme.colors.brandMain,
+          labelTextColor: customColor.brandMain,
           containerStyle: customStyle().fabContainer,
           style: customStyle().fab,
         },

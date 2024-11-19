@@ -63,7 +63,7 @@ const SocialLoginButton = ({
     //         <MaterialCommunityIcons
     //           name="email"
     //           size={20}
-    //           color={theme.colors.white}
+    //           color={customColor.white}
     //           style={{alignSelf: 'flex-start', marginLeft: 14}}
     //         />
     //       )}

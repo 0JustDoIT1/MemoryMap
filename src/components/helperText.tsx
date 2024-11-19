@@ -1,6 +1,6 @@
 import {HelperText} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 
 interface CustomHelperText {
   type: 'error' | 'info';
@@ -9,12 +9,11 @@ interface CustomHelperText {
 }
 
 const CustomHelperText = ({type, text, color}: CustomHelperText) => {
-  const theme = useAppTheme();
   const textColor = color
     ? color
     : type === 'info'
-    ? theme.colors.outline
-    : theme.colors.error;
+    ? customColor.outline
+    : customColor.error;
 
   return (
     <HelperText

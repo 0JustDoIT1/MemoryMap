@@ -1,4 +1,4 @@
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
@@ -11,8 +11,18 @@ import {
 } from 'src/recoil/atom';
 import {AppData, AppUser} from 'src/types/account';
 import {AppStory} from 'src/types/story';
-import {_getDoc, _setDoc} from 'src/utils/firestore';
-import {_read, _update} from 'src/utils/realtime';
+import {_deleteDoc, _getDoc, _setDoc} from 'src/utils/firestore';
+import {
+  getSecureValue,
+  removeSecureValue,
+  setSecureValue,
+} from 'src/utils/keyChain';
+import {
+  _deleteRealtime,
+  _readRealtime,
+  _updateRealtime,
+} from 'src/utils/realtime';
+import {_deleteAllStorage} from 'src/utils/storage';
 
 const useEmailAndPasswordAuth = () => {
   const [email, setEmail] = useState<string>('');
@@ -29,13 +39,17 @@ const useEmailAndPasswordAuth = () => {
     return await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async res => {
-        const result: AppUser = {
-          uid: res.user.uid!,
-          email: res.user.email!,
-          displayName: displayName,
-          createdAt: res.user.metadata.creationTime!,
-        };
-        return result;
+        const name = await onUpdateProfile();
+
+        return await setSecureValue(res.user.uid, password).then(() => {
+          const result: AppUser = {
+            uid: res.user.uid!,
+            email: res.user.email!,
+            displayName: name!,
+            createdAt: res.user.metadata.creationTime!,
+          };
+          return result;
+        });
       });
   };
 
@@ -43,21 +57,23 @@ const useEmailAndPasswordAuth = () => {
   const onSignInEmailAndPassword = async () => {
     return await auth()
       .signInWithEmailAndPassword(email, password)
-      .then(res => {
-        const result: AppUser = {
-          uid: res.user.uid!,
-          email: res.user.email!,
-          displayName: res.user.displayName!,
-          createdAt: res.user.metadata.creationTime!,
-        };
+      .then(async res => {
+        return await setSecureValue(res.user.uid, password).then(() => {
+          const result: AppUser = {
+            uid: res.user.uid!,
+            email: res.user.email!,
+            displayName: res.user.displayName!,
+            createdAt: res.user.metadata.creationTime!,
+          };
 
-        return result;
+          return result;
+        });
       });
   };
 
   // 로그인 시, uid를 통해 appData를 얻어오고 recoil에 세팅
   const getDataAndSetRecoil = async (user: AppUser) => {
-    await _read(user.uid).then(async snapshot => {
+    await _readRealtime(user.uid).then(async snapshot => {
       if (snapshot.val()) {
         await _getDoc(user.uid).then(res => {
           setKoreaMapData(snapshot.val()['koreaMapData']);
@@ -73,7 +89,7 @@ const useEmailAndPasswordAuth = () => {
           koreaMapData: koreaMapDataInit,
           regionCount: RegionCountInit,
         };
-        await _update(appDataInit).then(async () => {
+        await _updateRealtime(appDataInit).then(async () => {
           const appStoryInit: AppStory = {
             uid: user.uid,
             story: {},
@@ -98,7 +114,7 @@ const useEmailAndPasswordAuth = () => {
       regionCount: RegionCountInit,
     };
 
-    await _update(appDataInit).then(async () => {
+    await _updateRealtime(appDataInit).then(async () => {
       const appStoryInit: AppStory = {
         uid: user.uid,
         story: {},
@@ -118,7 +134,7 @@ const useEmailAndPasswordAuth = () => {
       .currentUser?.updateProfile({
         displayName: displayName,
       })
-      .then(res => displayName);
+      .then(res => setAppUser({...appUser!, displayName: displayName}));
   };
 
   // Send Password Reset Email
@@ -128,15 +144,52 @@ const useEmailAndPasswordAuth = () => {
       .then(res => res);
   };
 
+  // Recoil 초기화
+  const setInitRecoil = () => {
+    setAppUser(null);
+    setKoreaMapData(koreaMapDataInit);
+    setStory(null);
+    setRegionCount(RegionCountInit);
+  };
+
   // Sign Out
   const onSignOut = async () => {
     await auth()
       .signOut()
-      .then(() => {
-        setAppUser(null);
-        setKoreaMapData(koreaMapDataInit);
-        setStory(null);
-        setRegionCount(RegionCountInit);
+      .then(async () => {
+        await removeSecureValue().then(() => setInitRecoil());
+      });
+  };
+
+  // Withdrawal
+  const onWithdrawal = async () => {
+    const uid = appUser?.uid!;
+    const currentUser = auth().currentUser!;
+    const providerId = currentUser.providerData[0].providerId;
+
+    let token: string;
+    let authCredential: FirebaseAuthTypes.AuthCredential;
+
+    await getSecureValue().then(value => (token = value?.password!));
+
+    if (providerId === 'google.com') {
+      authCredential = auth.GoogleAuthProvider.credential(token!);
+    } else {
+      authCredential = auth.EmailAuthProvider.credential(
+        currentUser.email!,
+        token!,
+      );
+    }
+    await currentUser.reauthenticateWithCredential(authCredential);
+
+    await _deleteRealtime(uid);
+    await _deleteDoc(uid);
+    await _deleteAllStorage(uid);
+
+    await auth()
+      .currentUser?.delete()
+      .then(async () => {
+        await removeSecureValue().then(() => setInitRecoil());
       });
   };
 
@@ -154,7 +207,9 @@ const useEmailAndPasswordAuth = () => {
     getDataAndSetRecoil,
     setDataAndSetRecoil,
     onSendPasswordResetEmail,
+    setInitRecoil,
     onSignOut,
+    onWithdrawal,
   };
 };
 

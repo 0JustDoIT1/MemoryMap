@@ -5,7 +5,7 @@ import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {AppUser, SignUp} from 'src/types/account';
 import Feather from 'react-native-vector-icons/Feather';
 import {useState} from 'react';
@@ -21,8 +21,6 @@ interface EmailSignUp extends Omit<SignInProps, 'route'> {
 }
 
 const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
-  const theme = useAppTheme();
-
   const {
     control,
     handleSubmit,
@@ -98,7 +96,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
             className="w-full bg-white"
             mode="flat"
             label="이메일"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={text => {
               onChange(text);
@@ -126,7 +124,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
             className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={text => {
               onChange(text);
@@ -153,8 +151,8 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
               size={14}
               color={
                 errors.password?.type === 'pattern'
-                  ? theme.colors.error
-                  : theme.colors.outline
+                  ? customColor.error
+                  : customColor.outline
               }
             />
             <Text
@@ -184,7 +182,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
             className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호 확인"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={onChange}
             secureTextEntry={passwordCheckVisible}

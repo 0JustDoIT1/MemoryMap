@@ -1,6 +1,6 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import Navigation from 'navigation';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {PaperProvider} from 'react-native-paper';

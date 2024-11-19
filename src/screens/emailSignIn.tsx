@@ -7,7 +7,7 @@ import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {isLoadingState} from 'src/recoil/atom';
-import {useAppTheme} from 'src/style/paperTheme';
+import {customColor} from 'src/style/customColor';
 import {Account, AppUser} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
@@ -18,8 +18,6 @@ interface EmailSignIn extends Omit<SignInProps, 'route'> {
 }
 
 const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
-  const theme = useAppTheme();
-
   const {
     control,
     handleSubmit,
@@ -71,7 +69,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
             className="w-full bg-white"
             mode="flat"
             label="이메일"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={text => {
               onChange(text);
@@ -88,7 +86,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
             className="w-full bg-white mt-1"
             mode="flat"
             label="비밀번호"
-            activeUnderlineColor={theme.colors.brandMain}
+            activeUnderlineColor={customColor.brandMain}
             value={value}
             onChangeText={text => {
               onChange(text);
