@@ -3,9 +3,19 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {RegionCountInit} from 'src/constants/regionCount';
 import {AppUser, RegionCount} from 'src/types/account';
 import {KoreaMapData} from 'src/types/koreaMap';
+import {PinCode} from 'src/types/pinCode';
 import {StoryObject} from 'src/types/story';
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
+
+export const appPinCodeState = atom<PinCode>({
+  key: 'appPinCode',
+  default: {
+    lock: false,
+    status: 'choose',
+    time: 0,
+  },
+});
 
 // 어플 로그인 데이터 Recoil
 export const appUserState = atom<AppUser | null>({
