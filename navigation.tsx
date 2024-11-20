@@ -23,7 +23,8 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
-import AccountInfo from 'src/screens/accountInfo';
+import AccountInfoScreen from 'src/screens/accountInfo';
+import PinCodeScreen from 'src/screens/pinCode';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -241,7 +242,7 @@ const Navigation = () => {
         />
         <Stack.Screen
           name="AccountInfo"
-          component={AccountInfo}
+          component={AccountInfoScreen}
           options={{
             headerShown: true,
             headerShadowVisible: false,
@@ -255,6 +256,7 @@ const Navigation = () => {
             headerStyle: {backgroundColor: theme.colors.brandLight},
           }}
         />
+        <Stack.Screen name="PinCode" component={PinCodeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

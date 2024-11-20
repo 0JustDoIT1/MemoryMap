@@ -52,7 +52,7 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
   );
 };
 
-const AccountInfo = ({navigation}: AccountInfoProps) => {
+const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   const {appUser, onWithdrawal, setInitRecoil} = useEmailAndPasswordAuth();
   const {
     bottomSheetModalRef,
@@ -172,4 +172,4 @@ const AccountInfo = ({navigation}: AccountInfoProps) => {
   );
 };
 
-export default AccountInfo;
+export default AccountInfoScreen;

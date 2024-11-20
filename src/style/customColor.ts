@@ -2,6 +2,7 @@ export const customColor = {
   white: '#ffffff',
   black: '#000000',
   gray: '#6b7280',
+  whiteOpacity: 'rgba(255,255,255, 0.7)',
   brandLight: '#FF7C6C',
   brandMain: '#FF624F',
   brandDark: '#FF4832',

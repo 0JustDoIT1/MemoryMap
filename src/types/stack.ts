@@ -4,6 +4,7 @@ export type StackParamList = {
   Root: undefined;
   Auth: undefined;
   Main: undefined;
+  PinCode: undefined;
   SignIn: undefined;
   Map: undefined;
   Dashboard: undefined;
@@ -28,6 +29,7 @@ export type StackParamList = {
 };
 
 export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
+export type PinCodeProps = NativeStackScreenProps<StackParamList, 'PinCode'>;
 export type SignInProps = NativeStackScreenProps<StackParamList, 'SignIn'>;
 export type MapProps = NativeStackScreenProps<StackParamList, 'Map'>;
 export type DashboardProps = NativeStackScreenProps<
