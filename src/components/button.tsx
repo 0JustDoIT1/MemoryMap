@@ -1,7 +1,8 @@
 import {GestureResponderEvent} from 'react-native';
-import {ActivityIndicator, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import {customColor} from 'src/style/customColor';
+import CustomActivityIndicator from './activityIndicator';
 
 interface ButtonType {
   text: string;
@@ -24,7 +25,7 @@ export const BrandContainedButton = ({
       buttonColor={customColor.brandMain}
       onPress={onPress}
       disabled={isDisabled}>
-      {isDisabled ? <ActivityIndicator /> : text}
+      {isDisabled ? <CustomActivityIndicator /> : text}
     </Button>
   );
 };
@@ -43,7 +44,7 @@ export const BrandOutlinedButton = ({
       textColor={customColor.brandMain}
       onPress={onPress}
       disabled={isDisabled}>
-      {isDisabled ? <ActivityIndicator /> : text}
+      {isDisabled ? <CustomActivityIndicator /> : text}
     </Button>
   );
 };
@@ -61,7 +62,7 @@ export const FormContainedButton = ({
       buttonColor={customColor.brandMain}
       onPress={onSubmit}
       disabled={isDisabled}>
-      {isDisabled ? <ActivityIndicator /> : text}
+      {isDisabled ? <CustomActivityIndicator /> : text}
     </Button>
   );
 };
@@ -80,7 +81,7 @@ export const FormOutlinedButton = ({
       textColor={customColor.brandMain}
       onPress={onSubmit}
       disabled={isDisabled}>
-      {isDisabled ? <ActivityIndicator /> : text}
+      {isDisabled ? <CustomActivityIndicator /> : text}
     </Button>
   );
 };

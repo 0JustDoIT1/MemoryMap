@@ -3,18 +3,13 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {RegionCountInit} from 'src/constants/regionCount';
 import {AppUser, RegionCount} from 'src/types/account';
 import {KoreaMapData} from 'src/types/koreaMap';
-import {PinCode} from 'src/types/pinCode';
 import {StoryObject} from 'src/types/story';
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
-export const appPinCodeState = atom<PinCode>({
+export const appPinCodeState = atom<boolean>({
   key: 'appPinCode',
-  default: {
-    lock: false,
-    status: 'choose',
-    time: 0,
-  },
+  default: false,
 });
 
 // 어플 로그인 데이터 Recoil
@@ -41,7 +36,7 @@ export const regionCountState = atom<RegionCount>({
   default: RegionCountInit,
 });
 
-// 버튼 클릭 상태 Recoil
+// 화면전환용 로딩 상태 Recoil (필요한 화면에서 각각 쓰는 로딩과는 다름)
 export const isLoadingState = atom<boolean>({
   key: 'isLoading',
   default: false,

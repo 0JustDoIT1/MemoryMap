@@ -173,4 +173,13 @@ export const customStyle = (props?: CustomStyle) =>
       backgroundColor: `${props?.bgColor}50`,
     },
     dashboardImage: {width: 110, height: 110},
+    pinCodeSwitch: {},
+    pinCodeTopContainer: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: customColor.brandLight,
+    },
   });

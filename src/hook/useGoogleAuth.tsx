@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import {WebClientId} from '@env';
+import {KeyChainAccount, WebClientId} from '@env';
 import {AppUser} from 'src/types/account';
 import {setSecureValue} from 'src/utils/keyChain';
 
@@ -24,7 +24,11 @@ const useGoogleAuth = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const res = await auth().signInWithCredential(googleCredential);
 
-      return await setSecureValue(res.user.uid!, idToken!).then(() => {
+      return await setSecureValue(
+        KeyChainAccount,
+        res.user.uid!,
+        idToken!,
+      ).then(() => {
         const result: AppUser = {
           uid: res.user.uid!,
           email: res.user.email!,

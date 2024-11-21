@@ -1,5 +1,5 @@
 import {Pressable, View} from 'react-native';
-import {ActivityIndicator, Text, TextInput} from 'react-native-paper';
+import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BrandOutlinedButton} from 'src/components/button';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
@@ -13,6 +13,7 @@ import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import {AccountInfoProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
+import CustomActivityIndicator from 'src/components/activityIndicator';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
@@ -104,7 +105,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
     <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-white p-6">
       {isLoading ? (
         <View className="w-full h-full justify-center items-center">
-          <ActivityIndicator animating={true} color={customColor.brandMain} />
+          <CustomActivityIndicator />
         </View>
       ) : (
         <React.Fragment>

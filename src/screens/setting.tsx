@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {Pressable, SwitchChangeEvent, View} from 'react-native';
 import {Divider, Switch, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
@@ -42,8 +42,14 @@ const SettingScreen = ({navigation}: SettingProps) => {
     Linking.openURL(LinkingEmail(deviceName, appVersion, email));
   };
 
-  const onToggleSwitch = () => {
-    navigation.navigate('PinCode');
+  // 핀코드 on/off 설정
+  const onPressPinCodeSetting = () => {
+    if (appPinCode) navigation.navigate('PinCodeEnter', {route: 'Setting'});
+    else navigation.navigate('PinCodeSetting');
+  };
+
+  const onPressPinCodeReset = () => {
+    navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
   };
 
   return (
@@ -88,8 +94,21 @@ const SettingScreen = ({navigation}: SettingProps) => {
             <Text>잠금화면 설정</Text>
           </View>
         </View>
-        <View>
-          <Switch value={appPinCode.lock} onValueChange={onToggleSwitch} />
+        <View className="w-1/2 flex-row justify-end items-center">
+          <Pressable className="mx-2" onPress={onPressPinCodeReset}>
+            {appPinCode && (
+              <MaterialCommunityIcons
+                name="lock-reset"
+                size={30}
+                color={customColor.gray}
+              />
+            )}
+          </Pressable>
+          <Pressable onPress={onPressPinCodeSetting}>
+            <View pointerEvents="none">
+              <Switch color={customColor.brandMain} value={appPinCode} />
+            </View>
+          </Pressable>
         </View>
       </Pressable>
       <Divider className="w-full bg-black my-1" />
@@ -159,7 +178,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
         <View>
-          <Text className="text-gray-500">v {appVersion}</Text>
+          <Text className="text-gray-600">v {appVersion}</Text>
         </View>
       </View>
       <Divider className="w-full bg-black my-1" />

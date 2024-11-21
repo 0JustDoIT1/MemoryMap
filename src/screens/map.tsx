@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {lazy, Suspense, useRef} from 'react';
 import {Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
@@ -13,10 +13,10 @@ import {MapProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import MemoizedKoreaMap from 'src/components/koreaMapSvg';
 import MemoizedCustomAlert from 'src/components/alert';
 import MemoizedCustomFAB from 'src/components/fab';
 import {onCaptureMap} from 'src/utils/screenshot';
+import CustomActivityIndicator from 'src/components/activityIndicator';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -24,8 +24,11 @@ const clamp = (val: number, min: number, max: number) => {
   return Math.min(Math.max(val, min), max);
 };
 
-const MapScreen = ({navigation, route}: MapProps) => {
+const MapScreen = ({navigation}: MapProps) => {
   console.log('맵');
+
+  const MemoizedKoreaMap = lazy(() => import('../components/koreaMapSvg'));
+
   const viewShotRef = useRef<ViewShot>(null);
 
   const {open, onChangeFAB} = useFAB();
@@ -125,7 +128,9 @@ const MapScreen = ({navigation, route}: MapProps) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <MemoizedKoreaMap navigation={navigation} />
+            <Suspense fallback={<CustomActivityIndicator />}>
+              <MemoizedKoreaMap navigation={navigation} />
+            </Suspense>
           </Animated.View>
         </GestureDetector>
       </ViewShot>

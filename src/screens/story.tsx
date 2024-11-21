@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {FlatList, Pressable, View} from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/notFound';
 import {storyPointEmoji} from 'src/constants/storyPoint';
@@ -17,13 +17,12 @@ import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
 import MemoizedAccordion from 'src/components/accordion';
 import {getRegionTitleById} from 'src/utils/koreaMap';
+import CustomActivityIndicator from 'src/components/activityIndicator';
 
-const StoryScreen = ({navigation, route}: StoryProps) => {
+const StoryScreen = ({navigation}: StoryProps) => {
   const {story} = useStory();
   const {koreaMapData, regionList, regionMain} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const limit = 10;
   const [storyList, setStoryList] = useState<Story[]>([]);
@@ -61,17 +60,13 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
 
   // Init Story List Setting
   useEffect(() => {
-    if (index === 0 && storyList.length === 0 && isLoading) {
-      settingAllStoryList();
-      setIsLoading(false);
-    }
-  }, [index, storyList, isLoading]);
+    if (index === 0 && storyList.length === 0) settingAllStoryList();
+  }, [index, storyList]);
 
   // 리스트 옵션 초기화
   const onRefreshList = () => {
     setIndex(0);
     setStoryList([]);
-    setIsLoading(true);
     setRefreshing(true);
   };
 
@@ -141,57 +136,55 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
 
   return (
     <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white p-4">
-      {isLoading ? (
-        <ActivityIndicator animating={true} color={customColor.brandMain} />
-      ) : (
-        <View className="w-full h-full">
-          <View className="w-full h-[8%] flex-row justify-between items-center">
-            <View className="flex-row">
-              <Pressable
-                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={onPressFilter}>
-                <Text className="text-sm text-brandMain mx-1">필터</Text>
-                <MaterialCommunityIcons
-                  name="filter-outline"
-                  size={15}
-                  color={customColor.brandMain}
-                />
-              </Pressable>
-              <Pressable
-                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={onSortList}>
-                <Text className="text-sm text-brandMain mx-1">
-                  {sort === -1 ? '최신순' : '날짜순'}
-                </Text>
-                <MaterialCommunityIcons
-                  name="filter-variant"
-                  size={15}
-                  color={customColor.brandMain}
-                />
-              </Pressable>
-            </View>
-            <View className="flex-row">
-              <Pressable
-                className="flex-row justify-between items-center p-2 bg-brandLight rounded-md"
-                onPress={() => {
-                  if (filter !== '') onSelectFilter('');
-                }}>
-                <Text className="text-sm text-white mx-1">
-                  {filter === ''
-                    ? '전체'
-                    : getRegionTitleById(koreaMapData, filter)}
-                </Text>
-                {filter !== '' && (
-                  <MaterialCommunityIcons
-                    name="window-close"
-                    size={15}
-                    color={customColor.white}
-                  />
-                )}
-              </Pressable>
-            </View>
+      <View className="w-full h-full">
+        <View className="w-full h-[8%] flex-row justify-between items-center">
+          <View className="flex-row">
+            <Pressable
+              className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
+              onPress={onPressFilter}>
+              <Text className="text-sm text-brandMain mx-1">필터</Text>
+              <MaterialCommunityIcons
+                name="filter-outline"
+                size={15}
+                color={customColor.brandMain}
+              />
+            </Pressable>
+            <Pressable
+              className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
+              onPress={onSortList}>
+              <Text className="text-sm text-brandMain mx-1">
+                {sort === -1 ? '최신순' : '날짜순'}
+              </Text>
+              <MaterialCommunityIcons
+                name="filter-variant"
+                size={15}
+                color={customColor.brandMain}
+              />
+            </Pressable>
           </View>
-          {storyList.length >= 1 ? (
+          <View className="flex-row">
+            <Pressable
+              className="flex-row justify-between items-center p-2 bg-brandLight rounded-md"
+              onPress={() => {
+                if (filter !== '') onSelectFilter('');
+              }}>
+              <Text className="text-sm text-white mx-1">
+                {filter === ''
+                  ? '전체'
+                  : getRegionTitleById(koreaMapData, filter)}
+              </Text>
+              {filter !== '' && (
+                <MaterialCommunityIcons
+                  name="window-close"
+                  size={15}
+                  color={customColor.white}
+                />
+              )}
+            </Pressable>
+          </View>
+        </View>
+        {storyList.length >= 1 ? (
+          <Suspense fallback={<CustomActivityIndicator />}>
             <FlatList
               className="w-full h-[90%]"
               contentContainerStyle={customStyle().storyFlatListContainer}
@@ -203,22 +196,23 @@ const StoryScreen = ({navigation, route}: StoryProps) => {
               refreshing={refreshing}
               showsHorizontalScrollIndicator={false}
             />
-          ) : (
-            <View className="w-full h-[90%]">
-              <NotFound
-                icon={
-                  <MaterialCommunityIcons
-                    name="file-search-outline"
-                    size={90}
-                    color={customColor.outline}
-                  />
-                }
-                title="작성한 스토리가 없습니다."
-              />
-            </View>
-          )}
-        </View>
-      )}
+          </Suspense>
+        ) : (
+          <View className="w-full h-[90%]">
+            <NotFound
+              icon={
+                <MaterialCommunityIcons
+                  name="file-search-outline"
+                  size={90}
+                  color={customColor.outline}
+                />
+              }
+              title="작성한 스토리가 없습니다."
+            />
+          </View>
+        )}
+      </View>
+
       <CustomModal
         visible={visible}
         hideModal={hideModal}

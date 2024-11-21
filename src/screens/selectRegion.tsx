@@ -5,7 +5,7 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedAccordion from 'src/components/accordion';
 import {SelectRegionProps} from 'src/types/stack';
 
-const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
+const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
   const {regionList, regionMain} = useKoreaMap();
 
   const onSelectRegion = (value: string) => {

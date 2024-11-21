@@ -4,7 +4,10 @@ export type StackParamList = {
   Root: undefined;
   Auth: undefined;
   Main: undefined;
-  PinCode: undefined;
+  PinCodeSetting: undefined;
+  PinCodeEnter: {
+    route: 'PinCodeSetting' | 'Main' | 'Setting';
+  };
   SignIn: undefined;
   Map: undefined;
   Dashboard: undefined;
@@ -29,7 +32,14 @@ export type StackParamList = {
 };
 
 export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
-export type PinCodeProps = NativeStackScreenProps<StackParamList, 'PinCode'>;
+export type PinCodeSettingProps = NativeStackScreenProps<
+  StackParamList,
+  'PinCodeSetting'
+>;
+export type PinCodeEnterProps = NativeStackScreenProps<
+  StackParamList,
+  'PinCodeEnter'
+>;
 export type SignInProps = NativeStackScreenProps<StackParamList, 'SignIn'>;
 export type MapProps = NativeStackScreenProps<StackParamList, 'Map'>;
 export type DashboardProps = NativeStackScreenProps<

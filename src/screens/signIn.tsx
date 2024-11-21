@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, View, Pressable} from 'react-native';
-import {ActivityIndicator, Divider, Text} from 'react-native-paper';
+import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {customColor} from 'src/style/customColor';
@@ -17,6 +17,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import {statusCodes} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import CustomActivityIndicator from 'src/components/activityIndicator';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
@@ -91,7 +92,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>
       </View>
       {isLoading ? (
-        <ActivityIndicator animating={true} color={customColor.brandMain} />
+        <CustomActivityIndicator />
       ) : (
         <View className="h-1/3 flex justify-center items-center">
           <SocialLoginButton
