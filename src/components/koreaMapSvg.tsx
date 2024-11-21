@@ -3669,6 +3669,4 @@ const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
   );
 };
 
-const MemoizedKoreaMap = React.memo(KoreaMapSvg);
-
-export default MemoizedKoreaMap;
+export default KoreaMapSvg;

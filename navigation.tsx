@@ -24,7 +24,8 @@ import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
 import AccountInfoScreen from 'src/screens/accountInfo';
-import PinCodeScreen from 'src/screens/pinCode';
+import PinCodeSettingScreen from 'src/screens/pinCodeInit';
+import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -256,7 +257,23 @@ const Navigation = () => {
             headerStyle: {backgroundColor: theme.colors.brandLight},
           }}
         />
-        <Stack.Screen name="PinCode" component={PinCodeScreen} />
+        <Stack.Screen
+          name="PinCodeSetting"
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '잠금화면 설정',
+            headerBackButtonMenuEnabled: true,
+            headerStyle: {backgroundColor: theme.colors.brandLight},
+          }}
+          component={PinCodeSettingScreen}
+        />
+        <Stack.Screen name="PinCodeEnter" component={PinCodeEnterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

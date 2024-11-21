@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "typeRoots": ["./src/types", "./node_modules/@types"]
-    }
+    },
+    "module": "ESNext"
   }
 }

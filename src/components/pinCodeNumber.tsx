@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import Animated, {
   useAnimatedStyle,
@@ -33,10 +33,8 @@ const PinCodeNumber = ({item, onPress}: PinCodeNumber) => {
   const opacity = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => {
-    bgColor.value = press.value
-      ? withSpring('rgba(51, 47, 55)')
-      : withSpring('#ffffff');
-    opacity.value = press.value ? withSpring(0.5) : withSpring(1);
+    bgColor.value = press.value ? customColor.outline : '#ffffff';
+    opacity.value = press.value ? 0.3 : 1;
 
     return {
       backgroundColor: bgColor.value,

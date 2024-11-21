@@ -23,6 +23,7 @@ import {
   _updateRealtime,
 } from 'src/utils/realtime';
 import {_deleteAllStorage} from 'src/utils/storage';
+import {KeyChainAccount, KeyChainPinCode} from '@env';
 
 const useEmailAndPasswordAuth = () => {
   const [email, setEmail] = useState<string>('');
@@ -41,7 +42,11 @@ const useEmailAndPasswordAuth = () => {
       .then(async res => {
         const name = await onUpdateProfile();
 
-        return await setSecureValue(res.user.uid, password).then(() => {
+        return await setSecureValue(
+          KeyChainAccount,
+          res.user.uid,
+          password,
+        ).then(() => {
           const result: AppUser = {
             uid: res.user.uid!,
             email: res.user.email!,
@@ -58,7 +63,11 @@ const useEmailAndPasswordAuth = () => {
     return await auth()
       .signInWithEmailAndPassword(email, password)
       .then(async res => {
-        return await setSecureValue(res.user.uid, password).then(() => {
+        return await setSecureValue(
+          KeyChainAccount,
+          res.user.uid,
+          password,
+        ).then(() => {
           const result: AppUser = {
             uid: res.user.uid!,
             email: res.user.email!,
@@ -157,7 +166,8 @@ const useEmailAndPasswordAuth = () => {
     await auth()
       .signOut()
       .then(async () => {
-        await removeSecureValue().then(() => setInitRecoil());
+        await removeSecureValue(KeyChainPinCode);
+        await removeSecureValue(KeyChainAccount).then(() => setInitRecoil());
       });
   };
 
@@ -170,7 +180,9 @@ const useEmailAndPasswordAuth = () => {
     let token: string;
     let authCredential: FirebaseAuthTypes.AuthCredential;
 
-    await getSecureValue().then(value => (token = value?.password!));
+    await getSecureValue(KeyChainAccount).then(
+      value => (token = value?.password!),
+    );
 
     if (providerId === 'google.com') {
       authCredential = auth.GoogleAuthProvider.credential(token!);
@@ -189,7 +201,8 @@ const useEmailAndPasswordAuth = () => {
     await auth()
       .currentUser?.delete()
       .then(async () => {
-        await removeSecureValue().then(() => setInitRecoil());
+        await removeSecureValue(KeyChainPinCode);
+        await removeSecureValue(KeyChainAccount).then(() => setInitRecoil());
       });
   };
 

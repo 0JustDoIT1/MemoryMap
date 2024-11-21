@@ -45,34 +45,6 @@ const SocialLoginButton = ({
   };
 
   return (
-    // <Pressable
-    //   className={`w-full py-4 rounded-lg ${buttonClass}`}
-    //   underlayColor={underlayColor}
-    //   onPress={onPress}
-    //   disabled={isButtonDisabled}>
-    //   <View className={`w-full items-center`}>
-    //     <View className="absolute w-full h-full items-center justify-center">
-    //       {type === 'Google' && (
-    //         <Image
-    //           source={GoogleImage}
-    //           className="w-5 h-5"
-    //           style={{alignSelf: 'flex-start', marginLeft: 14}}
-    //         />
-    //       )}
-    //       {type === 'Email' && (
-    //         <MaterialCommunityIcons
-    //           name="email"
-    //           size={20}
-    //           color={customColor.white}
-    //           style={{alignSelf: 'flex-start', marginLeft: 14}}
-    //         />
-    //       )}
-    //     </View>
-    //     <Text className={`text-sm font-roboto ${textClass}`}>
-    //       {text} 계정으로 로그인
-    //     </Text>
-    //   </View>
-    // </Pressable>
     <Button
       mode="elevated"
       icon={() => icon(type)}
