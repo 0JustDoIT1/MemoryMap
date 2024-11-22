@@ -7,7 +7,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {GetColorRegionList} from 'src/types/koreaMap';
 
 interface Accordion<T> {
@@ -70,7 +70,11 @@ const CustomAccordion = ({
         <Text>{title}</Text>
         {item[title].child && (
           <Animated.View style={iconRotationStyle}>
-            <Ionicons name="chevron-down" color="#000000" size={20} />
+            <MaterialCommunityIcons
+              name="chevron-down"
+              color="#000000"
+              size={20}
+            />
           </Animated.View>
         )}
       </Pressable>

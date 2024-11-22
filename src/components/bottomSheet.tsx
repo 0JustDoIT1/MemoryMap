@@ -2,8 +2,8 @@ import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface CustomBottomSheet {
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods>;
@@ -41,8 +41,8 @@ const CustomBottomSheet = ({
               <Pressable
                 className="absolute top-50 right-0"
                 onPress={handleClosePress}>
-                <AntDesign
-                  name="close"
+                <MaterialCommunityIcons
+                  name="window-close"
                   size={32}
                   style={customStyle().bottomSheetIcon}
                 />

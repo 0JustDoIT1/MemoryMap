@@ -7,13 +7,13 @@ import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {customColor} from 'src/style/customColor';
 import {AppUser, SignUp} from 'src/types/account';
-import Feather from 'react-native-vector-icons/Feather';
 import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
 import {useSetRecoilState} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
@@ -146,8 +146,8 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
         type="info"
         text={
           <View className="flex-row justify-start items-center">
-            <Feather
-              name="info"
+            <MaterialCommunityIcons
+              name="information-outline"
               size={14}
               color={
                 errors.password?.type === 'pattern'

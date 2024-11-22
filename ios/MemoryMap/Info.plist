@@ -54,5 +54,9 @@
 		<string>GmarketSansMedium.otf</string>
 		<string>Roboto-Medium.ttf</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>itms-apps</string> <!-- app store -->
+	</array>
 </dict>
 </plist>

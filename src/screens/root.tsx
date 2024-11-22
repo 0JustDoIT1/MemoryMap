@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RootProps} from 'src/types/stack';
 import {Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,11 +10,53 @@ import {getSecureValue} from 'src/utils/keyChain';
 import {KeyChainPinCode} from '@env';
 import {useSetRecoilState} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
+import useDialog from 'src/hook/useDialog';
+import VersionCheck from 'react-native-version-check';
+import {onOpenStoreLink} from 'src/utils/openStoreLink';
+import MemoizedCustomConfirmAlert from 'src/components/confirmAlert';
 
 const RootScreen = ({navigation}: RootProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
 
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
+
+  const {visibleDialog, showDialog} = useDialog();
+
+  const [check, setCheck] = useState<boolean>(false);
+
+  // 어플 버전 체크 & 기존 로그인 여부 확인 한번만 실행하게끔
+  useEffect(() => {
+    checkVersion();
+
+    if (check) {
+      const onUnsubscribeAuth = auth().onAuthStateChanged(onSubscribeAuth);
+      return onUnsubscribeAuth;
+    }
+  }, [check]);
+
+  const checkVersion = async () => {
+    const androidPackageName = VersionCheck.getPackageName(); //com.memorymap
+
+    const currentVersion = VersionCheck.getCurrentVersion();
+    const latestVersion = await VersionCheck.getLatestVersion({
+      provider: 'playStore',
+      packageName: androidPackageName,
+    })
+      .then(value => value)
+      .catch(error => console.error('Error fetching latest version: ', error));
+
+    if (latestVersion && latestVersion > currentVersion) showDialog();
+    else setCheck(true);
+
+    // VersionCheck.needUpdate({
+    //   depth: 3,
+    // }).then(res => {
+    //   // console.log('저기요', res);
+    //   // console.log(res.isNeeded);
+    //   if (res.isNeeded) showDialog;
+    //   else setCheck(true);
+    // });
+  };
 
   // 기존 로그인 여부 확인
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
@@ -41,17 +83,19 @@ const RootScreen = ({navigation}: RootProps) => {
     return await getSecureValue(KeyChainPinCode).then(value => value?.username);
   };
 
-  // 기존 로그인 여부 확인 한번만 실행하게끔
-  useEffect(() => {
-    const onUnsubscribeAuth = auth().onAuthStateChanged(onSubscribeAuth);
-    return onUnsubscribeAuth;
-  }, []);
-
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="relative flex-1">
       <Image
         className="w-screen h-screen"
         source={require('assets/images/root_screen.png')}
+      />
+      <MemoizedCustomConfirmAlert
+        visible={visibleDialog}
+        title="최신 버전 업데이트"
+        description={`최신 버전 앱으로 업데이트를 위해\n스토어로 이동합니다.`}
+        buttonText="확인"
+        buttonOnPress={onOpenStoreLink}
+        dismissable={false}
       />
     </SafeAreaView>
   );

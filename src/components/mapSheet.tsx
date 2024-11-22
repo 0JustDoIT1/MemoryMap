@@ -2,7 +2,6 @@ import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {customStyle} from 'src/style/customStyle';
 import {BrandContainedButton, BrandOutlinedButton} from './button';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -12,13 +11,12 @@ import useModal from 'src/hook/useModal';
 import React from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedCustomAlert from './alert';
 import {getDataToBottomSheet} from 'src/utils/koreaMap';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -99,9 +97,9 @@ const MapSheet = ({
                   </Text>
                   {koreaMapData[id] && koreaMapData[id].type === 'photo' && (
                     <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
-                      <FontAwesome
-                        name="photo"
-                        size={12}
+                      <MaterialCommunityIcons
+                        name="file-image-outline"
+                        size={15}
                         style={customStyle().mapBottomSheetPhotoIcon}
                       />
                     </View>
@@ -116,8 +114,8 @@ const MapSheet = ({
                   )}
                   {koreaMapData[id] && koreaMapData[id].type !== 'init' && (
                     <Pressable onPress={showDialog}>
-                      <FontAwesome6
-                        name="eraser"
+                      <MaterialCommunityIcons
+                        name="trash-can-outline"
                         size={20}
                         style={customStyle().mapBottomSheetIcon}
                       />
@@ -125,8 +123,8 @@ const MapSheet = ({
                   )}
                 </View>
                 <Pressable onPress={handleClosePress}>
-                  <AntDesign
-                    name="close"
+                  <MaterialCommunityIcons
+                    name="window-close"
                     size={32}
                     style={customStyle().mapBottomSheetIcon}
                   />
