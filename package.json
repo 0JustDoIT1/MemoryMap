@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "cache": "npx react-native start --reset-cache",
+    "release": "npx react-native run-android --mode release",
     "test": "jest",
     "log": "react-native log-android"
   },

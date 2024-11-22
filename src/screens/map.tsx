@@ -27,7 +27,7 @@ const clamp = (val: number, min: number, max: number) => {
 const MapScreen = ({navigation}: MapProps) => {
   console.log('맵');
 
-  const MemoizedKoreaMap = lazy(() => import('../components/koreaMapSvg'));
+  const KoreaMap = lazy(() => import('../components/koreaMapSvg'));
 
   const viewShotRef = useRef<ViewShot>(null);
 
@@ -129,7 +129,7 @@ const MapScreen = ({navigation}: MapProps) => {
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
             <Suspense fallback={<CustomActivityIndicator />}>
-              <MemoizedKoreaMap navigation={navigation} />
+              <KoreaMap navigation={navigation} />
             </Suspense>
           </Animated.View>
         </GestureDetector>
