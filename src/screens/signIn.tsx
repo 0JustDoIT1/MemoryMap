@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, View, Pressable} from 'react-native';
+import {Image, View, Pressable, Linking} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useGoogleAuth from 'src/hook/useGoogleAuth';
@@ -18,6 +18,7 @@ import {statusCodes} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import CustomActivityIndicator from 'src/components/activityIndicator';
+import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
@@ -85,6 +86,10 @@ const SignInScreen = ({navigation}: SignInProps) => {
     }
   };
 
+  const LinkingTerm = (url: string) => {
+    Linking.openURL(url);
+  };
+
   return (
     <SafeAreaView className="flex-1 justify-center w-screen h-screen p-8 bg-white">
       <View className="h-2/3 flex justify-center items-center">
@@ -146,11 +151,11 @@ const SignInScreen = ({navigation}: SignInProps) => {
             </Pressable>
           </View>
           <View className="w-full mt-auto flex-row justify-center items-center">
-            <Pressable>
+            <Pressable onPress={() => LinkingTerm(TermPrivacyUrl)}>
               <Text className="text-xs text-blur">개인정보 처리방침</Text>
             </Pressable>
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
-            <Pressable>
+            <Pressable onPress={() => LinkingTerm(TermServiceUrl)}>
               <Text className="text-xs text-blur">서비스 이용약관</Text>
             </Pressable>
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>

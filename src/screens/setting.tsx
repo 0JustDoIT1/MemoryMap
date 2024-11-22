@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, SwitchChangeEvent, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Divider, Switch, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
@@ -9,9 +9,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {customColor} from 'src/style/customColor';
 import {Linking} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {LinkingEmail} from 'src/constants/linkingEmail';
+import {LinkingEmail, TermListUrl} from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
+import {onOpenStoreLink} from 'src/utils/openStoreLink';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const appVersion = DeviceInfo.getVersion();
@@ -39,7 +40,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const onPressContactUs = async () => {
     const deviceName = await DeviceInfo.getDeviceName();
     const email = appUser?.email!;
-    Linking.openURL(LinkingEmail(deviceName, appVersion, email));
+    await Linking.openURL(LinkingEmail(deviceName, appVersion, email));
   };
 
   // 핀코드 on/off 설정
@@ -48,8 +49,14 @@ const SettingScreen = ({navigation}: SettingProps) => {
     else navigation.navigate('PinCodeSetting');
   };
 
+  // 핀코드 reset 설정
   const onPressPinCodeReset = () => {
     navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
+  };
+
+  // 약관 링크
+  const onPressTerm = async () => {
+    await Linking.openURL(TermListUrl);
   };
 
   return (
@@ -111,7 +118,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </Pressable>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-1" />
+      {/* <Divider className="w-full bg-black my-1" />
       <Pressable className="w-full flex-row justify-between items-center py-3 px-6">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
@@ -123,9 +130,11 @@ const SettingScreen = ({navigation}: SettingProps) => {
             <Text>광고 제거</Text>
           </View>
         </View>
-      </Pressable>
+      </Pressable> */}
       <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-6">
+      <Pressable
+        className="w-full flex-row justify-between items-center py-3 px-6"
+        onPress={onPressTerm}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="file-document-outline"
@@ -152,8 +161,10 @@ const SettingScreen = ({navigation}: SettingProps) => {
           </View>
         </View>
       </Pressable>
-      <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-6">
+      {/* <Divider className="w-full bg-black my-1" />
+      <Pressable
+        className="w-full flex-row justify-between items-center py-3 px-6"
+        onPress={onOpenStoreLink}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="message-reply-text-outline"
@@ -164,7 +175,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
             <Text>리뷰 작성하기</Text>
           </View>
         </View>
-      </Pressable>
+      </Pressable> */}
       <Divider className="w-full bg-black my-1" />
       <View className="w-full flex-row justify-between items-center py-3 px-6">
         <View className="w-1/2 flex-row justify-start items-center">

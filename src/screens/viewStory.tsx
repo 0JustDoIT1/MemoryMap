@@ -7,7 +7,6 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import Feather from 'react-native-vector-icons/Feather';
 import {Story} from 'src/types/story';
 import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
@@ -16,6 +15,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureMap} from 'src/utils/screenshot';
 import {getRegionTitleById} from 'src/utils/koreaMap';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
@@ -109,13 +109,25 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
                 story: JSON.stringify(story),
               })
             }>
-            <Feather name="edit" size={25} color="#000000" />
+            <MaterialCommunityIcons
+              name="square-edit-outline"
+              size={25}
+              color="#000000"
+            />
           </Pressable>
           <Pressable className="mx-2" onPress={showDialog}>
-            <Feather name="trash-2" size={25} color="#000000" />
+            <MaterialCommunityIcons
+              name="trash-can-outline"
+              size={25}
+              color="#000000"
+            />
           </Pressable>
           <Pressable className="ml-2" onPress={() => onCaptureMap(viewShotRef)}>
-            <Feather name="download" size={25} color="#000000" />
+            <MaterialCommunityIcons
+              name="file-download-outline"
+              size={25}
+              color="#000000"
+            />
           </Pressable>
         </View>
       </View>
