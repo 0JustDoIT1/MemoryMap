@@ -26,6 +26,7 @@ import DashboardScreen from 'src/screens/dashboard';
 import AccountInfoScreen from 'src/screens/accountInfo';
 import PinCodeSettingScreen from 'src/screens/pinCodeInit';
 import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
+import AddStoryScreen from 'src/screens/addStory';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -92,7 +93,7 @@ const Main = () => {
             <Pressable
               className="px-4"
               onPress={() => {
-                navigation.navigate('EditStory', {title: '스토리 작성'});
+                navigation.navigate('AddStory');
               }}>
               <MaterialCommunityIcons
                 name="pencil-box-outline"
@@ -196,6 +197,21 @@ const Navigation = () => {
           })}
         />
         <Stack.Screen
+          name="AddStory"
+          component={AddStoryScreen}
+          options={({route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#000000',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '스토리 작성',
+            headerBackButtonMenuEnabled: true,
+          })}
+        />
+        <Stack.Screen
           name="EditStory"
           component={EditStoryScreen}
           options={({route}) => ({
@@ -206,7 +222,7 @@ const Navigation = () => {
               fontFamily: 'GmarketSansMedium',
             },
             headerTitleAlign: 'center',
-            headerTitle: route.params.title,
+            headerTitle: '스토리 수정',
             headerBackButtonMenuEnabled: true,
           })}
         />

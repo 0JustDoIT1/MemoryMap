@@ -63,8 +63,8 @@ const useDashboard = () => {
     [koreaMapData],
   );
 
-  // 색칠된 상위지역 카운트 중 가장 큰 지역 id와 카운트 수 반환
-  const mostColoredRegion = () => {
+  // 가장 많이 색칠된 메인 지역의 id 배열, 지역명, 스토리 수 반환
+  const mostColoredMainRegion = () => {
     const colorNumArr = Object.values(regionCount).map(item => item.color);
     const MathColorNum = Math.max(...colorNumArr);
 
@@ -81,8 +81,8 @@ const useDashboard = () => {
     return {regionIdArr, regionTitle, MathColorNum};
   };
 
-  // 색칠된 상위지역 카운트 중 가장 큰 지역 id와 카운트 수 반환
-  const mostStoryRegion = () => {
+  // 스토리 수가 가장 많은 메인 지역의 id 배열, 지역명, 스토리 수 반환
+  const mostStoryMainRegion = () => {
     const storyNumArr = Object.values(koreaMapData).map(item => item.story);
     const MathStoryNum = Math.max(...storyNumArr);
 
@@ -155,8 +155,8 @@ const useDashboard = () => {
     allCountColorNum,
     allCountPhotoNum,
     noStoryRegionNumber,
-    mostColoredRegion,
-    mostStoryRegion,
+    mostColoredMainRegion,
+    mostStoryMainRegion,
     maxPointRegion,
   };
 };

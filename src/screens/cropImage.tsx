@@ -8,9 +8,12 @@ import CustomSlider from 'src/components/slider';
 import {Text} from 'react-native-paper';
 import {showBottomToast} from 'src/utils/showToast';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import useRegionCount from 'src/hook/useRegionCount';
+import {getRegionTitleById} from 'src/utils/koreaMap';
 
 const CropImageScreen = ({navigation, route}: CropImageProps) => {
-  const {updateMapPhotoById, getSvgDataById} = useKoreaMap();
+  const {koreaMapData, updateMapPhotoById, getSvgDataById} = useKoreaMap();
+  const {updateRegionCountById} = useRegionCount();
 
   const svgData = getSvgDataById(route.params.id);
   const [image, setImage] = useState<string>(route.params.image);
@@ -67,14 +70,27 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
       scale: scale[0],
       rotation: rotate[0],
     };
-    await updateMapPhotoById(route.params.id, image, imageStyle)
-      .then(() => onUploadPhotoSuccess())
-      .catch(error => onUploadPhotoError(error));
+
+    const count = koreaMapData[route.params.id].type === 'init' ? 1 : 0;
+
+    try {
+      await updateMapPhotoById(route.params.id, image, imageStyle);
+      await updateRegionCountById(route.params.id, 'color', count);
+
+      onUploadPhotoSuccess();
+    } catch (error) {
+      onUploadPhotoError(error);
+    }
   };
 
   const onUploadPhotoSuccess = () => {
-    showBottomToast('success', '사진 추가!');
+    const text = `${getRegionTitleById(
+      koreaMapData,
+      route.params.id,
+    )} 사진 추가!`;
+
     navigation.navigate('Map');
+    showBottomToast('success', text);
   };
 
   const onUploadPhotoError = (error: any) => {

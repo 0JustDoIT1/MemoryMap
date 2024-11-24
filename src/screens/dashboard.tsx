@@ -17,8 +17,8 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
     allCountStoryNum,
     allCountColorNum,
     allCountPhotoNum,
-    mostColoredRegion,
-    mostStoryRegion,
+    mostColoredMainRegion,
+    mostStoryMainRegion,
     maxPointRegion,
   } = useDashboard();
 
@@ -93,23 +93,25 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             <Text className="text-base text-brandMain">
               가장 많이 색칠한 지역
             </Text>
-            {mostColoredRegion().MathColorNum !== 0 && (
+            {mostColoredMainRegion().MathColorNum !== 0 && (
               <Text className="text-base text-gray-500">
-                &nbsp;({mostColoredRegion().MathColorNum}개)
+                &nbsp;({mostColoredMainRegion().MathColorNum}개)
               </Text>
             )}
           </View>
           <View className="flex-row items-end mt-4">
             <Text className="text-2xl text-gray-500">
-              {mostColoredRegion().regionTitle}
+              {mostColoredMainRegion().regionIdArr.length >= 1
+                ? mostColoredMainRegion().regionTitle
+                : '-'}
             </Text>
 
-            {mostColoredRegion().regionIdArr.length > 1 && (
+            {mostColoredMainRegion().regionIdArr.length > 1 && (
               <View className="flex-row items-end">
                 <Text className="text-sm leading-7 text-gray-500 ml-2">
                   외
                   <Text className="text-lg leading-7 text-gray-500 ml-2">
-                    &nbsp;{mostColoredRegion().regionIdArr.length - 1}&nbsp;
+                    &nbsp;{mostColoredMainRegion().regionIdArr.length - 1}&nbsp;
                   </Text>
                   지역
                 </Text>
@@ -120,23 +122,25 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
         <View className="flex justify-start items-start w-full p-4 my-2 rounded-lg bg-white shadow-md shadow-black">
           <View className="flex-row items-end">
             <Text className="text-base text-brandMain">스토리 최다 지역</Text>
-            {mostStoryRegion().MathStoryNum !== 0 && (
+            {mostStoryMainRegion().MathStoryNum !== 0 && (
               <Text className="text-base text-gray-500">
-                &nbsp;({mostStoryRegion().MathStoryNum}개)
+                &nbsp;({mostStoryMainRegion().MathStoryNum}개)
               </Text>
             )}
           </View>
           <View className="flex-row items-end mt-4">
             <Text className="text-2xl text-gray-500">
-              {mostStoryRegion().regionTitle}
+              {mostStoryMainRegion().regionIdArr.length >= 1
+                ? mostStoryMainRegion().regionTitle
+                : '-'}
             </Text>
 
-            {mostStoryRegion().regionIdArr.length > 1 && (
+            {mostStoryMainRegion().regionIdArr.length > 1 && (
               <View className="flex-row items-end">
                 <Text className="text-sm leading-7 text-gray-500 ml-2">
                   외
                   <Text className="text-lg leading-7 text-gray-500 ml-2">
-                    &nbsp;{mostStoryRegion().regionIdArr.length - 1}&nbsp;
+                    &nbsp;{mostStoryMainRegion().regionIdArr.length - 1}&nbsp;
                   </Text>
                   지역
                 </Text>
@@ -155,7 +159,9 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
           </View>
           <View className="flex-row items-end mt-4">
             <Text className="text-2xl text-gray-500">
-              {maxPointRegion().regionTitle}
+              {maxPointRegion().regionIdArr.length >= 1
+                ? maxPointRegion().regionTitle
+                : '-'}
             </Text>
 
             {maxPointRegion().regionIdArr.length > 1 && (

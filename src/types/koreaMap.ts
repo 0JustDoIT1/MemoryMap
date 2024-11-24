@@ -20,3 +20,8 @@ export interface GetColorRegionList {
     sub: {id: string; title: string}[];
   };
 }
+
+export interface AppKoreaMapData {
+  uid: string;
+  koreaMapData: KoreaMapData;
+}

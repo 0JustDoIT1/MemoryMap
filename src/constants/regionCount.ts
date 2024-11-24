@@ -1,6 +1,6 @@
-import {RegionCount} from 'src/types/account';
+import {RegionCount} from 'src/types/regionCount';
 
-export const RegionCountInit: RegionCount = {
+export const regionCountInit: RegionCount = {
   'KR-1': {
     color: 0,
     story: 0,

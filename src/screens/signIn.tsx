@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, View, Pressable, Linking} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,14 +14,18 @@ import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import {useRecoilState} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
-import {statusCodes} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import {AppUser} from 'src/types/account';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import CustomActivityIndicator from 'src/components/activityIndicator';
 import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
+import {WebClientId} from '@env';
 
 const SignInScreen = ({navigation}: SignInProps) => {
-  const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
+  const {getDataAndSetRecoil, setDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
   const {
     bottomSheetModalRef,
@@ -37,30 +41,43 @@ const SignInScreen = ({navigation}: SignInProps) => {
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
+  // Google Sign In Configure
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: WebClientId,
+    });
+  }, []);
+
+  // 구글 로그인
   const onSignInGoogleAuth = async () => {
-    setIsLoading(true);
-    return await onSignInGoogle()
-      .then(res => onSignInGoogleAuthSuccess(res))
-      .catch(error => onSignInGoogleAuthError(error));
+    try {
+      setIsLoading(true);
+      const result = await onSignInGoogle();
+      if (result && result.isNew) await setDataAndSetRecoil(result.appUser);
+      else {
+        if (result && result.appUser) {
+          const name = result.appUser.displayName
+            ? result.appUser.displayName
+            : result.appUser.email.split('@')[0];
+          const appUserInit: AppUser = {
+            uid: result.appUser.uid,
+            email: result.appUser.email,
+            displayName: name,
+            createdAt: result.appUser.createdAt,
+          };
+
+          await getDataAndSetRecoil(appUserInit);
+        }
+      }
+      onSignInGoogleAuthSuccess();
+    } catch (error) {
+      onSignInGoogleAuthError(error);
+    }
   };
 
-  const onSignInGoogleAuthSuccess = async (result: AppUser | undefined) => {
-    if (result) {
-      const name = result.displayName
-        ? result.displayName
-        : result.email.split('@')[0];
-      const appUserInit: AppUser = {
-        uid: result.uid,
-        email: result.email,
-        displayName: name,
-        createdAt: result.createdAt,
-      };
-      await getDataAndSetRecoil(appUserInit);
-      navigation.replace('Main');
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
+  const onSignInGoogleAuthSuccess = () => {
+    navigation.replace('Main');
+    setIsLoading(false);
   };
 
   const onSignInGoogleAuthError = (error: any) => {

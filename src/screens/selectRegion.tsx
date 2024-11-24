@@ -9,7 +9,7 @@ const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
   const {regionList, regionMain} = useKoreaMap();
 
   const onSelectRegion = (value: string) => {
-    navigation.navigate('EditStory', {title: '스토리 작성', id: value});
+    navigation.navigate('AddStory', {regionId: value});
   };
 
   return (

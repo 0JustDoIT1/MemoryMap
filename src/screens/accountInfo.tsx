@@ -90,13 +90,12 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   };
 
   const onWithdrawalAccountSuccess = () => {
-    setIsLoading(false);
     navigation.navigate('Auth');
+    setIsLoading(false);
   };
 
   const onWithdrawalAccountError = (error: any) => {
     setInitRecoil();
-    setIsLoading(false);
     navigation.navigate('Auth');
     showBottomToast('error', '회원탈퇴 실패');
   };

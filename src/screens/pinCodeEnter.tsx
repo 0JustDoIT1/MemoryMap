@@ -2,8 +2,8 @@ import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {PinCodeEnterProps} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import {appPinCodeState, isLoadingState} from 'src/recoil/atom';
+import {useSetRecoilState} from 'recoil';
+import {appPinCodeState} from 'src/recoil/atom';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PinCodeNumber from 'src/components/pinCodeNumber';
@@ -22,7 +22,6 @@ import {customStyle} from 'src/style/customStyle';
 
 const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
-  const isLoading = useRecoilValue(isLoadingState);
 
   const pinCodeArray = [
     [1, 2, 3],
