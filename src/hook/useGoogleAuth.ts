@@ -1,19 +1,10 @@
-import {useEffect} from 'react';
-
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import {KeyChainAccount, WebClientId} from '@env';
+import {KeyChainAccount} from '@env';
 import {AppUser} from 'src/types/account';
 import {setSecureValue} from 'src/utils/keyChain';
 
 const useGoogleAuth = () => {
-  // Google Sign In Configure
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: WebClientId,
-    });
-  }, []);
-
   // Google Sign In
   const onSignInGoogle = async () => {
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
@@ -22,22 +13,18 @@ const useGoogleAuth = () => {
       const idToken = data.idToken;
 
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const res = await auth().signInWithCredential(googleCredential);
+      const result = await auth().signInWithCredential(googleCredential);
+      await setSecureValue(KeyChainAccount, result.user.uid!, idToken!);
 
-      return await setSecureValue(
-        KeyChainAccount,
-        res.user.uid!,
-        idToken!,
-      ).then(() => {
-        const result: AppUser = {
-          uid: res.user.uid!,
-          email: res.user.email!,
-          displayName: res.user.displayName!,
-          createdAt: res.user.metadata.creationTime!,
-        };
+      const appUser: AppUser = {
+        uid: result.user.uid!,
+        email: result.user.email!,
+        displayName: result.user.displayName!,
+        createdAt: result.user.metadata.creationTime!,
+      };
+      const isNew = result.additionalUserInfo?.isNewUser;
 
-        return result;
-      });
+      return {appUser, isNew};
     } else if (type === 'cancelled') {
       return;
     }

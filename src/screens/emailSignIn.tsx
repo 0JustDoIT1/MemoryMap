@@ -1,4 +1,5 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
@@ -34,6 +35,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
   const {setEmail, setPassword, onSignInEmailAndPassword, getDataAndSetRecoil} =
     useEmailAndPasswordAuth();
 
+  // 이메일 로그인
   const onSignInAccount = async (data: Account) => {
     Keyboard.dismiss();
     setIsLoading(true);

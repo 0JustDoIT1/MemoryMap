@@ -3,11 +3,11 @@ import {Defs, Image, Pattern} from 'react-native-svg';
 import useKoreaMap from 'src/hook/useKoreaMap';
 
 const SvgPattern = () => {
-  const {koreaMapData, getSvgDataById, getTypeToIdArray} = useKoreaMap();
+  const {koreaMapData, getSvgDataById, getTypePhotoToIdArray} = useKoreaMap();
   const [idArray, setIdArray] = useState<string[]>([]);
 
   useEffect(() => {
-    const arr = getTypeToIdArray('photo');
+    const arr = getTypePhotoToIdArray('photo');
     if (arr !== idArray) setIdArray(arr);
   }, [koreaMapData]);
 
@@ -37,6 +37,7 @@ const SvgPattern = () => {
   );
 };
 
-const MemoizationSvgPattern = React.memo(SvgPattern);
+// const MemoizationSvgPattern = React.memo(SvgPattern);
 
-export default MemoizationSvgPattern;
+// export default MemoizationSvgPattern;
+export default SvgPattern;

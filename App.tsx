@@ -9,6 +9,9 @@ import Toast from 'react-native-toast-message';
 import {RecoilRoot} from 'recoil';
 import {PaperTheme} from 'src/style/paperTheme';
 import {toastConfig} from 'src/style/toast.config';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko');
 
 const App = (): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';

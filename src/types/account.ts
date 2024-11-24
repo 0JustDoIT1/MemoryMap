@@ -1,5 +1,3 @@
-import {KoreaMapData} from './koreaMap';
-
 export interface Account {
   email: string;
   password: string;
@@ -18,18 +16,4 @@ export interface AppUser {
   email: string;
   displayName: string;
   createdAt: string;
-}
-
-export interface AppData {
-  uid: string;
-  email: string;
-  koreaMapData: KoreaMapData;
-  regionCount: RegionCount;
-}
-
-export interface RegionCount {
-  [key: string]: {
-    color: number;
-    story: number;
-  };
 }

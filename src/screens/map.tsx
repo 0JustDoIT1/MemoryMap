@@ -17,6 +17,8 @@ import MemoizedCustomAlert from 'src/components/alert';
 import MemoizedCustomFAB from 'src/components/fab';
 import {onCaptureMap} from 'src/utils/screenshot';
 import CustomActivityIndicator from 'src/components/activityIndicator';
+import useRegionCount from 'src/hook/useRegionCount';
+import useStory from 'src/hook/useStory';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -34,6 +36,8 @@ const MapScreen = ({navigation}: MapProps) => {
   const {open, onChangeFAB} = useFAB();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapData} = useKoreaMap();
+  const {resetStory} = useStory();
+  const {resetRegionCount} = useRegionCount();
 
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
@@ -108,12 +112,20 @@ const MapScreen = ({navigation}: MapProps) => {
 
   // 지도 정보 초기화
   const onResetMap = async () => {
-    await resetMapData()
-      .then(() => {
-        hideDialog();
-        showBottomToast('info', '지도를 새로 채워보세요!');
-      })
-      .catch(error => onResetMapError(error));
+    try {
+      await resetMapData();
+      await resetStory();
+      await resetRegionCount();
+
+      onResetMapSuccess();
+    } catch (error) {
+      onResetMapError(error);
+    }
+  };
+
+  const onResetMapSuccess = () => {
+    hideDialog();
+    showBottomToast('info', '지도를 새로 채워보세요!');
   };
 
   const onResetMapError = (error: any) => {

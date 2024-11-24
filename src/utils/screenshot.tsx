@@ -5,10 +5,14 @@ import {hasAndroidPermission} from 'src/utils/getCheckPermission';
 import {showBottomToast} from 'src/utils/showToast';
 
 export const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot>) => {
-  await viewShotRef.current
-    ?.capture?.()
-    .then(async uri => await onSaveScreenShot(uri))
-    .catch(error => onCaptureMapError(error));
+  try {
+    const viewShotUri = await viewShotRef.current?.capture?.();
+    if (viewShotUri) {
+      await onSaveScreenShot(viewShotUri);
+    }
+  } catch (error) {
+    onCaptureMapError(error);
+  }
 };
 
 const onCaptureMapError = (error: any) => {
@@ -20,9 +24,13 @@ const onSaveScreenShot = async (uri: string) => {
   if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
     return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
   }
-  return await CameraRoll.saveAsset(uri)
-    .then(() => onSaveScreenShotSuccess())
-    .catch(error => onSaveScreenShotError(error));
+
+  try {
+    await CameraRoll.saveAsset(uri);
+    onSaveScreenShotSuccess();
+  } catch (error) {
+    onSaveScreenShotError(error);
+  }
 };
 
 const onSaveScreenShotSuccess = () => {

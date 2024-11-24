@@ -15,8 +15,10 @@ import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedCustomAlert from './alert';
-import {getDataToBottomSheet} from 'src/utils/koreaMap';
+import {getDataToBottomSheet, getRegionTitleById} from 'src/utils/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useRegionCount from 'src/hook/useRegionCount';
+import useStory from 'src/hook/useStory';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -38,6 +40,8 @@ const MapSheet = ({
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {koreaMapData, deleteMapDataById} = useKoreaMap();
+  const {deleteRegionCountById} = useRegionCount();
+  const {getDeleteStoryCount, deleteStoryByRegionId} = useStory();
 
   const regionData = getDataToBottomSheet(id);
 
@@ -48,7 +52,7 @@ const MapSheet = ({
       maxHeight: 250,
       mediaType: 'photo',
       quality: 0.7,
-    }).then(async res => {
+    }).then(res => {
       if (res.assets) {
         handleClosePress();
         navigation.navigate('CropImage', {
@@ -62,16 +66,27 @@ const MapSheet = ({
 
   // 배경 제거
   const onDeleteBackground = async () => {
-    await deleteMapDataById(id)
-      .then(() => onDeleteBackgroundSuccess())
-      .catch(error => onDeleteBackgroundError(error));
-    hideDialog();
+    try {
+      const deleteColorNum = -1;
+      const deleteStoryNum = getDeleteStoryCount(id);
+
+      await deleteMapDataById(id);
+      await deleteRegionCountById(id, deleteColorNum, deleteStoryNum);
+      await deleteStoryByRegionId(id);
+
+      onDeleteBackgroundSuccess();
+    } catch (error) {
+      onDeleteBackgroundError(error);
+    }
   };
 
   const onDeleteBackgroundSuccess = () => {
-    showBottomToast('info', '색칠 제거!');
+    const text = `${getRegionTitleById(koreaMapData, id)} 색칠 제거!`;
+
+    hideDialog();
     hideModal();
     handleClosePress();
+    showBottomToast('info', text);
   };
 
   const onDeleteBackgroundError = (error: any) => {

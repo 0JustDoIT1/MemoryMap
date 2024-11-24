@@ -19,10 +19,11 @@ export type StackParamList = {
     title: string;
     image: string;
   };
+  AddStory: {
+    regionId?: string;
+  };
   EditStory: {
-    title: string;
-    id?: string;
-    story?: string;
+    storyId: string;
   };
   ViewStory: {
     storyId: string;
@@ -53,6 +54,7 @@ export type CropImageProps = NativeStackScreenProps<
   StackParamList,
   'CropImage'
 >;
+export type AddStoryProps = NativeStackScreenProps<StackParamList, 'AddStory'>;
 export type EditStoryProps = NativeStackScreenProps<
   StackParamList,
   'EditStory'

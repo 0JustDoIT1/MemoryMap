@@ -7,7 +7,7 @@ import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {customColor} from 'src/style/customColor';
 import {AppUser, SignUp} from 'src/types/account';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
@@ -48,6 +48,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
   const [passwordCheckVisible, setPasswordCheckVisible] =
     useState<boolean>(true);
 
+  // 이메일 회원가입
   const onSignUpAccount = async (data: SignUp) => {
     Keyboard.dismiss();
     setIsLoading(true);

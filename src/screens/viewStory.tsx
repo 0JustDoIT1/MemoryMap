@@ -7,7 +7,7 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import {Story} from 'src/types/story';
+import {StoryData} from 'src/types/story';
 import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import useStory from 'src/hook/useStory';
@@ -16,15 +16,17 @@ import ViewShot from 'react-native-view-shot';
 import {onCaptureMap} from 'src/utils/screenshot';
 import {getRegionTitleById} from 'src/utils/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useRegionCount from 'src/hook/useRegionCount';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {koreaMapData} = useKoreaMap();
+  const {koreaMapData, updateKoreaMapDataStory} = useKoreaMap();
   const {deleteStoryById, getStoryById} = useStory();
+  const {updateRegionCountById} = useRegionCount();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
-  const story = useMemo<Story>(
+  const story = useMemo<StoryData>(
     () => getStoryById(route.params.storyId),
     [route.params.storyId],
   );
@@ -42,14 +44,20 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
 
   // 스토리 제거
   const onDeleteStory = async () => {
-    await deleteStoryById(story.regionId, story._id)
-      .then(() => onDeleteStorySuccess())
-      .catch(error => onDeleteStoryError(error));
+    try {
+      await deleteStoryById(story._id);
+      await updateKoreaMapDataStory(story.regionId, -1);
+      await updateRegionCountById(story.regionId, 'story', -1);
+
+      onDeleteStorySuccess();
+    } catch (error) {
+      onDeleteStoryError(error);
+    }
   };
 
   const onDeleteStorySuccess = () => {
     navigation.goBack();
-    showBottomToast('info', '스토리를 삭제했습니다.');
+    showBottomToast('info', '해당 스토리를 삭제했습니다.');
   };
 
   const onDeleteStoryError = (error: any) => {
@@ -105,8 +113,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
             className="mx-2"
             onPress={() =>
               navigation.navigate('EditStory', {
-                title: '스토리 수정',
-                story: JSON.stringify(story),
+                storyId: story._id,
               })
             }>
             <MaterialCommunityIcons

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {G, Path, Polygon, Svg, Text} from 'react-native-svg';
 import {_downloadStorage} from 'src/utils/storage';
 import useKoreaMap from 'src/hook/useKoreaMap';
-import MemoizationSvgPattern from './svgPattern';
+import SvgPattern from './svgPattern';
 import MemoizedMapSheet from './mapSheet';
 import useMapSheet from 'src/hook/useMapSheet';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -27,7 +27,7 @@ const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
   return (
     <React.Fragment>
       <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
-        <MemoizationSvgPattern />
+        <SvgPattern />
         <G id="제주특별자치도_1_">
           <Path
             id="제주도_1_"

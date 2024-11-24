@@ -5,6 +5,7 @@ import {returnedResults} from 'reanimated-color-picker';
 import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import useRegionCount from 'src/hook/useRegionCount';
 import {customStyle} from 'src/style/customStyle';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 import {getRegionTitleById} from 'src/utils/koreaMap';
@@ -22,6 +23,7 @@ const ColorPickerModal = ({
   handleClosePress,
 }: ColorPickerModal) => {
   const {koreaMapData, updateMapColorById} = useKoreaMap();
+  const {updateRegionCountById} = useRegionCount();
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
@@ -36,18 +38,25 @@ const ColorPickerModal = ({
     setHex(color.hex);
   };
 
+  // 색깔로 지도 색칠
   const onSettingColor = async () => {
-    await updateMapColorById(id, hex)
-      .then(() => onSettingColorSuccess())
-      .catch(error => onSettingColorError(error));
+    const count = koreaMapData[id].type === 'init' ? 1 : 0;
+    try {
+      await updateMapColorById(id, hex);
+      await updateRegionCountById(id, 'color', count);
+
+      onSettingColorSuccess();
+    } catch (error) {
+      onSettingColorError(error);
+    }
   };
 
   const onSettingColorSuccess = () => {
     const text = `${getRegionTitleById(koreaMapData, id)} 색칠 완료!`;
 
-    showBottomToast('success', text);
     hideModal();
     handleClosePress();
+    showBottomToast('success', text);
   };
 
   const onSettingColorError = (error: any) => {
