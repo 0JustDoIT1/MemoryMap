@@ -131,10 +131,6 @@ export const customStyle = (props?: CustomStyle) =>
     storyFlatListContainer: {
       gap: 8,
     },
-    storyPointText: {
-      color: customColor.black,
-      backgroundColor: `${props?.bgColor}80`,
-    },
     storyViewShot: {
       width: '100%',
       height: '100%',
@@ -172,7 +168,6 @@ export const customStyle = (props?: CustomStyle) =>
     dashboardRound: {
       backgroundColor: `${props?.bgColor}50`,
     },
-    dashboardImage: {width: 110, height: 110},
     pinCodeSwitch: {},
     pinCodeTopContainer: {
       width: '100%',

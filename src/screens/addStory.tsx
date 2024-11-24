@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Keyboard, Pressable, View} from 'react-native';
+import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useKoreaMap from 'src/hook/useKoreaMap';
@@ -10,8 +10,8 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import MemoizedCalendar from 'src/components/calendar';
 import {BrandDynamicButton} from 'src/components/button';
 import {dateToFormatString} from 'src/utils/dateFormat';
-import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
-import {storyPointEmojiArray} from 'src/constants/storyPoint';
+import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {storyPointArray} from 'src/constants/storyPoint';
 import {customStyle} from 'src/style/customStyle';
 import {_setDoc} from 'src/utils/firestore';
 import {showBottomToast} from 'src/utils/showToast';
@@ -85,7 +85,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   const animatedStyle = (num: number) =>
     useAnimatedStyle(() => {
       return {
-        transform: [{scale: num === point ? withSpring(1.3) : withSpring(1)}],
+        transform: [{scale: num === point ? withTiming(1.3) : withTiming(1)}],
         elevation: 1,
       };
     }, [point]);
@@ -203,7 +203,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
       <View className="mt-8">
         <Text className="text-sm ml-2">여행은 즐거우셨나요?</Text>
         <View className="w-full mt-4 flex-row justify-between items-center">
-          {storyPointEmojiArray.map(item => {
+          {storyPointArray.map(item => {
             return (
               <AnimatedPressable
                 key={item.point}
@@ -213,7 +213,9 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
                   Keyboard.dismiss();
                   setPoint(item.point);
                 }}>
-                <Text className="text-5xl pt-2">{item.icon}</Text>
+                <View className="w-[60px] h-[60px] bg-white rounded-full shadow-sm shadow-black">
+                  <Image style={{width: 60, height: 60}} source={item.image} />
+                </View>
                 <Text
                   className="mt-1"
                   style={customStyle({color: item.color}).storyPointIconText}>

@@ -1,8 +1,8 @@
 import {useMemo, useRef} from 'react';
-import {Pressable, ScrollView, View} from 'react-native';
+import {Image, Pressable, ScrollView, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {storyPointEmoji} from 'src/constants/storyPoint';
+import {storyPoint} from 'src/constants/storyPoint';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
@@ -40,7 +40,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
     'YYYY.MM.DD (ddd)',
   );
 
-  const emoji = storyPointEmoji[story.point];
+  const point = storyPoint[story.point];
 
   // 스토리 제거
   const onDeleteStory = async () => {
@@ -75,7 +75,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
             className="w-full h-1/5 flex justify-center items-center p-4 border border-b-0 border-gray-400 rounded-t-lg"
             style={
               customStyle({
-                bgColor: emoji.color,
+                bgColor: point.color,
               }).storyPointView
             }>
             <Text className="text-xl text-white">
@@ -86,16 +86,12 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
           <View className="w-full h-4/5 flex items-center border border-t-0 border-gray-400 rounded-b-lg">
             <ScrollView showsVerticalScrollIndicator={false}>
               <View className="flex items-center mt-8 mx-4">
-                <Text className="text-9xl pt-4">{emoji.icon}</Text>
-                <Text
-                  className="text-base px-5 py-1 rounded-lg"
-                  style={
-                    customStyle({
-                      bgColor: emoji.color,
-                    }).storyPointText
-                  }>
-                  {emoji.text}
-                </Text>
+                <View className="w-[180px] h-[180px] bg-white rounded-full">
+                  <Image
+                    style={{width: 180, height: 180}}
+                    source={point.image}
+                  />
+                </View>
               </View>
 
               <View className="flex items-center my-8 mx-4">

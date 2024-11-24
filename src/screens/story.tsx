@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Pressable, View} from 'react-native';
+import {FlatList, Image, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/notFound';
-import {storyPointEmoji} from 'src/constants/storyPoint';
+import {storyPoint} from 'src/constants/storyPoint';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import useStory from 'src/hook/useStory';
 import {customStyle} from 'src/style/customStyle';
@@ -106,7 +106,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
       'YYYY.MM.DD (ddd)',
     );
 
-    const emoji = storyPointEmoji[item.point];
+    const point = storyPoint[item.point];
 
     const onDetailList = () => {
       navigation.navigate('ViewStory', {storyId: item._id});
@@ -118,7 +118,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
           className="flex-row justify-between items-start p-3 border border-b-0 border-gray-400 rounded-t-lg shadow-sm shadow-black"
           style={
             customStyle({
-              bgColor: emoji.color,
+              bgColor: point.color,
             }).storyPointView
           }>
           <View>
@@ -127,7 +127,9 @@ const StoryScreen = ({navigation}: StoryProps) => {
             </Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
-          <Text className="text-2xl">{emoji.icon}</Text>
+          <View className="w-[40px] h-[40px] bg-white rounded-full shadow-sm shadow-black">
+            <Image style={{width: 40, height: 40}} source={point.image} />
+          </View>
         </View>
         <View className="p-3 border border-t-0 border-gray-400 rounded-b-lg bg-white shadow-sm shadow-black">
           <Text className="text-black">{item.title}</Text>
