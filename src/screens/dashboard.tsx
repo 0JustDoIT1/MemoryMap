@@ -5,7 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
-import {customStyle} from 'src/style/customStyle';
 import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
 
@@ -46,7 +45,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             </View>
             <View className="w-1/2 flex items-end">
               <Image
-                style={customStyle().dashboardImage}
+                style={{width: 110, height: 110}}
                 source={require('assets/images/map.png')}
               />
             </View>
