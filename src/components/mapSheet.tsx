@@ -198,6 +198,4 @@ const MapSheet = ({
   );
 };
 
-const MemoizedMapSheet = React.memo(MapSheet);
-
-export default MemoizedMapSheet;
+export default MapSheet;
