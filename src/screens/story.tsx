@@ -143,7 +143,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white px-6"
+      className="flex-1 justify-center items-center bg-white pb-6 px-6"
       edges={['bottom', 'left', 'right']}>
       {isLoading ? (
         <CustomActivityIndicator />

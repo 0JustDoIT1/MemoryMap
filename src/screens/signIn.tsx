@@ -76,7 +76,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
   };
 
   const onSignInGoogleAuthSuccess = () => {
-    navigation.replace('Main');
+    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
   };
 
@@ -109,7 +109,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white p-6"
+      className="flex-1 justify-center items-center bg-white p-8"
       edges={['top', 'bottom', 'left', 'right']}>
       <View className="h-2/3 flex justify-center items-center">
         <Image source={require('/assets/images/MemoryMap_Main.png')} />

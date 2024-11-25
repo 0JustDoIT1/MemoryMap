@@ -51,7 +51,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
   const onSignInSuccess = async (result: AppUser) => {
     await getDataAndSetRecoil(result);
     close();
-    navigation.replace('Main');
+    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
   };
 

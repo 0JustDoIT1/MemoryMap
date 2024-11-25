@@ -118,7 +118,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   const onAddStorySuccess = () => {
     const text = `스토리를 작성했습니다.`;
 
-    navigation.navigate('Story');
+    navigation.navigate('Main', {screen: 'Story'});
     showBottomToast('success', text);
   };
 
@@ -128,7 +128,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white px-6"
+      className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       {regionMain.length >= 1 ? (
         <React.Fragment>
@@ -199,7 +199,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
           }
           title="색칠된 지역이 없습니다."
           description="지도에서 색칠한 후에 스토리를 작성해 주세요."
-          onPress={() => navigation.navigate('Map')}
+          onPress={() => navigation.navigate('Main', {screen: 'Map'})}
         />
       )}
       <View className="mt-8">
@@ -215,8 +215,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
                   Keyboard.dismiss();
                   setPoint(item.point);
                 }}>
-                <View className="w-[60px] h-[60px] bg-white rounded-full shadow-sm shadow-black">
-                  <Image style={{width: 60, height: 60}} source={item.image} />
+                <View className="w-[50px] h-[50px] bg-white rounded-full shadow-sm shadow-black">
+                  <Image style={{width: 50, height: 50}} source={item.image} />
                 </View>
                 <Text
                   className="mt-1"
