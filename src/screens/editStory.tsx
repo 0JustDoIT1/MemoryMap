@@ -126,7 +126,9 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-white p-6">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white px-6"
+      edges={['top', 'bottom', 'left', 'right']}>
       <View className="w-full">
         <TextInput
           className="w-full bg-gray-300"

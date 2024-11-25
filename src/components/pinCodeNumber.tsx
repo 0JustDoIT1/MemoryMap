@@ -4,7 +4,6 @@ import {Text} from 'react-native-paper';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';

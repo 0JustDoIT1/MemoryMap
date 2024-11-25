@@ -98,7 +98,9 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
   };
 
   return (
-    <SafeAreaView className="relative flex-1 justify-start items-center w-screen h-screen bg-white p-2">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white"
+      edges={['top', 'bottom', 'left', 'right']}>
       <View className="relative w-full h-1/2">
         <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 960 1110">
           <Defs>

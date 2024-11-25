@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useSetRecoilState} from 'recoil';
 import useDialog from 'src/hook/useDialog';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
@@ -75,7 +75,7 @@ const RootScreen = ({navigation}: RootProps) => {
   };
 
   return (
-    <SafeAreaView className="relative flex-1">
+    <SafeAreaView className="flex-1" edges={['left', 'right']}>
       <Image
         className="w-screen h-screen"
         source={require('assets/images/root_screen.png')}

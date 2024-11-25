@@ -106,7 +106,9 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-white">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-brandLight"
+      edges={['left', 'right']}>
       <View className="w-full h-2/3 flex items-center justify-center bg-brandLight">
         <Animated.View
           style={[customStyle().pinCodeTopContainer, animatedStyle]}>

@@ -93,7 +93,7 @@ const Main = () => {
             <Pressable
               className="px-4"
               onPress={() => {
-                navigation.navigate('AddStory');
+                navigation.navigate('AddStory', {});
               }}>
               <MaterialCommunityIcons
                 name="pencil-box-outline"

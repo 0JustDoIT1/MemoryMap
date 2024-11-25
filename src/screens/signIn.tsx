@@ -108,7 +108,9 @@ const SignInScreen = ({navigation}: SignInProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center w-screen h-screen p-8 bg-white">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white p-6"
+      edges={['top', 'bottom', 'left', 'right']}>
       <View className="h-2/3 flex justify-center items-center">
         <Image source={require('/assets/images/MemoryMap_Main.png')} />
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>
@@ -116,7 +118,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
       {isLoading ? (
         <CustomActivityIndicator />
       ) : (
-        <View className="h-1/3 flex justify-center items-center">
+        <View className="w-full h-1/3 flex justify-center items-center px-4">
           <SocialLoginButton
             type="Google"
             text="Google"
@@ -144,7 +146,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
               handlePresentPress();
             }}
           />
-          <View className="flex-row justify-center items-center">
+          <View className="w-full flex-row justify-center items-center">
             <Divider className="w-1/3 my-5 bg-blur" />
             <Text className="text-xs mx-2 text-blur">또는</Text>
             <Divider className="w-1/3 my-5 bg-blur" />

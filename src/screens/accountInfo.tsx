@@ -101,7 +101,9 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-start items-center w-screen h-screen bg-white p-6">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white px-6"
+      edges={['top', 'bottom', 'left', 'right']}>
       {isLoading ? (
         <View className="w-full h-full justify-center items-center">
           <CustomActivityIndicator />
