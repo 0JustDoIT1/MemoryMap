@@ -14,7 +14,7 @@ const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-brandLight px-6"
+      className="flex-1 justify-center items-center bg-brandLight p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       <FlatList
         className="w-full"

@@ -63,7 +63,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
       edges={['top', 'bottom', 'left', 'right']}>
-      <View className="w-full flex-row justify-start items-center pb-4 px-6">
+      <View className="w-full flex-row justify-start items-center p-6">
         <View>
           <MaterialCommunityIcons
             name="account-circle"

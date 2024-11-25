@@ -65,7 +65,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
   const onSignUpSuccess = async (result: AppUser) => {
     await setDataAndSetRecoil(result);
     close();
-    navigation.replace('Main');
+    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
   };
 

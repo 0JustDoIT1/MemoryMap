@@ -54,10 +54,12 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
       if (route.params.route === 'Setting') {
         await deletePinCodeToKeyChain().then(() => {
           setAppPinCode(false);
-          navigation.navigate(route.params.route);
+          navigation.navigate('Main', {screen: route.params.route});
         });
       } else {
-        navigation.replace(route.params.route);
+        if (route.params.route === 'PinCodeSetting')
+          navigation.replace(route.params.route);
+        else navigation.replace('Main', {screen: route.params.route});
       }
     } else {
       wobbleScreen();
@@ -119,8 +121,8 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
               color={customColor.brandLight}
             />
           </View>
-          <View className="w-1/2 flex items-center mt-12">
-            <Text className="text-white/80">암호를 입력해 주세요.</Text>
+          <View className="w-2/3 flex items-center mt-6">
+            <Text className="text-sm text-white/80">암호를 입력해 주세요.</Text>
           </View>
           <View className="w-2/5 flex-row justify-around items-center mt-6">
             {[...Array(pinLength)].map((item, index) => {
@@ -138,7 +140,7 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
           </View>
         </Animated.View>
       </View>
-      <View className="w-full h-1/3">
+      <View className="w-full h-1/3 bg-white">
         {pinCodeArray.map(array => (
           <View key={array[0]} className="w-full h-1/4 flex-row">
             {array.map(item => {

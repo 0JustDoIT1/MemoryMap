@@ -95,6 +95,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if(project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file('justdoit-key.keystore')
+                storePassword 'voswl153'
+                keyAlias 'justdoit-key-alias'
+                keyPassword 'voswl153'
+            }
+        }
     }
     buildTypes {
         debug {
@@ -103,11 +111,17 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             // signingConfig signingConfigs.debug
             // minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
         }
     }
 }

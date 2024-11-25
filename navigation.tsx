@@ -37,6 +37,7 @@ const Auth = () => {
       initialRouteName="SignIn"
       screenOptions={{
         headerShown: false,
+        animation: 'flip',
       }}>
       <Stack.Screen name="SignIn" component={SignInScreen} />
     </Stack.Navigator>
@@ -58,13 +59,13 @@ const Main = () => {
         },
         headerTitleAlign: 'center',
         tabBarStyle: {
-          height: 49,
           backgroundColor: theme.colors.brandMain,
         },
         tabBarActiveTintColor: '#ffffff',
         tabBarInactiveTintColor: theme.colors.surfaceVariant,
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
+        animation: 'shift',
       }}>
       <Tab.Screen
         name="Map"
@@ -166,6 +167,7 @@ const Navigation = () => {
         initialRouteName="Root"
         screenOptions={{
           headerShown: false,
+          animation: 'flip',
         }}>
         <Stack.Screen name="Root" component={RootScreen} />
         <Stack.Screen name="Auth" component={Auth} />

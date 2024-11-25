@@ -62,8 +62,8 @@ const RootScreen = ({navigation}: RootProps) => {
       const pinCodeLock = await getPinCodeToKeyChainCheck();
       if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
         setAppPinCode(true);
-        return navigation.replace('PinCodeEnter', {route: 'Main'});
-      } else return navigation.replace('Main');
+        return navigation.replace('PinCodeEnter', {route: 'Map'});
+      } else return navigation.replace('Main', {screen: 'Map'});
     } else {
       return navigation.replace('Auth');
     }

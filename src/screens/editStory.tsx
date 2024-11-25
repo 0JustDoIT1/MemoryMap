@@ -117,7 +117,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const onUpdateStorySuccess = () => {
     const text = `해당 스토리를 수정했습니다.`;
 
-    navigation.navigate('Story');
+    navigation.navigate('Main', {screen: 'Story'});
     showBottomToast('success', text);
   };
 
@@ -127,7 +127,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white px-6"
+      className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       <View className="w-full">
         <TextInput
@@ -197,8 +197,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
                   Keyboard.dismiss();
                   setPoint(item.point);
                 }}>
-                <View className="w-[60px] h-[60px] bg-white rounded-full shadow-sm shadow-black">
-                  <Image style={{width: 60, height: 60}} source={item.image} />
+                <View className="w-[50px] h-[50px] bg-white rounded-full shadow-sm shadow-black">
+                  <Image style={{width: 50, height: 50}} source={item.image} />
                 </View>
                 <Text
                   className="mt-1"

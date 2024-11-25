@@ -124,7 +124,7 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-brandLight"
-      edges={[]}>
+      edges={['left', 'right']}>
       <View className="w-full h-2/3 flex items-center justify-center bg-brandLight">
         <Animated.View
           style={[customStyle().pinCodeTopContainer, animatedStyle]}>
@@ -135,8 +135,8 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
               color={customColor.brandLight}
             />
           </View>
-          <View className="w-1/2 flex items-center mt-12">
-            <Text className="text-base text-white/80">
+          <View className="w-2/3 flex items-center mt-6">
+            <Text className="text-sm text-white/80">
               {reEnter ? '암호를 다시 입력해 주세요.' : '암호를 입력해 주세요.'}
             </Text>
           </View>
@@ -156,7 +156,7 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
           </View>
         </Animated.View>
       </View>
-      <View className="w-full h-1/3">
+      <View className="w-full h-1/3 bg-white">
         {pinCodeArray.map(array => (
           <View key={array[0]} className="w-full h-1/4 flex-row">
             {array.map(item => {

@@ -89,7 +89,7 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
       route.params.id,
     )} 사진 추가!`;
 
-    navigation.navigate('Map');
+    navigation.navigate('Main', {screen: 'Map'});
     showBottomToast('success', text);
   };
 

@@ -108,6 +108,7 @@ export const customStyle = (props?: CustomStyle) =>
     alert: {backgroundColor: '#F9F9F9', borderRadius: 10},
     calendarText: {
       fontFamily: 'GmarketSansMedium',
+      color: customColor.gray,
     },
     calendarHeaderText: {
       fontFamily: 'GmarketSansMedium',

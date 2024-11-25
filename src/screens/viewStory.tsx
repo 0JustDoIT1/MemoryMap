@@ -66,7 +66,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-start items-center bg-white px-6"
+      className="flex-1 justify-start items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       <View className="w-full h-[90%]">
         <ViewShot

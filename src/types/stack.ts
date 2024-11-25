@@ -3,10 +3,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 export type StackParamList = {
   Root: undefined;
   Auth: undefined;
-  Main: undefined;
+  Main: {
+    screen: string;
+  };
   PinCodeSetting: undefined;
   PinCodeEnter: {
-    route: 'PinCodeSetting' | 'Main' | 'Setting';
+    route: 'PinCodeSetting' | 'Map' | 'Setting';
   };
   SignIn: undefined;
   Map: undefined;
