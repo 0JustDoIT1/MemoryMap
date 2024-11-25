@@ -1,5 +1,4 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, View} from 'react-native';
 import {TextInput} from 'react-native-paper';

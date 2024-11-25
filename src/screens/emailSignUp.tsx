@@ -7,7 +7,7 @@ import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {customColor} from 'src/style/customColor';
 import {AppUser, SignUp} from 'src/types/account';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';

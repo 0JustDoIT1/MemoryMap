@@ -133,7 +133,9 @@ const MapScreen = ({navigation}: MapProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center w-screen h-screen bg-white">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white"
+      edges={['top', 'bottom', 'left', 'right']}>
       <ViewShot
         ref={viewShotRef}
         style={customStyle().mapViewShot}

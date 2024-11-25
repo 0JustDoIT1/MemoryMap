@@ -24,7 +24,9 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
   const percent = (regionCountNumber / koreaMapRegionCount) * 100;
 
   return (
-    <SafeAreaView className="flex-1 justify-between items-center w-screen h-screen bg-white">
+    <SafeAreaView
+      className="flex-1 justify-center items-center bg-white"
+      edges={['bottom', 'left', 'right']}>
       <View className="relative w-full h-1/3 flex justify-between items-start px-8 bg-brandLight shadow-md shadow-black">
         <View className="w-full h-full flex justify-center">
           <View className="w-full flex-row justify-between items-center">
