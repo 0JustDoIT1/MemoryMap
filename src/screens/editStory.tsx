@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -18,10 +18,30 @@ import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import {StoryData} from 'src/types/story';
 import {getRegionTitleById} from 'src/utils/koreaMap';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['40%', '70%'], []);
+
+  // Bottom Sheet present event
+  const handlePresentPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // Bottom Sheet close event
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {koreaMapData} = useKoreaMap();
   const {
     regionId,
@@ -42,15 +62,10 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     updateStoryById,
   } = useStory();
   const {
-    bottomSheetModalRef,
-    snapPoints,
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
     settingBottomSheet,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
   } = useCustomBottomSheet();
 
   const [id, setId] = useState<string>('');
@@ -82,7 +97,6 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
           close={handleClosePress}
         />
       ),
-      snap: '70%',
     });
     handlePresentPress();
   };

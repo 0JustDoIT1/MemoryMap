@@ -1,25 +1,34 @@
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {G, Path, Polygon, Svg, Text} from 'react-native-svg';
 import {_downloadStorage} from 'src/utils/storage';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import SvgPattern from './svgPattern';
 import MemoizedMapSheet from './mapSheet';
-import useMapSheet from 'src/hook/useMapSheet';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from 'src/types/stack';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 interface KoreaMapSvg {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
 }
 
 const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
-  const {
-    mapSheetModalRef,
-    snapPoints,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
-  } = useMapSheet();
+  const mapSheetModalRef = useRef<BottomSheetModal>(null);
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['30%', '40%'], []);
+
+  const handlePresentPress = useCallback(() => {
+    mapSheetModalRef.current?.present();
+  }, []);
+  // Bottom Sheet close event
+  const handleClosePress = () => mapSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {koreaMapData} = useKoreaMap();
   const [id, setId] = useState<string>('');
   console.log('지도svg');

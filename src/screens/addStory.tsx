@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,10 +20,30 @@ import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getRegionTitleById} from 'src/utils/koreaMap';
 import useRegionCount from 'src/hook/useRegionCount';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['40%', '70%'], []);
+
+  // Bottom Sheet present event
+  const handlePresentPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // Bottom Sheet close event
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {koreaMapData, regionMain, updateKoreaMapDataStory} = useKoreaMap();
   const {
     regionId,
@@ -44,15 +64,10 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   } = useStory();
   const {updateRegionCountById} = useRegionCount();
   const {
-    bottomSheetModalRef,
-    snapPoints,
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
     settingBottomSheet,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
   } = useCustomBottomSheet();
 
   // 지역 id에 맞게 title 설정
@@ -76,7 +91,6 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
           close={handleClosePress}
         />
       ),
-      snap: '70%',
     });
     handlePresentPress();
   };

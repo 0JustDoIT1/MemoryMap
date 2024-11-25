@@ -1,16 +1,12 @@
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
-import {useCallback, useMemo, useRef, useState} from 'react';
+import {useState} from 'react';
 
 interface SettingBottomSheet {
   title?: string;
   description?: string;
   contents: React.JSX.Element;
-  snap: string;
 }
 
 const useCustomBottomSheet = () => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
   const [bottomSheetTitle, setBottomSheetTitle] = useState<string | undefined>(
     '',
   );
@@ -19,47 +15,22 @@ const useCustomBottomSheet = () => {
   >('');
   const [bottomSheetContents, setBottomSheetContents] =
     useState<React.JSX.Element>(<></>);
-  const [point, setPoint] = useState<string>('');
-
-  // Bottom Sheet height setting [index0, index1]
-  const snapPoints = useMemo(() => ['40%', point], [point]);
 
   const settingBottomSheet = ({
     title,
     description,
     contents,
-    snap,
   }: SettingBottomSheet) => {
     setBottomSheetTitle(title);
     setBottomSheetDescription(description);
     setBottomSheetContents(contents);
-    setPoint(snap);
   };
 
-  // Bottom Sheet present event
-  const handlePresentPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  // Bottom Sheet close event
-  const handleClosePress = () => bottomSheetModalRef.current?.close();
-
-  // Bottom Sheet close event when background touch
-  const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
-    [bottomSheetModalRef],
-  );
-
   return {
-    bottomSheetModalRef,
-    snapPoints,
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
     settingBottomSheet,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
   };
 };
 

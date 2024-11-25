@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {Image, View, Pressable, Linking} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -23,20 +23,35 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import CustomActivityIndicator from 'src/components/activityIndicator';
 import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 import {WebClientId} from '@env';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const SignInScreen = ({navigation}: SignInProps) => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['40%', '70%'], []);
+
+  // Bottom Sheet present event
+  const handlePresentPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // Bottom Sheet close event
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {getDataAndSetRecoil, setDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
   const {
-    bottomSheetModalRef,
-    snapPoints,
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
     settingBottomSheet,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
   } = useCustomBottomSheet();
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
@@ -141,7 +156,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
                     close={handleClosePress}
                   />
                 ),
-                snap: '50%',
               });
               handlePresentPress();
             }}
@@ -162,7 +176,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
                       close={handleClosePress}
                     />
                   ),
-                  snap: '70%',
                 });
                 handlePresentPress();
               }}>
@@ -184,7 +197,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
                   title: '비밀번호 재설정',
                   description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
                   contents: <ResetPasswordScreen close={handleClosePress} />,
-                  snap: '50%',
                 });
                 handlePresentPress();
               }}>

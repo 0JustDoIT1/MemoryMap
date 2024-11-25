@@ -6,7 +6,7 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import MemoizedCustomAlert from 'src/components/alert';
@@ -14,6 +14,7 @@ import useDialog from 'src/hook/useDialog';
 import {AccountInfoProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import CustomActivityIndicator from 'src/components/activityIndicator';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
@@ -54,17 +55,31 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
 };
 
 const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['40%', '35%'], []);
+
+  // Bottom Sheet present event
+  const handlePresentPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // Bottom Sheet close event
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {appUser, onWithdrawal, setInitRecoil} = useEmailAndPasswordAuth();
   const {
-    bottomSheetModalRef,
-    snapPoints,
     bottomSheetTitle,
     bottomSheetDescription,
     bottomSheetContents,
     settingBottomSheet,
-    handlePresentPress,
-    handleClosePress,
-    renderBackdrop,
   } = useCustomBottomSheet();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
@@ -75,7 +90,6 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
     settingBottomSheet({
       title: '닉네임 수정',
       contents: <DisplayNameBottomSheet handleClosePress={handleClosePress} />,
-      snap: '35%',
     });
     handlePresentPress();
   };
