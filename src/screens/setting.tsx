@@ -63,17 +63,17 @@ const SettingScreen = ({navigation}: SettingProps) => {
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
       edges={['top', 'bottom', 'left', 'right']}>
-      <View className="w-full flex-row justify-start items-center p-6">
-        <View>
+      <View className="w-full flex-row justify-start items-center py-3 px-6">
+        <View className="bg-gray-500 rounded-xl">
           <MaterialCommunityIcons
-            name="account-circle"
+            name="account"
             size={50}
-            color={customColor.gray}
+            color={customColor.white}
           />
         </View>
         <View className="ml-4">
-          <Text>{appUser?.displayName}</Text>
-          <Text className="text-gray-500">{appUser?.email}</Text>
+          <Text className="text-lg">{appUser?.displayName}</Text>
+          <Text className="text-xs text-gray-500">{appUser?.email}</Text>
         </View>
       </View>
       <Divider className="w-full bg-black my-1" />
