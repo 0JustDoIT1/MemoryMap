@@ -15,7 +15,6 @@ dayjs.locale('ko');
 
 const App = (): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
-  // const backgroundStyle = 'bg-neutral-300 dark:bg-slate-900';
 
   return (
     <RecoilRoot>
