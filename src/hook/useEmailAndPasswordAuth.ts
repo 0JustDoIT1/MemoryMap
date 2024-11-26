@@ -10,7 +10,7 @@ import {
   storyState,
 } from 'src/recoil/atom';
 import {AppUser} from 'src/types/account';
-import {AppStoryData} from 'src/types/story';
+import {AppStory} from 'src/types/story';
 import {_deleteDoc, _getDoc, _setDoc} from 'src/utils/firestore';
 import {
   getSecureValue,
@@ -41,7 +41,7 @@ const useEmailAndPasswordAuth = () => {
   const setInitRecoil = () => {
     setAppUser(null);
     setKoreaMapData(koreaMapDataInit);
-    setStory(null);
+    setStory({});
     setRegionCount(regionCountInit);
   };
 
@@ -94,7 +94,6 @@ const useEmailAndPasswordAuth = () => {
     const story = await _getDoc(user.uid).then(res => res?.story);
 
     if (koreaMapData && regionCount && story) {
-      setAppUser(user);
       setKoreaMapData(koreaMapData);
       setStory(story);
       setRegionCount(regionCount);
@@ -111,7 +110,7 @@ const useEmailAndPasswordAuth = () => {
       uid: user.uid,
       regionCount: regionCountInit,
     };
-    const appStoryInit: AppStoryData = {
+    const appStoryInit: AppStory = {
       uid: user.uid,
       story: {},
     };
@@ -122,7 +121,7 @@ const useEmailAndPasswordAuth = () => {
 
     setAppUser(user);
     setKoreaMapData(koreaMapDataInit);
-    setStory(null);
+    setStory({});
     setRegionCount(regionCountInit);
   };
 
@@ -193,6 +192,7 @@ const useEmailAndPasswordAuth = () => {
 
   return {
     appUser,
+    setAppUser,
     email,
     setEmail,
     password,

@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import useDialog from 'src/hook/useDialog';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
@@ -16,8 +16,9 @@ import {Image} from 'react-native';
 const RootScreen = ({navigation}: RootProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
 
-  const {getDataAndSetRecoil} = useEmailAndPasswordAuth();
+  const {appUser, setAppUser, getDataAndSetRecoil} = useEmailAndPasswordAuth();
 
+  const [initializing, setInitializing] = useState(true);
   const {visibleDialog, showDialog} = useDialog();
 
   // 어플 버전 체크 & 기존 로그인 여부 확인 한번만 실행하게끔
@@ -27,7 +28,7 @@ const RootScreen = ({navigation}: RootProps) => {
       if (check) {
         const onUnsubscribeAuth = auth().onAuthStateChanged(onSubscribeAuth);
         return onUnsubscribeAuth;
-      } else showDialog();
+      } else return showDialog();
     });
   }, []);
 
@@ -58,21 +59,39 @@ const RootScreen = ({navigation}: RootProps) => {
         displayName: user.displayName!,
         createdAt: user.metadata.creationTime!,
       };
-      await getDataAndSetRecoil(appUserInit);
-      const pinCodeLock = await getPinCodeToKeyChainCheck();
-      if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
-        setAppPinCode(true);
-        return navigation.replace('PinCodeEnter', {route: 'Map'});
-      } else return navigation.replace('Main', {screen: 'Map'});
+      setAppUser(appUserInit);
     } else {
-      return navigation.replace('Auth');
+      setAppUser(null);
     }
+    setInitializing(false);
   };
 
   // KeyChain에 있는 pincode 여부 가져오기
   const getPinCodeToKeyChainCheck = async () => {
     return await getSecureValue(KeyChainPinCode).then(value => value?.username);
   };
+
+  // 로그인 성공 시 (appUser가 있을 경우) 데이터 세팅 및 잠금화면 확인
+  const settingData = async () => {
+    if (appUser) {
+      await getDataAndSetRecoil(appUser);
+      const pinCodeLock = await getPinCodeToKeyChainCheck();
+      if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
+        setAppPinCode(true);
+        return navigation.replace('PinCodeEnter', {route: 'Map'});
+      } else return navigation.replace('Main', {screen: 'Map'});
+    }
+  };
+
+  useEffect(() => {
+    if (initializing) return;
+
+    if (appUser) {
+      settingData();
+    } else {
+      navigation.replace('Auth');
+    }
+  }, [appUser, initializing]);
 
   return (
     <SafeAreaView className="flex-1" edges={['left', 'right']}>

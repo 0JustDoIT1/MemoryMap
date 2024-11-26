@@ -1,9 +1,9 @@
 import firestore from '@react-native-firebase/firestore';
-import {AppStoryData} from 'src/types/story';
+import {AppStory} from 'src/types/story';
 
 const collection = firestore().collection('users');
 
-export const _setDoc = async (data: AppStoryData) => {
+export const _setDoc = async (data: AppStory) => {
   console.log('파이어스토어 생성');
   await collection.doc(data.uid).set(data);
 };

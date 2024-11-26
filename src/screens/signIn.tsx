@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, View, Pressable, Linking} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {customColor} from 'src/style/customColor';
 import {SignInProps} from 'src/types/stack';
 import SocialLoginButton from 'src/components/socialLogin';
@@ -23,6 +22,7 @@ import CustomActivityIndicator from 'src/components/activityIndicator';
 import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 import {WebClientId} from '@env';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {onSignInGoogle} from 'src/utils/googleAuth';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   // Bottom Sheet Ref
@@ -36,7 +36,6 @@ const SignInScreen = ({navigation}: SignInProps) => {
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
   const {getDataAndSetRecoil, setDataAndSetRecoil} = useEmailAndPasswordAuth();
-  const {onSignInGoogle} = useGoogleAuth();
 
   const [bottomSheetSnap, setBottomSheetSnap] = useState<string>('40%');
   const [bottomSheetTitle, setBottomSheetTitle] = useState<string | null>(null);
@@ -61,20 +60,22 @@ const SignInScreen = ({navigation}: SignInProps) => {
     try {
       setIsLoading(true);
       const result = await onSignInGoogle();
-      if (result && result.isNew) await setDataAndSetRecoil(result.appUser);
-      else {
-        if (result && result.appUser) {
+      if (result) {
+        // 신규 회원
+        if (result.isNew) await setDataAndSetRecoil(result.appUser);
+        // 기존 회원
+        else {
           const name = result.appUser.displayName
             ? result.appUser.displayName
             : result.appUser.email.split('@')[0];
-          const appUserInit: AppUser = {
+          const appUser: AppUser = {
             uid: result.appUser.uid,
             email: result.appUser.email,
             displayName: name,
             createdAt: result.appUser.createdAt,
           };
 
-          await getDataAndSetRecoil(appUserInit);
+          await getDataAndSetRecoil(appUser);
         }
       }
       onSignInGoogleAuthSuccess();
