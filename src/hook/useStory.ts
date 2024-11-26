@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {appUserState, storyState} from 'src/recoil/atom';
-import {AppStoryData, StoryData, Story} from 'src/types/story';
+import {AppStory, StoryData, Story} from 'src/types/story';
 import {_deleteDoc, _setDoc} from 'src/utils/firestore';
 import {_updateRealtime} from 'src/utils/realtime';
 import {dateToTimestamp} from 'src/utils/dateFormat';
@@ -47,7 +47,7 @@ const useStory = () => {
       [storyData._id]: storyData,
     };
 
-    const appStory: AppStoryData = {
+    const appStory: AppStory = {
       uid: appUser?.uid!,
       story: updateStory,
     };
@@ -86,7 +86,7 @@ const useStory = () => {
       [storyData._id]: storyData,
     };
 
-    const appStory: AppStoryData = {
+    const appStory: AppStory = {
       uid: appUser?.uid!,
       story: updateStory,
     };
@@ -108,7 +108,7 @@ const useStory = () => {
     };
     delete updateStory[id];
 
-    const appStory: AppStoryData = {
+    const appStory: AppStory = {
       uid: appUser?.uid!,
       story: updateStory,
     };
@@ -150,7 +150,7 @@ const useStory = () => {
   const deleteStoryByRegionId = async (regionId: string) => {
     const updateStory = getFilterStoryJson(regionId);
 
-    const appStory: AppStoryData = {
+    const appStory: AppStory = {
       uid: appUser?.uid!,
       story: updateStory,
     };
@@ -163,7 +163,7 @@ const useStory = () => {
   // 스토리 초기화
   const resetStory = async () => {
     await _deleteDoc(appUser?.uid!).then(() => {
-      setStory(null);
+      setStory({});
     });
   };
 

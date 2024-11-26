@@ -20,7 +20,7 @@ export interface PointWithCount {
   [key: string]: {id: string; point: number; count?: number};
 }
 
-export interface AppStoryData {
+export interface AppStory {
   uid: string;
   story: Story;
 }
