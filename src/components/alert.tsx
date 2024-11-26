@@ -24,6 +24,8 @@ const CustomAlert = ({
     <Portal>
       <Dialog
         visible={visible}
+        dismissable={false}
+        dismissableBackButton={false}
         onDismiss={hideAlert}
         style={customStyle().alert}>
         <View className="flex justify-center items-center pt-2 pb-6">

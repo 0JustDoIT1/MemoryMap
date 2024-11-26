@@ -1,8 +1,10 @@
-import {useMemo} from 'react';
 import {useRecoilValue} from 'recoil';
 import {koreaMapDataState, regionCountState, storyState} from 'src/recoil/atom';
 import {PointWithCount} from 'src/types/story';
-import {getRegionTitleById, getTitleByRegionList} from 'src/utils/koreaMap';
+import {
+  getTitleAllByRegionList,
+  getTitleByRegionList,
+} from 'src/utils/koreaMap';
 
 const useDashboard = () => {
   const koreaMapData = useRecoilValue(koreaMapDataState);
@@ -10,15 +12,15 @@ const useDashboard = () => {
   const regionCount = useRecoilValue(regionCountState);
 
   // 색칠된 지역 숫자
-  const regionCountNumber = useMemo(() => {
+  const regionCountNumber = () => {
     const colorList = Object.values(koreaMapData).filter(
       region => region.type !== 'init',
     );
     return colorList.length;
-  }, [koreaMapData]);
+  };
 
   // 총 스토리 수
-  const allCountStoryNum = useMemo(() => {
+  const allCountStoryNum = () => {
     let count: number = 0;
 
     Object.values(koreaMapData).forEach(item => {
@@ -26,10 +28,10 @@ const useDashboard = () => {
     });
 
     return count;
-  }, [koreaMapData]);
+  };
 
   // 총 색깔로 색칠된 수
-  const allCountColorNum = useMemo(() => {
+  const allCountColorNum = () => {
     let count: number = 0;
 
     Object.values(koreaMapData).forEach(item => {
@@ -39,10 +41,10 @@ const useDashboard = () => {
     });
 
     return count;
-  }, [koreaMapData]);
+  };
 
   // 총 사진으로 색칠된 수
-  const allCountPhotoNum = useMemo(() => {
+  const allCountPhotoNum = () => {
     let count: number = 0;
 
     Object.values(koreaMapData).forEach(item => {
@@ -52,16 +54,13 @@ const useDashboard = () => {
     });
 
     return count;
-  }, [koreaMapData]);
+  };
 
   // 색칠만 되고 스토리는 없는 지역 수
-  const noStoryRegionNumber = useMemo(
-    () =>
-      Object.values(koreaMapData).filter(
-        item => item.type !== 'init' && item.story === 0,
-      ).length,
-    [koreaMapData],
-  );
+  const noStoryRegionNumber = () =>
+    Object.values(koreaMapData).filter(
+      item => item.type !== 'init' && item.story === 0,
+    ).length;
 
   // 가장 많이 색칠된 메인 지역의 id 배열, 지역명, 스토리 수 반환
   const mostColoredMainRegion = () => {
@@ -94,9 +93,7 @@ const useDashboard = () => {
         : [];
 
     const regionTitle: string =
-      regionIdArr.length >= 1
-        ? getRegionTitleById(koreaMapData, regionIdArr[0])
-        : '';
+      regionIdArr.length >= 1 ? getTitleAllByRegionList(regionIdArr[0]) : '';
 
     return {regionIdArr, regionTitle, MathStoryNum};
   };
@@ -141,9 +138,7 @@ const useDashboard = () => {
         : [];
 
     const regionTitle: string =
-      regionIdArr.length >= 1
-        ? getRegionTitleById(koreaMapData, regionIdArr[0])
-        : '';
+      regionIdArr.length >= 1 ? getTitleAllByRegionList(regionIdArr[0]) : '';
 
     return {regionIdArr, regionTitle, mathPointNum};
   };

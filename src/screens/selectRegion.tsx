@@ -6,7 +6,10 @@ import MemoizedAccordion from 'src/components/accordion';
 import {SelectRegionProps} from 'src/types/stack';
 
 const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
-  const {regionList, regionMain} = useKoreaMap();
+  const {getColorRegionList, getColorRegionMainList} = useKoreaMap();
+
+  const regionList = getColorRegionList();
+  const regionMainList = getColorRegionMainList();
 
   const onSelectRegion = (value: string) => {
     navigation.navigate('AddStory', {regionId: value});
@@ -18,7 +21,7 @@ const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
       edges={['top', 'bottom', 'left', 'right']}>
       <FlatList
         className="w-full"
-        data={regionMain}
+        data={regionMainList}
         keyExtractor={item => item}
         renderItem={({item}) => (
           <MemoizedAccordion

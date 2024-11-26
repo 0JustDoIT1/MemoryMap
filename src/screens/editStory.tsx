@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useKoreaMap from 'src/hook/useKoreaMap';
 import {customColor} from 'src/style/customColor';
 import {EditStoryProps} from 'src/types/stack';
 import CustomBottomSheet from 'src/components/bottomSheet';
@@ -16,9 +15,9 @@ import {_setDoc} from 'src/utils/firestore';
 import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import {StoryData} from 'src/types/story';
-import {getRegionTitleById} from 'src/utils/koreaMap';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusEffect} from '@react-navigation/native';
+import {getTitleAllByRegionList} from 'src/utils/koreaMap';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -33,8 +32,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {koreaMapData} = useKoreaMap();
   const {
+    story,
     regionId,
     setRegionId,
     regionTitle,
@@ -49,7 +48,6 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     setSelectedEndDate,
     point,
     setPoint,
-    getStoryById,
     updateStoryById,
   } = useStory();
 
@@ -67,15 +65,15 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // 지역 id에 맞게 title 설정
   useEffect(() => {
     if (route.params.storyId) {
-      const story: StoryData = getStoryById(route.params.storyId);
-      setId(story._id);
-      setRegionId(story.regionId);
-      setRegionTitle(getRegionTitleById(koreaMapData, story.regionId));
-      setTitle(story.title);
-      setContents(story.contents);
-      setSelectedStartDate(timestampToDate(story.startDate));
-      setSelectedEndDate(timestampToDate(story.endDate));
-      setPoint(story.point);
+      const storyData: StoryData = story![route.params.storyId];
+      setId(storyData._id);
+      setRegionId(storyData.regionId);
+      setRegionTitle(getTitleAllByRegionList(storyData.regionId));
+      setTitle(storyData.title);
+      setContents(storyData.contents);
+      setSelectedStartDate(timestampToDate(storyData.startDate));
+      setSelectedEndDate(timestampToDate(storyData.endDate));
+      setPoint(storyData.point);
     }
   }, [route.params.storyId]);
 
@@ -115,7 +113,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const onUpdateStorySuccess = () => {
     const text = `해당 스토리를 수정했습니다.`;
 
-    navigation.navigate('Main', {screen: 'Story'});
+    navigation.goBack();
     showBottomToast('success', text);
   };
 

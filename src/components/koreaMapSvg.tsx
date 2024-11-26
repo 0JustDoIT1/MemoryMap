@@ -9,7 +9,6 @@ import {StackParamList} from 'src/types/stack';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {regionDataEmpty} from 'src/constants/koreaMapData';
-import {useFocusEffect} from '@react-navigation/native';
 
 interface KoreaMapSvg {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
@@ -26,20 +25,13 @@ const KoreaMapSvg = ({navigation}: KoreaMapSvg) => {
 
   const {koreaMapData} = useKoreaMap();
 
-  const [regionData, setRegionData] = useState<KoreaRegionData | null>(null);
-
-  useFocusEffect(
-    useCallback(() => {
-      setRegionData(regionDataEmpty);
-
-      return () => setRegionData(null);
-    }, []),
-  );
+  const [regionData, setRegionData] =
+    useState<KoreaRegionData>(regionDataEmpty);
 
   return (
     <React.Fragment>
       <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
-        <SvgPattern />
+        <SvgPattern data={koreaMapData} />
         <G id="제주특별자치도_1_">
           <Path
             id="제주도_1_"
