@@ -24,9 +24,11 @@ const SettingScreen = ({navigation}: SettingProps) => {
 
   // 로그 아웃
   const onSignOutAuth = async () => {
-    await onSignOut()
-      .then(() => navigation.replace('Auth'))
-      .catch(error => onSignOutAuthError(error));
+    try {
+      navigation.replace('Auth');
+    } catch (error) {
+      onSignOutAuthError(error);
+    }
   };
 
   const onSignOutAuthError = (error: any) => {

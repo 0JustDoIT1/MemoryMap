@@ -6,7 +6,7 @@ import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {customColor} from 'src/style/customColor';
-import {AppUser, SignUp} from 'src/types/account';
+import {SignUp} from 'src/types/account';
 import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -57,16 +57,20 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
       return setError('passwordCheck', {type: 'validate'});
     }
 
-    return await onSignUpEmailAndPassword()
-      .then(res => onSignUpSuccess(res))
-      .catch(error => onSignUpError(error));
+    try {
+      const result = await onSignUpEmailAndPassword();
+      await setDataAndSetRecoil(result);
+
+      onSignUpSuccess();
+    } catch (error) {
+      onSignUpError(error);
+    }
   };
 
-  const onSignUpSuccess = async (result: AppUser) => {
-    await setDataAndSetRecoil(result);
+  const onSignUpSuccess = async () => {
     close();
-    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
+    navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignUpError = (error: any) => {

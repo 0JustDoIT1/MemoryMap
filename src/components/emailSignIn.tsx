@@ -8,7 +8,7 @@ import CustomHelperText from 'src/components/helperText';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {isLoadingState} from 'src/recoil/atom';
 import {customColor} from 'src/style/customColor';
-import {Account, AppUser} from 'src/types/account';
+import {Account} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -43,16 +43,20 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
       return setError('password', {type: 'custom'});
     }
 
-    return await onSignInEmailAndPassword()
-      .then(res => onSignInSuccess(res))
-      .catch(error => onSignInError(error));
+    try {
+      const result = await onSignInEmailAndPassword();
+      await getDataAndSetRecoil(result);
+
+      onSignInSuccess();
+    } catch (error) {
+      onSignInError(error);
+    }
   };
 
-  const onSignInSuccess = async (result: AppUser) => {
-    await getDataAndSetRecoil(result);
+  const onSignInSuccess = async () => {
     close();
-    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
+    navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignInError = (error: any) => {
