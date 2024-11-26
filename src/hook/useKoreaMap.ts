@@ -1,7 +1,6 @@
 import {useMemo} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
-import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
 import {
   AppKoreaMapData,
@@ -67,24 +66,6 @@ const useKoreaMap = () => {
     () => Object.keys(getColorRegionList).sort(),
     [koreaMapData],
   );
-
-  // id로 해당 지역 svg 데이터 가져오기
-  const getSvgDataById = (id: string): RegionList => {
-    let result: any;
-
-    // 객체 속 원하는 값 찾기 (Depth First Search 방식, 중첩 객체도 가능)
-    const DFS = (obj: any, name: any, val: any) => {
-      if (obj[name] === val) result = obj;
-      else
-        Object.values(obj).forEach(value => {
-          if (typeof value === 'object') DFS(value, name, val);
-        });
-    };
-
-    DFS(KoreaRegionList, 'id', id);
-
-    return result;
-  };
 
   // type === photo 에 맞는 id 배열로 반환
   const getTypePhotoToIdArray = (type: 'init' | 'color' | 'photo') => {
@@ -262,7 +243,6 @@ const useKoreaMap = () => {
     koreaMapData,
     regionList,
     regionMain,
-    getSvgDataById,
     getTypePhotoToIdArray,
     updateMapColorById,
     updateMapPhotoById,

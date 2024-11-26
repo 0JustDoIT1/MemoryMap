@@ -19,18 +19,19 @@ import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import MemoizedCustomAlert from './alert';
-import {getDataToBottomSheet, getRegionTitleById} from 'src/utils/koreaMap';
+import {getDataToBottomSheet, getRegionTitle} from 'src/utils/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useRegionCount from 'src/hook/useRegionCount';
 import useStory from 'src/hook/useStory';
+import {KoreaRegionData} from 'src/types/koreaMap';
 
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
   mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
-  id: string;
+  data: KoreaRegionData | null;
 }
 
-const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
+const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['30%', '40%'], []);
 
@@ -45,11 +46,11 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
 
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {koreaMapData, deleteMapDataById} = useKoreaMap();
+  const {deleteMapDataById} = useKoreaMap();
   const {deleteRegionCountById} = useRegionCount();
   const {getDeleteStoryCount, deleteStoryByRegionId} = useStory();
 
-  const regionData = getDataToBottomSheet(id);
+  const regionData = getDataToBottomSheet(data!.id);
 
   // 사진 선택
   const onImagePicker = async () => {
@@ -62,7 +63,7 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
       if (res.assets) {
         handleClosePress();
         navigation.navigate('CropImage', {
-          id: id,
+          id: data!.id,
           title: regionData!.title,
           image: res.assets[0].uri!,
         });
@@ -74,11 +75,11 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
   const onDeleteBackground = async () => {
     try {
       const deleteColorNum = -1;
-      const deleteStoryNum = getDeleteStoryCount(id);
+      const deleteStoryNum = getDeleteStoryCount(data!.id);
 
-      await deleteMapDataById(id);
-      await deleteRegionCountById(id, deleteColorNum, deleteStoryNum);
-      await deleteStoryByRegionId(id);
+      await deleteMapDataById(data!.id);
+      await deleteRegionCountById(data!.id, deleteColorNum, deleteStoryNum);
+      await deleteStoryByRegionId(data!.id);
 
       onDeleteBackgroundSuccess();
     } catch (error) {
@@ -87,7 +88,7 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
   };
 
   const onDeleteBackgroundSuccess = () => {
-    const text = `${getRegionTitleById(koreaMapData, id)} 색칠 제거!`;
+    const text = `${getRegionTitle(data!)} 색칠 제거!`;
 
     hideDialog();
     hideModal();
@@ -116,7 +117,7 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
                   <Text className="text-xl text-black">
                     {regionData?.title}
                   </Text>
-                  {koreaMapData[id] && koreaMapData[id].type === 'photo' && (
+                  {data && data.type === 'photo' && (
                     <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
                       <MaterialCommunityIcons
                         name="file-image-outline"
@@ -125,15 +126,15 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
                       />
                     </View>
                   )}
-                  {koreaMapData[id] && koreaMapData[id].type === 'color' && (
+                  {data && data.type === 'color' && (
                     <View
                       className="w-5 h-5 mx-2 rounded-full"
                       style={
-                        customStyle({bgColor: koreaMapData[id]?.background})
+                        customStyle({bgColor: data?.background})
                           .mapBottomSheetCircle
                       }></View>
                   )}
-                  {koreaMapData[id] && koreaMapData[id].type !== 'init' && (
+                  {data && data.type !== 'init' && (
                     <Pressable onPress={showDialog}>
                       <MaterialCommunityIcons
                         name="trash-can-outline"
@@ -160,9 +161,9 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
                       {item}
                     </Text>
                   ))}
-                {koreaMapData[id].type !== 'init' && (
+                {data && data.type !== 'init' && (
                   <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                    # 스토리 {koreaMapData[id].story}건
+                    # 스토리 {data.story}건
                   </Text>
                 )}
               </View>
@@ -186,7 +187,7 @@ const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
         hideModal={hideModal}
         contents={
           <ColorPickerModal
-            id={id}
+            data={data!}
             hideModal={hideModal}
             handleClosePress={handleClosePress}
           />

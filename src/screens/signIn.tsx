@@ -23,6 +23,7 @@ import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 import {WebClientId} from '@env';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {onSignInGoogle} from 'src/utils/googleAuth';
+import {useFocusEffect} from '@react-navigation/native';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   // Bottom Sheet Ref
@@ -46,6 +47,15 @@ const SignInScreen = ({navigation}: SignInProps) => {
     useState<React.JSX.Element | null>(null);
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocus(true);
+
+      return () => setIsFocus(false);
+    }, []),
+  );
 
   // Google Sign In Configure
   useEffect(() => {
@@ -201,13 +211,15 @@ const SignInScreen = ({navigation}: SignInProps) => {
         </View>
       )}
 
-      <CustomBottomSheet
-        ref={bottomSheetModalRef}
-        snap={bottomSheetSnap}
-        title={bottomSheetTitle!}
-        description={bottomSheetDescription!}
-        contents={bottomSheetContents!}
-      />
+      {isFocus && (
+        <CustomBottomSheet
+          ref={bottomSheetModalRef}
+          snap={bottomSheetSnap}
+          title={bottomSheetTitle!}
+          description={bottomSheetDescription!}
+          contents={bottomSheetContents!}
+        />
+      )}
     </SafeAreaView>
   );
 };

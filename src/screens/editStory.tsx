@@ -18,6 +18,7 @@ import useStory from 'src/hook/useStory';
 import {StoryData} from 'src/types/story';
 import {getRegionTitleById} from 'src/utils/koreaMap';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFocusEffect} from '@react-navigation/native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -53,6 +54,15 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   } = useStory();
 
   const [id, setId] = useState<string>('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocus(true);
+
+      return () => setIsFocus(false);
+    }, []),
+  );
 
   // 지역 id에 맞게 title 설정
   useEffect(() => {
@@ -214,18 +224,20 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
           onPress={onUpdateStory}
         />
       </View>
-      <CustomBottomSheet
-        ref={bottomSheetModalRef}
-        snap="60%"
-        contents={
-          <MemoizedCalendar
-            selectedStartDate={selectedStartDate!}
-            selectedEndDate={selectedEndDate!}
-            onDatePicker={onDatePicker}
-            close={handleClosePress}
-          />
-        }
-      />
+      {isFocus && (
+        <CustomBottomSheet
+          ref={bottomSheetModalRef}
+          snap="60%"
+          contents={
+            <MemoizedCalendar
+              selectedStartDate={selectedStartDate!}
+              selectedEndDate={selectedEndDate!}
+              onDatePicker={onDatePicker}
+              close={handleClosePress}
+            />
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

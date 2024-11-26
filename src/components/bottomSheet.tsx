@@ -39,7 +39,10 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
         ref={ref}
         index={1}
         snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}>
+        backdropComponent={renderBackdrop}
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
+        android_keyboardInputMode="adjustResize">
         <BottomSheetView className="flex-1 items-center">
           <View className="flex justify-center items-center w-full py-6 px-8">
             {title && title !== '' && (

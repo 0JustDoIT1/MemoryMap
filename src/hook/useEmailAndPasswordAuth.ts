@@ -49,14 +49,14 @@ const useEmailAndPasswordAuth = () => {
   const onSignUpEmailAndPassword = async () => {
     const result: FirebaseAuthTypes.UserCredential =
       await auth().createUserWithEmailAndPassword(email, password);
-    const name = await onUpdateProfile();
+    await onUpdateProfile();
 
     await setSecureValue(KeyChainAccount, result.user.uid, password);
 
     const appUser: AppUser = {
       uid: result.user.uid!,
       email: result.user.email!,
-      displayName: name!,
+      displayName: displayName,
       createdAt: result.user.metadata.creationTime!,
     };
 
@@ -90,7 +90,6 @@ const useEmailAndPasswordAuth = () => {
     const regionCount = await _readRealtime(user.uid, 'count').then(
       snapshot => snapshot.val()['regionCount'],
     );
-
     const story = await _getDoc(user.uid).then(res => res?.story);
 
     if (koreaMapData && regionCount && story) {
@@ -132,16 +131,11 @@ const useEmailAndPasswordAuth = () => {
         displayName: displayName,
       })
       .then(res => setAppUser({...appUser!, displayName: displayName}));
-
-    return displayName;
   };
 
   // Send Password Reset Email
-  const onSendPasswordResetEmail = async () => {
-    return await auth()
-      .sendPasswordResetEmail(email)
-      .then(res => res);
-  };
+  const onSendPasswordResetEmail = async () =>
+    await auth().sendPasswordResetEmail(email);
 
   // Sign Out
   const onSignOut = async () => {
@@ -157,6 +151,7 @@ const useEmailAndPasswordAuth = () => {
 
   // Withdrawal
   const onWithdrawal = async () => {
+    // 로그인 정보 재검증
     const uid = appUser?.uid!;
     const currentUser = auth().currentUser!;
     const providerId = currentUser.providerData[0].providerId;
@@ -178,12 +173,15 @@ const useEmailAndPasswordAuth = () => {
     }
     await currentUser.reauthenticateWithCredential(authCredential);
 
+    // firebase 데이터와 auth 삭제
     await _deleteRealtime(uid, 'map');
     await _deleteRealtime(uid, 'count');
     await _deleteDoc(uid);
     await _deleteAllStorage(uid);
 
     await auth().currentUser?.delete();
+
+    // keyChain 삭제
     await removeSecureValue(KeyChainPinCode);
     await removeSecureValue(KeyChainAccount);
 

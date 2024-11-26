@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Divider, Switch, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -13,12 +13,14 @@ import {LinkingEmail, TermListUrl} from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
+import {AppUser} from 'src/types/account';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const appVersion = DeviceInfo.getVersion();
 
   const {appUser, onSignOut} = useEmailAndPasswordAuth();
   const appPinCode = useRecoilValue(appPinCodeState);
+  const [appUserData, setAppUserData] = useState<AppUser>(appUser!);
 
   // 로그 아웃
   const onSignOutAuth = async () => {
@@ -39,7 +41,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   // 이메일 문의 기능
   const onPressContactUs = async () => {
     const deviceName = await DeviceInfo.getDeviceName();
-    const email = appUser?.email!;
+    const email = appUserData.email!;
     await Linking.openURL(LinkingEmail(deviceName, appVersion, email));
   };
 
@@ -72,8 +74,8 @@ const SettingScreen = ({navigation}: SettingProps) => {
           />
         </View>
         <View className="ml-4">
-          <Text className="text-lg">{appUser?.displayName}</Text>
-          <Text className="text-xs text-gray-500">{appUser?.email}</Text>
+          <Text className="text-lg">{appUserData.displayName}</Text>
+          <Text className="text-xs text-gray-500">{appUserData.email}</Text>
         </View>
       </View>
       <Divider className="w-full bg-black my-1" />

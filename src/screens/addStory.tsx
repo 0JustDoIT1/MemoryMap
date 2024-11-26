@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,6 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {getRegionTitleById} from 'src/utils/koreaMap';
 import useRegionCount from 'src/hook/useRegionCount';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFocusEffect} from '@react-navigation/native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -53,6 +54,16 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     addStoryByRegionId,
   } = useStory();
   const {updateRegionCountById} = useRegionCount();
+
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsFocus(true);
+
+      return () => setIsFocus(false);
+    }, []),
+  );
 
   // 지역 id에 맞게 title 설정
   useEffect(() => {
@@ -232,18 +243,20 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
           onPress={onAddStory}
         />
       </View>
-      <CustomBottomSheet
-        ref={bottomSheetModalRef}
-        snap="60%"
-        contents={
-          <MemoizedCalendar
-            selectedStartDate={selectedStartDate!}
-            selectedEndDate={selectedEndDate!}
-            onDatePicker={onDatePicker}
-            close={handleClosePress}
-          />
-        }
-      />
+      {isFocus && (
+        <CustomBottomSheet
+          ref={bottomSheetModalRef}
+          snap="60%"
+          contents={
+            <MemoizedCalendar
+              selectedStartDate={selectedStartDate!}
+              selectedEndDate={selectedEndDate!}
+              onDatePicker={onDatePicker}
+              close={handleClosePress}
+            />
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

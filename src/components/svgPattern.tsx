@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
 import useKoreaMap from 'src/hook/useKoreaMap';
+import {getSvgDataById} from 'src/utils/koreaMap';
 
 const SvgPattern = () => {
-  const {koreaMapData, getSvgDataById, getTypePhotoToIdArray} = useKoreaMap();
+  const {koreaMapData, getTypePhotoToIdArray} = useKoreaMap();
   const [idArray, setIdArray] = useState<string[]>([]);
 
   useEffect(() => {
