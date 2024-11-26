@@ -1,4 +1,8 @@
-import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
@@ -8,7 +12,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {MapProps, StackParamList} from 'src/types/stack';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/screens/colorPickerModal';
 import {showBottomToast} from 'src/utils/showToast';
@@ -23,20 +27,22 @@ import useStory from 'src/hook/useStory';
 interface MapSheet extends Omit<MapProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
   mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
-  snapPoints: string[];
-  handleClosePress: () => void;
-  renderBackdrop: (props: any) => React.JSX.Element;
   id: string;
 }
 
-const MapSheet = ({
-  navigation,
-  mapSheetModalRef,
-  snapPoints,
-  handleClosePress,
-  renderBackdrop,
-  id,
-}: MapSheet) => {
+const MapSheet = ({navigation, mapSheetModalRef, id}: MapSheet) => {
+  // Bottom Sheet height setting [index0, index1]
+  const snapPoints = useMemo(() => ['30%', '40%'], []);
+
+  // Bottom Sheet close event
+  const handleClosePress = () => mapSheetModalRef.current?.close();
+
+  // Bottom Sheet close event when background touch
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    [],
+  );
+
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {koreaMapData, deleteMapDataById} = useKoreaMap();
@@ -160,7 +166,7 @@ const MapSheet = ({
                   </Text>
                 )}
               </View>
-              <View className="w-full">
+              <View className="w-full pb-4">
                 <BrandContainedButton
                   text="사진 넣기"
                   onPress={onImagePicker}

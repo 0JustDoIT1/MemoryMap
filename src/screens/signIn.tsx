@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, View, Pressable, Linking} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -6,11 +6,10 @@ import useGoogleAuth from 'src/hook/useGoogleAuth';
 import {customColor} from 'src/style/customColor';
 import {SignInProps} from 'src/types/stack';
 import SocialLoginButton from 'src/components/socialLogin';
-import EmailSignInScreen from './emailSignIn';
+import EmailSignIn from '../components/emailSignIn';
 import CustomBottomSheet from 'src/components/bottomSheet';
-import EmailSignUpScreen from './emailSignUp';
-import ResetPasswordScreen from './resetPassword';
-import useCustomBottomSheet from 'src/hook/useBottomSheet';
+import EmailSignUp from '../components/emailSignUp';
+import ResetPassword from '../components/resetPassword';
 import {useRecoilState} from 'recoil';
 import {isLoadingState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
@@ -23,44 +22,38 @@ import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import CustomActivityIndicator from 'src/components/activityIndicator';
 import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 import {WebClientId} from '@env';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const SignInScreen = ({navigation}: SignInProps) => {
+  // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // Bottom Sheet height setting [index0, index1]
-  const snapPoints = useMemo(() => ['40%', '70%'], []);
-
   // Bottom Sheet present event
-  const handlePresentPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
+  const handlePresentPress = useCallback(
+    () => bottomSheetModalRef.current?.present(),
+    [],
+  );
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  // Bottom Sheet close event when background touch
-  const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
-    [],
-  );
-
   const {getDataAndSetRecoil, setDataAndSetRecoil} = useEmailAndPasswordAuth();
   const {onSignInGoogle} = useGoogleAuth();
-  const {
-    bottomSheetTitle,
-    bottomSheetDescription,
-    bottomSheetContents,
-    settingBottomSheet,
-  } = useCustomBottomSheet();
+
+  const [bottomSheetSnap, setBottomSheetSnap] = useState<string>('40%');
+  const [bottomSheetTitle, setBottomSheetTitle] = useState<string | null>(null);
+  const [bottomSheetDescription, setBottomSheetDescription] = useState<
+    string | null
+  >(null);
+  const [bottomSheetContents, setBottomSheetContents] =
+    useState<React.JSX.Element | null>(null);
 
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   // Google Sign In Configure
   useEffect(() => {
-    GoogleSignin.configure({
+    const googleSigninConfigure = GoogleSignin.configure({
       webClientId: WebClientId,
     });
+    return googleSigninConfigure;
   }, []);
 
   // 구글 로그인
@@ -148,15 +141,14 @@ const SignInScreen = ({navigation}: SignInProps) => {
             buttonColor={customColor.brandMain}
             textColor={customColor.white}
             onPress={() => {
-              settingBottomSheet({
-                title: '계정 로그인',
-                contents: (
-                  <EmailSignInScreen
-                    navigation={navigation}
-                    close={handleClosePress}
-                  />
-                ),
-              });
+              setBottomSheetSnap('53%');
+              setBottomSheetTitle('계정 로그인');
+              setBottomSheetContents(
+                <EmailSignIn
+                  navigation={navigation}
+                  close={handleClosePress}
+                />,
+              );
               handlePresentPress();
             }}
           />
@@ -168,15 +160,14 @@ const SignInScreen = ({navigation}: SignInProps) => {
           <View className="w-full flex items-center">
             <Pressable
               onPress={() => {
-                settingBottomSheet({
-                  title: '회원가입',
-                  contents: (
-                    <EmailSignUpScreen
-                      navigation={navigation}
-                      close={handleClosePress}
-                    />
-                  ),
-                });
+                setBottomSheetSnap('70%');
+                setBottomSheetTitle('회원가입');
+                setBottomSheetContents(
+                  <EmailSignUp
+                    navigation={navigation}
+                    close={handleClosePress}
+                  />,
+                );
                 handlePresentPress();
               }}>
               <Text className="underline text-blur">이메일로 회원가입</Text>
@@ -193,11 +184,14 @@ const SignInScreen = ({navigation}: SignInProps) => {
             <View className="h-3/4 mx-3 border-r-[0.5px] border-blur"></View>
             <Pressable
               onPress={() => {
-                settingBottomSheet({
-                  title: '비밀번호 재설정',
-                  description: `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
-                  contents: <ResetPasswordScreen close={handleClosePress} />,
-                });
+                setBottomSheetSnap('45%');
+                setBottomSheetTitle('비밀번호 재설정');
+                setBottomSheetDescription(
+                  `회원가입 시 입력했던 이메일 주소를 입력해 주세요.\n만약 메일이 오지 않는다면, 스팸 메일함을 확인해 주세요.`,
+                );
+                setBottomSheetContents(
+                  <ResetPassword close={handleClosePress} />,
+                );
                 handlePresentPress();
               }}>
               <Text className="text-xs text-blur">비밀번호 찾기</Text>
@@ -207,13 +201,11 @@ const SignInScreen = ({navigation}: SignInProps) => {
       )}
 
       <CustomBottomSheet
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        title={bottomSheetTitle}
-        description={bottomSheetDescription}
-        contents={bottomSheetContents}
+        ref={bottomSheetModalRef}
+        snap={bottomSheetSnap}
+        title={bottomSheetTitle!}
+        description={bottomSheetDescription!}
+        contents={bottomSheetContents!}
       />
     </SafeAreaView>
   );

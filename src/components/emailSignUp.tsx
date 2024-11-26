@@ -20,7 +20,7 @@ interface EmailSignUp extends Omit<SignInProps, 'route'> {
   close: () => void;
 }
 
-const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
+const EmailSignUp = ({navigation, close}: EmailSignUp) => {
   const {
     control,
     handleSubmit,
@@ -92,7 +92,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
             message: '이메일 형식에 맞게 입력해 주세요.',
           },
         }}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <TextInput
             className="w-full bg-white"
             mode="flat"
@@ -120,7 +120,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
             message: '영문, 숫자, 특수문자를 포함해 주세요.',
           },
         }}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <TextInput
             className="w-full bg-white mt-1"
             mode="flat"
@@ -178,7 +178,7 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
           validate: value =>
             watch('password') === value || '비밀번호가 다릅니다.',
         }}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <TextInput
             className="w-full bg-white mt-1"
             mode="flat"
@@ -211,4 +211,4 @@ const EmailSignUpScreen = ({navigation, close}: EmailSignUp) => {
   );
 };
 
-export default EmailSignUpScreen;
+export default EmailSignUp;

@@ -14,7 +14,7 @@ interface ResetPassword {
   close: () => void;
 }
 
-const ResetPasswordScreen = ({close}: ResetPassword) => {
+const ResetPassword = ({close}: ResetPassword) => {
   const setIsLoading = useSetRecoilState(isLoadingState);
   const {setEmail, onSendPasswordResetEmail} = useEmailAndPasswordAuth();
 
@@ -90,4 +90,4 @@ const ResetPasswordScreen = ({close}: ResetPassword) => {
   );
 };
 
-export default ResetPasswordScreen;
+export default ResetPassword;

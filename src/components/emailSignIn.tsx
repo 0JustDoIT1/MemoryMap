@@ -17,7 +17,7 @@ interface EmailSignIn extends Omit<SignInProps, 'route'> {
   close: () => void;
 }
 
-const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
+const EmailSignIn = ({navigation, close}: EmailSignIn) => {
   const {
     control,
     handleSubmit,
@@ -65,7 +65,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
       <Controller
         name="email"
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <TextInput
             className="w-full bg-white"
             mode="flat"
@@ -82,7 +82,7 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
       <Controller
         name="password"
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <TextInput
             className="w-full bg-white mt-1"
             mode="flat"
@@ -113,4 +113,4 @@ const EmailSignInScreen = ({navigation, close}: EmailSignIn) => {
   );
 };
 
-export default EmailSignInScreen;
+export default EmailSignIn;

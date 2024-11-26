@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import {customColor} from 'src/style/customColor';
 import {EditStoryProps} from 'src/types/stack';
-import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import MemoizedCalendar from 'src/components/calendar';
 import {BrandDynamicButton} from 'src/components/button';
@@ -18,29 +17,20 @@ import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import {StoryData} from 'src/types/story';
 import {getRegionTitleById} from 'src/utils/koreaMap';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
+  // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // Bottom Sheet height setting [index0, index1]
-  const snapPoints = useMemo(() => ['40%', '70%'], []);
-
   // Bottom Sheet present event
-  const handlePresentPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  // Bottom Sheet close event
-  const handleClosePress = () => bottomSheetModalRef.current?.close();
-
-  // Bottom Sheet close event when background touch
-  const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+  const handlePresentPress = useCallback(
+    () => bottomSheetModalRef.current?.present(),
     [],
   );
+  // Bottom Sheet close event
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
 
   const {koreaMapData} = useKoreaMap();
   const {
@@ -61,12 +51,6 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     getStoryById,
     updateStoryById,
   } = useStory();
-  const {
-    bottomSheetTitle,
-    bottomSheetDescription,
-    bottomSheetContents,
-    settingBottomSheet,
-  } = useCustomBottomSheet();
 
   const [id, setId] = useState<string>('');
 
@@ -88,16 +72,6 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // 날짜 선택 시 bottomSheet open
   const onPressDate = () => {
     Keyboard.dismiss();
-    settingBottomSheet({
-      contents: (
-        <MemoizedCalendar
-          selectedStartDate={selectedStartDate!}
-          selectedEndDate={selectedEndDate!}
-          onDatePicker={onDatePicker}
-          close={handleClosePress}
-        />
-      ),
-    });
     handlePresentPress();
   };
 
@@ -241,13 +215,16 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
         />
       </View>
       <CustomBottomSheet
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        title={bottomSheetTitle}
-        description={bottomSheetDescription}
-        contents={bottomSheetContents}
+        ref={bottomSheetModalRef}
+        snap="60%"
+        contents={
+          <MemoizedCalendar
+            selectedStartDate={selectedStartDate!}
+            selectedEndDate={selectedEndDate!}
+            onDatePicker={onDatePicker}
+            close={handleClosePress}
+          />
+        }
       />
     </SafeAreaView>
   );

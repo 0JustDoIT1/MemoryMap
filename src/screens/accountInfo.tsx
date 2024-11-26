@@ -1,20 +1,21 @@
 import {Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BrandOutlinedButton} from 'src/components/button';
+import {BrandOutlinedButton, FormOutlinedButton} from 'src/components/button';
 import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomBottomSheet from 'src/components/bottomSheet';
-import useCustomBottomSheet from 'src/hook/useBottomSheet';
 import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import {AccountInfoProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import CustomActivityIndicator from 'src/components/activityIndicator';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {Controller, useForm} from 'react-hook-form';
+import CustomHelperText from 'src/components/helperText';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
@@ -28,6 +29,16 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
     setDisplayName(appUser?.displayName!);
   }, [appUser]);
 
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+  } = useForm({
+    values: {
+      displayName: displayName,
+    },
+  });
+
   // 닉네임 수정
   const onUpdateDisplayName = async () => {
     await onUpdateProfile().then(() => handleClosePress());
@@ -35,64 +46,61 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
 
   return (
     <View className="w-full">
-      <TextInput
-        className="w-full bg-white"
-        mode="outlined"
-        label="제목"
-        placeholder="(10자)"
-        activeOutlineColor={customColor.brandMain}
-        value={displayName}
-        maxLength={10}
-        onChangeText={setDisplayName}
+      <Controller
+        name="displayName"
+        control={control}
+        rules={{
+          required: '닉네임을 입력해 주세요.',
+        }}
+        render={({field: {onChange, value}}) => (
+          <TextInput
+            className="w-full bg-white"
+            mode="outlined"
+            label="닉네임"
+            placeholder="(10자)"
+            activeOutlineColor={customColor.brandMain}
+            value={value}
+            maxLength={10}
+            onChangeText={text => {
+              onChange(text);
+              setDisplayName(text);
+            }}
+          />
+        )}
       />
-      <BrandOutlinedButton
+      {errors.displayName && (
+        <CustomHelperText type="error" text={errors.displayName.message} />
+      )}
+
+      <FormOutlinedButton
         text="수정"
         classes="w-full mt-4 py-1"
-        onPress={onUpdateDisplayName}
+        isDisabled={isSubmitting}
+        onSubmit={handleSubmit(onUpdateDisplayName)}
       />
     </View>
   );
 };
 
 const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
+  // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // Bottom Sheet height setting [index0, index1]
-  const snapPoints = useMemo(() => ['40%', '35%'], []);
-
   // Bottom Sheet present event
-  const handlePresentPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
+  const handlePresentPress = useCallback(
+    () => bottomSheetModalRef.current?.present(),
+    [],
+  );
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  // Bottom Sheet close event when background touch
-  const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
-    [],
-  );
-
   const {appUser, onWithdrawal, setInitRecoil} = useEmailAndPasswordAuth();
-  const {
-    bottomSheetTitle,
-    bottomSheetDescription,
-    bottomSheetContents,
-    settingBottomSheet,
-  } = useCustomBottomSheet();
+
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // 닉네임 수정을 위한 바텀시트
-  const onPressDisplayName = () => {
-    settingBottomSheet({
-      title: '닉네임 수정',
-      contents: <DisplayNameBottomSheet handleClosePress={handleClosePress} />,
-    });
-    handlePresentPress();
-  };
+  const onPressDisplayName = () => handlePresentPress();
 
   // 회원탈퇴
   const onWithdrawalAccount = async () => {
@@ -176,13 +184,12 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
         hideAlert={hideDialog}
       />
       <CustomBottomSheet
-        bottomSheetModalRef={bottomSheetModalRef}
-        snapPoints={snapPoints}
-        handleClosePress={handleClosePress}
-        renderBackdrop={renderBackdrop}
-        title={bottomSheetTitle}
-        description={bottomSheetDescription}
-        contents={bottomSheetContents}
+        ref={bottomSheetModalRef}
+        snap="35%"
+        title="닉네임 수정"
+        contents={
+          <DisplayNameBottomSheet handleClosePress={handleClosePress} />
+        }
       />
     </SafeAreaView>
   );

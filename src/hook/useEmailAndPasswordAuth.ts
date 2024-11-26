@@ -146,11 +146,14 @@ const useEmailAndPasswordAuth = () => {
 
   // Sign Out
   const onSignOut = async () => {
-    await auth().signOut();
-    await removeSecureValue(KeyChainPinCode);
-    await removeSecureValue(KeyChainAccount);
+    await auth()
+      .signOut()
+      .then(async () => {
+        await removeSecureValue(KeyChainPinCode);
+        await removeSecureValue(KeyChainAccount);
 
-    setInitRecoil();
+        setInitRecoil();
+      });
   };
 
   // Withdrawal
