@@ -21,6 +21,8 @@ const RootScreen = ({navigation}: RootProps) => {
   const [initializing, setInitializing] = useState(true);
   const {visibleDialog, showDialog} = useDialog();
 
+  let authFlag = true;
+
   // 어플 버전 체크 & 기존 로그인 여부 확인 한번만 실행하게끔
   useEffect(() => {
     // const check = checkVersion()
@@ -52,18 +54,24 @@ const RootScreen = ({navigation}: RootProps) => {
 
   // 기존 로그인 여부 확인
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
-    if (user) {
-      const appUserInit: AppUser = {
-        uid: user.uid!,
-        email: user.email!,
-        displayName: user.displayName!,
-        createdAt: user.metadata.creationTime!,
-      };
-      setAppUser(appUserInit);
-    } else {
-      setAppUser(null);
+    if (authFlag) {
+      if (user) {
+        console.log('구독: 유저있음');
+        const appUserInit: AppUser = {
+          uid: user.uid!,
+          email: user.email!,
+          displayName: user.displayName!,
+          createdAt: user.metadata.creationTime!,
+        };
+        setAppUser(appUserInit);
+        authFlag = false;
+      } else {
+        console.log('구독: 유저없음');
+        setAppUser(null);
+      }
+      authFlag = false;
+      setInitializing(false);
     }
-    setInitializing(false);
   };
 
   // KeyChain에 있는 pincode 여부 가져오기
@@ -79,7 +87,9 @@ const RootScreen = ({navigation}: RootProps) => {
       if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
         setAppPinCode(true);
         return navigation.replace('PinCodeEnter', {route: 'Map'});
-      } else return navigation.replace('Main', {screen: 'Map'});
+      } else {
+        return navigation.replace('Main', {screen: 'Map'});
+      }
     }
   };
 

@@ -126,14 +126,14 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   };
 
   const onWithdrawalAccountSuccess = () => {
-    navigation.navigate('Auth');
     setIsLoading(false);
+    navigation.navigate('Auth');
   };
 
   const onWithdrawalAccountError = (error: any) => {
-    navigation.navigate('Auth');
     setInitRecoil();
     showBottomToast('error', '회원탈퇴 실패');
+    navigation.navigate('Auth');
   };
 
   return (

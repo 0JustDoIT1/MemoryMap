@@ -78,6 +78,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
           const name = result.appUser.displayName
             ? result.appUser.displayName
             : result.appUser.email.split('@')[0];
+
           const appUser: AppUser = {
             uid: result.appUser.uid,
             email: result.appUser.email,
@@ -95,8 +96,8 @@ const SignInScreen = ({navigation}: SignInProps) => {
   };
 
   const onSignInGoogleAuthSuccess = () => {
-    navigation.replace('Main', {screen: 'Map'});
     setIsLoading(false);
+    navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignInGoogleAuthError = (error: any) => {

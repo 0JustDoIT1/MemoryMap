@@ -87,8 +87,8 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
   const onUploadPhotoSuccess = () => {
     const text = `${getRegionTitle(regionData)} 사진 추가!`;
 
-    navigation.navigate('Main', {screen: 'Map'});
     showBottomToast('success', text);
+    navigation.navigate('Main', {screen: 'Map'});
   };
 
   const onUploadPhotoError = (error: any) => {

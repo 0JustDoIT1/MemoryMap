@@ -92,6 +92,10 @@ const useEmailAndPasswordAuth = () => {
     );
     const story = await _getDoc(user.uid).then(res => res?.story);
 
+    if (!appUser) {
+      setAppUser(user);
+    }
+
     if (koreaMapData && regionCount && story) {
       setKoreaMapData(koreaMapData);
       setStory(story);

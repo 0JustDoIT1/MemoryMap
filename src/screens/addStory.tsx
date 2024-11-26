@@ -119,8 +119,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   const onAddStorySuccess = () => {
     const text = `스토리를 작성했습니다.`;
 
-    navigation.navigate('Main', {screen: 'Story'});
     showBottomToast('success', text);
+    navigation.navigate('Main', {screen: 'Story'});
   };
 
   const onAddStoryError = (error: any) => {
