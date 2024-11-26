@@ -9,12 +9,13 @@ import {Text} from 'react-native-paper';
 import {showBottomToast} from 'src/utils/showToast';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import useRegionCount from 'src/hook/useRegionCount';
-import {getRegionTitleById} from 'src/utils/koreaMap';
+import {getRegionTitle, getSvgDataById} from 'src/utils/koreaMap';
 
 const CropImageScreen = ({navigation, route}: CropImageProps) => {
-  const {koreaMapData, updateMapPhotoById, getSvgDataById} = useKoreaMap();
+  const {koreaMapData, updateMapPhotoById} = useKoreaMap();
   const {updateRegionCountById} = useRegionCount();
 
+  const regionData = koreaMapData[route.params.id];
   const svgData = getSvgDataById(route.params.id);
   const [image, setImage] = useState<string>(route.params.image);
 
@@ -71,7 +72,7 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
       rotation: rotate[0],
     };
 
-    const count = koreaMapData[route.params.id].type === 'init' ? 1 : 0;
+    const count = regionData.type === 'init' ? 1 : 0;
 
     try {
       await updateMapPhotoById(route.params.id, image, imageStyle);
@@ -84,10 +85,7 @@ const CropImageScreen = ({navigation, route}: CropImageProps) => {
   };
 
   const onUploadPhotoSuccess = () => {
-    const text = `${getRegionTitleById(
-      koreaMapData,
-      route.params.id,
-    )} 사진 추가!`;
+    const text = `${getRegionTitle(regionData)} 사진 추가!`;
 
     navigation.navigate('Main', {screen: 'Map'});
     showBottomToast('success', text);

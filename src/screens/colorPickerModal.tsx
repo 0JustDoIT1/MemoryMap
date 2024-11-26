@@ -7,27 +7,28 @@ import CustomColorSwatch from 'src/components/colorSwatch';
 import useKoreaMap from 'src/hook/useKoreaMap';
 import useRegionCount from 'src/hook/useRegionCount';
 import {customStyle} from 'src/style/customStyle';
+import {KoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
-import {getRegionTitleById} from 'src/utils/koreaMap';
+import {getRegionTitle} from 'src/utils/koreaMap';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface ColorPickerModal {
-  id: string;
+  data: KoreaRegionData;
   hideModal: () => void;
   handleClosePress: () => void;
 }
 
 const ColorPickerModal = ({
-  id,
+  data,
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {koreaMapData, updateMapColorById} = useKoreaMap();
+  const {updateMapColorById} = useKoreaMap();
   const {updateRegionCountById} = useRegionCount();
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
-    koreaMapData[id].type === 'color' ? koreaMapData[id].background : '#ffffff',
+    data.type === 'color' ? data.background : '#ffffff',
   );
 
   const onChangeMode = () => {
@@ -40,10 +41,10 @@ const ColorPickerModal = ({
 
   // 색깔로 지도 색칠
   const onSettingColor = async () => {
-    const count = koreaMapData[id].type === 'init' ? 1 : 0;
+    const count = data.type === 'init' ? 1 : 0;
     try {
-      await updateMapColorById(id, hex);
-      await updateRegionCountById(id, 'color', count);
+      await updateMapColorById(data.id, hex);
+      await updateRegionCountById(data.id, 'color', count);
 
       onSettingColorSuccess();
     } catch (error) {
@@ -52,7 +53,7 @@ const ColorPickerModal = ({
   };
 
   const onSettingColorSuccess = () => {
-    const text = `${getRegionTitleById(koreaMapData, id)} 색칠 완료!`;
+    const text = `${getRegionTitle(data)} 색칠 완료!`;
 
     hideModal();
     handleClosePress();
@@ -68,20 +69,12 @@ const ColorPickerModal = ({
       <Text className="text-lg mb-4">색상 선택</Text>
       {mode ? (
         <CustomColorPannel
-          value={
-            koreaMapData[id].type === 'color'
-              ? koreaMapData[id].background
-              : '#ffffff'
-          }
+          value={data.type === 'color' ? data.background : '#ffffff'}
           onChange={onColorSelect}
         />
       ) : (
         <CustomColorSwatch
-          value={
-            koreaMapData[id].type === 'color'
-              ? koreaMapData[id].background
-              : '#ffffff'
-          }
+          value={data.type === 'color' ? data.background : '#ffffff'}
           onChange={onColorSelect}
         />
       )}
@@ -90,20 +83,13 @@ const ColorPickerModal = ({
           className="w-1/2 text-center py-1"
           style={
             customStyle({
-              bgColor:
-                koreaMapData[id].type === 'color'
-                  ? koreaMapData[id].background
-                  : '#ffffff',
+              bgColor: data.type === 'color' ? data.background : '#ffffff',
               color: getTextColorByBackgroundColor(
-                koreaMapData[id].type === 'color'
-                  ? koreaMapData[id].background
-                  : '#ffffff',
+                data.type === 'color' ? data.background : '#ffffff',
               ),
             }).colorPickerPreview
           }>
-          {koreaMapData[id].type === 'color'
-            ? koreaMapData[id].background
-            : '#ffffff'}
+          {data.type === 'color' ? data.background : '#ffffff'}
         </Text>
         <Text
           className="w-1/2 text-center py-1"

@@ -1,4 +1,13 @@
-import {KoreaMapData} from 'src/types/koreaMap';
+import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
+
+export const regionDataEmpty: KoreaRegionData = {
+  id: '',
+  title: '',
+  value: [],
+  type: 'init',
+  background: '#ffffff',
+  story: 0,
+};
 
 //163
 export const koreaMapDataInit: KoreaMapData = {
