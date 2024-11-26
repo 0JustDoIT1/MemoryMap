@@ -1,4 +1,4 @@
-import {useMemo, useRef} from 'react';
+import {useMemo, useRef, useState} from 'react';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -7,47 +7,44 @@ import useKoreaMap from 'src/hook/useKoreaMap';
 import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
 import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import {StoryData} from 'src/types/story';
+import {Story, StoryData} from 'src/types/story';
 import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import useStory from 'src/hook/useStory';
 import {showBottomToast} from 'src/utils/showToast';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureMap} from 'src/utils/screenshot';
-import {getRegionTitleById} from 'src/utils/koreaMap';
+import {getTitleAllByRegionList} from 'src/utils/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useRegionCount from 'src/hook/useRegionCount';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {koreaMapData, updateKoreaMapDataStory} = useKoreaMap();
-  const {deleteStoryById, getStoryById} = useStory();
+  const {updateKoreaMapDataStory} = useKoreaMap();
+  const {story, deleteStoryById} = useStory();
   const {updateRegionCountById} = useRegionCount();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
-  const story = useMemo<StoryData>(
-    () => getStoryById(route.params.storyId),
-    [route.params.storyId],
-  );
+  const storyData = story![route.params.storyId];
 
   const startDateString = dateToFormatString(
-    timestampToDate(story.startDate),
+    timestampToDate(storyData.startDate),
     'YYYY.MM.DD (ddd)',
   );
   const endDateString = dateToFormatString(
-    timestampToDate(story.endDate),
+    timestampToDate(storyData.endDate),
     'YYYY.MM.DD (ddd)',
   );
 
-  const point = storyPoint[story.point];
+  const point = storyPoint[storyData.point];
 
   // 스토리 제거
   const onDeleteStory = async () => {
     try {
-      await deleteStoryById(story._id);
-      await updateKoreaMapDataStory(story.regionId, -1);
-      await updateRegionCountById(story.regionId, 'story', -1);
+      await deleteStoryById(storyData._id);
+      await updateKoreaMapDataStory(storyData.regionId, -1);
+      await updateRegionCountById(storyData.regionId, 'story', -1);
 
       onDeleteStorySuccess();
     } catch (error) {
@@ -81,7 +78,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
               }).storyPointView
             }>
             <Text className="text-xl text-white">
-              {getRegionTitleById(koreaMapData, story.regionId)}
+              {getTitleAllByRegionList(storyData.regionId)}
             </Text>
             <Text className="text-sm text-white mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
@@ -97,9 +94,9 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
               </View>
 
               <View className="flex items-center my-8 mx-4">
-                <Text className="text-lg">{story.title}</Text>
+                <Text className="text-lg">{storyData.title}</Text>
                 <Text className="text-center text-gray-500 mt-2 leading-6">
-                  {story.contents}
+                  {storyData.contents}
                 </Text>
               </View>
             </ScrollView>
@@ -111,7 +108,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
             className="mx-2"
             onPress={() =>
               navigation.navigate('EditStory', {
-                storyId: story._id,
+                storyId: storyData._id,
               })
             }>
             <MaterialCommunityIcons

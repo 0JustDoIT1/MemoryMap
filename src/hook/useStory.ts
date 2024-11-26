@@ -96,11 +96,6 @@ const useStory = () => {
     });
   };
 
-  // story Id에 해당하는 내용 가져오기
-  const getStoryById = (storyId: string) => {
-    return story![storyId];
-  };
-
   // 특정 스토리 삭제 -> Firebase & Recoil
   const deleteStoryById = async (id: string) => {
     const updateStory = {
@@ -185,7 +180,6 @@ const useStory = () => {
     setPoint,
     addStoryByRegionId,
     updateStoryById,
-    getStoryById,
     deleteStoryById,
     getDeleteStoryCount,
     deleteStoryByRegionId,

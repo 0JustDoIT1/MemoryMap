@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {appUserState, koreaMapDataState} from 'src/recoil/atom';
@@ -22,7 +21,7 @@ const useKoreaMap = () => {
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
 
   // 지도 색칠된 지역(color & photo) 리스트 가져오기
-  const getColorRegionList = useMemo(() => {
+  const getColorRegionList = () => {
     const result: GetColorRegionList = {};
 
     const colorList = Object.values(koreaMapData).filter(
@@ -56,29 +55,10 @@ const useKoreaMap = () => {
     });
 
     return result;
-  }, [koreaMapData]);
-
-  // 지도 색칠된 지역 list
-  const regionList = useMemo(() => getColorRegionList, [koreaMapData]);
+  };
 
   // 지도 색칠된 지역 list 중 Main Array
-  const regionMain = useMemo(
-    () => Object.keys(getColorRegionList).sort(),
-    [koreaMapData],
-  );
-
-  // type === photo 에 맞는 id 배열로 반환
-  const getTypePhotoToIdArray = (type: 'init' | 'color' | 'photo') => {
-    const arr: string[] = [];
-
-    Object.values(koreaMapData).forEach(value => {
-      if (value.type === type) {
-        arr.push(value.id);
-      }
-    });
-
-    return arr;
-  };
+  const getColorRegionMainList = () => Object.keys(getColorRegionList()).sort();
 
   // 색상 업데이트 시 데이터 반환 (KoreaMapData)
   const updateDataByTypeColor = (id: string, color: string) => {
@@ -241,9 +221,8 @@ const useKoreaMap = () => {
 
   return {
     koreaMapData,
-    regionList,
-    regionMain,
-    getTypePhotoToIdArray,
+    getColorRegionList,
+    getColorRegionMainList,
     updateMapColorById,
     updateMapPhotoById,
     deleteMapDataById,

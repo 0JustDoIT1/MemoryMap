@@ -21,7 +21,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
     maxPointRegion,
   } = useDashboard();
 
-  const percent = (regionCountNumber / koreaMapRegionCount) * 100;
+  const percent = (regionCountNumber() / koreaMapRegionCount) * 100;
 
   return (
     <SafeAreaView
@@ -37,7 +37,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
               <View className="w-full flex-row justify-between items-center my-2">
                 <View className="flex-row items-end">
                   <Text className="text-6xl text-white">
-                    {regionCountNumber}
+                    {regionCountNumber()}
                   </Text>
                   <Text className="text-xl text-white leading-8">
                     /&nbsp;{koreaMapRegionCount}
@@ -67,21 +67,21 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
             <View className="flex items-center mx-6">
               <Text className="text-sm text-brandMain">사진</Text>
               <Text className="text-xl text-gray-500 mt-[0.5px]">
-                {allCountPhotoNum}
+                {allCountPhotoNum()}
               </Text>
             </View>
             <View className="h-5/6 mx-3 border-r-[0.5px] border-gray-400"></View>
             <View className="flex items-center mx-6">
               <Text className="text-sm text-brandMain">색상</Text>
               <Text className="text-xl text-gray-500 mt-[0.5px]">
-                {allCountColorNum}
+                {allCountColorNum()}
               </Text>
             </View>
             <View className="h-5/6 mx-3 border-r-[0.5px] border-gray-400"></View>
             <View className="flex items-center mx-6">
               <Text className="text-sm text-brandMain">스토리</Text>
               <Text className="text-xl text-gray-500 mt-[0.5px]">
-                {allCountStoryNum}
+                {allCountStoryNum()}
               </Text>
             </View>
           </View>

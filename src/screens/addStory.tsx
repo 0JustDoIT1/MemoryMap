@@ -17,7 +17,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getRegionTitleById} from 'src/utils/koreaMap';
+import {getTitleAllByRegionList} from 'src/utils/koreaMap';
 import useRegionCount from 'src/hook/useRegionCount';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusEffect} from '@react-navigation/native';
@@ -35,7 +35,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {koreaMapData, regionMain, updateKoreaMapDataStory} = useKoreaMap();
+  const {getColorRegionMainList, updateKoreaMapDataStory} = useKoreaMap();
   const {
     regionId,
     setRegionId,
@@ -57,6 +57,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
 
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
+  const regionMainList = getColorRegionMainList();
+
   useFocusEffect(
     useCallback(() => {
       setIsFocus(true);
@@ -70,7 +72,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     if (route.params?.regionId) {
       const region = route.params.regionId;
       setRegionId(region);
-      setRegionTitle(getRegionTitleById(koreaMapData, region));
+      setRegionTitle(getTitleAllByRegionList(region));
     }
   }, [route.params]);
 
@@ -129,7 +131,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      {regionMain.length >= 1 ? (
+      {regionMainList.length >= 1 ? (
         <React.Fragment>
           <Pressable className="w-full" onPress={onPressRegion}>
             <TextInput

@@ -100,6 +100,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
   const [appUserData, setAppUserData] = useState<AppUser>(appUser!);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [isFocus, setIsFocus] = useState<boolean>(false);

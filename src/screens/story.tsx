@@ -16,15 +16,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
 import MemoizedAccordion from 'src/components/accordion';
-import {getRegionTitleById} from 'src/utils/koreaMap';
+import {getTitleAllByRegionList} from 'src/utils/koreaMap';
 import CustomActivityIndicator from 'src/components/activityIndicator';
 
 const StoryScreen = ({navigation}: StoryProps) => {
   const {story} = useStory();
-  const {koreaMapData, regionList, regionMain} = useKoreaMap();
+  const {getColorRegionList, getColorRegionMainList} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
 
+  const regionList = getColorRegionList();
+  const regionMainList = getColorRegionMainList();
   const limit = 10;
+
   const [storyList, setStoryList] = useState<StoryData[]>([]);
   const [index, setIndex] = useState<number>(0);
   const [filter, setFilter] = useState<string>('');
@@ -123,7 +126,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
           }>
           <View>
             <Text className="text-white">
-              {getRegionTitleById(koreaMapData, item.regionId)}
+              {getTitleAllByRegionList(item.regionId)}
             </Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
@@ -181,9 +184,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
                   if (filter !== '') onSelectFilter('');
                 }}>
                 <Text className="text-sm text-white mx-1">
-                  {filter === ''
-                    ? '전체'
-                    : getRegionTitleById(koreaMapData, filter)}
+                  {filter === '' ? '전체' : getTitleAllByRegionList(filter)}
                 </Text>
                 {filter !== '' && (
                   <MaterialCommunityIcons
@@ -230,7 +231,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
         contents={
           <View className="w-56 max-h-full">
             <FlatList
-              data={regionMain}
+              data={regionMainList}
               keyExtractor={item => item}
               renderItem={({item}) => (
                 <MemoizedAccordion
