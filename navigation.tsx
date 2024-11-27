@@ -60,11 +60,11 @@ const Main = () => {
         headerTitleAlign: 'center',
         tabBarStyle: {
           backgroundColor: theme.colors.brandMain,
-          height: 80,
+          height: 60,
         },
         tabBarItemStyle: {
-          justifyContent: 'center',
-          paddingTop: 7,
+          height: 60,
+          paddingTop: 10,
         },
         tabBarActiveTintColor: '#ffffff',
         tabBarInactiveTintColor: theme.colors.surfaceVariant,
