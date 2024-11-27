@@ -97,9 +97,9 @@ const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
   };
 
   const onDeleteBackgroundError = (error: any) => {
-    showBottomToast('error', '색칠 제거에 실패했습니다.');
     hideModal();
     handleClosePress();
+    showBottomToast('error', '색칠 제거에 실패했습니다.');
   };
 
   return (
