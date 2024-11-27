@@ -88,8 +88,10 @@ const SignInScreen = ({navigation}: SignInProps) => {
 
           await getDataAndSetRecoil(appUser);
         }
+        onSignInGoogleAuthSuccess();
+      } else {
+        setIsLoading(false);
       }
-      onSignInGoogleAuthSuccess();
     } catch (error) {
       onSignInGoogleAuthError(error);
     }

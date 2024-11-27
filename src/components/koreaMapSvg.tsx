@@ -7,7 +7,7 @@ import MapSheet from './mapSheet';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {StackParamList} from 'src/types/stack';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {KoreaMapData, KoreaRegionData} from 'src/types/koreaMap';
+import {KoreaRegionData} from 'src/types/koreaMap';
 import {regionDataEmpty} from 'src/constants/koreaMapData';
 
 interface KoreaMapSvg {
