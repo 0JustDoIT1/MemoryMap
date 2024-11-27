@@ -2,11 +2,32 @@ import {useRecoilState, useRecoilValue} from 'recoil';
 import {regionCountInit} from 'src/constants/regionCount';
 import {appUserState, regionCountState} from 'src/recoil/atom';
 import {AppRegionCount, RegionCount} from 'src/types/regionCount';
-import {_updateRealtime} from 'src/utils/realtime';
+import {_readRealtime, _updateRealtime} from 'src/utils/realtime';
 
 const useRegionCount = () => {
   const appUser = useRecoilValue(appUserState);
   const [regionCount, setRegionCount] = useRecoilState(regionCountState);
+
+  // 로그인 시 firebase에서 데이터 불러오고 recoil에 세팅
+  const getRegionCountFromFirebase = async (uid: string) => {
+    const regionCount = await _readRealtime(uid, 'count').then(
+      snapshot => snapshot.val()['regionCount'],
+    );
+
+    setRegionCount(regionCount);
+  };
+
+  // 회원가입 시 firebase에 데이터 저장하고 recoil에 세팅
+  const setRegionCountFromFirebase = async (uid: string) => {
+    const appRegionCountData: AppRegionCount = {
+      uid: uid,
+      regionCount: regionCountInit,
+    };
+
+    await _updateRealtime(appRegionCountData, 'count');
+
+    setRegionCount(regionCountInit);
+  };
 
   // 배경 혹은 스토리 업데이트 시 상위 지역 수 카운팅 -> Firebase & Recoil
   const updateRegionCountById = async (
@@ -75,6 +96,9 @@ const useRegionCount = () => {
 
   return {
     regionCount,
+    setRegionCount,
+    getRegionCountFromFirebase,
+    setRegionCountFromFirebase,
     updateRegionCountById,
     deleteRegionCountById,
     resetRegionCount,

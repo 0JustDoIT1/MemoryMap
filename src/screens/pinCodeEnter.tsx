@@ -19,6 +19,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
+import {showBottomToast} from 'src/utils/showToast';
 
 const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
@@ -47,23 +48,26 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
 
   // code와 reCode 값 비교
   const matchPinCode = async () => {
-    const pinCode = await getPinCodeToKeyChain();
-    const codeString = code.join('');
+    try {
+      const pinCode = await getPinCodeToKeyChain();
+      const codeString = code.join('');
 
-    if (pinCode && pinCode === codeString) {
-      if (route.params.route === 'Setting') {
-        await deletePinCodeToKeyChain().then(() => {
+      if (pinCode && pinCode === codeString) {
+        if (route.params.route === 'Setting') {
+          await deletePinCodeToKeyChain();
           setAppPinCode(false);
           navigation.navigate('Main', {screen: route.params.route});
-        });
+        } else {
+          if (route.params.route === 'PinCodeSetting')
+            navigation.replace(route.params.route);
+          else navigation.replace('Main', {screen: route.params.route});
+        }
       } else {
-        if (route.params.route === 'PinCodeSetting')
-          navigation.replace(route.params.route);
-        else navigation.replace('Main', {screen: route.params.route});
+        wobbleScreen();
+        setCode([]);
       }
-    } else {
-      wobbleScreen();
-      setCode([]);
+    } catch (error) {
+      showBottomToast('error', '핀코드 에러');
     }
   };
 
