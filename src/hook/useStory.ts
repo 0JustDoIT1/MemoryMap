@@ -2,8 +2,8 @@ import {useState} from 'react';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {appUserState, storyState} from 'src/recoil/atom';
 import {AppStory, StoryData, Story} from 'src/types/story';
-import {_deleteDoc, _setDoc} from 'src/utils/firestore';
-import {_updateRealtime} from 'src/utils/realtime';
+import {_deleteDoc, _getDoc, _setDoc} from 'src/utils/firestore';
+import {_readRealtime, _updateRealtime} from 'src/utils/realtime';
 import {dateToTimestamp} from 'src/utils/dateFormat';
 
 const useStory = () => {
@@ -18,6 +18,25 @@ const useStory = () => {
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [point, setPoint] = useState<number>(0);
+
+  // 로그인 시 firebase에서 데이터 불러오고 recoil에 세팅
+  const getStoryFromFirebase = async (uid: string) => {
+    const story = await _getDoc(uid).then(res => res?.story);
+
+    setStory(story);
+  };
+
+  // 회원가입 시 firebase에 데이터 저장하고 recoil에 세팅
+  const setStoryFromFirebase = async (uid: string) => {
+    const appStoryInit: AppStory = {
+      uid: uid,
+      story: {},
+    };
+
+    await _setDoc(appStoryInit);
+
+    setStory({});
+  };
 
   // 스토리 추가
   const addStoryByRegionId = async () => {
@@ -164,6 +183,7 @@ const useStory = () => {
 
   return {
     story,
+    setStory,
     regionId,
     setRegionId,
     regionTitle,
@@ -178,6 +198,8 @@ const useStory = () => {
     setSelectedEndDate,
     point,
     setPoint,
+    getStoryFromFirebase,
+    setStoryFromFirebase,
     addStoryByRegionId,
     updateStoryById,
     deleteStoryById,

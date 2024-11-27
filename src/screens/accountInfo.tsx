@@ -43,7 +43,16 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
 
   // 닉네임 수정
   const onUpdateDisplayName = async () => {
-    await onUpdateProfile().then(() => handleClosePress());
+    try {
+      await onUpdateProfile();
+      handleClosePress();
+    } catch (error) {
+      onUpdateDisplayNameError(error);
+    }
+  };
+
+  const onUpdateDisplayNameError = (error: any) => {
+    showBottomToast('error', '닉네임 수정 에러');
   };
 
   return (
@@ -120,9 +129,13 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   const onWithdrawalAccount = async () => {
     setIsLoading(true);
     hideDialog();
-    await onWithdrawal()
-      .then(() => onWithdrawalAccountSuccess())
-      .catch(error => onWithdrawalAccountError(error));
+
+    try {
+      await onWithdrawal();
+      onWithdrawalAccountSuccess();
+    } catch (error) {
+      onWithdrawalAccountError(error);
+    }
   };
 
   const onWithdrawalAccountSuccess = () => {

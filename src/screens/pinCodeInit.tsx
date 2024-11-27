@@ -74,9 +74,12 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
 
   // pincode를 keyChain에 세팅
   const setPinCodeToKeyChain = async (pinCode: string) => {
-    await setSecureValue(KeyChainPinCode, KeyChainPinCode, pinCode)
-      .then(() => setPinCodeToKeyChainSuccess())
-      .catch(error => setPinCodeToKeyChainError(error));
+    try {
+      await setSecureValue(KeyChainPinCode, KeyChainPinCode, pinCode);
+      setPinCodeToKeyChainSuccess();
+    } catch (error) {
+      setPinCodeToKeyChainError(error);
+    }
   };
 
   const setPinCodeToKeyChainSuccess = () => {

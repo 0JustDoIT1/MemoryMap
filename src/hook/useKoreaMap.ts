@@ -7,7 +7,7 @@ import {
   KoreaMapData,
   KoreaRegionData,
 } from 'src/types/koreaMap';
-import {_updateRealtime} from 'src/utils/realtime';
+import {_readRealtime, _updateRealtime} from 'src/utils/realtime';
 import {
   _deleteStorage,
   _deleteAllStorage,
@@ -18,7 +18,29 @@ import {_deleteDoc, _setDoc} from 'src/utils/firestore';
 
 const useKoreaMap = () => {
   const appUser = useRecoilValue(appUserState);
+
   const [koreaMapData, setKoreaMapData] = useRecoilState(koreaMapDataState);
+
+  // 로그인 시 firebase에서 데이터 불러오고 recoil에 세팅
+  const getKoreaMapDataFromFirebase = async (uid: string) => {
+    const koreaMapData = await _readRealtime(uid, 'map').then(
+      snapshot => snapshot.val()['koreaMapData'],
+    );
+
+    setKoreaMapData(koreaMapData);
+  };
+
+  // 회원가입 시 firebase에 데이터 저장하고 recoil에 세팅
+  const setKoreaMapDataFromFirebase = async (uid: string) => {
+    const appKoreaMapData: AppKoreaMapData = {
+      uid: uid,
+      koreaMapData: koreaMapDataInit,
+    };
+
+    await _updateRealtime(appKoreaMapData, 'map');
+
+    setKoreaMapData(koreaMapDataInit);
+  };
 
   // 지도 색칠된 지역(color & photo) 리스트 가져오기
   const getColorRegionList = () => {
@@ -221,6 +243,9 @@ const useKoreaMap = () => {
 
   return {
     koreaMapData,
+    setKoreaMapData,
+    getKoreaMapDataFromFirebase,
+    setKoreaMapDataFromFirebase,
     getColorRegionList,
     getColorRegionMainList,
     updateMapColorById,
