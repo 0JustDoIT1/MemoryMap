@@ -16,7 +16,6 @@ import CustomActivityIndicator from 'src/components/activityIndicator';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Controller, useForm} from 'react-hook-form';
 import CustomHelperText from 'src/components/helperText';
-import {AppUser} from 'src/types/account';
 import {useFocusEffect} from '@react-navigation/native';
 
 interface DisplayNameBottomSheet {
@@ -108,8 +107,6 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
-  const [appUserData, setAppUserData] = useState<AppUser>(appUser!);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [isFocus, setIsFocus] = useState<boolean>(false);
@@ -164,7 +161,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
               <Text>닉네임</Text>
             </View>
             <View className="w-4/5 flex-row justify-end items-center">
-              <Text className="mx-2">{appUserData.displayName}</Text>
+              <Text className="mx-2">{appUser?.displayName}</Text>
               <Pressable onPress={onPressDisplayName}>
                 <MaterialCommunityIcons
                   name="pencil-box-outline"
@@ -179,7 +176,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
               <Text>이메일</Text>
             </View>
             <View className="w-4/5 flex-row justify-end items-center">
-              <Text>{appUserData.email}</Text>
+              <Text>{appUser?.email}</Text>
             </View>
           </View>
           <View className="w-full p-4 flex-row justify-between items-center">
@@ -188,10 +185,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
             </View>
             <View className="w-4/5 flex-row justify-end items-center">
               <Text>
-                {dateToSeoulTime(
-                  appUserData.createdAt,
-                  'YYYY년 MM월 DD일 (ddd)',
-                )}
+                {dateToSeoulTime(appUser?.createdAt, 'YYYY년 MM월 DD일 (ddd)')}
               </Text>
             </View>
           </View>

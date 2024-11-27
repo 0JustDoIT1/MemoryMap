@@ -20,7 +20,6 @@ const SettingScreen = ({navigation}: SettingProps) => {
 
   const {appUser, onSignOut} = useEmailAndPasswordAuth();
   const appPinCode = useRecoilValue(appPinCodeState);
-  const [appUserData, setAppUserData] = useState<AppUser>(appUser!);
 
   // 로그 아웃
   const onSignOutAuth = async () => {
@@ -44,7 +43,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   // 이메일 문의 기능
   const onPressContactUs = async () => {
     const deviceName = await DeviceInfo.getDeviceName();
-    const email = appUserData.email!;
+    const email = appUser?.email!;
     await Linking.openURL(LinkingEmail(deviceName, appVersion, email));
   };
 
@@ -77,8 +76,8 @@ const SettingScreen = ({navigation}: SettingProps) => {
           />
         </View>
         <View className="ml-4">
-          <Text className="text-lg">{appUserData.displayName}</Text>
-          <Text className="text-xs text-gray-500">{appUserData.email}</Text>
+          <Text className="text-lg">{appUser?.displayName}</Text>
+          <Text className="text-xs text-gray-500">{appUser?.email}</Text>
         </View>
       </View>
       <Divider className="w-full bg-black my-1" />

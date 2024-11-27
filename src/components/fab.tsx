@@ -57,6 +57,4 @@ const CustomFAB = ({
   );
 };
 
-const MemoizedCustomFAB = React.memo(CustomFAB);
-
-export default MemoizedCustomFAB;
+export default CustomFAB;

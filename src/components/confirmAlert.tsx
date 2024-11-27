@@ -51,6 +51,4 @@ const CustomConfirmAlert = ({
   );
 };
 
-const MemoizedCustomConfirmAlert = React.memo(CustomConfirmAlert);
-
-export default MemoizedCustomConfirmAlert;
+export default CustomConfirmAlert;

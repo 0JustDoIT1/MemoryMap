@@ -10,11 +10,11 @@ const useRegionCount = () => {
 
   // 로그인 시 firebase에서 데이터 불러오고 recoil에 세팅
   const getRegionCountFromFirebase = async (uid: string) => {
-    const regionCount = await _readRealtime(uid, 'count').then(
+    const result = await _readRealtime(uid, 'count').then(
       snapshot => snapshot.val()['regionCount'],
     );
 
-    setRegionCount(regionCount);
+    setRegionCount(result);
   };
 
   // 회원가입 시 firebase에 데이터 저장하고 recoil에 세팅
