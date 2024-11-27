@@ -44,7 +44,7 @@ export const storyPoint: StoryPoint = {
     point: 1,
     image: point_1,
     color: '#FF4343',
-    text: '끔찍함',
+    text: '최악',
   },
 };
 

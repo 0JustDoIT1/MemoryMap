@@ -21,9 +21,9 @@ const useStory = () => {
 
   // 로그인 시 firebase에서 데이터 불러오고 recoil에 세팅
   const getStoryFromFirebase = async (uid: string) => {
-    const story = await _getDoc(uid).then(res => res?.story);
+    const result = await _getDoc(uid).then(res => res?.story);
 
-    setStory(story);
+    setStory(result);
   };
 
   // 회원가입 시 firebase에 데이터 저장하고 recoil에 세팅

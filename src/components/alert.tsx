@@ -56,6 +56,4 @@ const CustomAlert = ({
   );
 };
 
-const MemoizedCustomAlert = React.memo(CustomAlert);
-
-export default MemoizedCustomAlert;
+export default CustomAlert;

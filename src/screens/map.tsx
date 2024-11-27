@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useRef} from 'react';
+import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
 import {Dimensions} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
@@ -29,7 +29,15 @@ const clamp = (val: number, min: number, max: number) => {
 const MapScreen = ({navigation}: MapProps) => {
   console.log('맵');
 
-  const KoreaMap = lazy(() => import('../components/koreaMapSvg'));
+  const LazyKoreaMapSvg = lazy(
+    async () => await import('../components/koreaMapSvg'),
+  );
+
+  const [showMap, setShowMap] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => setShowMap(true), 1000);
+  }, []);
 
   const viewShotRef = useRef<ViewShot>(null);
 
@@ -142,9 +150,11 @@ const MapScreen = ({navigation}: MapProps) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <Suspense fallback={<CustomActivityIndicator />}>
-              <KoreaMap navigation={navigation} />
-            </Suspense>
+            {showMap && (
+              <Suspense fallback={<CustomActivityIndicator />}>
+                <LazyKoreaMapSvg navigation={navigation} />
+              </Suspense>
+            )}
           </Animated.View>
         </GestureDetector>
       </ViewShot>

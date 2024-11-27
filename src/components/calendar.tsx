@@ -90,6 +90,4 @@ const BrandCalendar = ({
   );
 };
 
-const MemoizedCalendar = React.memo(BrandCalendar);
-
-export default MemoizedCalendar;
+export default BrandCalendar;
