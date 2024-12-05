@@ -1,6 +1,6 @@
 import {getDBConnection} from 'src/database/sqlite';
 import {Story} from 'src/types/story';
-import {deleteDocAll, deleteDocOne, setDoc} from 'src/firebase/firestore';
+import {deleteDocOne, setDoc} from 'src/firebase/firestore';
 import {
   getOneStoryToDB,
   getStoryRegionIdToDB,
@@ -10,14 +10,9 @@ import {
   maxStoryNumToDB,
 } from 'src/database/read';
 import {saveStoryToDB} from 'src/database/create';
-import {deleteAllStoryToDB, deleteOneStoryToDB} from 'src/database/delete';
+import {deleteOneStoryToDB} from 'src/database/delete';
 import {ResultSet} from 'react-native-sqlite-storage';
-import {
-  getColorRegionList,
-  getRegionTitleByList,
-  koreaMapDataToObject,
-} from './koreaMap.util';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {getRegionTitleById} from './koreaMap.util';
 
 // Result data convert Story Type
 const _resultToStory = (data: any) => {
@@ -98,23 +93,19 @@ export const getStoryRegionList = async (uid: string) => {
   const regionIdArray: string[] = [];
   // Get SQLite
   const db = await getDBConnection();
-  await getStoryRegionIdToDB(db, uid).then(res => {
-    for (let i = 0; i < res[0].rows.length; i++) {
-      const regionId = res[0].rows.item(i)['regionId'];
-      regionIdArray.push(regionId);
-    }
-  });
+  const result = await getStoryRegionIdToDB(db, uid);
 
-  // Setting Data
-  const koreaMapDataObject = koreaMapDataToObject(koreaMapDataInit);
+  for (let i = 0; i < result[0].rows.length; i++) {
+    let regionId = result[0].rows.item(i)['regionId'];
+    if (regionId.split('-').length - 1 >= 2)
+      regionId = `${regionId.split('-')[0]}-${regionId.split('-')[1]}`;
 
-  const colorArray = regionIdArray.map(item => koreaMapDataObject[item]);
-  const colorObject = koreaMapDataToObject(colorArray);
+    regionIdArray.push(regionId);
+  }
 
-  const regionList = getColorRegionList(colorObject);
-  const regionMainList = Object.keys(regionList).sort();
+  const mainIdArray = [...new Set(regionIdArray)];
 
-  return {all: regionList, main: regionMainList};
+  return mainIdArray;
 };
 
 // Get Dashboard of Story
@@ -128,7 +119,7 @@ export const getDashboardStory = async (uid: string) => {
   await highestPointStoryRegionToDB(db, uid).then(res => {
     for (let i = 0; i < res[0].rows.length; i++) {
       const item = res[0].rows.item(i);
-      const title = getRegionTitleByList(item['regionId']);
+      const title = getRegionTitleById(item['regionId']);
 
       if (i !== 0 && pointRegion[0].avg > item['avg']) return;
       pointRegion.push({title: title, avg: item['avg']});
@@ -138,7 +129,7 @@ export const getDashboardStory = async (uid: string) => {
   await maxStoryNumToDB(db, uid).then(res => {
     for (let i = 0; i < res[0].rows.length; i++) {
       const item = res[0].rows.item(i);
-      const title = getRegionTitleByList(item['regionId']);
+      const title = getRegionTitleById(item['regionId']);
 
       if (i !== 0 && countRegion[0].count > item['count']) return;
       countRegion.push({title: title, count: item['count']});

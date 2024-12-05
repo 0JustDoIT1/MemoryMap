@@ -13,12 +13,14 @@ import {getAuthToDB} from 'src/database/read';
 import {KoreaMapDataObject} from 'src/types/koreaMap';
 import {koreaMapDataToObject} from './koreaMap.util';
 import {setUidToKoreaMapDataInit} from './koreaMap.db';
+import {dateToFormatString} from './dateFormat';
 
 // Save initial data when SignUp -> SQLite & Firebase
 export const setInitialDataToDB = async (data: FirebaseUser) => {
   // Setting data
   const appUser: User = {
     ...data,
+    createdAt: dateToFormatString(data.createdAt, 'YYYY-MM-DD HH:mm:ss'),
     subscribe: false,
   };
 

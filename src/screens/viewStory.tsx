@@ -15,7 +15,7 @@ import CustomAlert from 'src/components/alert';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {deleteStoryById, getOneStoryById} from 'src/utils/story.db';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
-import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import SkeletonEditStory from 'src/skeleton/skeletonEditStory';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
@@ -95,7 +95,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
                 }).storyPointView
               }>
               <Text className="text-xl text-white">
-                {getRegionTitleByList(data.regionId)}
+                {getRegionTitleById(data.regionId)}
               </Text>
               <Text className="text-sm text-white mt-1">{`${dateToFormatString(
                 data.startDate,
@@ -154,7 +154,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
               onPress={() =>
                 onCaptureAndShare(
                   viewShotRef,
-                  `${getRegionTitleByList(data.regionId)} 여행 스토리`,
+                  `${getRegionTitleById(data.regionId)} 여행 스토리`,
                 )
               }>
               <MaterialCommunityIcons
