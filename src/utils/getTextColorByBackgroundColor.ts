@@ -12,3 +12,8 @@ export const getTextColorByBackgroundColor = (hexColor: string): string => {
   const result = luma < 127.5 ? 'white' : 'black';
   return result; // 글자색
 };
+
+export const getTextColorByMapBackground = (hexColor: string, type: string) => {
+  if (type === 'photo') return 'white';
+  getTextColorByBackgroundColor(hexColor);
+};

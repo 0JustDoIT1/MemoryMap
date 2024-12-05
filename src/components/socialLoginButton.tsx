@@ -1,7 +1,7 @@
 import {GestureResponderEvent, Image} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {useRecoilValue} from 'recoil';
-import {isLoadingState} from 'src/recoil/atom';
+import {isDisabledState} from 'src/recoil/atom';
 import GoogleImage from 'assets/images/google_logo.png';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customStyle} from 'src/style/customStyle';
@@ -23,7 +23,7 @@ const SocialLoginButton = ({
   textColor,
   onPress,
 }: SocialLoginButton) => {
-  const isButtonDisabled = useRecoilValue(isLoadingState);
+  const isDisabled = useRecoilValue(isDisabledState);
   const icon = (type: string) => {
     if (type === 'Google')
       return (
@@ -52,7 +52,7 @@ const SocialLoginButton = ({
       buttonColor={buttonColor}
       textColor={textColor}
       onPress={onPress}
-      disabled={isButtonDisabled}>
+      disabled={isDisabled}>
       <Text
         className="text-sm font-roboto"
         style={customStyle({color: textColor}).socialLoginLabel}>

@@ -2,29 +2,26 @@ import {Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BrandOutlinedButton, FormOutlinedButton} from 'src/components/button';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import useAuth from 'src/hook/useAuth';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import CustomBottomSheet from 'src/components/bottomSheet';
-import MemoizedCustomAlert from 'src/components/alert';
 import useDialog from 'src/hook/useDialog';
 import {AccountInfoProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
-import CustomActivityIndicator from 'src/components/activityIndicator';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Controller, useForm} from 'react-hook-form';
 import CustomHelperText from 'src/components/helperText';
-import {useFocusEffect} from '@react-navigation/native';
+import CustomAlert from 'src/components/alert';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
 }
 
 const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
-  const {appUser, displayName, setDisplayName, onUpdateProfile} =
-    useEmailAndPasswordAuth();
+  const {appUser, displayName, setDisplayName, onUpdateProfile} = useAuth();
 
   useEffect(() => {
     setDisplayName(appUser?.displayName!);
@@ -103,28 +100,15 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {appUser, onWithdrawal, setInitRecoil} = useEmailAndPasswordAuth();
+  const {appUser, onWithdrawal, resetAppUser} = useAuth();
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-
-  useFocusEffect(
-    useCallback(() => {
-      setIsFocus(true);
-
-      return () => setIsFocus(false);
-    }, []),
-  );
 
   // 닉네임 수정을 위한 바텀시트
   const onPressDisplayName = () => handlePresentPress();
 
   // 회원탈퇴
   const onWithdrawalAccount = async () => {
-    setIsLoading(true);
     hideDialog();
 
     try {
@@ -136,12 +120,11 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   };
 
   const onWithdrawalAccountSuccess = () => {
-    setIsLoading(false);
     navigation.navigate('Auth');
   };
 
   const onWithdrawalAccountError = (error: any) => {
-    setInitRecoil();
+    resetAppUser();
     showBottomToast('error', '회원탈퇴 실패');
     navigation.navigate('Auth');
   };
@@ -150,56 +133,50 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      {isLoading ? (
-        <View className="w-full h-full justify-center items-center">
-          <CustomActivityIndicator />
+      <React.Fragment>
+        <View className="w-full p-4 flex-row justify-between items-center">
+          <View className="w-1/5">
+            <Text>닉네임</Text>
+          </View>
+          <View className="w-4/5 flex-row justify-end items-center">
+            <Text className="mx-2">{appUser?.displayName}</Text>
+            <Pressable onPress={onPressDisplayName}>
+              <MaterialCommunityIcons
+                name="pencil-box-outline"
+                size={24}
+                color={customColor.gray}
+              />
+            </Pressable>
+          </View>
         </View>
-      ) : (
-        <React.Fragment>
-          <View className="w-full p-4 flex-row justify-between items-center">
-            <View className="w-1/5">
-              <Text>닉네임</Text>
-            </View>
-            <View className="w-4/5 flex-row justify-end items-center">
-              <Text className="mx-2">{appUser?.displayName}</Text>
-              <Pressable onPress={onPressDisplayName}>
-                <MaterialCommunityIcons
-                  name="pencil-box-outline"
-                  size={24}
-                  color={customColor.gray}
-                />
-              </Pressable>
-            </View>
+        <View className="w-full p-4 flex-row justify-between items-center">
+          <View className="w-1/5">
+            <Text>이메일</Text>
           </View>
-          <View className="w-full p-4 flex-row justify-between items-center">
-            <View className="w-1/5">
-              <Text>이메일</Text>
-            </View>
-            <View className="w-4/5 flex-row justify-end items-center">
-              <Text>{appUser?.email}</Text>
-            </View>
+          <View className="w-4/5 flex-row justify-end items-center">
+            <Text>{appUser?.email}</Text>
           </View>
-          <View className="w-full p-4 flex-row justify-between items-center">
-            <View className="w-1/5">
-              <Text>가입일</Text>
-            </View>
-            <View className="w-4/5 flex-row justify-end items-center">
-              <Text>
-                {dateToSeoulTime(appUser?.createdAt, 'YYYY년 MM월 DD일 (ddd)')}
-              </Text>
-            </View>
+        </View>
+        <View className="w-full p-4 flex-row justify-between items-center">
+          <View className="w-1/5">
+            <Text>가입일</Text>
           </View>
-          <View className="w-full p-4 mt-auto">
-            <BrandOutlinedButton
-              classes="w-full py-1"
-              text="회원 탈퇴"
-              onPress={showDialog}
-            />
+          <View className="w-4/5 flex-row justify-end items-center">
+            <Text>
+              {dateToSeoulTime(appUser?.createdAt, 'YYYY년 MM월 DD일 (ddd)')}
+            </Text>
           </View>
-        </React.Fragment>
-      )}
+        </View>
+        <View className="w-full p-4 mt-auto">
+          <BrandOutlinedButton
+            classes="w-full py-1"
+            text="회원 탈퇴"
+            onPress={showDialog}
+          />
+        </View>
+      </React.Fragment>
 
-      <MemoizedCustomAlert
+      <CustomAlert
         visible={visibleDialog}
         title="정말 탈퇴하시겠어요?"
         description={`탈퇴 버튼 선택 시, 계정과\n모든 데이터가 삭제되며 복구되지 않습니다.`}
@@ -207,16 +184,14 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
         buttonOnPress={onWithdrawalAccount}
         hideAlert={hideDialog}
       />
-      {isFocus && (
-        <CustomBottomSheet
-          ref={bottomSheetModalRef}
-          snap="35%"
-          title="닉네임 수정"
-          contents={
-            <DisplayNameBottomSheet handleClosePress={handleClosePress} />
-          }
-        />
-      )}
+      <CustomBottomSheet
+        ref={bottomSheetModalRef}
+        snap="35%"
+        title="닉네임 수정"
+        contents={
+          <DisplayNameBottomSheet handleClosePress={handleClosePress} />
+        }
+      />
     </SafeAreaView>
   );
 };

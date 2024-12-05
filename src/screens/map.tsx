@@ -1,5 +1,5 @@
-import React, {lazy, Suspense, useEffect, useRef, useState} from 'react';
-import {Dimensions} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Dimensions, Pressable, View} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -7,46 +7,46 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ViewShot from 'react-native-view-shot';
-import useFAB from 'src/hook/useFAB';
 import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
-import useKoreaMap from 'src/hook/useKoreaMap';
-import MemoizedCustomAlert from 'src/components/alert';
-import MemoizedCustomFAB from 'src/components/fab';
-import {onCaptureMap} from 'src/utils/screenshot';
-import CustomActivityIndicator from 'src/components/activityIndicator';
-import useRegionCount from 'src/hook/useRegionCount';
-import useStory from 'src/hook/useStory';
+import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
+import useAuth from 'src/hook/useAuth';
+import {resetMapData} from 'src/utils/koreaMap.db';
+import CustomAlert from 'src/components/alert';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAppTheme} from 'src/style/paperTheme';
+import KoreaMapSvg from '../components/koreaMapSvg';
 
+// Screen width & height
 const {width, height} = Dimensions.get('screen');
 
+// Limit a value within a specified range.
 const clamp = (val: number, min: number, max: number) => {
   return Math.min(Math.max(val, min), max);
 };
 
 const MapScreen = ({navigation}: MapProps) => {
   console.log('맵');
+  const theme = useAppTheme();
 
-  const LazyKoreaMapSvg = lazy(
-    async () => await import('../components/koreaMapSvg'),
-  );
+  const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {appUser} = useAuth();
 
-  const [showMap, setShowMap] = useState<boolean>(false);
-
-  useEffect(() => {
-    setTimeout(() => setShowMap(true), 1000);
-  }, []);
-
+  const uid = appUser?.uid!;
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {open, onChangeFAB} = useFAB();
-  const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {resetMapData} = useKoreaMap();
-  const {resetStory} = useStory();
-  const {resetRegionCount} = useRegionCount();
+  // Access the client
+  const queryClient = useQueryClient();
 
+  // React-Query Mutation
+  const resetMapMutation = useMutation({
+    mutationFn: (uid: string) => resetMapData(uid),
+  });
+
+  // Setting map animation value
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
   const prevTranslationX = useSharedValue(0);
@@ -54,6 +54,7 @@ const MapScreen = ({navigation}: MapProps) => {
   const scale = useSharedValue(1);
   const startScale = useSharedValue(0);
 
+  // Pinch Animation(move)
   const pinch = Gesture.Pinch()
     .onStart(() => {
       startScale.value = scale.value;
@@ -74,6 +75,7 @@ const MapScreen = ({navigation}: MapProps) => {
     })
     .runOnJS(true);
 
+  // Pan Animation(scale)
   const pan = Gesture.Pan()
     .averageTouches(true)
     .onStart(() => {
@@ -108,6 +110,7 @@ const MapScreen = ({navigation}: MapProps) => {
     })
     .runOnJS(true);
 
+  // Animation Style
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [
       {scale: scale.value},
@@ -116,14 +119,18 @@ const MapScreen = ({navigation}: MapProps) => {
     ],
   }));
 
+  // Pinch + Pan Animation
   const composed = Gesture.Simultaneous(pinch, pan);
 
-  // 지도 정보 초기화
+  // Reset Map & RegionCount
   const onResetMap = async () => {
     try {
-      await resetMapData();
-      await resetStory();
-      await resetRegionCount();
+      await resetMapMutation.mutateAsync(uid);
+
+      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['KoreaMapDataColor', uid],
+      });
 
       onResetMapSuccess();
     } catch (error) {
@@ -140,38 +147,60 @@ const MapScreen = ({navigation}: MapProps) => {
     showBottomToast('error', '지도 초기화에 실패했습니다.');
   };
 
+  // Header button
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Pressable className="px-6" onPress={() => showDialog()}>
+          <MaterialCommunityIcons
+            name="refresh"
+            color={theme.colors.darkGray}
+            size={28}
+          />
+        </Pressable>
+      ),
+      headerRight: () => (
+        <React.Fragment>
+          <Pressable
+            className="pr-4"
+            onPress={() => onCaptureAndSave(viewShotRef)}>
+            <MaterialCommunityIcons
+              name="camera-outline"
+              color={theme.colors.darkGray}
+              size={28}
+            />
+          </Pressable>
+          <Pressable
+            className="pr-6"
+            onPress={() => onCaptureAndShare(viewShotRef, '나만의 여행지도')}>
+            <MaterialCommunityIcons
+              name="share-variant"
+              color={theme.colors.darkGray}
+              size={26}
+            />
+          </Pressable>
+        </React.Fragment>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white"
-      edges={['top', 'bottom', 'left', 'right']}>
+      className="flex-1 justify-start items-center bg-white"
+      edges={['left', 'right']}>
       <ViewShot
         ref={viewShotRef}
         style={customStyle().mapViewShot}
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            {showMap && (
-              <Suspense fallback={<CustomActivityIndicator />}>
-                <LazyKoreaMapSvg navigation={navigation} />
-              </Suspense>
-            )}
+            <KoreaMapSvg uid={uid} />
           </Animated.View>
         </GestureDetector>
       </ViewShot>
-      <MemoizedCustomFAB
-        open={open}
-        onChangeFAB={onChangeFAB}
-        icon1="camera"
-        label1="지도 저장"
-        onPress1={() => onCaptureMap(viewShotRef)}
-        icon2="refresh"
-        label2="지도 초기화"
-        onPress2={showDialog}
-      />
-      <MemoizedCustomAlert
+      <CustomAlert
         visible={visibleDialog}
         title="지도를 초기화하시겠습니까?"
-        description="스토리도 전부 삭제됩니다."
         buttonText="초기화"
         buttonOnPress={onResetMap}
         hideAlert={hideDialog}

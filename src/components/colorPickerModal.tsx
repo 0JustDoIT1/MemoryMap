@@ -1,50 +1,74 @@
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {returnedResults} from 'reanimated-color-picker';
 import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
-import useKoreaMap from 'src/hook/useKoreaMap';
-import useRegionCount from 'src/hook/useRegionCount';
 import {customStyle} from 'src/style/customStyle';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
-import {getRegionTitle} from 'src/utils/koreaMap';
+import {updateMapColorById} from 'src/utils/koreaMap.db';
+import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface ColorPickerModal {
-  data: KoreaRegionData;
+  uid: string;
+  regionData: KoreaRegionData;
   hideModal: () => void;
   handleClosePress: () => void;
 }
 
 const ColorPickerModal = ({
-  data,
+  uid,
+  regionData,
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {updateMapColorById} = useKoreaMap();
-  const {updateRegionCountById} = useRegionCount();
-
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
-    data.type === 'color' ? data.background : '#ffffff',
+    regionData.type === 'color' ? regionData.background : '#ffffff',
   );
 
+  // Access the client
+  const queryClient = useQueryClient();
+
+  // React-Query Mutation
+  const updateMapMutation = useMutation({
+    mutationFn: ({
+      uid,
+      data,
+      color,
+    }: {
+      uid: string;
+      data: KoreaRegionData;
+      color: string;
+    }) => updateMapColorById(uid, data, color),
+  });
+
+  // Change ColorPicker mode(swatch <=> pannel)
   const onChangeMode = () => {
     setMode(!mode);
   };
 
+  // Select Color
   const onColorSelect = (color: returnedResults) => {
     setHex(color.hex);
   };
 
-  // 색깔로 지도 색칠
+  // Color the map with hex
   const onSettingColor = async () => {
-    const count = data.type === 'init' ? 1 : 0;
     try {
-      await updateMapColorById(data.id, hex);
-      await updateRegionCountById(data.id, 'color', count);
+      await updateMapMutation.mutateAsync({
+        uid: uid,
+        data: regionData,
+        color: hex,
+      });
+
+      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['KoreaMapDataColor', uid],
+      });
 
       onSettingColorSuccess();
     } catch (error) {
@@ -53,7 +77,7 @@ const ColorPickerModal = ({
   };
 
   const onSettingColorSuccess = () => {
-    const text = `${getRegionTitle(data)} 색칠 완료!`;
+    const text = `${getRegionTitle(regionData)} 색칠 완료!`;
 
     hideModal();
     handleClosePress();
@@ -61,6 +85,7 @@ const ColorPickerModal = ({
   };
 
   const onSettingColorError = (error: any) => {
+    console.log('에러', error);
     showBottomToast('error', '색칠에 실패했습니다.');
   };
 
@@ -69,12 +94,16 @@ const ColorPickerModal = ({
       <Text className="text-lg mb-4">색상 선택</Text>
       {mode ? (
         <CustomColorPannel
-          value={data.type === 'color' ? data.background : '#ffffff'}
+          value={
+            regionData.type === 'color' ? regionData.background : '#ffffff'
+          }
           onChange={onColorSelect}
         />
       ) : (
         <CustomColorSwatch
-          value={data.type === 'color' ? data.background : '#ffffff'}
+          value={
+            regionData.type === 'color' ? regionData.background : '#ffffff'
+          }
           onChange={onColorSelect}
         />
       )}
@@ -83,13 +112,14 @@ const ColorPickerModal = ({
           className="w-1/2 text-center py-1"
           style={
             customStyle({
-              bgColor: data.type === 'color' ? data.background : '#ffffff',
+              bgColor:
+                regionData.type === 'color' ? regionData.background : '#ffffff',
               color: getTextColorByBackgroundColor(
-                data.type === 'color' ? data.background : '#ffffff',
+                regionData.type === 'color' ? regionData.background : '#ffffff',
               ),
             }).colorPickerPreview
           }>
-          {data.type === 'color' ? data.background : '#ffffff'}
+          {regionData.type === 'color' ? regionData.background : '#ffffff'}
         </Text>
         <Text
           className="w-1/2 text-center py-1"

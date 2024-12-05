@@ -4,7 +4,7 @@ import {Text, TextInput} from 'react-native-paper';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import useAuth from 'src/hook/useAuth';
 import {customColor} from 'src/style/customColor';
 import {SignUp} from 'src/types/account';
 import {useState} from 'react';
@@ -12,8 +12,9 @@ import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
 import {useSetRecoilState} from 'recoil';
-import {isLoadingState} from 'src/recoil/atom';
+import {isDisabledState} from 'src/recoil/atom';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {setInitialDataToDB} from 'src/utils/auth';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
@@ -35,31 +36,34 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     },
   });
 
-  const setIsLoading = useSetRecoilState(isLoadingState);
+  const setIsDisabled = useSetRecoilState(isDisabledState);
   const {
+    setAppUser,
     setEmail,
     setPassword,
     setDisplayName,
     onSignUpEmailAndPassword,
-    setDataAndSetRecoil,
-  } = useEmailAndPasswordAuth();
+  } = useAuth();
 
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
   const [passwordCheckVisible, setPasswordCheckVisible] =
     useState<boolean>(true);
 
-  // 이메일 회원가입
+  // Email SignUp
   const onSignUpAccount = async (data: SignUp) => {
     Keyboard.dismiss();
-    setIsLoading(true);
+    setIsDisabled(true);
+
+    // Check Password
     if (data.password !== data.passwordCheck) {
-      setIsLoading(false);
+      setIsDisabled(false);
       return setError('passwordCheck', {type: 'validate'});
     }
 
     try {
       const result = await onSignUpEmailAndPassword();
-      await setDataAndSetRecoil(result);
+      const finalUser = await setInitialDataToDB(result);
+      setAppUser(finalUser);
 
       onSignUpSuccess();
     } catch (error) {
@@ -69,12 +73,12 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
 
   const onSignUpSuccess = async () => {
     close();
-    setIsLoading(false);
+    setIsDisabled(false);
     navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignUpError = (error: any) => {
-    setIsLoading(false);
+    setIsDisabled(false);
     if (error.code === 'auth/email-already-in-use') {
       return showBottomToast('error', '이미 사용 중인 이메일입니다.');
     } else if (error.code === 'auth/invalid-email') {

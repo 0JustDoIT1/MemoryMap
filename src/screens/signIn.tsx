@@ -4,26 +4,29 @@ import {Divider, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
 import {SignInProps} from 'src/types/stack';
-import SocialLoginButton from 'src/components/socialLogin';
+import SocialLoginButton from 'src/components/socialLoginButton';
 import EmailSignIn from '../components/emailSignIn';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import EmailSignUp from '../components/emailSignUp';
 import ResetPassword from '../components/resetPassword';
-import {useRecoilState} from 'recoil';
-import {isLoadingState} from 'src/recoil/atom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {appUserState, isDisabledState} from 'src/recoil/atom';
 import {showBottomToast} from 'src/utils/showToast';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {AppUser} from 'src/types/account';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
 import CustomActivityIndicator from 'src/components/activityIndicator';
 import {TermPrivacyUrl, TermServiceUrl} from 'src/constants/linking';
 import {WebClientId} from '@env';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {onSignInGoogle} from 'src/utils/googleAuth';
-import {useFocusEffect} from '@react-navigation/native';
+import {
+  syncDataToSQLite,
+  onSignInGoogle,
+  setInitialDataToDB,
+  getInitialDataToDB,
+} from 'src/utils/auth';
+import {FirebaseUser} from 'src/types/account';
 
 const SignInScreen = ({navigation}: SignInProps) => {
   // Bottom Sheet Ref
@@ -36,7 +39,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {getDataAndSetRecoil, setDataAndSetRecoil} = useEmailAndPasswordAuth();
+  const setAppUser = useSetRecoilState(appUserState);
 
   const [bottomSheetSnap, setBottomSheetSnap] = useState<string>('40%');
   const [bottomSheetTitle, setBottomSheetTitle] = useState<string | null>(null);
@@ -45,17 +48,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
   >(null);
   const [bottomSheetContents, setBottomSheetContents] =
     useState<React.JSX.Element | null>(null);
-
-  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-
-  useFocusEffect(
-    useCallback(() => {
-      setIsFocus(true);
-
-      return () => setIsFocus(false);
-    }, []),
-  );
+  const [isDisabled, setIsDisabled] = useRecoilState(isDisabledState);
 
   // Google Sign In Configure
   useEffect(() => {
@@ -65,32 +58,39 @@ const SignInScreen = ({navigation}: SignInProps) => {
     return googleSigninConfigure;
   }, []);
 
-  // 구글 로그인
+  // Google SignIn
   const onSignInGoogleAuth = async () => {
     try {
-      setIsLoading(true);
+      setIsDisabled(true);
       const result = await onSignInGoogle();
       if (result) {
-        // 신규 회원
-        if (result.isNew) await setDataAndSetRecoil(result.appUser);
-        // 기존 회원
-        else {
-          const name = result.appUser.displayName
-            ? result.appUser.displayName
-            : result.appUser.email.split('@')[0];
+        // Setting DisplayName
+        const displayName = result.appUser.displayName
+          ? result.appUser.displayName
+          : result.appUser.email.split('@')[0];
 
-          const appUser: AppUser = {
-            uid: result.appUser.uid,
-            email: result.appUser.email,
-            displayName: name,
-            createdAt: result.appUser.createdAt,
-          };
+        const newUser: FirebaseUser = {
+          uid: result.appUser.uid,
+          email: result.appUser.email,
+          displayName: displayName,
+          createdAt: result.appUser.createdAt,
+        };
 
-          await getDataAndSetRecoil(appUser);
+        // New User
+        if (result.isNew) {
+          const finalUser = await setInitialDataToDB(newUser);
+          setAppUser(finalUser);
         }
+        // Existing User
+        else {
+          await syncDataToSQLite(newUser);
+          const finalUser = await getInitialDataToDB(newUser);
+          setAppUser(finalUser);
+        }
+
         onSignInGoogleAuthSuccess();
       } else {
-        setIsLoading(false);
+        setIsDisabled(false);
       }
     } catch (error) {
       onSignInGoogleAuthError(error);
@@ -98,33 +98,34 @@ const SignInScreen = ({navigation}: SignInProps) => {
   };
 
   const onSignInGoogleAuthSuccess = () => {
-    setIsLoading(false);
+    setIsDisabled(false);
     navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignInGoogleAuthError = (error: any) => {
-    setIsLoading(false);
+    setIsDisabled(false);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      // user cancelled the login flow
+      // User cancelled the login flow
       return;
     } else if (error.code === statusCodes.IN_PROGRESS) {
-      // operation sign in is in progress already
+      // Operation sign in is in progress already
       return showBottomToast(
         'error',
         '이미 로그인 진행 중입니다. 잠시만 기다려주세요.',
       );
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      // play services not available
+      // Play services not available
       return showBottomToast(
         'error',
         '구글 플레이 서비스를 이용할 수 없거나 업데이트가 필요합니다.',
       );
     } else {
-      // some other error
+      // Some other error
       return showBottomToast('error', '구글 로그인에 실패했습니다.');
     }
   };
 
+  // Terms Link
   const LinkingTerm = (url: string) => {
     Linking.openURL(url);
   };
@@ -137,7 +138,7 @@ const SignInScreen = ({navigation}: SignInProps) => {
         <Image source={require('/assets/images/MemoryMap_Main.png')} />
         <Text className="text-gray-800">나만의 추억지도 만들기</Text>
       </View>
-      {isLoading ? (
+      {isDisabled ? (
         <CustomActivityIndicator />
       ) : (
         <View className="w-full h-1/3 flex justify-center items-center px-4">
@@ -214,15 +215,13 @@ const SignInScreen = ({navigation}: SignInProps) => {
         </View>
       )}
 
-      {isFocus && (
-        <CustomBottomSheet
-          ref={bottomSheetModalRef}
-          snap={bottomSheetSnap}
-          title={bottomSheetTitle!}
-          description={bottomSheetDescription!}
-          contents={bottomSheetContents!}
-        />
-      )}
+      <CustomBottomSheet
+        ref={bottomSheetModalRef}
+        snap={bottomSheetSnap}
+        title={bottomSheetTitle!}
+        description={bottomSheetDescription!}
+        contents={bottomSheetContents!}
+      />
     </SafeAreaView>
   );
 };

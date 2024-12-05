@@ -1,29 +1,30 @@
 import {useEffect, useState} from 'react';
 import {useSetRecoilState} from 'recoil';
 import useDialog from 'src/hook/useDialog';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import useAuth from 'src/hook/useAuth';
 import {appPinCodeState} from 'src/recoil/atom';
 import {RootProps} from 'src/types/stack';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {AppUser} from 'src/types/account';
 import {KeyChainPinCode} from '@env';
 import {getSecureValue} from 'src/utils/keyChain';
-import MemoizedCustomConfirmAlert from 'src/components/confirmAlert';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
+import CustomConfirmAlert from 'src/components/confirmAlert';
+import {getInitialDataToDB, syncDataToSQLite} from 'src/utils/auth';
+import {FirebaseUser} from 'src/types/account';
 
 const RootScreen = ({navigation}: RootProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
 
-  const {appUser, setAppUser, getDataAndSetRecoil} = useEmailAndPasswordAuth();
+  const {appUser, setAppUser} = useAuth();
 
   const [initializing, setInitializing] = useState(true);
   const {visibleDialog, showDialog} = useDialog();
 
   let authFlag = true;
 
-  // 어플 버전 체크 & 기존 로그인 여부 확인 한번만 실행하게끔
+  // App version check & Check existing SignIn status
   useEffect(() => {
     // const check = checkVersion()
     checkVersion().then(check => {
@@ -52,53 +53,65 @@ const RootScreen = ({navigation}: RootProps) => {
     return true;
   };
 
-  // 기존 로그인 여부 확인
+  // Check existing SignIn status
   const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
     if (authFlag) {
+      // Existing SignIn
       if (user) {
         console.log('구독: 유저있음');
-        const appUserInit: AppUser = {
+        const newUser: FirebaseUser = {
           uid: user.uid!,
           email: user.email!,
           displayName: user.displayName!,
           createdAt: user.metadata.creationTime!,
         };
-        setAppUser(appUserInit);
-        authFlag = false;
+        // Firebase 상에서 두번 실행이 강제되기 때문에 authFlag를 통해 한번만 실행되게끔 강제
+        await syncDataToSQLite(newUser);
+        const finalUser = await getInitialDataToDB(newUser);
+        setAppUser(finalUser);
+        authFlag = false; // Check existing SignIn complete
+
+        // No Existing SignIn
       } else {
         console.log('구독: 유저없음');
         setAppUser(null);
+        authFlag = false; // Check existing SignIn complete
       }
-      authFlag = false;
-      setInitializing(false);
     }
+    setInitializing(false); // Check existing SignIn complete
   };
 
-  // KeyChain에 있는 pincode 여부 가져오기
+  // Get pincode in KeyChain
   const getPinCodeToKeyChainCheck = async () => {
     return await getSecureValue(KeyChainPinCode).then(value => value?.username);
   };
 
-  // 로그인 성공 시 (appUser가 있을 경우) 데이터 세팅 및 잠금화면 확인
+  // Data Setting & Check pincode when AppUser Exists
   const settingData = async () => {
     if (appUser) {
-      await getDataAndSetRecoil(appUser);
+      // Check pincode settings
       const pinCodeLock = await getPinCodeToKeyChainCheck();
       if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
         setAppPinCode(true);
-        return navigation.replace('PinCodeEnter', {route: 'Map'});
+        // Pincode, navigate to the Lock screen
+        navigation.replace('PinCodeEnter', {route: 'Map'});
       } else {
-        return navigation.replace('Main', {screen: 'Map'});
+        // No pincode, navigate to the Main screen
+        navigation.replace('Main', {screen: 'Map'});
       }
     }
   };
 
   useEffect(() => {
+    // Need to check existing SignIn
     if (initializing) return;
 
+    // Check existing SignIn & AppUser exists
     if (appUser) {
+      // Setting Data
       settingData();
     } else {
+      // Navigate to SignIn screen
       navigation.replace('Auth');
     }
   }, [appUser, initializing]);
@@ -109,7 +122,7 @@ const RootScreen = ({navigation}: RootProps) => {
         className="w-screen h-screen"
         source={require('assets/images/root_screen.png')}
       />
-      <MemoizedCustomConfirmAlert
+      <CustomConfirmAlert
         visible={visibleDialog}
         title="최신 버전 업데이트"
         description={`최신 버전 앱으로 업데이트를 위해\n스토어로 이동합니다.`}

@@ -1,21 +1,21 @@
 import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
-import {KoreaMapData} from 'src/types/koreaMap';
-import {getSvgDataById, getTypePhotoToIdArray} from 'src/utils/koreaMap';
+import {KoreaMapDataObject} from 'src/types/koreaMap';
+import {getIdArrayByType, getSvgDataById} from 'src/utils/koreaMap.util';
 
 interface SvgPattern {
-  data: KoreaMapData;
+  data: KoreaMapDataObject;
 }
 
 const SvgPattern = ({data}: SvgPattern) => {
   console.log('패턴');
 
-  const idArray = getTypePhotoToIdArray(data, 'photo');
+  const imageArray = getIdArrayByType(data, 'photo');
 
   return (
     <Defs>
-      {idArray.length >= 1 &&
-        idArray.map(item => (
+      {imageArray.length >= 1 &&
+        imageArray.map(item => (
           <Pattern
             key={item}
             id={item}
@@ -27,10 +27,6 @@ const SvgPattern = ({data}: SvgPattern) => {
               height={getSvgDataById(item).svgStyle?.height}
               preserveAspectRatio="xMidyMid slice"
               href={data[item].imageUrl}
-              translateX={data[item].imageStyle?.x}
-              translateY={data[item].imageStyle?.y}
-              scale={data[item].imageStyle?.scale}
-              rotation={data[item].imageStyle?.rotation}
             />
           </Pattern>
         ))}

@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Pressable, View} from 'react-native';
 import {Divider, Switch, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
+import useAuth from 'src/hook/useAuth';
 import {SettingProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,12 +13,11 @@ import {LinkingEmail, TermListUrl} from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
-import {AppUser} from 'src/types/account';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const appVersion = DeviceInfo.getVersion();
 
-  const {appUser, onSignOut} = useEmailAndPasswordAuth();
+  const {appUser, onSignOut} = useAuth();
   const appPinCode = useRecoilValue(appPinCodeState);
 
   // 로그 아웃
@@ -67,7 +66,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
       edges={['top', 'bottom', 'left', 'right']}>
-      <View className="w-full flex-row justify-start items-center py-3 px-6">
+      <View className="w-full flex-row justify-start items-center pb-3 px-6">
         <View className="bg-gray-500 rounded-xl">
           <MaterialCommunityIcons
             name="account"

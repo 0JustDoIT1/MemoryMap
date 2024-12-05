@@ -1,118 +1,118 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {FlatList, Image, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/notFound';
-import {storyPoint} from 'src/constants/storyPoint';
-import useKoreaMap from 'src/hook/useKoreaMap';
-import useStory from 'src/hook/useStory';
+import {storyPoint} from 'src/constants/point';
 import {customStyle} from 'src/style/customStyle';
 import {StoryProps} from 'src/types/stack';
-import {StoryData} from 'src/types/story';
-import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import {sorting} from 'src/utils/sort';
+import {dateToFormatString} from 'src/utils/dateFormat';
 import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
-import MemoizedAccordion from 'src/components/accordion';
-import {getTitleAllByRegionList} from 'src/utils/koreaMap';
 import CustomActivityIndicator from 'src/components/activityIndicator';
+import useAuth from 'src/hook/useAuth';
+import CustomAccordion from 'src/components/accordion';
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from '@tanstack/react-query';
+import {Story} from 'src/types/story';
+import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
+import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+
+interface Pagination {
+  limit: number;
+  filter: string;
+  order: string;
+  sort: string;
+}
 
 const StoryScreen = ({navigation}: StoryProps) => {
-  const {story} = useStory();
-  const {getColorRegionList, getColorRegionMainList} = useKoreaMap();
   const {visible, showModal, hideModal} = useModal();
+  const {appUser} = useAuth();
+  const uid = appUser?.uid!;
 
-  const regionList = getColorRegionList();
-  const regionMainList = getColorRegionMainList();
-  const limit = 10;
+  const initPagination = {
+    limit: 10,
+    filter: '',
+    order: 'createdAt',
+    sort: 'DESC',
+  };
 
-  const [storyList, setStoryList] = useState<StoryData[]>([]);
-  const [index, setIndex] = useState<number>(0);
-  const [filter, setFilter] = useState<string>('');
-  const [sort, setSort] = useState<number>(-1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [pagination, setPagination] = useState<Pagination>(initPagination);
 
-  // Refresh List when focus screen
-  useEffect(() => {
-    const focusScreen = navigation.addListener('focus', () => {
-      onRefreshList();
+  // React-Query Query
+  const {
+    isSuccess: isStorySuccess,
+    isLoading: isStoryLoading,
+    hasNextPage,
+    fetchNextPage,
+    data: storyData,
+  } = useInfiniteQuery({
+    queryKey: ['story', pagination],
+    queryFn: ({pageParam}) => getStoryPagination(uid, pageParam, pagination),
+    initialPageParam: 1,
+    getNextPageParam: lastPage => {
+      const nextPage = lastPage.currentPage + 1;
+      return nextPage > lastPage.totalPage ? null : nextPage;
+    },
+    placeholderData: keepPreviousData,
+  });
+  const {isSuccess: isListSuccess, data: listData} = useQuery({
+    queryKey: ['storyRegionList', uid],
+    queryFn: () => getStoryRegionList(uid),
+    enabled: !!uid,
+    retry: false,
+  });
+
+  // Loading story data when flatlist reach end
+  const onLoadMoreStory = () => {
+    if (hasNextPage) fetchNextPage();
+  };
+
+  // Story data sorting
+  const onPressOrderBy = () => {
+    if (!storyData || storyData.pages[0].totalCount === 0) return;
+    setPagination({
+      ...initPagination,
+      filter: pagination.filter,
+      order: pagination.order,
+      sort: pagination.sort === 'ASC' ? 'DESC' : 'ASC',
     });
-    return focusScreen;
-  }, [navigation]);
-
-  // Setting All Story List By Filter
-  const settingAllStoryList = () => {
-    if (story) {
-      let newArr: StoryData[];
-      const storyArr = Object.values(story);
-
-      if (filter === '') newArr = storyArr;
-      else newArr = storyArr.filter(item => item.regionId === filter);
-
-      newArr = newArr.sort((a, b) => sorting(a, b, sort, 'createdAt'));
-
-      setStoryList(storyList.concat(newArr!.splice(index, index + limit)));
-      setIndex(index + limit);
-    } else {
-      setStoryList([]);
-    }
-    setRefreshing(false);
   };
 
-  // Init Story List Setting
-  useEffect(() => {
-    if (index === 0 && storyList.length === 0 && isLoading) {
-      settingAllStoryList();
-      setIsLoading(false);
-    }
-  }, [index, storyList, isLoading]);
-
-  // 리스트 옵션 초기화
-  const onRefreshList = () => {
-    setIndex(0);
-    setStoryList([]);
-    setIsLoading(true);
-    setRefreshing(true);
-  };
-
-  // 필터 버튼 클릭
+  // Press filter button
   const onPressFilter = () => {
-    if (!story || JSON.stringify(story) === '{}') return;
+    if (!storyData || storyData.pages[0].totalCount === 0) return;
     showModal();
   };
 
-  // 리스트 정렬
-  const onSortList = () => {
-    if (!story || JSON.stringify(story) === '{}') return;
-    setSort(sort * -1);
-    onRefreshList();
-  };
-
-  // 리스트 필터에서 지역선택
+  // Story data filtering
   const onSelectFilter = (value: string) => {
     hideModal();
-    setFilter(value);
-    onRefreshList();
+    setPagination({
+      ...pagination,
+      filter: value,
+      order: pagination.order,
+      sort: pagination.sort,
+    });
   };
 
   // Redering Component
-  const renderItem = (item: StoryData) => {
+  const renderItem = (item: Story) => {
+    const title = getRegionTitleByList(item.regionId);
     const startDateString = dateToFormatString(
-      timestampToDate(item.startDate),
+      item.startDate,
       'YYYY.MM.DD (ddd)',
     );
-    const endDateString = dateToFormatString(
-      timestampToDate(item.endDate),
-      'YYYY.MM.DD (ddd)',
-    );
-
+    const endDateString = dateToFormatString(item.endDate, 'YYYY.MM.DD (ddd)');
     const point = storyPoint[item.point];
 
     const onDetailList = () => {
-      navigation.navigate('ViewStory', {storyId: item._id});
+      navigation.navigate('ViewStory', {storyId: item.id});
     };
 
     return (
@@ -125,9 +125,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
             }).storyPointView
           }>
           <View>
-            <Text className="text-white">
-              {getTitleAllByRegionList(item.regionId)}
-            </Text>
+            <Text className="text-white">{title}</Text>
             <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
           </View>
           <View className="w-[40px] h-[40px] bg-white rounded-full shadow-sm shadow-black">
@@ -148,9 +146,8 @@ const StoryScreen = ({navigation}: StoryProps) => {
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white pb-6 px-6"
       edges={['bottom', 'left', 'right']}>
-      {isLoading ? (
-        <CustomActivityIndicator />
-      ) : (
+      {isStoryLoading && <CustomActivityIndicator />}
+      {isStorySuccess && (
         <View className="w-full h-full">
           <View className="w-full h-[8%] flex-row justify-between items-center">
             <View className="flex-row">
@@ -166,9 +163,9 @@ const StoryScreen = ({navigation}: StoryProps) => {
               </Pressable>
               <Pressable
                 className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={onSortList}>
+                onPress={onPressOrderBy}>
                 <Text className="text-sm text-brandMain mx-1">
-                  {sort === -1 ? '최신순' : '날짜순'}
+                  {pagination.sort === 'DESC' ? '최신순' : '날짜순'}
                 </Text>
                 <MaterialCommunityIcons
                   name="filter-variant"
@@ -181,12 +178,14 @@ const StoryScreen = ({navigation}: StoryProps) => {
               <Pressable
                 className="flex-row justify-between items-center p-2 bg-brandLight rounded-md"
                 onPress={() => {
-                  if (filter !== '') onSelectFilter('');
+                  if (pagination.filter !== '') onSelectFilter('');
                 }}>
                 <Text className="text-sm text-white mx-1">
-                  {filter === '' ? '전체' : getTitleAllByRegionList(filter)}
+                  {pagination.filter === ''
+                    ? '전체'
+                    : getRegionTitleByList(pagination.filter)}
                 </Text>
-                {filter !== '' && (
+                {pagination.filter !== '' && (
                   <MaterialCommunityIcons
                     name="window-close"
                     size={15}
@@ -196,16 +195,15 @@ const StoryScreen = ({navigation}: StoryProps) => {
               </Pressable>
             </View>
           </View>
-          {storyList.length >= 1 ? (
+          {storyData && storyData.pages[0].totalCount >= 1 ? (
             <FlatList
-              className="w-full h-[90%]"
+              className="w-full h-[90%] mt-1"
               contentContainerStyle={customStyle().storyFlatListContainer}
-              data={storyList}
-              keyExtractor={item => item.createdAt?.toString()!}
-              onEndReached={settingAllStoryList}
-              onEndReachedThreshold={0.5}
+              data={storyData?.pages.map(page => page.doc).flat()}
+              keyExtractor={item => item.createdAt}
+              onEndReached={onLoadMoreStory}
+              onEndReachedThreshold={0.7}
               renderItem={({item}) => renderItem(item)}
-              refreshing={refreshing}
               showsHorizontalScrollIndicator={false}
             />
           ) : (
@@ -224,27 +222,28 @@ const StoryScreen = ({navigation}: StoryProps) => {
           )}
         </View>
       )}
-
-      <CustomModal
-        visible={visible}
-        hideModal={hideModal}
-        contents={
-          <View className="w-56 max-h-full">
-            <FlatList
-              data={regionMainList}
-              keyExtractor={item => item}
-              renderItem={({item}) => (
-                <MemoizedAccordion
-                  title={item}
-                  item={regionList}
-                  onSelect={onSelectFilter}
-                />
-              )}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        }
-      />
+      {isListSuccess && (
+        <CustomModal
+          visible={visible}
+          hideModal={hideModal}
+          contents={
+            <View className="w-56 max-h-full">
+              <FlatList
+                data={listData.main}
+                keyExtractor={item => item}
+                renderItem={({item}) => (
+                  <CustomAccordion
+                    title={item}
+                    item={listData.all}
+                    onSelect={onSelectFilter}
+                  />
+                )}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };

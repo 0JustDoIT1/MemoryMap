@@ -1,17 +1,15 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useKoreaMap from 'src/hook/useKoreaMap';
-import MemoizedAccordion from 'src/components/accordion';
 import {SelectRegionProps} from 'src/types/stack';
+import CustomAccordion from 'src/components/accordion';
 
-const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
-  const {getColorRegionList, getColorRegionMainList} = useKoreaMap();
-
-  const regionList = getColorRegionList();
-  const regionMainList = getColorRegionMainList();
+const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
+  const regionList = route.params.regionList;
+  const regionMainList = route.params.regionMainList;
 
   const onSelectRegion = (value: string) => {
+    navigation.pop();
     navigation.navigate('AddStory', {regionId: value});
   };
 
@@ -24,7 +22,7 @@ const SelectRegionScreen = ({navigation}: SelectRegionProps) => {
         data={regionMainList}
         keyExtractor={item => item}
         renderItem={({item}) => (
-          <MemoizedAccordion
+          <CustomAccordion
             title={item}
             item={regionList}
             onSelect={onSelectRegion}

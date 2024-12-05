@@ -1,25 +1,19 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import BootSplash from 'react-native-bootsplash';
 
 import {StackParamList} from 'src/types/stack';
 
-import MapScreen from 'src/screens/map';
 import SignInScreen from 'src/screens/signIn';
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
 import RootScreen from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
-import CropImageScreen from 'src/screens/cropImage';
 import {Pressable} from 'react-native';
 import EditStoryScreen from 'src/screens/editStory';
-import {launchImageLibrary} from 'react-native-image-picker';
 import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
@@ -27,6 +21,8 @@ import AccountInfoScreen from 'src/screens/accountInfo';
 import PinCodeSettingScreen from 'src/screens/pinCodeInit';
 import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
 import AddStoryScreen from 'src/screens/addStory';
+import {lazy, Suspense} from 'react';
+import CustomActivityIndicatorScreen from 'src/components/activityIndicatorScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -47,6 +43,8 @@ const Auth = () => {
 const Main = () => {
   const theme = useAppTheme();
 
+  const LazyMapScreen = lazy(() => import('./src/screens/map'));
+
   return (
     <Tab.Navigator
       initialRouteName="Map"
@@ -59,22 +57,22 @@ const Main = () => {
         },
         headerTitleAlign: 'center',
         tabBarStyle: {
-          backgroundColor: theme.colors.brandMain,
+          backgroundColor: theme.colors.white,
           height: 60,
+          elevation: 2,
         },
         tabBarItemStyle: {
           height: 60,
           paddingTop: 10,
         },
-        tabBarActiveTintColor: '#ffffff',
-        tabBarInactiveTintColor: theme.colors.surfaceVariant,
+        tabBarActiveTintColor: theme.colors.brandMain,
+        tabBarInactiveTintColor: theme.colors.darkGray,
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: false,
         animation: 'shift',
       }}>
       <Tab.Screen
         name="Map"
-        component={MapScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'map' : 'map-outline';
@@ -83,8 +81,13 @@ const Main = () => {
             );
           },
           headerTitle: '여행지도',
-        }}
-      />
+        }}>
+        {props => (
+          <Suspense fallback={<CustomActivityIndicatorScreen />}>
+            <LazyMapScreen {...props} />
+          </Suspense>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Story"
         component={StoryScreen}
@@ -97,14 +100,14 @@ const Main = () => {
           },
           headerRight: () => (
             <Pressable
-              className="px-4"
+              className="px-6"
               onPress={() => {
                 navigation.navigate('AddStory', {});
               }}>
               <MaterialCommunityIcons
                 name="pencil-box-outline"
-                size={24}
-                color="#000000"
+                size={28}
+                color={theme.colors.darkGray}
               />
             </Pressable>
           ),
@@ -144,25 +147,6 @@ const Main = () => {
 const Navigation = () => {
   const theme = useAppTheme();
 
-  const onReImagePicker = async (
-    navigation: NativeStackNavigationProp<
-      StackParamList,
-      'CropImage',
-      undefined
-    >,
-  ) => {
-    await launchImageLibrary({
-      maxWidth: 250,
-      maxHeight: 250,
-      mediaType: 'photo',
-      quality: 0.7,
-    }).then(async res => {
-      if (res.assets) {
-        navigation.setParams({image: res.assets[0] as string});
-      }
-    });
-  };
-
   return (
     <NavigationContainer
       onReady={() => {
@@ -177,32 +161,6 @@ const Navigation = () => {
         <Stack.Screen name="Root" component={RootScreen} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen
-          name="CropImage"
-          component={CropImageScreen}
-          options={({navigation, route}) => ({
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#000000',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
-            headerTitle: route.params.title,
-            headerBackButtonMenuEnabled: true,
-            headerRight: () => (
-              <Pressable
-                className="px-4"
-                onPress={() => onReImagePicker(navigation)}>
-                <MaterialCommunityIcons
-                  name="refresh"
-                  size={24}
-                  color="#000000"
-                />
-              </Pressable>
-            ),
-          })}
-        />
         <Stack.Screen
           name="AddStory"
           component={AddStoryScreen}
