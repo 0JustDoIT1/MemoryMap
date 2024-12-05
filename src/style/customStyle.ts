@@ -60,12 +60,6 @@ export const customStyle = (props?: CustomStyle) =>
       width: '100%',
       height: '100%',
     },
-    mapBottomSheetPhotoIcon: {
-      color: customColor.white,
-    },
-    mapBottomSheetIcon: {
-      color: customColor.black,
-    },
     mapBottomSheetCircle: {
       backgroundColor: props?.bgColor,
     },
@@ -177,5 +171,16 @@ export const customStyle = (props?: CustomStyle) =>
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: customColor.brandLight,
+    },
+    blurScreen: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+    },
+    blurViewShot: {
+      width: '100%',
+      height: '100%',
     },
   });

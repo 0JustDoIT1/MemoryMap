@@ -1,4 +1,4 @@
-import {timestampToDate} from './dateFormat';
+import {dateTypeToDate} from './dateFormat';
 
 export const sorting = (a: any, b: any, sort: number, option?: string) => {
   let newA;
@@ -6,8 +6,8 @@ export const sorting = (a: any, b: any, sort: number, option?: string) => {
 
   if (option) {
     if (option === 'createdAt') {
-      newA = timestampToDate(a[option]).getTime();
-      newB = timestampToDate(b[option]).getTime();
+      newA = dateTypeToDate(a[option]);
+      newB = dateTypeToDate(b[option]);
     } else {
       newA = a[option];
       newB = b[option];

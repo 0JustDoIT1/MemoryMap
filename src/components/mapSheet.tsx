@@ -8,30 +8,30 @@ import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import {BrandContainedButton, BrandOutlinedButton} from './button';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {MapProps, StackParamList} from 'src/types/stack';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useModal from 'src/hook/useModal';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import CustomModal from './modal';
-import ColorPickerModal from 'src/screens/colorPickerModal';
+import ColorPickerModal from 'src/components/colorPickerModal';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
-import useKoreaMap from 'src/hook/useKoreaMap';
-import MemoizedCustomAlert from './alert';
-import {getDataToBottomSheet, getRegionTitle} from 'src/utils/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import useRegionCount from 'src/hook/useRegionCount';
-import useStory from 'src/hook/useStory';
 import {KoreaRegionData} from 'src/types/koreaMap';
+import {getRegionTitle, getSvgDataById} from 'src/utils/koreaMap.util';
+import CustomAlert from './alert';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {deleteMapDataById, updateMapPhotoById} from 'src/utils/koreaMap.db';
+import ImagePicker from 'react-native-image-crop-picker';
+import ZoomImage from './zoomImage';
+import {useAppTheme} from 'src/style/paperTheme';
 
-interface MapSheet extends Omit<MapProps, 'route'> {
-  navigation: NativeStackNavigationProp<StackParamList, 'Map'>;
+interface MapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
-  data: KoreaRegionData | null;
+  uid: string;
+  regionData: KoreaRegionData;
 }
 
-const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
+const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
+  const theme = useAppTheme();
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['30%', '40%'], []);
 
@@ -46,40 +46,103 @@ const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
 
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {deleteMapDataById} = useKoreaMap();
-  const {deleteRegionCountById} = useRegionCount();
-  const {getDeleteStoryCount, deleteStoryByRegionId} = useStory();
 
-  const regionData = getDataToBottomSheet(data!.id);
+  const [zoom, setZoom] = useState<boolean>(false);
 
-  // 사진 선택
+  // Access the client
+  const queryClient = useQueryClient();
+
+  // React-Query Mutation
+  const deleteMapMutation = useMutation({
+    mutationFn: ({uid, data}: {uid: string; data: KoreaRegionData}) =>
+      deleteMapDataById(uid, data),
+  });
+  const updateMapMutation = useMutation({
+    mutationFn: ({
+      uid,
+      data,
+      uri,
+      imageStyle,
+    }: {
+      uid: string;
+      data: KoreaRegionData;
+      uri: string;
+      imageStyle: {width: number; height: number};
+    }) => updateMapPhotoById(uid, data, uri, imageStyle),
+  });
+
+  // KoreaMapData tag list
+  const tagList =
+    regionData.title === regionData.main
+      ? []
+      : [regionData.main, regionData.title];
+
+  // Select Image
   const onImagePicker = async () => {
-    await launchImageLibrary({
-      maxWidth: 250,
-      maxHeight: 250,
-      mediaType: 'photo',
-      quality: 0.7,
-    }).then(res => {
-      if (res.assets) {
-        handleClosePress();
-        navigation.navigate('CropImage', {
-          id: data!.id,
-          title: regionData!.title,
-          image: res.assets[0].uri!,
-        });
-      }
-    });
+    try {
+      const svgData = getSvgDataById(regionData.id);
+      const cropW = svgData.svgStyle?.width! * 3;
+      const cropH = svgData.svgStyle?.height! * 3;
+
+      const cropImage = await ImagePicker.openPicker({
+        width: cropW,
+        height: cropH,
+        cropping: true,
+        mediaType: 'photo',
+        // freeStyleCropEnabled: true,
+        compressImageQuality: 0.8,
+        cropperToolbarTitle: getRegionTitle(regionData),
+      });
+      await onUploadPhoto(cropImage.path, cropImage.width, cropImage.height);
+    } catch (error) {
+      return;
+    }
   };
 
-  // 배경 제거
+  // Upload photo to map
+  const onUploadPhoto = async (path: string, width: number, height: number) => {
+    try {
+      await updateMapMutation.mutateAsync({
+        uid: uid,
+        data: regionData,
+        uri: path,
+        imageStyle: {width: width, height: height},
+      });
+
+      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['KoreaMapDataColor', uid],
+      });
+
+      onUploadPhotoSuccess();
+    } catch (error) {
+      onUploadPhotoError(error);
+    }
+  };
+
+  const onUploadPhotoSuccess = () => {
+    const text = `${getRegionTitle(regionData)} 사진 추가!`;
+
+    handleClosePress();
+    showBottomToast('success', text);
+  };
+
+  const onUploadPhotoError = (error: any) => {
+    showBottomToast('error', '사진 넣기에 실패했습니다.');
+  };
+
+  // Delete map background
   const onDeleteBackground = async () => {
     try {
-      const deleteColorNum = -1;
-      const deleteStoryNum = getDeleteStoryCount(data!.id);
+      await deleteMapMutation.mutateAsync({
+        uid: uid,
+        data: regionData,
+      });
 
-      await deleteMapDataById(data!.id);
-      await deleteRegionCountById(data!.id, deleteColorNum, deleteStoryNum);
-      await deleteStoryByRegionId(data!.id);
+      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['KoreaMapDataColor', uid],
+      });
 
       onDeleteBackgroundSuccess();
     } catch (error) {
@@ -88,7 +151,7 @@ const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
   };
 
   const onDeleteBackgroundSuccess = () => {
-    const text = `${getRegionTitle(data!)} 색칠 제거!`;
+    const text = `${getRegionTitle(regionData)} 색칠 제거!`;
 
     hideDialog();
     hideModal();
@@ -110,76 +173,84 @@ const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}>
         <BottomSheetView className="flex-1 items-center">
-          {regionData && (
-            <View className="flex justify-center items-center w-full py-6 px-8">
-              <View className="flex-row justify-between items-center w-full mb-2">
-                <View className="flex-row justify-start items-center">
-                  <Text className="text-xl text-black">
-                    {regionData?.title}
-                  </Text>
-                  {data && data.type === 'photo' && (
-                    <View className="w-5 h-5 mx-2 rounded-full flex justify-center items-center bg-brandDark">
+          <View className="flex justify-center items-center w-full py-6 px-8">
+            <View className="flex-row justify-between items-center w-full mb-2">
+              <View className="flex-row justify-start items-center">
+                {regionData && regionData.type === 'photo' && (
+                  <React.Fragment>
+                    <View className="w-5 h-5 mr-2 mb-[2] rounded-full flex justify-center items-center bg-brandMain">
                       <MaterialCommunityIcons
                         name="file-image-outline"
-                        size={15}
-                        style={customStyle().mapBottomSheetPhotoIcon}
+                        size={17}
+                        color={theme.colors.white}
                       />
                     </View>
-                  )}
-                  {data && data.type === 'color' && (
-                    <View
-                      className="w-5 h-5 mx-2 rounded-full"
-                      style={
-                        customStyle({bgColor: data?.background})
-                          .mapBottomSheetCircle
-                      }></View>
-                  )}
-                  {data && data.type !== 'init' && (
-                    <Pressable onPress={showDialog}>
-                      <MaterialCommunityIcons
-                        name="trash-can-outline"
-                        size={20}
-                        style={customStyle().mapBottomSheetIcon}
-                      />
-                    </Pressable>
-                  )}
-                </View>
-                <Pressable onPress={handleClosePress}>
-                  <MaterialCommunityIcons
-                    name="window-close"
-                    size={32}
-                    style={customStyle().mapBottomSheetIcon}
+                  </React.Fragment>
+                )}
+                {regionData && regionData.type === 'color' && (
+                  <View
+                    className="w-5 h-5 mr-2 mb-[2] rounded-full"
+                    style={
+                      customStyle({bgColor: regionData.background})
+                        .mapBottomSheetCircle
+                    }
                   />
-                </Pressable>
-              </View>
-              <View className="w-full flex-row justify-start items-center mb-8">
-                {regionData?.tagList.length > 0 &&
-                  regionData?.tagList.map(item => (
-                    <Text
-                      key={item}
-                      className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                      {item}
-                    </Text>
-                  ))}
-                {data && data.type !== 'init' && (
-                  <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
-                    # 스토리 {data.story}건
-                  </Text>
+                )}
+                <Text className="text-xl text-black">{regionData.title}</Text>
+
+                {regionData && regionData.type === 'photo' && (
+                  <Pressable
+                    className="ml-2 mb-[2]"
+                    onPress={() => setZoom(true)}>
+                    <MaterialCommunityIcons
+                      name="magnify-plus-outline"
+                      size={22}
+                      color={theme.colors.darkGray}
+                    />
+                  </Pressable>
+                )}
+                {regionData && regionData.type !== 'init' && (
+                  <Pressable className="ml-2 mb-[2]" onPress={showDialog}>
+                    <MaterialCommunityIcons
+                      name="trash-can-outline"
+                      size={22}
+                      color={theme.colors.darkGray}
+                    />
+                  </Pressable>
                 )}
               </View>
-              <View className="w-full pb-4">
-                <BrandContainedButton
-                  text="사진 넣기"
-                  onPress={onImagePicker}
+              <Pressable onPress={handleClosePress}>
+                <MaterialCommunityIcons
+                  name="window-close"
+                  size={32}
+                  color={theme.colors.black}
                 />
-                <BrandOutlinedButton
-                  text="색칠 하기"
-                  classes="mt-1"
-                  onPress={showModal}
-                />
-              </View>
+              </Pressable>
             </View>
-          )}
+            <View className="w-full flex-row justify-start items-center mb-8">
+              {tagList.length > 0 &&
+                tagList.map(item => (
+                  <Text
+                    key={item}
+                    className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
+                    {item}
+                  </Text>
+                ))}
+              {regionData && regionData.type !== 'init' && (
+                <Text className="py-1 px-2 mr-1 text-xs text-outline text-center border border-outline rounded-xl">
+                  # 스토리 {regionData.story}건
+                </Text>
+              )}
+            </View>
+            <View className="w-full pb-4">
+              <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
+              <BrandOutlinedButton
+                text="색칠 하기"
+                classes="mt-1"
+                onPress={showModal}
+              />
+            </View>
+          </View>
         </BottomSheetView>
       </BottomSheetModal>
       <CustomModal
@@ -187,20 +258,21 @@ const MapSheet = ({navigation, mapSheetModalRef, data}: MapSheet) => {
         hideModal={hideModal}
         contents={
           <ColorPickerModal
-            data={data!}
+            uid={uid}
+            regionData={regionData}
             hideModal={hideModal}
             handleClosePress={handleClosePress}
           />
         }
       />
-      <MemoizedCustomAlert
+      <CustomAlert
         visible={visibleDialog}
         title="배경을 제거하시겠습니까?"
-        description="해당 지역 스토리도 전부 삭제됩니다."
         buttonText="삭제"
         buttonOnPress={onDeleteBackground}
         hideAlert={hideDialog}
       />
+      {zoom && <ZoomImage data={regionData} setZoom={setZoom} />}
     </React.Fragment>
   );
 };

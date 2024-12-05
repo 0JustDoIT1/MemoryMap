@@ -11,6 +11,7 @@ module.exports = {
         brandLight: '#60C9EE',
         brandMain: '#24B4E7',
         brandDark: '#1E9AC6',
+        darkGray: '#484848',
         success: '#22bb33',
         error: '#FF2424',
         info: '#5bc0de',

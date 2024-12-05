@@ -5,11 +5,12 @@ import {TextInput} from 'react-native-paper';
 import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
-import {isLoadingState} from 'src/recoil/atom';
+import useAuth from 'src/hook/useAuth';
+import {appUserState, isDisabledState} from 'src/recoil/atom';
 import {customColor} from 'src/style/customColor';
-import {Account} from 'src/types/account';
+import {SignIn} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
+import {getInitialDataToDB, syncDataToSQLite} from 'src/utils/auth';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface EmailSignIn extends Omit<SignInProps, 'route'> {
@@ -30,22 +31,26 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
     },
   });
 
-  const setIsLoading = useSetRecoilState(isLoadingState);
-  const {setEmail, setPassword, onSignInEmailAndPassword, getDataAndSetRecoil} =
-    useEmailAndPasswordAuth();
+  const setAppUser = useSetRecoilState(appUserState);
+  const setIsDisabled = useSetRecoilState(isDisabledState);
+  const {setEmail, setPassword, onSignInEmailAndPassword} = useAuth();
 
-  // 이메일 로그인
-  const onSignInAccount = async (data: Account) => {
+  // Email SignIn
+  const onSignInAccount = async (data: SignIn) => {
     Keyboard.dismiss();
-    setIsLoading(true);
+    setIsDisabled(true);
+
+    // Check email & password
     if (!data.email || !data.password) {
-      setIsLoading(false);
+      setIsDisabled(false);
       return setError('password', {type: 'custom'});
     }
 
     try {
-      const result = await onSignInEmailAndPassword();
-      await getDataAndSetRecoil(result);
+      const newUser = await onSignInEmailAndPassword();
+      await syncDataToSQLite(newUser);
+      const finalUser = await getInitialDataToDB(newUser);
+      setAppUser(finalUser);
 
       onSignInSuccess();
     } catch (error) {
@@ -55,12 +60,12 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
 
   const onSignInSuccess = async () => {
     close();
-    setIsLoading(false);
+    setIsDisabled(false);
     navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignInError = (error: any) => {
-    setIsLoading(false);
+    setIsDisabled(false);
     return showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
   };
 

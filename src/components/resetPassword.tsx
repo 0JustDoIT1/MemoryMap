@@ -5,8 +5,8 @@ import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
-import useEmailAndPasswordAuth from 'src/hook/useEmailAndPasswordAuth';
-import {isLoadingState} from 'src/recoil/atom';
+import useAuth from 'src/hook/useAuth';
+import {isDisabledState} from 'src/recoil/atom';
 import {customColor} from 'src/style/customColor';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -15,8 +15,8 @@ interface ResetPassword {
 }
 
 const ResetPassword = ({close}: ResetPassword) => {
-  const setIsLoading = useSetRecoilState(isLoadingState);
-  const {setEmail, onSendPasswordResetEmail} = useEmailAndPasswordAuth();
+  const setIsDisabled = useSetRecoilState(isDisabledState);
+  const {setEmail, onSendPasswordResetEmail} = useAuth();
 
   const {
     control,
@@ -28,21 +28,25 @@ const ResetPassword = ({close}: ResetPassword) => {
     },
   });
 
+  // Send password reset mail
   const onSendResetPassword = async (data: {email: string}) => {
-    setIsLoading(true);
-    await onSendPasswordResetEmail()
-      .then(res => onSendResetPasswordSuccess())
-      .catch(error => onSendResetPasswordError(error));
+    setIsDisabled(true);
+    try {
+      await onSendPasswordResetEmail();
+      onSendResetPasswordSuccess();
+    } catch (error) {
+      onSendResetPasswordError(error);
+    }
   };
 
   const onSendResetPasswordSuccess = () => {
     close();
-    setIsLoading(false);
+    setIsDisabled(false);
     showBottomToast('success', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
   };
 
   const onSendResetPasswordError = (error: any) => {
-    setIsLoading(false);
+    setIsDisabled(false);
     if (error.code === 'auth/too-many-requests') {
       showBottomToast(
         'error',

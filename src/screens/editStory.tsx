@@ -1,25 +1,23 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Image, Keyboard, Pressable, View} from 'react-native';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
 import {EditStoryProps} from 'src/types/stack';
 import CustomBottomSheet from 'src/components/bottomSheet';
-import MemoizedCalendar from 'src/components/calendar';
 import {BrandDynamicButton} from 'src/components/button';
-import {dateToFormatString, timestampToDate} from 'src/utils/dateFormat';
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
-import {storyPointArray} from 'src/constants/storyPoint';
-import {customStyle} from 'src/style/customStyle';
-import {_setDoc} from 'src/utils/firestore';
+import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
+import {storyPointArray} from 'src/constants/point';
 import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
-import {StoryData} from 'src/types/story';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {useFocusEffect} from '@react-navigation/native';
-import {getTitleAllByRegionList} from 'src/utils/koreaMap';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import BrandCalendar from 'src/components/calendar';
+import useAuth from 'src/hook/useAuth';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import SelectPoint from 'src/components/selectPoint';
+import {Story} from 'src/types/story';
+import {addStoryByRegionId} from 'src/utils/story.db';
+import {getRegionTitleByList} from 'src/utils/koreaMap.util';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -32,8 +30,11 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
+  const {appUser} = useAuth();
+  const uid = appUser?.uid!;
+  const story = route.params.story;
+
   const {
-    story,
     regionId,
     setRegionId,
     regionTitle,
@@ -48,61 +49,57 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     setSelectedEndDate,
     point,
     setPoint,
-    updateStoryById,
-  } = useStory();
+    settingStoryData,
+  } = useStory(uid);
 
-  const [id, setId] = useState<string>('');
-  const [isFocus, setIsFocus] = useState<boolean>(false);
+  // Access the client
+  const queryClient = useQueryClient();
 
-  useFocusEffect(
-    useCallback(() => {
-      setIsFocus(true);
+  // React-Query Mutation
+  const editStoryMutation = useMutation({
+    mutationFn: (data: Story) => addStoryByRegionId(data),
+  });
 
-      return () => setIsFocus(false);
-    }, []),
-  );
-
-  // 지역 id에 맞게 title 설정
+  // Set state to region id
   useEffect(() => {
-    if (route.params.storyId) {
-      const storyData: StoryData = story![route.params.storyId];
-      setId(storyData._id);
-      setRegionId(storyData.regionId);
-      setRegionTitle(getTitleAllByRegionList(storyData.regionId));
-      setTitle(storyData.title);
-      setContents(storyData.contents);
-      setSelectedStartDate(timestampToDate(storyData.startDate));
-      setSelectedEndDate(timestampToDate(storyData.endDate));
-      setPoint(storyData.point);
+    if (route.params.story) {
+      setRegionId(story.regionId);
+      setRegionTitle(getRegionTitleByList(story.regionId));
+      setTitle(story.title);
+      setContents(story.contents);
+      setSelectedStartDate(dateTypeToDate(story.startDate));
+      setSelectedEndDate(dateTypeToDate(story.endDate));
+      setPoint(story.point);
     }
-  }, [route.params.storyId]);
+  }, [route.params.story]);
 
-  // 날짜 선택 시 bottomSheet open
+  // DateRangePicker bottomsheet open
   const onPressDate = () => {
     Keyboard.dismiss();
     handlePresentPress();
   };
 
-  // 점수 선택에 따라 크기 변화
-  const animatedStyle = (num: number) =>
-    useAnimatedStyle(() => {
-      return {
-        transform: [{scale: num === point ? withTiming(1.3) : withTiming(1)}],
-        elevation: 1,
-      };
-    }, [point]);
-
-  // 날짜 선택
+  // Select Date(start & end)
   const onDatePicker = (startDate: Date, endDate: Date) => {
     setSelectedStartDate(startDate);
     setSelectedEndDate(endDate);
     handleClosePress();
   };
 
-  // 스토리 수정
+  // Edit Story
   const onUpdateStory = async () => {
     try {
-      await updateStoryById(id);
+      const newStory = settingStoryData(true, story);
+      await editStoryMutation.mutateAsync(newStory);
+
+      await queryClient.invalidateQueries({queryKey: ['story']});
+      await queryClient.invalidateQueries({
+        queryKey: ['viewStory', route.params.story.id],
+      });
+      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['storyRegionList', uid],
+      });
 
       onUpdateStorySuccess();
     } catch (error) {
@@ -113,8 +110,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const onUpdateStorySuccess = () => {
     const text = `해당 스토리를 수정했습니다.`;
 
-    navigation.goBack();
     showBottomToast('success', text);
+    navigation.goBack();
   };
 
   const onUpdateStoryError = (error: any) => {
@@ -185,23 +182,12 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
         <View className="w-full mt-4 flex-row justify-between items-center">
           {storyPointArray.map(item => {
             return (
-              <AnimatedPressable
+              <SelectPoint
                 key={item.point}
-                className="flex items-center"
-                style={animatedStyle(item.point)}
-                onPress={() => {
-                  Keyboard.dismiss();
-                  setPoint(item.point);
-                }}>
-                <View className="w-[50px] h-[50px] bg-white rounded-full shadow-sm shadow-black">
-                  <Image style={{width: 50, height: 50}} source={item.image} />
-                </View>
-                <Text
-                  className="mt-1"
-                  style={customStyle({color: item.color}).storyPointIconText}>
-                  {item.text}
-                </Text>
-              </AnimatedPressable>
+                item={item}
+                point={point}
+                setPoint={setPoint}
+              />
             );
           })}
         </View>
@@ -222,20 +208,18 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
           onPress={onUpdateStory}
         />
       </View>
-      {isFocus && (
-        <CustomBottomSheet
-          ref={bottomSheetModalRef}
-          snap="60%"
-          contents={
-            <MemoizedCalendar
-              selectedStartDate={selectedStartDate!}
-              selectedEndDate={selectedEndDate!}
-              onDatePicker={onDatePicker}
-              close={handleClosePress}
-            />
-          }
-        />
-      )}
+      <CustomBottomSheet
+        ref={bottomSheetModalRef}
+        snap="60%"
+        contents={
+          <BrandCalendar
+            selectedStartDate={selectedStartDate!}
+            selectedEndDate={selectedEndDate!}
+            onDatePicker={onDatePicker}
+            close={handleClosePress}
+          />
+        }
+      />
     </SafeAreaView>
   );
 };
