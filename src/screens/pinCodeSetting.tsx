@@ -8,7 +8,6 @@ import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PinCodeNumber from 'src/components/pinCodeNumber';
 import {useEffect, useState} from 'react';
-import {showBottomToast} from 'src/utils/showToast';
 import {setSecureValue} from 'src/utils/keyChain';
 import {KeyChainPinCode} from '@env';
 import Animated, {
@@ -21,7 +20,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
 
-const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
+const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
 
   const pinCodeArray = [
@@ -85,13 +84,11 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
   const setPinCodeToKeyChainSuccess = () => {
     setAppPinCode(true);
     navigation.goBack();
-    showBottomToast('success', '잠금화면을 설정했습니다.');
   };
 
   const setPinCodeToKeyChainError = (error: any) => {
     setAppPinCode(false);
     navigation.goBack();
-    showBottomToast('error', '잠금화면 설정에 실패했습니다.');
   };
 
   // 틀렸을 경우, 화면 흔들림 설정
@@ -178,4 +175,4 @@ const PinCodeInitScreen = ({navigation}: PinCodeSettingProps) => {
   );
 };
 
-export default PinCodeInitScreen;
+export default PinCodeSettingScreen;

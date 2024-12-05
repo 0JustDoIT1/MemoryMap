@@ -37,8 +37,8 @@ const CustomProgressBar = ({
     percent - 4 < 0
       ? {marginRight: 'auto'}
       : percent - 4 > 90
-      ? {marginLeft: 'auto'}
-      : {marginLeft: `${percent - 4}%`};
+        ? {marginLeft: 'auto'}
+        : {marginLeft: `${percent - 4}%`};
 
   const progress = useSharedValue(0);
 
@@ -69,7 +69,6 @@ const CustomProgressBar = ({
       <View
         style={
           customStyle({
-            width: '100%',
             bgColor: bgColor,
           }).progressBar
         }>

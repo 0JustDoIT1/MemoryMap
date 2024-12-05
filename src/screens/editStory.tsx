@@ -8,7 +8,6 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import {BrandDynamicButton} from 'src/components/button';
 import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
 import {storyPointArray} from 'src/constants/point';
-import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/calendar';
@@ -98,24 +97,17 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
       });
       await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
       await queryClient.invalidateQueries({
-        queryKey: ['storyRegionList', uid],
+        queryKey: ['story', uid],
       });
 
       onUpdateStorySuccess();
     } catch (error) {
-      onUpdateStoryError(error);
+      return;
     }
   };
 
   const onUpdateStorySuccess = () => {
-    const text = `해당 스토리를 수정했습니다.`;
-
-    showBottomToast('success', text);
     navigation.goBack();
-  };
-
-  const onUpdateStoryError = (error: any) => {
-    showBottomToast('error', '스토리 저장에 실패했습니다.');
   };
 
   return (

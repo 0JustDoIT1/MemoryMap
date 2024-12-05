@@ -7,7 +7,6 @@ import {customStyle} from 'src/style/customStyle';
 import {ViewStoryProps} from 'src/types/stack';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import useDialog from 'src/hook/useDialog';
-import {showBottomToast} from 'src/utils/showToast';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,6 +16,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {deleteStoryById, getOneStoryById} from 'src/utils/story.db';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
 import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import SkeletonEditStory from 'src/skeleton/skeletonEditStory';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
@@ -31,7 +31,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const queryClient = useQueryClient();
 
   // React-Query Query
-  const {isSuccess, data} = useQuery({
+  const {isSuccess, isLoading, isError, data} = useQuery({
     queryKey: ['viewStory', storyId],
     queryFn: () => getOneStoryById(storyId),
     enabled: !!uid,
@@ -61,29 +61,26 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
         await queryClient.invalidateQueries({queryKey: ['story']});
         await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
         await queryClient.invalidateQueries({
-          queryKey: ['storyRegionList', uid],
+          queryKey: ['story', uid],
         });
 
         onDeleteStorySuccess();
       }
     } catch (error) {
-      onDeleteStoryError(error);
+      return;
     }
   };
 
   const onDeleteStorySuccess = () => {
-    showBottomToast('info', '해당 스토리를 삭제했습니다.');
     navigation.goBack();
-  };
-
-  const onDeleteStoryError = (error: any) => {
-    showBottomToast('error', '스토리 삭제에 실패했습니다.');
   };
 
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
+      {isError && <></>}
+      {isLoading && <SkeletonEditStory />}
       {isSuccess && (
         <View className="w-full h-[90%]">
           <ViewShot

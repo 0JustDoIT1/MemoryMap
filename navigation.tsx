@@ -18,11 +18,11 @@ import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
 import AccountInfoScreen from 'src/screens/accountInfo';
-import PinCodeSettingScreen from 'src/screens/pinCodeInit';
+import PinCodeSettingScreen from 'src/screens/pinCodeSetting';
 import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
 import AddStoryScreen from 'src/screens/addStory';
 import {lazy, Suspense} from 'react';
-import CustomActivityIndicatorScreen from 'src/components/activityIndicatorScreen';
+import MapLoadingScreen from 'src/screens/mapLoadingScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
@@ -83,7 +83,7 @@ const Main = () => {
           headerTitle: '여행지도',
         }}>
         {props => (
-          <Suspense fallback={<CustomActivityIndicatorScreen />}>
+          <Suspense fallback={<MapLoadingScreen />}>
             <LazyMapScreen {...props} />
           </Suspense>
         )}
@@ -129,7 +129,7 @@ const Main = () => {
       />
       <Tab.Screen
         name="Setting"
-        component={SettingScreen}
+        // component={SettingScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'cog' : 'cog-outline';
@@ -138,8 +138,9 @@ const Main = () => {
             );
           },
           headerTitle: '설정',
-        }}
-      />
+        }}>
+        {props => <SettingScreen {...props} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

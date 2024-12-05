@@ -1,5 +1,5 @@
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useRecoilState, useResetRecoilState} from 'recoil';
 import {appUserState} from 'src/recoil/atom';
 import {
@@ -9,9 +9,9 @@ import {
 } from 'src/utils/keyChain';
 import {deleteRealtime, updateRealtime} from 'src/firebase/realtime';
 import {deleteAllStorage} from 'src/firebase/storage';
-import {KeyChainAccount, KeyChainPinCode} from '@env';
+import {KeyChainAccount, KeyChainPinCode, WebClientId} from '@env';
 import {deleteDocAll} from 'src/firebase/firestore';
-import {FirebaseUser} from 'src/types/account';
+import {FirebaseUser, User} from 'src/types/account';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {getDBConnection} from 'src/database/sqlite';
 import {saveAuthToDB} from 'src/database/create';
@@ -30,12 +30,51 @@ const useAuth = () => {
   const [password, setPassword] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
 
+  // Google Sign In Configure
+  useEffect(() => {
+    const googleSigninConfigure = GoogleSignin.configure({
+      webClientId: WebClientId,
+    });
+    return googleSigninConfigure;
+  }, []);
+
+  // Google Sign In
+  const onSignInGoogle = async () => {
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    const {type, data} = await GoogleSignin.signIn();
+    if (type === 'success') {
+      const idToken = data.idToken;
+
+      // SignIn Google Credential
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const result = await auth().signInWithCredential(googleCredential);
+      // Save GoogleSignIn Token to Keychain
+      await setSecureValue(KeyChainAccount, result.user.uid!, idToken!);
+
+      const appUser: FirebaseUser = {
+        uid: result.user.uid!,
+        email: result.user.email!,
+        displayName: result.user.displayName!,
+        createdAt: result.user.metadata.creationTime!,
+      };
+      // Google SignIn new or existence check
+      const isNew = result.additionalUserInfo?.isNewUser;
+
+      return {appUser, isNew};
+      // User Cancel
+    } else if (type === 'cancelled') {
+      return;
+    }
+  };
+
   // Email Sign Up
   const onSignUpEmailAndPassword = async () => {
     const result: FirebaseAuthTypes.UserCredential =
       await auth().createUserWithEmailAndPassword(email, password);
-    // Profile Update
-    await onUpdateProfile();
+    await auth().currentUser?.updateProfile({
+      displayName: displayName,
+    });
+
     // Save SignUp Data to KeyChain
     await setSecureValue(KeyChainAccount, result.user.uid, password);
 
@@ -68,9 +107,9 @@ const useAuth = () => {
   };
 
   // Profile Update (displayName)
-  const onUpdateProfile = async () => {
+  const onUpdateProfile = async (user: User) => {
     // Setting Data
-    const updateAppUser = {...appUser!, displayName: displayName};
+    const updateAppUser = {...user, displayName: displayName};
 
     // Save SQLite
     const db = await getDBConnection();
@@ -81,7 +120,7 @@ const useAuth = () => {
     });
     await updateRealtime(uid, updateAppUser, 'auth');
     // Save Recoil
-    setAppUser({...appUser!, displayName: displayName});
+    setAppUser(updateAppUser);
   };
 
   // Send Password Reset Email
@@ -154,6 +193,7 @@ const useAuth = () => {
     setPassword,
     displayName,
     setDisplayName,
+    onSignInGoogle,
     onSignUpEmailAndPassword,
     onSignInEmailAndPassword,
     onUpdateProfile,

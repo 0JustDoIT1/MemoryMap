@@ -1,12 +1,10 @@
 import {Controller, useForm} from 'react-hook-form';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
 import useAuth from 'src/hook/useAuth';
-import {isDisabledState} from 'src/recoil/atom';
 import {customColor} from 'src/style/customColor';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -15,7 +13,6 @@ interface ResetPassword {
 }
 
 const ResetPassword = ({close}: ResetPassword) => {
-  const setIsDisabled = useSetRecoilState(isDisabledState);
   const {setEmail, onSendPasswordResetEmail} = useAuth();
 
   const {
@@ -30,7 +27,6 @@ const ResetPassword = ({close}: ResetPassword) => {
 
   // Send password reset mail
   const onSendResetPassword = async (data: {email: string}) => {
-    setIsDisabled(true);
     try {
       await onSendPasswordResetEmail();
       onSendResetPasswordSuccess();
@@ -41,12 +37,10 @@ const ResetPassword = ({close}: ResetPassword) => {
 
   const onSendResetPasswordSuccess = () => {
     close();
-    setIsDisabled(false);
     showBottomToast('success', '비밀번호 재설정을 위한 메일이 전송되었습니다.');
   };
 
   const onSendResetPasswordError = (error: any) => {
-    setIsDisabled(false);
     if (error.code === 'auth/too-many-requests') {
       showBottomToast(
         'error',

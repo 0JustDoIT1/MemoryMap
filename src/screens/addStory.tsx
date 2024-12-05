@@ -8,7 +8,6 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import {BrandDynamicButton} from 'src/components/button';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import {storyPointArray} from 'src/constants/point';
-import {showBottomToast} from 'src/utils/showToast';
 import useStory from 'src/hook/useStory';
 import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,6 +23,7 @@ import {
 import {Story} from 'src/types/story';
 import {addStoryByRegionId} from 'src/utils/story.db';
 import SelectPoint from 'src/components/selectPoint';
+import SkeletonAddStory from 'src/skeleton/skeletonAddStory';
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet Ref
@@ -60,8 +60,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   const queryClient = useQueryClient();
 
   // React-Query Query
-  const {isSuccess, isError, data} = useQuery({
-    queryKey: ['KoreaMapDataColor', uid],
+  const {isSuccess, isLoading, isError, data} = useQuery({
+    queryKey: ['addStory', uid],
     queryFn: () => getKoreaMapDataByColor(uid),
     enabled: !!uid,
     retry: false,
@@ -123,26 +123,18 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
         await queryClient.invalidateQueries({queryKey: ['story']});
         await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
         await queryClient.invalidateQueries({
-          queryKey: ['storyRegionList', uid],
+          queryKey: ['story', uid],
         });
 
         onAddStorySuccess();
       }
     } catch (error) {
-      console.log('에러', error);
-      onAddStoryError(error);
+      return;
     }
   };
 
   const onAddStorySuccess = () => {
-    const text = `스토리를 작성했습니다.`;
-
-    showBottomToast('success', text);
     navigation.navigate('Main', {screen: 'Story'});
-  };
-
-  const onAddStoryError = (error: any) => {
-    showBottomToast('error', '스토리 저장에 실패했습니다.');
   };
 
   return (
@@ -150,6 +142,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       {isError && <></>}
+      {isLoading && <SkeletonAddStory />}
       {isSuccess && (
         <React.Fragment>
           {data.main.length >= 1 ? (

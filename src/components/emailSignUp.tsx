@@ -1,6 +1,6 @@
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, View} from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import {Portal, Text, TextInput} from 'react-native-paper';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import {FormRegEx} from 'src/constants/regex';
@@ -11,10 +11,9 @@ import {useState} from 'react';
 import {showBottomToast} from 'src/utils/showToast';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SignInProps, StackParamList} from 'src/types/stack';
-import {useSetRecoilState} from 'recoil';
-import {isDisabledState} from 'src/recoil/atom';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {setInitialDataToDB} from 'src/utils/auth';
+import LoadingScreen from 'src/screens/loadingScreen';
 
 interface EmailSignUp extends Omit<SignInProps, 'route'> {
   navigation: NativeStackNavigationProp<StackParamList, 'SignIn', undefined>;
@@ -36,7 +35,6 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
     },
   });
 
-  const setIsDisabled = useSetRecoilState(isDisabledState);
   const {
     setAppUser,
     setEmail,
@@ -49,14 +47,16 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
   const [passwordCheckVisible, setPasswordCheckVisible] =
     useState<boolean>(true);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   // Email SignUp
   const onSignUpAccount = async (data: SignUp) => {
     Keyboard.dismiss();
-    setIsDisabled(true);
+    setIsLoading(true);
 
     // Check Password
     if (data.password !== data.passwordCheck) {
-      setIsDisabled(false);
+      setIsLoading(false);
       return setError('passwordCheck', {type: 'validate'});
     }
 
@@ -73,12 +73,11 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
 
   const onSignUpSuccess = async () => {
     close();
-    setIsDisabled(false);
     navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignUpError = (error: any) => {
-    setIsDisabled(false);
+    setIsLoading(false);
     if (error.code === 'auth/email-already-in-use') {
       return showBottomToast('error', '이미 사용 중인 이메일입니다.');
     } else if (error.code === 'auth/invalid-email') {
@@ -215,6 +214,11 @@ const EmailSignUp = ({navigation, close}: EmailSignUp) => {
         isDisabled={isSubmitting}
         onSubmit={handleSubmit(onSignUpAccount)}
       />
+      {isLoading && (
+        <Portal>
+          <LoadingScreen />
+        </Portal>
+      )}
     </View>
   );
 };
