@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {Story} from 'src/types/story';
+import {dateToFormatString} from 'src/utils/dateFormat';
 
 const useStory = (uid: string) => {
   const [regionId, setRegionId] = useState<string>('');
@@ -24,19 +25,21 @@ const useStory = (uid: string) => {
       throw new Error('스토리 미완성');
 
     const id = edit ? data!.id : `${uid}_${Number(new Date())}`;
-    const createdAt = edit ? data!.createdAt : new Date().toString();
+    const createdAt = edit
+      ? data!.createdAt
+      : dateToFormatString(new Date(), 'YYYY-MM-DD HH:mm:ss');
 
     const story: Story = {
       id: id,
       uid: uid,
       regionId: regionId,
-      startDate: selectedStartDate.toString(),
-      endDate: selectedEndDate.toString(),
+      startDate: dateToFormatString(selectedStartDate, 'YYYY-MM-DD HH:mm:ss'),
+      endDate: dateToFormatString(selectedEndDate, 'YYYY-MM-DD HH:mm:ss'),
       title: title,
       contents: contents,
       point: point,
       createdAt: createdAt,
-      updatedAt: new Date().toString(),
+      updatedAt: dateToFormatString(new Date(), 'YYYY-MM-DD HH:mm:ss'),
     };
 
     return story;

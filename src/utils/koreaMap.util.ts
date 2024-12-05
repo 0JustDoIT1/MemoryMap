@@ -48,7 +48,7 @@ export const getIdArrayByType = (
   return arr;
 };
 
-// Get region name from the data (value, not title)
+// Get region name from the data (main + title)
 export const getRegionTitle = (data: KoreaRegionData) => {
   let title = data.title;
   if (title !== data.main) title = `${data.main} ${data.title}`;
@@ -56,13 +56,22 @@ export const getRegionTitle = (data: KoreaRegionData) => {
   return title;
 };
 
-// Get region name from the KoreaMapDataInit (value, not title)
-export const getRegionTitleByList = (id: string) => {
+// Get region name from the KoreaMapDataInit (main + title)
+export const getRegionTitleById = (id: string) => {
   const koreaMapDataObject = koreaMapDataToObject(koreaMapDataInit);
 
   const title = getRegionTitle(koreaMapDataObject[id]);
 
   return title;
+};
+
+// Get main region name from the KoreaMapDataInit
+export const getRegionMainTitleById = (id: string) => {
+  const region = koreaMapDataInit.find(item => item.id.includes(id));
+
+  const main = region?.main!;
+
+  return main;
 };
 
 // Get a list of map colored region (color & image)

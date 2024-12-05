@@ -16,7 +16,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import SelectPoint from 'src/components/selectPoint';
 import {Story} from 'src/types/story';
 import {addStoryByRegionId} from 'src/utils/story.db';
-import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -63,7 +63,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   useEffect(() => {
     if (route.params.story) {
       setRegionId(story.regionId);
-      setRegionTitle(getRegionTitleByList(story.regionId));
+      setRegionTitle(getRegionTitleById(story.regionId));
       setTitle(story.title);
       setContents(story.contents);
       setSelectedStartDate(dateTypeToDate(story.startDate));

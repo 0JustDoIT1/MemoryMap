@@ -20,8 +20,12 @@ import {
 } from '@tanstack/react-query';
 import {Story} from 'src/types/story';
 import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
-import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import {
+  getRegionMainTitleById,
+  getRegionTitleById,
+} from 'src/utils/koreaMap.util';
 import SkeletonStory from 'src/skeleton/skeletonStory';
+import {KoreaRegionList} from 'src/constants/regionList';
 
 interface Pagination {
   limit: number;
@@ -109,7 +113,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
 
   // Redering Component
   const renderItem = (item: Story) => {
-    const title = getRegionTitleByList(item.regionId);
+    const title = getRegionTitleById(item.regionId);
     const startDateString = dateToFormatString(
       item.startDate,
       'YYYY.MM.DD (ddd)',
@@ -194,7 +198,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
                 <Text className="text-sm text-white mx-1">
                   {pagination.filter === ''
                     ? '전체'
-                    : getRegionTitleByList(pagination.filter)}
+                    : getRegionMainTitleById(pagination.filter)}
                 </Text>
                 {pagination.filter !== '' && (
                   <MaterialCommunityIcons
@@ -240,14 +244,16 @@ const StoryScreen = ({navigation}: StoryProps) => {
           contents={
             <View className="w-56 max-h-full">
               <FlatList
-                data={listData.main}
+                data={listData}
                 keyExtractor={item => item}
                 renderItem={({item}) => (
-                  <CustomAccordion
-                    title={item}
-                    item={listData.all}
-                    onSelect={onSelectFilter}
-                  />
+                  <View className="w-full bg-white rounded-md my-1 border">
+                    <Pressable
+                      className="flex-row justify-between items-center p-4"
+                      onPress={() => onSelectFilter(item)}>
+                      <Text>{getRegionMainTitleById(item)}</Text>
+                    </Pressable>
+                  </View>
                 )}
                 showsHorizontalScrollIndicator={false}
               />

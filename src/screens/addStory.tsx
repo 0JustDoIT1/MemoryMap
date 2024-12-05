@@ -13,7 +13,7 @@ import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useAuth from 'src/hook/useAuth';
-import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import BrandCalendar from 'src/components/calendar';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
@@ -81,7 +81,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     if (route.params?.regionId) {
       const region = route.params.regionId;
       setRegionId(region);
-      setRegionTitle(getRegionTitleByList(region));
+      setRegionTitle(getRegionTitleById(region));
     }
   }, [route.params]);
 

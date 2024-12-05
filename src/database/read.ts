@@ -91,7 +91,7 @@ export const getStoryPaginationToDB = async (
 
     if (option) {
       if (option.filter && option.filter !== '')
-        query += ` and regionId = '${option.filter}'`;
+        query += ` and regionId LIKE '${option.filter}%'`;
       if (
         option.order &&
         option.order !== '' &&
