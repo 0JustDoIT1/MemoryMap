@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Dimensions, Pressable, View} from 'react-native';
+import {Dimensions, Pressable} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -129,22 +129,18 @@ const MapScreen = ({navigation}: MapProps) => {
 
       await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
       await queryClient.invalidateQueries({
-        queryKey: ['KoreaMapDataColor', uid],
+        queryKey: ['addStory', uid],
       });
 
       onResetMapSuccess();
     } catch (error) {
-      onResetMapError(error);
+      return;
     }
   };
 
   const onResetMapSuccess = () => {
     hideDialog();
     showBottomToast('info', '지도를 새로 채워보세요!');
-  };
-
-  const onResetMapError = (error: any) => {
-    showBottomToast('error', '지도 초기화에 실패했습니다.');
   };
 
   // Header button

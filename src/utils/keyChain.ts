@@ -13,7 +13,7 @@ export const getSecureValue = async (server: string) => {
     }
     return null;
   } catch (error) {
-    showBottomToast('error', '키체인 가져오기 에러');
+    showBottomToast('error', '키체인 조회 에러');
   }
 };
 

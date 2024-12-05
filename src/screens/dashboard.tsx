@@ -6,6 +6,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useAuth from 'src/hook/useAuth';
+import SkeletonDashboard from 'src/skeleton/skeletonDashboard';
 import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
 import {getDashboardKoreaMapData} from 'src/utils/koreaMap.db';
@@ -20,14 +21,24 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
   const [percent, setPercent] = useState<number>(0);
 
   // React-Query Query
-  const {isSuccess: isMapSuccess, data: mapData} = useQuery({
+  const {
+    isSuccess: isMapSuccess,
+    isLoading: isMapLoading,
+    isError: isMapError,
+    data: mapData,
+  } = useQuery({
     queryKey: ['dashboardKoreaMap', uid],
     queryFn: () => getDashboardKoreaMapData(uid),
     enabled: !!uid,
     retry: false,
     placeholderData: keepPreviousData,
   });
-  const {isSuccess: isStorySuccess, data: storyData} = useQuery({
+  const {
+    isSuccess: isStorySuccess,
+    isLoading: isStoryLoading,
+    isError: isStoryError,
+    data: storyData,
+  } = useQuery({
     queryKey: ['dashboardStory', uid],
     queryFn: () => getDashboardStory(uid),
     enabled: !!uid,
@@ -44,7 +55,8 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white"
       edges={['bottom', 'left', 'right']}>
-      {!isMapSuccess || (!isStorySuccess && <></>)}
+      {(isMapError || isStoryError) && <></>}
+      {(isMapLoading || isStoryLoading) && <SkeletonDashboard />}
       {isMapSuccess && isStorySuccess && (
         <React.Fragment>
           <View className="relative w-full h-2/5 flex justify-between items-start px-8 bg-brandLight shadow-md shadow-black">

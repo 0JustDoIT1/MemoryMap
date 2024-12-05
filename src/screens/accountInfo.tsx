@@ -6,15 +6,15 @@ import useAuth from 'src/hook/useAuth';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import useDialog from 'src/hook/useDialog';
 import {AccountInfoProps} from 'src/types/stack';
-import {showBottomToast} from 'src/utils/showToast';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Controller, useForm} from 'react-hook-form';
 import CustomHelperText from 'src/components/helperText';
 import CustomAlert from 'src/components/alert';
+import LoadingScreen from './loadingScreen';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
@@ -40,15 +40,11 @@ const DisplayNameBottomSheet = ({handleClosePress}: DisplayNameBottomSheet) => {
   // 닉네임 수정
   const onUpdateDisplayName = async () => {
     try {
-      await onUpdateProfile();
+      await onUpdateProfile({...appUser!, displayName: displayName});
       handleClosePress();
     } catch (error) {
-      onUpdateDisplayNameError(error);
+      return;
     }
-  };
-
-  const onUpdateDisplayNameError = (error: any) => {
-    showBottomToast('error', '닉네임 수정 에러');
   };
 
   return (
@@ -101,8 +97,9 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
   const {appUser, onWithdrawal, resetAppUser} = useAuth();
-
   const {visibleDialog, showDialog, hideDialog} = useDialog();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // 닉네임 수정을 위한 바텀시트
   const onPressDisplayName = () => handlePresentPress();
@@ -110,6 +107,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
   // 회원탈퇴
   const onWithdrawalAccount = async () => {
     hideDialog();
+    setIsLoading(true);
 
     try {
       await onWithdrawal();
@@ -125,7 +123,6 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
 
   const onWithdrawalAccountError = (error: any) => {
     resetAppUser();
-    showBottomToast('error', '회원탈퇴 실패');
     navigation.navigate('Auth');
   };
 
@@ -192,6 +189,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
           <DisplayNameBottomSheet handleClosePress={handleClosePress} />
         }
       />
+      {isLoading && <LoadingScreen />}
     </SafeAreaView>
   );
 };

@@ -67,12 +67,12 @@ const ColorPickerModal = ({
 
       await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
       await queryClient.invalidateQueries({
-        queryKey: ['KoreaMapDataColor', uid],
+        queryKey: ['addStory', uid],
       });
 
       onSettingColorSuccess();
     } catch (error) {
-      onSettingColorError(error);
+      return;
     }
   };
 
@@ -82,11 +82,6 @@ const ColorPickerModal = ({
     hideModal();
     handleClosePress();
     showBottomToast('success', text);
-  };
-
-  const onSettingColorError = (error: any) => {
-    console.log('에러', error);
-    showBottomToast('error', '색칠에 실패했습니다.');
   };
 
   return (

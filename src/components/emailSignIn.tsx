@@ -1,12 +1,14 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, View} from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {Portal, TextInput} from 'react-native-paper';
 import {useSetRecoilState} from 'recoil';
 import {FormOutlinedButton} from 'src/components/button';
 import CustomHelperText from 'src/components/helperText';
 import useAuth from 'src/hook/useAuth';
-import {appUserState, isDisabledState} from 'src/recoil/atom';
+import {appUserState} from 'src/recoil/atom';
+import LoadingScreen from 'src/screens/loadingScreen';
 import {customColor} from 'src/style/customColor';
 import {SignIn} from 'src/types/account';
 import {SignInProps, StackParamList} from 'src/types/stack';
@@ -32,17 +34,18 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
   });
 
   const setAppUser = useSetRecoilState(appUserState);
-  const setIsDisabled = useSetRecoilState(isDisabledState);
   const {setEmail, setPassword, onSignInEmailAndPassword} = useAuth();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Email SignIn
   const onSignInAccount = async (data: SignIn) => {
     Keyboard.dismiss();
-    setIsDisabled(true);
+    setIsLoading(true);
 
     // Check email & password
     if (!data.email || !data.password) {
-      setIsDisabled(false);
+      setIsLoading(false);
       return setError('password', {type: 'custom'});
     }
 
@@ -60,12 +63,11 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
 
   const onSignInSuccess = async () => {
     close();
-    setIsDisabled(false);
     navigation.replace('Main', {screen: 'Map'});
   };
 
   const onSignInError = (error: any) => {
-    setIsDisabled(false);
+    setIsLoading(false);
     return showBottomToast('error', '이메일 또는 비밀번호가 틀렸습니다.');
   };
 
@@ -118,6 +120,11 @@ const EmailSignIn = ({navigation, close}: EmailSignIn) => {
         isDisabled={isSubmitting}
         onSubmit={handleSubmit(onSignInAccount)}
       />
+      {isLoading && (
+        <Portal>
+          <LoadingScreen />
+        </Portal>
+      )}
     </View>
   );
 };

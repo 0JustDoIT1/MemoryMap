@@ -67,7 +67,7 @@ const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
         setCode([]);
       }
     } catch (error) {
-      showBottomToast('error', '핀코드 에러');
+      showBottomToast('error', '핀코드 설정 에러');
     }
   };
 

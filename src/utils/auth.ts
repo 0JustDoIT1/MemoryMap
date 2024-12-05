@@ -1,8 +1,4 @@
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-import {KeyChainAccount} from '@env';
 import {User, FirebaseUser} from 'src/types/account';
-import {setSecureValue} from 'src/utils/keyChain';
 import {readRealtime, setRealtime} from '../firebase/realtime';
 import {getDocAll} from '../firebase/firestore';
 import {getDBConnection, countData} from 'src/database/sqlite';
@@ -17,35 +13,6 @@ import {getAuthToDB} from 'src/database/read';
 import {KoreaMapDataObject} from 'src/types/koreaMap';
 import {koreaMapDataToObject} from './koreaMap.util';
 import {setUidToKoreaMapDataInit} from './koreaMap.db';
-
-// Google Sign In
-export const onSignInGoogle = async () => {
-  await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-  const {type, data} = await GoogleSignin.signIn();
-  if (type === 'success') {
-    const idToken = data.idToken;
-
-    // SignIn Google Credential
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    const result = await auth().signInWithCredential(googleCredential);
-    // Save GoogleSignIn Token to Keychain
-    await setSecureValue(KeyChainAccount, result.user.uid!, idToken!);
-
-    const appUser: FirebaseUser = {
-      uid: result.user.uid!,
-      email: result.user.email!,
-      displayName: result.user.displayName!,
-      createdAt: result.user.metadata.creationTime!,
-    };
-    // Google SignIn new or existence check
-    const isNew = result.additionalUserInfo?.isNewUser;
-
-    return {appUser, isNew};
-    // User Cancel
-  } else if (type === 'cancelled') {
-    return;
-  }
-};
 
 // Save initial data when SignUp -> SQLite & Firebase
 export const setInitialDataToDB = async (data: FirebaseUser) => {

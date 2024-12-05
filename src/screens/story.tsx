@@ -11,7 +11,6 @@ import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
-import CustomActivityIndicator from 'src/components/activityIndicator';
 import useAuth from 'src/hook/useAuth';
 import CustomAccordion from 'src/components/accordion';
 import {
@@ -22,6 +21,7 @@ import {
 import {Story} from 'src/types/story';
 import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
 import {getRegionTitleByList} from 'src/utils/koreaMap.util';
+import SkeletonStory from 'src/skeleton/skeletonStory';
 
 interface Pagination {
   limit: number;
@@ -48,6 +48,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
   const {
     isSuccess: isStorySuccess,
     isLoading: isStoryLoading,
+    isError: isStoryError,
     hasNextPage,
     fetchNextPage,
     data: storyData,
@@ -61,8 +62,13 @@ const StoryScreen = ({navigation}: StoryProps) => {
     },
     placeholderData: keepPreviousData,
   });
-  const {isSuccess: isListSuccess, data: listData} = useQuery({
-    queryKey: ['storyRegionList', uid],
+  const {
+    isSuccess: isListSuccess,
+    isLoading: isListLoading,
+    isError: isListError,
+    data: listData,
+  } = useQuery({
+    queryKey: ['story', uid],
     queryFn: () => getStoryRegionList(uid),
     enabled: !!uid,
     retry: false,
@@ -146,8 +152,13 @@ const StoryScreen = ({navigation}: StoryProps) => {
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white pb-6 px-6"
       edges={['bottom', 'left', 'right']}>
-      {isStoryLoading && <CustomActivityIndicator />}
-      {isStorySuccess && (
+      {(isStoryError || isListError) && <></>}
+      {(isStoryLoading || isListLoading) && (
+        <View className="w-full h-full items-start">
+          <SkeletonStory />
+        </View>
+      )}
+      {isStorySuccess && isListSuccess && (
         <View className="w-full h-full">
           <View className="w-full h-[8%] flex-row justify-between items-center">
             <View className="flex-row">

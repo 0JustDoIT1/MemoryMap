@@ -12,7 +12,7 @@ const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot>) => {
     const viewShotUri = await viewShotRef.current?.capture?.();
     return viewShotUri;
   } catch (error) {
-    showBottomToast('error', '지도 캡처에 실패했습니다.');
+    return;
   }
 };
 
@@ -26,7 +26,7 @@ const onSaveScreenShot = async (uri: string) => {
     await CameraRoll.saveAsset(uri, {type: 'photo'});
     showBottomToast('success', '갤러리에 저장되었습니다.');
   } catch (error) {
-    showBottomToast('error', '사진 저장에 실패했습니다.');
+    return;
   }
 };
 
@@ -34,7 +34,6 @@ const onSaveScreenShot = async (uri: string) => {
 const onShareLink = async (uri: string, message: string) => {
   try {
     await Share.open({title: appName, message: message, url: uri});
-    showBottomToast('success', '이미지를 공유했습니다.');
   } catch (error) {
     return;
   }

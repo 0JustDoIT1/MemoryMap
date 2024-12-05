@@ -14,13 +14,13 @@ import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 
-const SettingScreen = ({navigation}: SettingProps) => {
+const SettingScreen = ({navigation, route}: SettingProps) => {
   const appVersion = DeviceInfo.getVersion();
 
   const {appUser, onSignOut} = useAuth();
   const appPinCode = useRecoilValue(appPinCodeState);
 
-  // 로그 아웃
+  // Sign out
   const onSignOutAuth = async () => {
     try {
       await onSignOut();
@@ -34,30 +34,30 @@ const SettingScreen = ({navigation}: SettingProps) => {
     showBottomToast('error', '로그아웃에 실패했습니다.');
   };
 
-  // 개인/보안 버튼
+  // Navigate account Info
   const onPressAccount = () => {
     navigation.navigate('AccountInfo');
   };
 
-  // 이메일 문의 기능
+  // Email Contact us
   const onPressContactUs = async () => {
     const deviceName = await DeviceInfo.getDeviceName();
     const email = appUser?.email!;
     await Linking.openURL(LinkingEmail(deviceName, appVersion, email));
   };
 
-  // 핀코드 on/off 설정
+  // Pincode(lock screen) on/off
   const onPressPinCodeSetting = () => {
     if (appPinCode) navigation.navigate('PinCodeEnter', {route: 'Setting'});
     else navigation.navigate('PinCodeSetting');
   };
 
-  // 핀코드 reset 설정
+  // Pincode(lock screen) reset
   const onPressPinCodeReset = () => {
     navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
   };
 
-  // 약관 링크
+  // Term link
   const onPressTerm = async () => {
     await Linking.openURL(TermListUrl);
   };

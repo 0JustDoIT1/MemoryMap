@@ -14,9 +14,3 @@ export const appUserState = atom<User | null>({
   key: 'appUser',
   default: null,
 });
-
-// Screen navigation / logic processing status Recoil
-export const isDisabledState = atom<boolean>({
-  key: 'isDisabled',
-  default: false,
-});

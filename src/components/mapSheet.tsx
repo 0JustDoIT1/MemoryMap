@@ -5,7 +5,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Pressable, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import {BrandContainedButton, BrandOutlinedButton} from './button';
 import useModal from 'src/hook/useModal';
@@ -23,6 +23,7 @@ import {deleteMapDataById, updateMapPhotoById} from 'src/utils/koreaMap.db';
 import ImagePicker from 'react-native-image-crop-picker';
 import ZoomImage from './zoomImage';
 import {useAppTheme} from 'src/style/paperTheme';
+import LoadingScreen from 'src/screens/loadingScreen';
 
 interface MapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
@@ -48,6 +49,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
   const {visibleDialog, showDialog, hideDialog} = useDialog();
 
   const [zoom, setZoom] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Access the client
   const queryClient = useQueryClient();
@@ -101,6 +103,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
   // Upload photo to map
   const onUploadPhoto = async (path: string, width: number, height: number) => {
+    setIsLoading(true);
     try {
       await updateMapMutation.mutateAsync({
         uid: uid,
@@ -111,24 +114,21 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
       await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
       await queryClient.invalidateQueries({
-        queryKey: ['KoreaMapDataColor', uid],
+        queryKey: ['addStory', uid],
       });
 
       onUploadPhotoSuccess();
     } catch (error) {
-      onUploadPhotoError(error);
+      setIsLoading(false);
+      return;
     }
   };
 
   const onUploadPhotoSuccess = () => {
     const text = `${getRegionTitle(regionData)} 사진 추가!`;
-
+    setIsLoading(false);
     handleClosePress();
     showBottomToast('success', text);
-  };
-
-  const onUploadPhotoError = (error: any) => {
-    showBottomToast('error', '사진 넣기에 실패했습니다.');
   };
 
   // Delete map background
@@ -141,7 +141,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
       await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
       await queryClient.invalidateQueries({
-        queryKey: ['KoreaMapDataColor', uid],
+        queryKey: ['addStory', uid],
       });
 
       onDeleteBackgroundSuccess();
@@ -151,18 +151,14 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
   };
 
   const onDeleteBackgroundSuccess = () => {
-    const text = `${getRegionTitle(regionData)} 색칠 제거!`;
-
     hideDialog();
     hideModal();
     handleClosePress();
-    showBottomToast('info', text);
   };
 
   const onDeleteBackgroundError = (error: any) => {
     hideModal();
     handleClosePress();
-    showBottomToast('error', '색칠 제거에 실패했습니다.');
   };
 
   return (
@@ -273,6 +269,11 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         hideAlert={hideDialog}
       />
       {zoom && <ZoomImage data={regionData} setZoom={setZoom} />}
+      {isLoading && (
+        <Portal>
+          <LoadingScreen />
+        </Portal>
+      )}
     </React.Fragment>
   );
 };
