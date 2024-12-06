@@ -174,7 +174,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
               <View className="flex-row justify-start items-center">
                 {regionData && regionData.type === 'photo' && (
                   <React.Fragment>
-                    <View className="w-5 h-5 mr-2 mb-[2] rounded-full flex justify-center items-center bg-brandMain">
+                    <View className="w-5 h-5 mr-1 mb-[2] rounded-full flex justify-center items-center bg-brandMain">
                       <MaterialCommunityIcons
                         name="file-image-outline"
                         size={17}
@@ -185,7 +185,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
                 )}
                 {regionData && regionData.type === 'color' && (
                   <View
-                    className="w-5 h-5 mr-2 mb-[2] rounded-full"
+                    className="w-5 h-5 mr-1 mb-[2] rounded-full"
                     style={
                       customStyle({bgColor: regionData.background})
                         .mapBottomSheetCircle

@@ -15,6 +15,9 @@ import 'dayjs/locale/ko';
 import {createTable, getDBConnection} from 'src/database/sqlite';
 import {TableName} from 'src/database/table';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {useNetInfo} from '@react-native-community/netinfo';
+import NoNetwork from 'src/screens/noNetwork';
+
 dayjs.locale('ko');
 // Enable the SQLite
 SQLite.enablePromise(true);
@@ -32,6 +35,9 @@ const App = (): React.JSX.Element => {
     await createTable(db, TableName.story);
   };
 
+  // Check Network
+  const {isConnected} = useNetInfo();
+
   useEffect(() => {
     createSqlTable();
   }, []);
@@ -46,7 +52,7 @@ const App = (): React.JSX.Element => {
             />
             <GestureHandlerRootView style={{flex: 1}}>
               <BottomSheetModalProvider>
-                <Navigation />
+                {isConnected ? <Navigation /> : <NoNetwork />}
               </BottomSheetModalProvider>
               <Toast config={toastConfig} />
             </GestureHandlerRootView>
