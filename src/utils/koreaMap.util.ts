@@ -3,7 +3,6 @@ import {
   KoreaMapDataObject,
   KoreaRegionData,
 } from 'src/types/koreaMap';
-import {KoreaRegionList, RegionList} from 'src/constants/regionList';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 
 // KoreaMapData Array to Object
@@ -12,24 +11,6 @@ export const koreaMapDataToObject = (data: KoreaRegionData[]) => {
   data.forEach(item => (koreaMapDataObject[item.id] = item));
 
   return koreaMapDataObject;
-};
-
-// Get local svg data by id
-export const getSvgDataById = (id: string): RegionList => {
-  let result: any;
-
-  // Find the desired value in an object (Defth First Search method, nested objects are also possible)
-  const DFS = (obj: any, name: any, val: any) => {
-    if (obj[name] === val) result = obj;
-    else
-      Object.values(obj).forEach(value => {
-        if (typeof value === 'object') DFS(value, name, val);
-      });
-  };
-
-  DFS(KoreaRegionList, 'id', id);
-
-  return result;
 };
 
 // Id array matching type

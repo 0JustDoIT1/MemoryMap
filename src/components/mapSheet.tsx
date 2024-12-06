@@ -16,7 +16,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {KoreaRegionData} from 'src/types/koreaMap';
-import {getRegionTitle, getSvgDataById} from 'src/utils/koreaMap.util';
+import {getRegionTitle} from 'src/utils/koreaMap.util';
 import CustomAlert from './alert';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {deleteMapDataById, updateMapPhotoById} from 'src/utils/koreaMap.db';
@@ -24,6 +24,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import ZoomImage from './zoomImage';
 import {useAppTheme} from 'src/style/paperTheme';
 import LoadingScreen from 'src/screens/loadingScreen';
+import {koreaMapSvgData} from 'src/constants/koreaMapData';
 
 interface MapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
@@ -82,9 +83,8 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
   // Select Image
   const onImagePicker = async () => {
     try {
-      const svgData = getSvgDataById(regionData.id);
-      const cropW = svgData.svgStyle?.width! * 3;
-      const cropH = svgData.svgStyle?.height! * 3;
+      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width * 5;
+      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height * 5;
 
       const cropImage = await ImagePicker.openPicker({
         width: cropW,

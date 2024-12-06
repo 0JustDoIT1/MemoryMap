@@ -1,7 +1,8 @@
 import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
+import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import {KoreaMapDataObject} from 'src/types/koreaMap';
-import {getIdArrayByType, getSvgDataById} from 'src/utils/koreaMap.util';
+import {getIdArrayByType} from 'src/utils/koreaMap.util';
 
 interface SvgPattern {
   data: KoreaMapDataObject;
@@ -20,11 +21,11 @@ const SvgPattern = ({data}: SvgPattern) => {
             key={item}
             id={item}
             patternUnits="userSpaceOnUse"
-            x={getSvgDataById(item).svgStyle?.x}
-            y={getSvgDataById(item).svgStyle?.y}>
+            x={koreaMapSvgData[item].mapSvgStyle.x}
+            y={koreaMapSvgData[item].mapSvgStyle.y}>
             <Image
-              width={getSvgDataById(item).svgStyle?.width}
-              height={getSvgDataById(item).svgStyle?.height}
+              width={koreaMapSvgData[item].mapSvgStyle.width}
+              height={koreaMapSvgData[item].mapSvgStyle.height}
               preserveAspectRatio="xMidyMid slice"
               href={data[item].imageUrl}
             />
