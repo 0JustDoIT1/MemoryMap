@@ -2,7 +2,7 @@ import {BackHandler, Pressable, View} from 'react-native';
 import {Portal, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Svg, {Defs, Image, Path, Pattern, Polygon} from 'react-native-svg';
-import {getRegionTitle, getSvgDataById} from 'src/utils/koreaMap.util';
+import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {BlurView} from '@react-native-community/blur';
 import {customStyle} from 'src/style/customStyle';
 import {useEffect, useRef} from 'react';
@@ -13,6 +13,7 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from 'src/style/toast.config';
 import {KoreaRegionData} from 'src/types/koreaMap';
+import {koreaMapSvgData} from 'src/constants/koreaMapData';
 
 interface ZoomImage {
   data: KoreaRegionData;
@@ -25,11 +26,7 @@ const ZoomImage = ({data, setZoom}: ZoomImage) => {
   const viewShotRef = useRef<ViewShot>(null);
 
   // Get Svg Data
-  const svgData = getSvgDataById(data.id);
-
-  const width = data.imageStyle?.width! / svgData.svgStyle?.width!;
-  const height = data.imageStyle?.height! / svgData.svgStyle?.height!;
-  const ratio = data.imageStyle?.width! / data.imageStyle?.height!;
+  const regionSvgData = koreaMapSvgData[data.id];
 
   // Hardware BackButton Handler
   const onPressHardwareBackButton = () => {
@@ -65,29 +62,33 @@ const ZoomImage = ({data, setZoom}: ZoomImage) => {
             options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
             <Svg id="Layer_2" width="100%" height="100%" viewBox="0 0 960 1110">
               <Defs>
-                <Pattern id="image" patternUnits="userSpaceOnUse">
+                <Pattern
+                  id="image"
+                  patternUnits="userSpaceOnUse"
+                  x={regionSvgData.regionSvgStyle.x}
+                  y={regionSvgData.regionSvgStyle.y}>
                   <Image
-                    width="100%"
-                    height="100%"
+                    width={regionSvgData.regionSvgStyle.width}
+                    height={regionSvgData.regionSvgStyle.height}
                     preserveAspectRatio="xMidyMid slice"
                     href={data.imageUrl}
                   />
                 </Pattern>
               </Defs>
-              {svgData.svgType === 'path' && (
+              {regionSvgData.regionSvgType === 'path' && (
                 <Path
                   fill="url(#image)"
                   stroke="#000000"
                   strokeWidth="2"
-                  d={svgData.svgPath}
+                  d={regionSvgData.regionSvgPath}
                 />
               )}
-              {svgData.svgType === 'polygon' && (
+              {regionSvgData.regionSvgType === 'polygon' && (
                 <Polygon
                   fill="url(#image)"
                   stroke="#000000"
                   strokeWidth="2"
-                  points={svgData.svgPath}
+                  points={regionSvgData.regionSvgPath}
                 />
               )}
             </Svg>

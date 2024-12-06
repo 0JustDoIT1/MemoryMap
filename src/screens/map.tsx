@@ -7,18 +7,18 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ViewShot from 'react-native-view-shot';
-import {customStyle} from 'src/style/customStyle';
 import {MapProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import useAuth from 'src/hook/useAuth';
 import {resetMapData} from 'src/utils/koreaMap.db';
-import CustomAlert from 'src/components/alert';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
-import KoreaMapSvg from '../components/koreaMapSvg';
+import {customStyle} from 'src/style/customStyle';
+import KoreaMapSvg from 'src/components/koreaMapSvg';
+import CustomAlert from 'src/components/alert';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');

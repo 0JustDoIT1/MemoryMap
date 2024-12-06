@@ -12,7 +12,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
 import useAuth from 'src/hook/useAuth';
-import CustomAccordion from 'src/components/accordion';
 import {
   keepPreviousData,
   useInfiniteQuery,
@@ -25,7 +24,6 @@ import {
   getRegionTitleById,
 } from 'src/utils/koreaMap.util';
 import SkeletonStory from 'src/skeleton/skeletonStory';
-import {KoreaRegionList} from 'src/constants/regionList';
 
 interface Pagination {
   limit: number;
