@@ -17,6 +17,7 @@ import SelectPoint from 'src/components/selectPoint';
 import {Story} from 'src/types/story';
 import {addStoryByRegionId} from 'src/utils/story.db';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
+import useButton from 'src/hook/useButton';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -50,6 +51,7 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     setPoint,
     settingStoryData,
   } = useStory(uid);
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   // Access the client
   const queryClient = useQueryClient();
@@ -87,26 +89,37 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
 
   // Edit Story
   const onUpdateStory = async () => {
+    disabledButton();
     try {
       const newStory = settingStoryData(true, story);
       await editStoryMutation.mutateAsync(newStory);
 
-      await queryClient.invalidateQueries({queryKey: ['story']});
+      await queryClient.invalidateQueries({
+        queryKey: ['story'],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['viewStory', route.params.story.id],
+        refetchType: 'all',
       });
-      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['koreaMapData', uid],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['story', uid],
+        refetchType: 'all',
       });
 
       onUpdateStorySuccess();
     } catch (error) {
+      abledButton();
       return;
     }
   };
 
   const onUpdateStorySuccess = () => {
+    abledButton();
     navigation.goBack();
   };
 
@@ -124,24 +137,21 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
         />
       </View>
       <View className="w-full flex-row justify-between items-center mt-2">
-        <Pressable className="w-[49%]" onPress={onPressDate}>
+        <Pressable
+          className="w-full"
+          onPress={onPressDate}
+          disabled={isDisabled}>
           <TextInput
             className="w-full bg-white"
             mode="outlined"
-            label="From"
+            label="여행일자"
             activeOutlineColor={customColor.brandMain}
             editable={false}
-            value={dateToFormatString(selectedStartDate, 'YYYY.MM.DD')}
-          />
-        </Pressable>
-        <Pressable className="w-[49%]" onPress={onPressDate}>
-          <TextInput
-            className="w-full bg-white"
-            mode="outlined"
-            label="To"
-            activeOutlineColor={customColor.brandMain}
-            editable={false}
-            value={dateToFormatString(selectedEndDate, 'YYYY.MM.DD')}
+            value={
+              selectedStartDate && selectedEndDate
+                ? `${dateToFormatString(selectedStartDate, 'YYYY.MM.DD (ddd)')} ~ ${dateToFormatString(selectedEndDate, 'YYYY.MM.DD (ddd)')}`
+                : ''
+            }
           />
         </Pressable>
       </View>
@@ -195,7 +205,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
             !selectedEndDate ||
             title === '' ||
             contents === '' ||
-            point === 0
+            point === 0 ||
+            isDisabled
           }
           onPress={onUpdateStory}
         />

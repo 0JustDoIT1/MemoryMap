@@ -17,6 +17,7 @@ import {deleteStoryById, getOneStoryById} from 'src/utils/story.db';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import SkeletonEditStory from 'src/skeleton/skeletonEditStory';
+import useButton from 'src/hook/useButton';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
@@ -26,6 +27,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const storyId = route.params.storyId;
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   // Access the client
   const queryClient = useQueryClient();
@@ -49,6 +51,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
 
   // 스토리 제거
   const onDeleteStory = async () => {
+    disabledButton();
     try {
       if (isSuccess) {
         await deleteStoryMutation.mutateAsync(data.id);
@@ -58,20 +61,29 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
           count: -1,
         });
 
-        await queryClient.invalidateQueries({queryKey: ['story']});
-        await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+        await queryClient.invalidateQueries({
+          queryKey: ['story'],
+          refetchType: 'all',
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ['koreaMapData', uid],
+          refetchType: 'all',
+        });
         await queryClient.invalidateQueries({
           queryKey: ['story', uid],
+          refetchType: 'all',
         });
 
         onDeleteStorySuccess();
       }
     } catch (error) {
+      abledButton();
       return;
     }
   };
 
   const onDeleteStorySuccess = () => {
+    abledButton();
     navigation.goBack();
   };
 
@@ -178,6 +190,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
         visible={visibleDialog}
         title="스토리를 삭제하시겠습니까?"
         buttonText="삭제"
+        isDisabled={isDisabled}
         buttonOnPress={onDeleteStory}
         hideAlert={hideDialog}
       />

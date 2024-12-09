@@ -7,7 +7,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import Share from 'react-native-share';
 
 // Capture screen
-const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot>) => {
+const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot | null>) => {
   try {
     const viewShotUri = await viewShotRef.current?.capture?.();
     return viewShotUri;
@@ -41,7 +41,7 @@ const onShareLink = async (uri: string, message: string) => {
 
 // Capture screen and save gallery
 export const onCaptureAndSave = async (
-  viewShotRef: React.RefObject<ViewShot>,
+  viewShotRef: React.RefObject<ViewShot | null>,
 ) => {
   const uri = await onCaptureMap(viewShotRef);
   if (uri) await onSaveScreenShot(uri);
@@ -49,7 +49,7 @@ export const onCaptureAndSave = async (
 
 // Capture screen and share
 export const onCaptureAndShare = async (
-  viewShotRef: React.RefObject<ViewShot>,
+  viewShotRef: React.RefObject<ViewShot | null>,
   message: string,
 ) => {
   const uri = await onCaptureMap(viewShotRef);

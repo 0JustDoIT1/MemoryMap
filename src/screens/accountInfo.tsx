@@ -15,6 +15,7 @@ import {Controller, useForm} from 'react-hook-form';
 import CustomHelperText from 'src/components/helperText';
 import CustomAlert from 'src/components/alert';
 import LoadingScreen from './loadingScreen';
+import useButton from 'src/hook/useButton';
 
 interface DisplayNameBottomSheet {
   handleClosePress: () => void;
@@ -98,6 +99,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
 
   const {appUser, onWithdrawal, resetAppUser} = useAuth();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -137,7 +139,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
           </View>
           <View className="w-4/5 flex-row justify-end items-center">
             <Text className="mx-2">{appUser?.displayName}</Text>
-            <Pressable onPress={onPressDisplayName}>
+            <Pressable onPress={onPressDisplayName} disabled={isDisabled}>
               <MaterialCommunityIcons
                 name="pencil-box-outline"
                 size={24}
@@ -169,6 +171,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
             classes="w-full py-1"
             text="회원 탈퇴"
             onPress={showDialog}
+            isDisabled={isDisabled}
           />
         </View>
       </React.Fragment>
@@ -178,6 +181,7 @@ const AccountInfoScreen = ({navigation}: AccountInfoProps) => {
         title="정말 탈퇴하시겠어요?"
         description={`탈퇴 버튼 선택 시, 계정과\n모든 데이터가 삭제되며 복구되지 않습니다.`}
         buttonText="회원 탈퇴"
+        isDisabled={isDisabled}
         buttonOnPress={onWithdrawalAccount}
         hideAlert={hideDialog}
       />
