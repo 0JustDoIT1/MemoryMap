@@ -5,6 +5,7 @@ import {Text} from 'react-native-paper';
 import {returnedResults} from 'reanimated-color-picker';
 import CustomColorPannel from 'src/components/colorPannel';
 import CustomColorSwatch from 'src/components/colorSwatch';
+import useButton from 'src/hook/useButton';
 import {customStyle} from 'src/style/customStyle';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
@@ -25,6 +26,8 @@ const ColorPickerModal = ({
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
+  const {isDisabled, disabledButton, abledButton} = useButton();
+
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
     regionData.type === 'color' ? regionData.background : '#ffffff',
@@ -58,6 +61,7 @@ const ColorPickerModal = ({
 
   // Color the map with hex
   const onSettingColor = async () => {
+    disabledButton();
     try {
       await updateMapMutation.mutateAsync({
         uid: uid,
@@ -65,13 +69,18 @@ const ColorPickerModal = ({
         color: hex,
       });
 
-      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['koreaMapData', uid],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['addStory', uid],
+        refetchType: 'all',
       });
 
       onSettingColorSuccess();
     } catch (error) {
+      abledButton();
       return;
     }
   };
@@ -81,6 +90,7 @@ const ColorPickerModal = ({
 
     hideModal();
     handleClosePress();
+    abledButton();
     showBottomToast('success', text);
   };
 
@@ -129,12 +139,12 @@ const ColorPickerModal = ({
       </View>
 
       <View className="mt-4 flex-row justify-between items-center">
-        <Pressable onPress={onChangeMode}>
+        <Pressable onPress={onChangeMode} disabled={isDisabled}>
           <Text className="text-brandMain">
             {mode ? '기본 색상' : '더 많은 색상'}
           </Text>
         </Pressable>
-        <Pressable onPress={onSettingColor}>
+        <Pressable onPress={onSettingColor} disabled={isDisabled}>
           <Text className="text-brandMain">색칠하기</Text>
         </Pressable>
       </View>

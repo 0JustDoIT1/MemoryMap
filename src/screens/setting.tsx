@@ -13,17 +13,22 @@ import {LinkingEmail, TermListUrl} from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
+import useButton from 'src/hook/useButton';
 
 const SettingScreen = ({navigation, route}: SettingProps) => {
   const appVersion = DeviceInfo.getVersion();
 
-  const {appUser, onSignOut} = useAuth();
   const appPinCode = useRecoilValue(appPinCodeState);
+
+  const {appUser, onSignOut} = useAuth();
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   // Sign out
   const onSignOutAuth = async () => {
+    disabledButton();
     try {
       await onSignOut();
+      abledButton();
       navigation.replace('Auth');
     } catch (error) {
       onSignOutAuthError(error);
@@ -31,6 +36,7 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
   };
 
   const onSignOutAuthError = (error: any) => {
+    abledButton();
     showBottomToast('error', '로그아웃에 실패했습니다.');
   };
 
@@ -82,7 +88,8 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
       <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-6"
-        onPress={onPressAccount}>
+        onPress={onPressAccount}
+        disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="account-lock-outline"
@@ -95,7 +102,7 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
         </View>
       </Pressable>
       <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-6">
+      <View className="w-full flex-row justify-between items-center py-3 px-6">
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="lock-outline"
@@ -107,7 +114,10 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
           </View>
         </View>
         <View className="w-1/2 flex-row justify-end items-center">
-          <Pressable className="mx-2" onPress={onPressPinCodeReset}>
+          <Pressable
+            className="mx-2"
+            onPress={onPressPinCodeReset}
+            disabled={isDisabled}>
             {appPinCode && (
               <MaterialCommunityIcons
                 name="lock-reset"
@@ -116,15 +126,15 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
               />
             )}
           </Pressable>
-          <Pressable onPress={onPressPinCodeSetting}>
+          <Pressable onPress={onPressPinCodeSetting} disabled={isDisabled}>
             <View pointerEvents="none">
               <Switch color={customColor.brandMain} value={appPinCode} />
             </View>
           </Pressable>
         </View>
-      </Pressable>
+      </View>
       {/* <Divider className="w-full bg-black my-1" />
-      <Pressable className="w-full flex-row justify-between items-center py-3 px-6">
+      <Pressable className="w-full flex-row justify-between items-center py-3 px-6" disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="advertisements-off"
@@ -139,7 +149,8 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
       <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-6"
-        onPress={onPressTerm}>
+        onPress={onPressTerm}
+        disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="file-document-outline"
@@ -154,7 +165,8 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
       <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-6"
-        onPress={onPressContactUs}>
+        onPress={onPressContactUs}
+        disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="email-outline"
@@ -169,7 +181,7 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
       {/* <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-6"
-        onPress={onOpenStoreLink}>
+        onPress={onOpenStoreLink} disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="message-reply-text-outline"
@@ -200,7 +212,8 @@ const SettingScreen = ({navigation, route}: SettingProps) => {
       <Divider className="w-full bg-black my-1" />
       <Pressable
         className="w-full flex-row justify-between items-center py-3 px-6"
-        onPress={onSignOutAuth}>
+        onPress={onSignOutAuth}
+        disabled={isDisabled}>
         <View className="w-1/2 flex-row justify-start items-center">
           <MaterialCommunityIcons
             name="location-enter"

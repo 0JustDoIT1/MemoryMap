@@ -24,6 +24,7 @@ import {Story} from 'src/types/story';
 import {addStoryByRegionId} from 'src/utils/story.db';
 import SelectPoint from 'src/components/selectPoint';
 import SkeletonAddStory from 'src/skeleton/skeletonAddStory';
+import useButton from 'src/hook/useButton';
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet Ref
@@ -55,6 +56,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     setPoint,
     settingStoryData,
   } = useStory(appUser?.uid!);
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   // Access the client
   const queryClient = useQueryClient();
@@ -110,6 +112,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
 
   // Add Story
   const onAddStory = async () => {
+    disabledButton();
     try {
       if (isSuccess) {
         const newStory = settingStoryData(false);
@@ -120,20 +123,29 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
           count: 1,
         });
 
-        await queryClient.invalidateQueries({queryKey: ['story']});
-        await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+        await queryClient.invalidateQueries({
+          queryKey: ['story'],
+          refetchType: 'all',
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ['koreaMapData', uid],
+          refetchType: 'all',
+        });
         await queryClient.invalidateQueries({
           queryKey: ['story', uid],
+          refetchType: 'all',
         });
 
         onAddStorySuccess();
       }
     } catch (error) {
+      abledButton();
       return;
     }
   };
 
   const onAddStorySuccess = () => {
+    abledButton();
     navigation.navigate('Main', {screen: 'Story'});
   };
 
@@ -147,7 +159,10 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
         <React.Fragment>
           {data.main.length >= 1 ? (
             <React.Fragment>
-              <Pressable className="w-full" onPress={onPressRegion}>
+              <Pressable
+                className="w-full"
+                onPress={onPressRegion}
+                disabled={isDisabled}>
                 <TextInput
                   className="w-full bg-white"
                   mode="outlined"
@@ -158,7 +173,10 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
                 />
               </Pressable>
               <View className="w-full flex-row justify-between items-center mt-2">
-                <Pressable className="w-full" onPress={onPressDate}>
+                <Pressable
+                  className="w-full"
+                  onPress={onPressDate}
+                  disabled={isDisabled}>
                   <TextInput
                     className="w-full bg-white"
                     mode="outlined"
@@ -220,7 +238,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
                     !selectedEndDate ||
                     title === '' ||
                     contents === '' ||
-                    point === 0
+                    point === 0 ||
+                    isDisabled
                   }
                   onPress={onAddStory}
                 />

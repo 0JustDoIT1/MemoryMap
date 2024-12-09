@@ -25,9 +25,10 @@ import ZoomImage from './zoomImage';
 import {useAppTheme} from 'src/style/paperTheme';
 import LoadingScreen from 'src/screens/loadingScreen';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import useButton from 'src/hook/useButton';
 
 interface MapSheet {
-  mapSheetModalRef: React.RefObject<BottomSheetModalMethods>;
+  mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
   uid: string;
   regionData: KoreaRegionData;
 }
@@ -48,6 +49,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {isDisabled, disabledButton, abledButton} = useButton();
 
   const [zoom, setZoom] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -83,8 +85,8 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
   // Select Image
   const onImagePicker = async () => {
     try {
-      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width * 5;
-      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height * 5;
+      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width;
+      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height;
 
       const cropImage = await ImagePicker.openPicker({
         width: cropW,
@@ -92,7 +94,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         cropping: true,
         mediaType: 'photo',
         // freeStyleCropEnabled: true,
-        compressImageQuality: 0.8,
+        compressImageQuality: 1,
         cropperToolbarTitle: getRegionTitle(regionData),
       });
       await onUploadPhoto(cropImage.path, cropImage.width, cropImage.height);
@@ -103,6 +105,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
   // Upload photo to map
   const onUploadPhoto = async (path: string, width: number, height: number) => {
+    disabledButton();
     setIsLoading(true);
     try {
       await updateMapMutation.mutateAsync({
@@ -112,14 +115,19 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         imageStyle: {width: width, height: height},
       });
 
-      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['koreaMapData', uid],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['addStory', uid],
+        refetchType: 'all',
       });
 
       onUploadPhotoSuccess();
     } catch (error) {
       setIsLoading(false);
+      abledButton();
       return;
     }
   };
@@ -128,20 +136,26 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
     const text = `${getRegionTitle(regionData)} 사진 추가!`;
     setIsLoading(false);
     handleClosePress();
+    abledButton();
     showBottomToast('success', text);
   };
 
   // Delete map background
   const onDeleteBackground = async () => {
+    disabledButton();
     try {
       await deleteMapMutation.mutateAsync({
         uid: uid,
         data: regionData,
       });
 
-      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['koreaMapData', uid],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['addStory', uid],
+        refetchType: 'all',
       });
 
       onDeleteBackgroundSuccess();
@@ -154,11 +168,13 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
     hideDialog();
     hideModal();
     handleClosePress();
+    abledButton();
   };
 
   const onDeleteBackgroundError = (error: any) => {
     hideModal();
     handleClosePress();
+    abledButton();
   };
 
   return (
@@ -197,7 +213,8 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
                 {regionData && regionData.type === 'photo' && (
                   <Pressable
                     className="ml-2 mb-[2]"
-                    onPress={() => setZoom(true)}>
+                    onPress={() => setZoom(true)}
+                    disabled={isDisabled}>
                     <MaterialCommunityIcons
                       name="magnify-plus-outline"
                       size={22}
@@ -206,7 +223,10 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
                   </Pressable>
                 )}
                 {regionData && regionData.type !== 'init' && (
-                  <Pressable className="ml-2 mb-[2]" onPress={showDialog}>
+                  <Pressable
+                    className="ml-2 mb-[2]"
+                    onPress={showDialog}
+                    disabled={isDisabled}>
                     <MaterialCommunityIcons
                       name="trash-can-outline"
                       size={22}
@@ -215,7 +235,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
                   </Pressable>
                 )}
               </View>
-              <Pressable onPress={handleClosePress}>
+              <Pressable onPress={handleClosePress} disabled={isDisabled}>
                 <MaterialCommunityIcons
                   name="window-close"
                   size={32}
@@ -239,11 +259,16 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
               )}
             </View>
             <View className="w-full pb-4">
-              <BrandContainedButton text="사진 넣기" onPress={onImagePicker} />
+              <BrandContainedButton
+                text="사진 넣기"
+                onPress={onImagePicker}
+                isDisabled={isDisabled}
+              />
               <BrandOutlinedButton
                 text="색칠 하기"
                 classes="mt-1"
                 onPress={showModal}
+                isDisabled={isDisabled}
               />
             </View>
           </View>
@@ -265,6 +290,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         visible={visibleDialog}
         title="배경을 제거하시겠습니까?"
         buttonText="삭제"
+        isDisabled={isDisabled}
         buttonOnPress={onDeleteBackground}
         hideAlert={hideDialog}
       />

@@ -8,6 +8,7 @@ interface CustomAlert {
   title: string;
   description?: string;
   buttonText: string;
+  isDisabled: boolean;
   buttonOnPress: () => void;
   hideAlert: () => void;
 }
@@ -17,6 +18,7 @@ const CustomAlert = ({
   title,
   description,
   buttonText,
+  isDisabled,
   hideAlert,
   buttonOnPress,
 }: CustomAlert) => {
@@ -40,12 +42,14 @@ const CustomAlert = ({
           <View className="flex-row justify-center items-center">
             <Pressable
               className="w-1/2 flex justify-center items-center py-4"
+              disabled={isDisabled}
               onPress={hideAlert}>
               <Text className="text-blue-500">취소</Text>
             </Pressable>
             <View className="h-full border-r-[0.5px] border-blur"></View>
             <Pressable
               className="w-1/2 flex justify-center items-center py-4"
+              disabled={isDisabled}
               onPress={buttonOnPress}>
               <Text className="text-error">{buttonText}</Text>
             </Pressable>

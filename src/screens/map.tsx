@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, Pressable} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
@@ -19,6 +19,7 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
 import CustomAlert from 'src/components/alert';
+import useButton from 'src/hook/useButton';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');
@@ -33,6 +34,7 @@ const MapScreen = ({navigation}: MapProps) => {
   const theme = useAppTheme();
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {isDisabled, disabledButton, abledButton} = useButton();
   const {appUser} = useAuth();
 
   const uid = appUser?.uid!;
@@ -54,7 +56,7 @@ const MapScreen = ({navigation}: MapProps) => {
   const scale = useSharedValue(1);
   const startScale = useSharedValue(0);
 
-  // Pinch Animation(move)
+  // Pinch Animation(scale)
   const pinch = Gesture.Pinch()
     .onStart(() => {
       startScale.value = scale.value;
@@ -63,7 +65,7 @@ const MapScreen = ({navigation}: MapProps) => {
       scale.value = clamp(
         startScale.value * event.scale,
         0.5,
-        Math.min(width / 100, height / 100),
+        Math.min(width / 80, height / 80),
       );
     })
     .onEnd(() => {
@@ -75,7 +77,7 @@ const MapScreen = ({navigation}: MapProps) => {
     })
     .runOnJS(true);
 
-  // Pan Animation(scale)
+  // Pan Animation(move)
   const pan = Gesture.Pan()
     .averageTouches(true)
     .onStart(() => {
@@ -125,21 +127,28 @@ const MapScreen = ({navigation}: MapProps) => {
   // Reset Map & RegionCount
   const onResetMap = async () => {
     try {
+      disabledButton();
       await resetMapMutation.mutateAsync(uid);
 
-      await queryClient.invalidateQueries({queryKey: ['koreaMapData', uid]});
+      await queryClient.invalidateQueries({
+        queryKey: ['koreaMapData', uid],
+        refetchType: 'all',
+      });
       await queryClient.invalidateQueries({
         queryKey: ['addStory', uid],
+        refetchType: 'all',
       });
 
       onResetMapSuccess();
     } catch (error) {
+      abledButton();
       return;
     }
   };
 
   const onResetMapSuccess = () => {
     hideDialog();
+    abledButton();
     showBottomToast('info', '지도를 새로 채워보세요!');
   };
 
@@ -198,6 +207,7 @@ const MapScreen = ({navigation}: MapProps) => {
         visible={visibleDialog}
         title="지도를 초기화하시겠습니까?"
         buttonText="초기화"
+        isDisabled={isDisabled}
         buttonOnPress={onResetMap}
         hideAlert={hideDialog}
       />

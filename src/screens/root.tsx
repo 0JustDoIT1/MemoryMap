@@ -107,7 +107,7 @@ const RootScreen = ({navigation}: RootProps) => {
     if (initializing) return;
 
     // Check existing SignIn & AppUser exists
-    if (appUser) {
+    if (appUser && !authFlag) {
       // Setting Data
       settingData();
     } else {

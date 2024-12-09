@@ -79,7 +79,8 @@ const SignInScreen = ({navigation}: SignInProps) => {
       } else {
         setIsLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
+      showBottomToast('error', error);
       onSignInGoogleAuthError(error);
     }
   };
