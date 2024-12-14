@@ -9,8 +9,6 @@ interface SvgPattern {
 }
 
 const SvgPattern = ({data}: SvgPattern) => {
-  console.log('패턴');
-
   const imageArray = getIdArrayByType(data, 'photo');
 
   return (

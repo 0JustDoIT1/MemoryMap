@@ -11,7 +11,6 @@ export const saveAsyncStorage = async (key: string, value: string) => {
 export const getAsyncStorage = async (key: string) => {
   try {
     const result = await AsyncStorage.getItem(key);
-    console.log('!!!', result);
     return result;
   } catch (error) {
     return;

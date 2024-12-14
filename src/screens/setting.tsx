@@ -1,7 +1,7 @@
 import React from 'react';
 import {Cell, Section, TableView} from 'react-native-tableview-simple';
 import {Pressable, ScrollView, View} from 'react-native';
-import {Divider, Switch, Text} from 'react-native-paper';
+import {Switch} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SettingProps} from 'src/types/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +15,6 @@ import {
 } from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
-import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import CustomAlert from 'src/components/alert';
 import useButton from 'src/hook/useButton';
 import useDialog from 'src/hook/useDialog';
@@ -33,9 +32,6 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapMutation} = useKoreaMapMutation();
-
-  const [expanded, setExpanded] = React.useState(false);
-  const handlePress = () => setExpanded(!expanded);
 
   // BackUp AppData
   const onPressBackUp = () => {

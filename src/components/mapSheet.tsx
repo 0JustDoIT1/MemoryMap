@@ -95,7 +95,6 @@ const MapSheet = ({mapSheetModalRef, regionData}: MapSheet) => {
       handleClosePress();
       showBottomToast('success', `${getRegionTitle(regionData)} 사진 추가!`);
     } catch (error) {
-      console.log('###', error);
       endLoading();
       abledButton();
       return;

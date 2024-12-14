@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.0.5",
-    "@miblanchard/react-native-slider": "^2.6.0",
     "@react-native-async-storage/async-storage": "https://github.com/react-native-async-storage/async-storage",
     "@react-native-camera-roll/camera-roll": "^7.8.4",
     "@react-native-community/blur": "^4.4.1",
@@ -47,7 +46,6 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-ui-datepicker": "^2.0.4",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-version-check": "^3.4.7",
     "react-native-view-shot": "^4.0.2",
     "reanimated-color-picker": "^3.0.5",
     "recoil": "^0.7.7"
