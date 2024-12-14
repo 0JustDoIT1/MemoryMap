@@ -3,7 +3,6 @@ export interface KoreaMapDataObject {
 }
 
 export interface KoreaRegionData {
-  uid: string;
   id: string;
   title: string;
   main: string;

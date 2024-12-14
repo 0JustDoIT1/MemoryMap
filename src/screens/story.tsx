@@ -1,85 +1,35 @@
-import React, {useState} from 'react';
-import {FlatList, Image, Pressable, View} from 'react-native';
+import React from 'react';
+import {FlatList, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/notFound';
-import {storyPoint} from 'src/constants/point';
 import {customStyle} from 'src/style/customStyle';
 import {StoryProps} from 'src/types/stack';
-import {dateToFormatString} from 'src/utils/dateFormat';
 import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
-import useAuth from 'src/hook/useAuth';
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useQuery,
-} from '@tanstack/react-query';
-import {Story} from 'src/types/story';
-import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
-import {
-  getRegionMainTitleById,
-  getRegionTitleById,
-} from 'src/utils/koreaMap.util';
+import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
 import SkeletonStory from 'src/skeleton/skeletonStory';
-
-interface Pagination {
-  limit: number;
-  filter: string;
-  order: string;
-  sort: string;
-}
+import useStoryQuery from 'src/hook/useStoryQuery';
+import StoryCard from 'src/components/storyCard';
 
 const StoryScreen = ({navigation}: StoryProps) => {
   const {visible, showModal, hideModal} = useModal();
-  const {appUser} = useAuth();
-  const uid = appUser?.uid!;
-
-  const initPagination = {
-    limit: 10,
-    filter: '',
-    order: 'createdAt',
-    sort: 'DESC',
-  };
-
-  const [pagination, setPagination] = useState<Pagination>(initPagination);
-
-  // React-Query Query
   const {
-    isSuccess: isStorySuccess,
-    isLoading: isStoryLoading,
-    isError: isStoryError,
-    hasNextPage,
-    fetchNextPage,
-    data: storyData,
-  } = useInfiniteQuery({
-    queryKey: ['story', pagination],
-    queryFn: ({pageParam}) => getStoryPagination(uid, pageParam, pagination),
-    initialPageParam: 1,
-    getNextPageParam: lastPage => {
-      const nextPage = lastPage.currentPage + 1;
-      return nextPage > lastPage.totalPage ? null : nextPage;
-    },
-    placeholderData: keepPreviousData,
-  });
-  const {
-    isSuccess: isListSuccess,
-    isLoading: isListLoading,
-    isError: isListError,
-    data: listData,
-  } = useQuery({
-    queryKey: ['story', uid],
-    queryFn: () => getStoryRegionList(uid),
-    enabled: !!uid,
-    retry: false,
-  });
-
-  // Loading story data when flatlist reach end
-  const onLoadMoreStory = () => {
-    if (hasNextPage) fetchNextPage();
-  };
+    initPagination,
+    pagination,
+    setPagination,
+    isStorySuccess,
+    isStoryLoading,
+    isStoryError,
+    storyData,
+    isListSuccess,
+    isListLoading,
+    isListError,
+    listData,
+    onLoadMoreStory,
+  } = useStoryQuery();
 
   // Story data sorting
   const onPressOrderBy = () => {
@@ -107,47 +57,6 @@ const StoryScreen = ({navigation}: StoryProps) => {
       order: pagination.order,
       sort: pagination.sort,
     });
-  };
-
-  // Redering Component
-  const renderItem = (item: Story) => {
-    const title = getRegionTitleById(item.regionId);
-    const startDateString = dateToFormatString(
-      item.startDate,
-      'YYYY.MM.DD (ddd)',
-    );
-    const endDateString = dateToFormatString(item.endDate, 'YYYY.MM.DD (ddd)');
-    const point = storyPoint[item.point];
-
-    const onDetailList = () => {
-      navigation.navigate('ViewStory', {storyId: item.id});
-    };
-
-    return (
-      <Pressable onPress={onDetailList}>
-        <View
-          className="flex-row justify-between items-start p-3 border border-b-0 border-gray-400 rounded-t-lg shadow-sm shadow-black"
-          style={
-            customStyle({
-              bgColor: point.color,
-            }).storyPointView
-          }>
-          <View>
-            <Text className="text-white">{title}</Text>
-            <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
-          </View>
-          <View className="w-[40px] h-[40px] bg-white rounded-full shadow-sm shadow-black">
-            <Image style={{width: 40, height: 40}} source={point.image} />
-          </View>
-        </View>
-        <View className="p-3 border border-t-0 border-gray-400 rounded-b-lg bg-white shadow-sm shadow-black">
-          <Text className="text-black">{item.title}</Text>
-          <Text className="text-gray-400 mt-2 truncate" numberOfLines={1}>
-            {item.contents}
-          </Text>
-        </View>
-      </Pressable>
-    );
   };
 
   return (
@@ -216,7 +125,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
               keyExtractor={item => item.createdAt}
               onEndReached={onLoadMoreStory}
               onEndReachedThreshold={0.7}
-              renderItem={({item}) => renderItem(item)}
+              renderItem={({item}) => StoryCard(item, navigation)}
               showsHorizontalScrollIndicator={false}
             />
           ) : (

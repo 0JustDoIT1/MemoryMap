@@ -12,18 +12,15 @@ interface CustomStyle {
     marginLeft?: DimensionValue;
     marginRight?: DimensionValue;
   };
+  border?: {
+    bottom?: number;
+  };
 }
 
 export const customStyle = (props?: CustomStyle) =>
   StyleSheet.create({
     brandOutlinedButton: {
       borderColor: customColor.brandMain,
-    },
-    helperText: {
-      color: props?.color,
-    },
-    socialLoginLabel: {
-      color: props?.color,
     },
     successToast: {
       backgroundColor: customColor.success,
@@ -46,7 +43,20 @@ export const customStyle = (props?: CustomStyle) =>
       alignItems: 'center',
       paddingLeft: 10,
     },
-    toastContent: {paddingHorizontal: 5},
+    blackOpacityToast: {
+      height: 50,
+      width: '80%',
+      backgroundColor: customColor.blackOpacity,
+      borderLeftColor: customColor.blackOpacity,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 5,
+      borderRadius: 100,
+    },
+    toastContent: {
+      paddingHorizontal: 5,
+    },
     toastText1: {
       color: customColor.white,
     },
@@ -84,20 +94,6 @@ export const customStyle = (props?: CustomStyle) =>
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: customColor.white,
-    },
-    sliderContainer: {
-      width: '100%',
-    },
-    sliderTrack: {height: 10, borderRadius: 50},
-    sliderMinimumTrack: {
-      backgroundColor: props?.bgColor ? props.bgColor : customColor.brandMain,
-    },
-    fab: {
-      borderRadius: 100,
-      backgroundColor: customColor.brandMain,
-    },
-    fabContainer: {
-      marginRight: 8,
     },
     alert: {backgroundColor: '#F9F9F9', borderRadius: 10},
     calendarText: {
@@ -160,10 +156,6 @@ export const customStyle = (props?: CustomStyle) =>
       marginTop: 5,
       color: props?.color,
     },
-    dashboardRound: {
-      backgroundColor: `${props?.bgColor}50`,
-    },
-    pinCodeSwitch: {},
     pinCodeTopContainer: {
       width: '100%',
       height: '100%',
@@ -182,5 +174,29 @@ export const customStyle = (props?: CustomStyle) =>
     blurViewShot: {
       width: '100%',
       height: '100%',
+    },
+    settingTable: {
+      width: '100%',
+    },
+    settingTableCell: {
+      backgroundColor: 'inherit',
+      paddingTop: 3,
+      paddingBottom: 3,
+      borderBottomWidth: props?.border?.bottom ? props?.border?.bottom : 0,
+      borderBottomColor: customColor.backdrop,
+    },
+    settingTableSectionTitle: {
+      fontFamily: 'GmarketSansMedium',
+      fontSize: 12,
+    },
+    settingTableCellTitle: {
+      fontFamily: 'GmarketSansMedium',
+      fontSize: 16,
+    },
+    mapTextSettingSelect: {
+      backgroundColor: props?.bgColor,
+    },
+    mapTextSettingText: {
+      color: props?.color,
     },
   });

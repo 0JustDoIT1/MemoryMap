@@ -1,6 +1,5 @@
 export interface Story {
   id: string;
-  uid: string;
   regionId: string;
   startDate: string;
   endDate: string;
@@ -9,4 +8,11 @@ export interface Story {
   point: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Pagination {
+  limit: number;
+  filter: string;
+  order: string;
+  sort: string;
 }

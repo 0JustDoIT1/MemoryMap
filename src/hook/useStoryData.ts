@@ -1,8 +1,9 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Story} from 'src/types/story';
-import {dateToFormatString} from 'src/utils/dateFormat';
+import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
+import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
-const useStory = (uid: string) => {
+const useStoryData = (edit: boolean, data: Story) => {
   const [regionId, setRegionId] = useState<string>('');
   const [regionTitle, setRegionTitle] = useState<string>('');
 
@@ -12,8 +13,24 @@ const useStory = (uid: string) => {
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [point, setPoint] = useState<number>(0);
 
+  // Set state to region id
+  useEffect(() => {
+    if (edit) {
+      setRegionId(data.regionId);
+      setRegionTitle(getRegionTitleById(data.regionId));
+      setTitle(data.title);
+      setContents(data.contents);
+      setSelectedStartDate(dateTypeToDate(data.startDate));
+      setSelectedEndDate(dateTypeToDate(data.endDate));
+      setPoint(data.point);
+    } else if (!edit && data.regionId !== '') {
+      setRegionId(data.regionId);
+      setRegionTitle(getRegionTitleById(data.regionId));
+    }
+  }, [edit, data]);
+
   // Setting story data
-  const settingStoryData = (edit: boolean, data?: Story) => {
+  const settingStoryData = () => {
     if (
       regionId === '' ||
       !selectedStartDate ||
@@ -24,14 +41,13 @@ const useStory = (uid: string) => {
     )
       throw new Error('스토리 미완성');
 
-    const id = edit ? data!.id : `${uid}_${Number(new Date())}`;
+    const id = edit ? data!.id : `${regionId}_${Number(new Date())}`;
     const createdAt = edit
       ? data!.createdAt
       : dateToFormatString(new Date(), 'YYYY-MM-DD HH:mm:ss');
 
     const story: Story = {
       id: id,
-      uid: uid,
       regionId: regionId,
       startDate: dateToFormatString(selectedStartDate, 'YYYY-MM-DD HH:mm:ss'),
       endDate: dateToFormatString(selectedEndDate, 'YYYY-MM-DD HH:mm:ss'),
@@ -64,4 +80,4 @@ const useStory = (uid: string) => {
   };
 };
 
-export default useStory;
+export default useStoryData;

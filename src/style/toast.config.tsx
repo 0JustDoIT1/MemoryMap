@@ -3,9 +3,12 @@ import {
   ErrorToast,
   InfoToast,
   ToastProps,
+  BaseToast,
 } from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {customStyle} from './customStyle';
+import {View} from 'react-native';
+import {Text} from 'react-native-paper';
 
 export const toastConfig = {
   success: (props: ToastProps) => (
@@ -40,5 +43,10 @@ export const toastConfig = {
         <MaterialIcons name="info" size={18} color="#ffffff" />
       )}
     />
+  ),
+  blackOpacity: ({text1}: any) => (
+    <View style={customStyle().blackOpacityToast}>
+      <Text style={customStyle().toastText1}>{text1}</Text>
+    </View>
   ),
 };

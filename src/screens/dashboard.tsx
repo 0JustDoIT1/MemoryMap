@@ -1,55 +1,28 @@
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Image, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
-import useAuth from 'src/hook/useAuth';
+import useDashboard from 'src/hook/useDashboard';
 import SkeletonDashboard from 'src/skeleton/skeletonDashboard';
 import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
-import {getDashboardKoreaMapData} from 'src/utils/koreaMap.db';
-import {getDashboardStory} from 'src/utils/story.db';
 
 const DashboardScreen = ({navigation}: DashboardProps) => {
   const koreaMapRegionCount = Object.values(koreaMapDataInit).length;
 
-  const {appUser} = useAuth();
-  const uid = appUser?.uid!;
-
-  const [percent, setPercent] = useState<number>(0);
-
-  // React-Query Query
   const {
-    isSuccess: isMapSuccess,
-    isLoading: isMapLoading,
-    isError: isMapError,
-    data: mapData,
-  } = useQuery({
-    queryKey: ['dashboardKoreaMap', uid],
-    queryFn: () => getDashboardKoreaMapData(uid),
-    enabled: !!uid,
-    retry: false,
-    placeholderData: keepPreviousData,
-  });
-  const {
-    isSuccess: isStorySuccess,
-    isLoading: isStoryLoading,
-    isError: isStoryError,
-    data: storyData,
-  } = useQuery({
-    queryKey: ['dashboardStory', uid],
-    queryFn: () => getDashboardStory(uid),
-    enabled: !!uid,
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (isMapSuccess) {
-      setPercent(((mapData.color + mapData.photo) / koreaMapRegionCount) * 100);
-    }
-  }, [mapData]);
+    percent,
+    isMapSuccess,
+    isMapLoading,
+    isMapError,
+    mapData,
+    isStorySuccess,
+    isStoryLoading,
+    isStoryError,
+    storyData,
+  } = useDashboard(koreaMapRegionCount);
 
   return (
     <SafeAreaView
@@ -57,15 +30,15 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
       edges={['bottom', 'left', 'right']}>
       {(isMapError || isStoryError) && <></>}
       {(isMapLoading || isStoryLoading) && <SkeletonDashboard />}
-      {isMapSuccess && isStorySuccess && (
+      {isMapSuccess && isStorySuccess && mapData && storyData && (
         <React.Fragment>
           <View className="relative w-full h-2/5 flex justify-between items-start px-8 bg-brandLight shadow-md shadow-black">
             <View className="w-full h-full flex justify-center">
+              <View className="my-2">
+                <Text className="text-lg text-white">추억을 확인해보세요.</Text>
+              </View>
               <View className="w-full flex-row justify-between items-center">
                 <View className="w-1/2">
-                  <View className="my-2">
-                    <Text className="text-lg text-white">얼마나 왔다감?</Text>
-                  </View>
                   <View className="w-full flex-row justify-between items-center my-3">
                     <View className="flex-row items-end">
                       <Text className="text-6xl text-white">
@@ -79,7 +52,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
                 </View>
                 <View className="w-1/2 flex items-end">
                   <Image
-                    style={{width: 110, height: 110}}
+                    style={{width: 100, height: 100}}
                     source={require('assets/images/map.png')}
                   />
                 </View>

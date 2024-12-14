@@ -1,5 +1,5 @@
 import {atom, RecoilEnv} from 'recoil';
-import {User} from 'src/types/account';
+import {AppShowRegionName} from 'src/types/appData';
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
@@ -9,8 +9,8 @@ export const appPinCodeState = atom<boolean>({
   default: false,
 });
 
-// App signin data Recoil
-export const appUserState = atom<User | null>({
-  key: 'appUser',
-  default: null,
+// Show region name
+export const appShowRegionNameState = atom<AppShowRegionName>({
+  key: 'appShowRegionName',
+  default: 'show',
 });

@@ -8,9 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brandLight: '#60C9EE',
-        brandMain: '#24B4E7',
-        brandDark: '#1E9AC6',
+        blackOpacity: 'rgba(0,0,0, 0.6)',
+        whiteOpacity: 'rgba(255,255,255, 0.7)',
+        brandLight: '#3F6FE6',
+        brandMain: '#2058E2',
+        brandDark: '#1B4BC1',
         darkGray: '#484848',
         success: '#22bb33',
         error: '#FF2424',
