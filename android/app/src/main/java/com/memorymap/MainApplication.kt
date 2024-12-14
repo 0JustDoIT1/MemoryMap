@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 import io.xogus.reactnative.versioncheck.RNVersionCheckPackage
+import com.alpha0010.fs.FileAccessPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -21,6 +22,7 @@ class MainApplication : Application(), ReactApplication {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
               RNVersionCheckPackage()
+              FileAccessPackage()
             }
 
         override fun getJSMainModuleName(): String = "index"

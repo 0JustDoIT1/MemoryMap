@@ -30,7 +30,6 @@ const App = (): React.JSX.Element => {
   // Create SQLite Table (If exists, no create)
   const createSqlTable = async () => {
     const db = await getDBConnection();
-    await createTable(db, TableName.auth);
     await createTable(db, TableName.map);
     await createTable(db, TableName.story);
   };

@@ -4,7 +4,6 @@ import {GetColorRegionList} from './koreaMap';
 
 export type StackParamList = {
   Root: undefined;
-  Auth: undefined;
   Main: {
     screen: string;
   };
@@ -12,7 +11,6 @@ export type StackParamList = {
   PinCodeEnter: {
     route: 'PinCodeSetting' | 'Map' | 'Setting';
   };
-  SignIn: undefined;
   Map: undefined;
   Dashboard: undefined;
   Story: undefined;
@@ -31,7 +29,8 @@ export type StackParamList = {
     regionList: GetColorRegionList;
     regionMainList: string[];
   };
-  AccountInfo: undefined;
+  BackUp: undefined;
+  MapTextSetting: undefined;
 };
 
 export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
@@ -43,7 +42,6 @@ export type PinCodeEnterProps = NativeStackScreenProps<
   StackParamList,
   'PinCodeEnter'
 >;
-export type SignInProps = NativeStackScreenProps<StackParamList, 'SignIn'>;
 export type MapProps = NativeStackScreenProps<StackParamList, 'Map'>;
 export type DashboardProps = NativeStackScreenProps<
   StackParamList,
@@ -65,7 +63,8 @@ export type SelectRegionProps = NativeStackScreenProps<
   StackParamList,
   'SelectRegion'
 >;
-export type AccountInfoProps = NativeStackScreenProps<
+export type BackUpProps = NativeStackScreenProps<StackParamList, 'BackUp'>;
+export type MapTextSettingProps = NativeStackScreenProps<
   StackParamList,
-  'AccountInfo'
+  'MapTextSetting'
 >;

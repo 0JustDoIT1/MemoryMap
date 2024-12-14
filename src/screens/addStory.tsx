@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -8,23 +8,17 @@ import CustomBottomSheet from 'src/components/bottomSheet';
 import {BrandDynamicButton} from 'src/components/button';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import {storyPointArray} from 'src/constants/point';
-import useStory from 'src/hook/useStory';
 import NotFound from 'src/components/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import useAuth from 'src/hook/useAuth';
-import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import BrandCalendar from 'src/components/calendar';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-  getKoreaMapDataByColor,
-  updateKoreaMapDataStory,
-} from 'src/utils/koreaMap.db';
-import {Story} from 'src/types/story';
-import {addStoryByRegionId} from 'src/utils/story.db';
 import SelectPoint from 'src/components/selectPoint';
 import SkeletonAddStory from 'src/skeleton/skeletonAddStory';
 import useButton from 'src/hook/useButton';
+import useStoryData from 'src/hook/useStoryData';
+import useKoreaMapQuery from 'src/hook/useKoreaMapQuery';
+import useUpdateStory from 'src/hook/useUpdateStory';
+import {StoryInit} from 'src/constants/story';
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet Ref
@@ -37,13 +31,11 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {appUser} = useAuth();
-  const uid = appUser?.uid!;
+  const region = route.params.regionId ? route.params.regionId : '';
+
   const {
     regionId,
-    setRegionId,
     regionTitle,
-    setRegionTitle,
     title,
     setTitle,
     contents,
@@ -55,37 +47,11 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     point,
     setPoint,
     settingStoryData,
-  } = useStory(appUser?.uid!);
+  } = useStoryData(false, {...StoryInit, regionId: region});
   const {isDisabled, disabledButton, abledButton} = useButton();
-
-  // Access the client
-  const queryClient = useQueryClient();
-
-  // React-Query Query
-  const {isSuccess, isLoading, isError, data} = useQuery({
-    queryKey: ['addStory', uid],
-    queryFn: () => getKoreaMapDataByColor(uid),
-    enabled: !!uid,
-    retry: false,
-  });
-
-  // React-Query Mutation
-  const addStoryMutation = useMutation({
-    mutationFn: (data: Story) => addStoryByRegionId(data),
-  });
-  const updateMapMutation = useMutation({
-    mutationFn: ({uid, id, count}: {uid: string; id: string; count: number}) =>
-      updateKoreaMapDataStory(uid, id, count),
-  });
-
-  // Set title to region ID
-  useEffect(() => {
-    if (route.params?.regionId) {
-      const region = route.params.regionId;
-      setRegionId(region);
-      setRegionTitle(getRegionTitleById(region));
-    }
-  }, [route.params]);
+  const {isColorSuccess, isColorLoading, isColorError, colorData} =
+    useKoreaMapQuery();
+  const {addStoryMutation, updateMapMutation} = useUpdateStory();
 
   // BottomSheet opens when date is selected
   const onPressDate = () => {
@@ -95,10 +61,10 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
 
   // Navigate to region selection page
   const onPressRegion = () => {
-    if (isSuccess) {
+    if (isColorSuccess && colorData) {
       navigation.navigate('SelectRegion', {
-        regionList: data.all,
-        regionMainList: data.main,
+        regionList: colorData.all,
+        regionMainList: colorData.main,
       });
     }
   };
@@ -112,31 +78,18 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
 
   // Add Story
   const onAddStory = async () => {
-    disabledButton();
     try {
-      if (isSuccess) {
-        const newStory = settingStoryData(false);
+      if (isColorSuccess) {
+        disabledButton();
+        const newStory = settingStoryData();
         await addStoryMutation.mutateAsync(newStory);
         await updateMapMutation.mutateAsync({
-          uid: uid,
           id: regionId,
           count: 1,
         });
 
-        await queryClient.invalidateQueries({
-          queryKey: ['story'],
-          refetchType: 'all',
-        });
-        await queryClient.invalidateQueries({
-          queryKey: ['koreaMapData', uid],
-          refetchType: 'all',
-        });
-        await queryClient.invalidateQueries({
-          queryKey: ['story', uid],
-          refetchType: 'all',
-        });
-
-        onAddStorySuccess();
+        abledButton();
+        navigation.navigate('Main', {screen: 'Story'});
       }
     } catch (error) {
       abledButton();
@@ -144,20 +97,15 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     }
   };
 
-  const onAddStorySuccess = () => {
-    abledButton();
-    navigation.navigate('Main', {screen: 'Story'});
-  };
-
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      {isError && <></>}
-      {isLoading && <SkeletonAddStory />}
-      {isSuccess && (
+      {isColorError && <></>}
+      {isColorLoading && <SkeletonAddStory />}
+      {isColorSuccess && colorData && (
         <React.Fragment>
-          {data.main.length >= 1 ? (
+          {colorData.main.length >= 1 ? (
             <React.Fragment>
               <Pressable
                 className="w-full"

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -6,18 +6,14 @@ import {customColor} from 'src/style/customColor';
 import {EditStoryProps} from 'src/types/stack';
 import CustomBottomSheet from 'src/components/bottomSheet';
 import {BrandDynamicButton} from 'src/components/button';
-import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
+import {dateToFormatString} from 'src/utils/dateFormat';
 import {storyPointArray} from 'src/constants/point';
-import useStory from 'src/hook/useStory';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/calendar';
-import useAuth from 'src/hook/useAuth';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
 import SelectPoint from 'src/components/selectPoint';
-import {Story} from 'src/types/story';
-import {addStoryByRegionId} from 'src/utils/story.db';
-import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useButton from 'src/hook/useButton';
+import useStoryData from 'src/hook/useStoryData';
+import useUpdateStory from 'src/hook/useUpdateStory';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -30,15 +26,11 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
-  const {appUser} = useAuth();
-  const uid = appUser?.uid!;
   const story = route.params.story;
 
   const {
     regionId,
-    setRegionId,
     regionTitle,
-    setRegionTitle,
     title,
     setTitle,
     contents,
@@ -50,29 +42,9 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     point,
     setPoint,
     settingStoryData,
-  } = useStory(uid);
+  } = useStoryData(true, story);
   const {isDisabled, disabledButton, abledButton} = useButton();
-
-  // Access the client
-  const queryClient = useQueryClient();
-
-  // React-Query Mutation
-  const editStoryMutation = useMutation({
-    mutationFn: (data: Story) => addStoryByRegionId(data),
-  });
-
-  // Set state to region id
-  useEffect(() => {
-    if (route.params.story) {
-      setRegionId(story.regionId);
-      setRegionTitle(getRegionTitleById(story.regionId));
-      setTitle(story.title);
-      setContents(story.contents);
-      setSelectedStartDate(dateTypeToDate(story.startDate));
-      setSelectedEndDate(dateTypeToDate(story.endDate));
-      setPoint(story.point);
-    }
-  }, [route.params.story]);
+  const {editStoryMutation} = useUpdateStory(story.id);
 
   // DateRangePicker bottomsheet open
   const onPressDate = () => {
@@ -89,38 +61,17 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
 
   // Edit Story
   const onUpdateStory = async () => {
-    disabledButton();
     try {
-      const newStory = settingStoryData(true, story);
+      disabledButton();
+      const newStory = settingStoryData();
       await editStoryMutation.mutateAsync(newStory);
 
-      await queryClient.invalidateQueries({
-        queryKey: ['story'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['viewStory', route.params.story.id],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData', uid],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['story', uid],
-        refetchType: 'all',
-      });
-
-      onUpdateStorySuccess();
+      abledButton();
+      navigation.goBack();
     } catch (error) {
       abledButton();
       return;
     }
-  };
-
-  const onUpdateStorySuccess = () => {
-    abledButton();
-    navigation.goBack();
   };
 
   return (

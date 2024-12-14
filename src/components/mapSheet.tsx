@@ -3,7 +3,6 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Pressable, View} from 'react-native';
 import {Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
@@ -18,22 +17,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
 import CustomAlert from './alert';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteMapDataById, updateMapPhotoById} from 'src/utils/koreaMap.db';
 import ImagePicker from 'react-native-image-crop-picker';
 import ZoomImage from './zoomImage';
 import {useAppTheme} from 'src/style/paperTheme';
 import LoadingScreen from 'src/screens/loadingScreen';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import useButton from 'src/hook/useButton';
+import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
+import useLoading from 'src/hook/useLoading';
 
 interface MapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
-  uid: string;
   regionData: KoreaRegionData;
 }
 
-const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
+const MapSheet = ({mapSheetModalRef, regionData}: MapSheet) => {
   const theme = useAppTheme();
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['30%', '40%'], []);
@@ -47,53 +45,31 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
     [],
   );
 
-  const {visible, showModal, hideModal} = useModal();
-  const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {isDisabled, disabledButton, abledButton} = useButton();
-
-  const [zoom, setZoom] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Access the client
-  const queryClient = useQueryClient();
-
-  // React-Query Mutation
-  const deleteMapMutation = useMutation({
-    mutationFn: ({uid, data}: {uid: string; data: KoreaRegionData}) =>
-      deleteMapDataById(uid, data),
-  });
-  const updateMapMutation = useMutation({
-    mutationFn: ({
-      uid,
-      data,
-      uri,
-      imageStyle,
-    }: {
-      uid: string;
-      data: KoreaRegionData;
-      uri: string;
-      imageStyle: {width: number; height: number};
-    }) => updateMapPhotoById(uid, data, uri, imageStyle),
-  });
-
   // KoreaMapData tag list
   const tagList =
     regionData.title === regionData.main
       ? []
       : [regionData.main, regionData.title];
 
+  const {isDisabled, disabledButton, abledButton} = useButton();
+  const {onLoading, startLoading, endLoading} = useLoading();
+  const {visible, showModal, hideModal} = useModal();
+  const {visibleDialog, showDialog, hideDialog} = useDialog();
+  const {deleteMapMutation, updateMapByPhotoMutation} = useKoreaMapMutation();
+
+  const [zoom, setZoom] = useState<boolean>(false);
+
   // Select Image
   const onImagePicker = async () => {
     try {
-      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width;
-      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height;
+      const cropW = koreaMapSvgData[regionData.id].regionSvgStyle.width;
+      const cropH = koreaMapSvgData[regionData.id].regionSvgStyle.height;
 
       const cropImage = await ImagePicker.openPicker({
         width: cropW,
         height: cropH,
         cropping: true,
         mediaType: 'photo',
-        // freeStyleCropEnabled: true,
         compressImageQuality: 1,
         cropperToolbarTitle: getRegionTitle(regionData),
       });
@@ -105,76 +81,43 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
 
   // Upload photo to map
   const onUploadPhoto = async (path: string, width: number, height: number) => {
-    disabledButton();
-    setIsLoading(true);
     try {
-      await updateMapMutation.mutateAsync({
-        uid: uid,
+      disabledButton();
+      startLoading();
+      await updateMapByPhotoMutation.mutateAsync({
         data: regionData,
         uri: path,
         imageStyle: {width: width, height: height},
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData', uid],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['addStory', uid],
-        refetchType: 'all',
-      });
-
-      onUploadPhotoSuccess();
+      endLoading();
+      abledButton();
+      handleClosePress();
+      showBottomToast('success', `${getRegionTitle(regionData)} 사진 추가!`);
     } catch (error) {
-      setIsLoading(false);
+      console.log('###', error);
+      endLoading();
       abledButton();
       return;
     }
   };
 
-  const onUploadPhotoSuccess = () => {
-    const text = `${getRegionTitle(regionData)} 사진 추가!`;
-    setIsLoading(false);
-    handleClosePress();
-    abledButton();
-    showBottomToast('success', text);
-  };
-
   // Delete map background
   const onDeleteBackground = async () => {
-    disabledButton();
     try {
-      await deleteMapMutation.mutateAsync({
-        uid: uid,
-        data: regionData,
-      });
+      disabledButton();
+      await deleteMapMutation.mutateAsync(regionData);
 
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData', uid],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['addStory', uid],
-        refetchType: 'all',
-      });
-
-      onDeleteBackgroundSuccess();
+      abledButton();
+      hideDialog();
+      hideModal();
+      handleClosePress();
     } catch (error) {
-      onDeleteBackgroundError(error);
+      abledButton();
+      hideModal();
+      handleClosePress();
+      return;
     }
-  };
-
-  const onDeleteBackgroundSuccess = () => {
-    hideDialog();
-    hideModal();
-    handleClosePress();
-    abledButton();
-  };
-
-  const onDeleteBackgroundError = (error: any) => {
-    hideModal();
-    handleClosePress();
-    abledButton();
   };
 
   return (
@@ -279,7 +222,6 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         hideModal={hideModal}
         contents={
           <ColorPickerModal
-            uid={uid}
             regionData={regionData}
             hideModal={hideModal}
             handleClosePress={handleClosePress}
@@ -295,7 +237,7 @@ const MapSheet = ({mapSheetModalRef, uid, regionData}: MapSheet) => {
         hideAlert={hideDialog}
       />
       {zoom && <ZoomImage data={regionData} setZoom={setZoom} />}
-      {isLoading && (
+      {onLoading && (
         <Portal>
           <LoadingScreen />
         </Portal>

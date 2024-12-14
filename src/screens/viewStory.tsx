@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import React, {useRef} from 'react';
 import {Image, Pressable, ScrollView, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,81 +10,47 @@ import useDialog from 'src/hook/useDialog';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import useAuth from 'src/hook/useAuth';
 import CustomAlert from 'src/components/alert';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {deleteStoryById, getOneStoryById} from 'src/utils/story.db';
-import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import SkeletonEditStory from 'src/skeleton/skeletonEditStory';
 import useButton from 'src/hook/useButton';
+import useViewStory from 'src/hook/useViewStory';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
 
-  const {appUser} = useAuth();
-  const uid = appUser?.uid!;
   const storyId = route.params.storyId;
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {isDisabled, disabledButton, abledButton} = useButton();
 
-  // Access the client
-  const queryClient = useQueryClient();
-
-  // React-Query Query
-  const {isSuccess, isLoading, isError, data} = useQuery({
-    queryKey: ['viewStory', storyId],
-    queryFn: () => getOneStoryById(storyId),
-    enabled: !!uid,
-    retry: false,
-  });
-
-  // React-Query Mutation
-  const deleteStoryMutation = useMutation({
-    mutationFn: deleteStoryById,
-  });
-  const updateMapMutation = useMutation({
-    mutationFn: ({uid, id, count}: {uid: string; id: string; count: number}) =>
-      updateKoreaMapDataStory(uid, id, count),
-  });
+  const {
+    isSuccess,
+    isLoading,
+    isError,
+    data,
+    deleteStoryMutation,
+    updateMapMutation,
+  } = useViewStory(storyId);
 
   // 스토리 제거
   const onDeleteStory = async () => {
-    disabledButton();
     try {
       if (isSuccess) {
+        disabledButton();
         await deleteStoryMutation.mutateAsync(data.id);
         await updateMapMutation.mutateAsync({
-          uid: uid,
           id: data.regionId,
           count: -1,
         });
 
-        await queryClient.invalidateQueries({
-          queryKey: ['story'],
-          refetchType: 'all',
-        });
-        await queryClient.invalidateQueries({
-          queryKey: ['koreaMapData', uid],
-          refetchType: 'all',
-        });
-        await queryClient.invalidateQueries({
-          queryKey: ['story', uid],
-          refetchType: 'all',
-        });
-
-        onDeleteStorySuccess();
+        abledButton();
+        navigation.goBack();
       }
     } catch (error) {
       abledButton();
       return;
     }
-  };
-
-  const onDeleteStorySuccess = () => {
-    abledButton();
-    navigation.goBack();
   };
 
   return (

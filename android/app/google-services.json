@@ -1,50 +1,41 @@
 {
   "project_info": {
-    "project_number": "634770973339",
-    "firebase_url": "https://memorymap-20e31-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "memorymap-20e31",
-    "storage_bucket": "memorymap-20e31.appspot.com"
+    "project_number": "1075551018716",
+    "project_id": "memorymap-36074",
+    "storage_bucket": "memorymap-36074.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:634770973339:android:7e5f1089612aada7b8dc3e",
+        "mobilesdk_app_id": "1:1075551018716:android:4ff868b0d3e94e55ea1e19",
         "android_client_info": {
           "package_name": "com.memorymap"
         }
       },
       "oauth_client": [
         {
-          "client_id": "634770973339-0he712ffun09ij8secbo1r75dq4bd4n8.apps.googleusercontent.com",
+          "client_id": "1075551018716-59mekb5006459cp0tfdjntn37gp59jpo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.memorymap",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "47d680016924557f46ef90b4a53f2b3e1fc62d97"
           }
         },
         {
-          "client_id": "634770973339-apgov2qs4lp9ka7nadbqv0njk7m67olo.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.memorymap",
-            "certificate_hash": "12699071147c37696d90e9d12f2ab021adefb2df"
-          }
-        },
-        {
-          "client_id": "634770973339-ae9l841vgnscqo1581b5csi0eisgheqj.apps.googleusercontent.com",
+          "client_id": "1075551018716-gaco7n0df8lcrt89s7haq4m943cubjk8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBDefJm5Qo61ofzF8TpEd5dE63M335fsk8"
+          "current_key": "AIzaSyAKLLX21kU_ygoWpR5_nLn5M6j6FHZVbsU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "634770973339-ae9l841vgnscqo1581b5csi0eisgheqj.apps.googleusercontent.com",
+              "client_id": "1075551018716-gaco7n0df8lcrt89s7haq4m943cubjk8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

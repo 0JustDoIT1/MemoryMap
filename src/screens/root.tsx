@@ -1,120 +1,27 @@
-import {useEffect, useState} from 'react';
-import {useSetRecoilState} from 'recoil';
+import {useEffect} from 'react';
 import useDialog from 'src/hook/useDialog';
-import useAuth from 'src/hook/useAuth';
-import {appPinCodeState} from 'src/recoil/atom';
 import {RootProps} from 'src/types/stack';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {KeyChainPinCode} from '@env';
-import {getSecureValue} from 'src/utils/keyChain';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
 import CustomConfirmAlert from 'src/components/confirmAlert';
-import {getInitialDataToDB, syncDataToSQLite} from 'src/utils/auth';
-import {FirebaseUser} from 'src/types/account';
+import useRoot from 'src/hook/useRoot';
 
 const RootScreen = ({navigation}: RootProps) => {
-  const setAppPinCode = useSetRecoilState(appPinCodeState);
-
-  const {appUser, setAppUser} = useAuth();
-
-  const [initializing, setInitializing] = useState(true);
   const {visibleDialog, showDialog} = useDialog();
-
-  let authFlag = true;
+  const {checkVersion, checkPincode, checkShowMapText} = useRoot();
 
   // App version check & Check existing SignIn status
   useEffect(() => {
     // const check = checkVersion()
     checkVersion().then(check => {
-      if (check) {
-        const onUnsubscribeAuth = auth().onAuthStateChanged(onSubscribeAuth);
-        return onUnsubscribeAuth;
-      } else return showDialog();
+      if (!check) return showDialog();
+      else {
+        checkShowMapText();
+        checkPincode(navigation);
+      }
     });
   }, []);
-
-  const checkVersion = async () => {
-    // const androidPackageName = VersionCheck.getPackageName(); //com.memorymap
-
-    // const currentVersion = VersionCheck.getCurrentVersion();
-    // const latestVersion = await VersionCheck.getLatestVersion({
-    //   provider: 'playStore',
-    //   packageName: androidPackageName,
-    // })
-    //   .then(value => value)
-    //   .catch(error => console.error('Error fetching latest version: ', error));
-
-    // if (latestVersion && latestVersion > currentVersion) return false;
-    // else return true;
-
-    // 임시
-    return true;
-  };
-
-  // Check existing SignIn status
-  const onSubscribeAuth = async (user: FirebaseAuthTypes.User | null) => {
-    if (authFlag) {
-      // Existing SignIn
-      if (user) {
-        console.log('구독: 유저있음');
-        const newUser: FirebaseUser = {
-          uid: user.uid!,
-          email: user.email!,
-          displayName: user.displayName!,
-          createdAt: user.metadata.creationTime!,
-        };
-        // Firebase 상에서 두번 실행이 강제되기 때문에 authFlag를 통해 한번만 실행되게끔 강제
-        await syncDataToSQLite(newUser);
-        const finalUser = await getInitialDataToDB(newUser);
-        setAppUser(finalUser);
-        authFlag = false; // Check existing SignIn complete
-
-        // No Existing SignIn
-      } else {
-        console.log('구독: 유저없음');
-        setAppUser(null);
-        authFlag = false; // Check existing SignIn complete
-      }
-    }
-    setInitializing(false); // Check existing SignIn complete
-  };
-
-  // Get pincode in KeyChain
-  const getPinCodeToKeyChainCheck = async () => {
-    return await getSecureValue(KeyChainPinCode).then(value => value?.username);
-  };
-
-  // Data Setting & Check pincode when AppUser Exists
-  const settingData = async () => {
-    if (appUser) {
-      // Check pincode settings
-      const pinCodeLock = await getPinCodeToKeyChainCheck();
-      if (pinCodeLock && pinCodeLock === KeyChainPinCode) {
-        setAppPinCode(true);
-        // Pincode, navigate to the Lock screen
-        navigation.replace('PinCodeEnter', {route: 'Map'});
-      } else {
-        // No pincode, navigate to the Main screen
-        navigation.replace('Main', {screen: 'Map'});
-      }
-    }
-  };
-
-  useEffect(() => {
-    // Need to check existing SignIn
-    if (initializing) return;
-
-    // Check existing SignIn & AppUser exists
-    if (appUser && !authFlag) {
-      // Setting Data
-      settingData();
-    } else {
-      // Navigate to SignIn screen
-      navigation.replace('Auth');
-    }
-  }, [appUser, initializing]);
 
   return (
     <SafeAreaView className="flex-1" edges={['left', 'right']}>

@@ -10,19 +10,14 @@ export const getDBConnection = async () => {
 export const createTable = async (db: SQLiteDatabase, tableName: string) => {
   let tableColumn!: string;
 
-  if (tableName === TableName.auth) {
-    tableColumn =
-      '(uid TEXT UNIQUE PRIMARY KEY, email TEXT UNIQUE, displayName TEXT, subscribe INTEGER, createdAt TEXT)';
-  }
-
   if (tableName === TableName.map) {
     tableColumn =
-      '(id TEXT UNIQUE PRIMARY KEY, uid TEXT, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, imageStyle TEXT)';
+      '(id TEXT UNIQUE PRIMARY KEY, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, imageStyle TEXT)';
   }
 
   if (tableName === TableName.story) {
     tableColumn =
-      '(id TEXT UNIQUE PRIMARY KEY, uid TEXT, regionId TEXT, startDate TEXT, endDate TEXT, title TEXT, contents TEXT, point INT, createdAt TEXT, updatedAt TEXT)';
+      '(id TEXT UNIQUE PRIMARY KEY, regionId TEXT, startDate TEXT, endDate TEXT, title TEXT, contents TEXT, point INT, createdAt TEXT, updatedAt TEXT)';
   }
 
   const query = `CREATE TABLE IF NOT EXISTS ${tableName}${tableColumn};`;
@@ -31,12 +26,8 @@ export const createTable = async (db: SQLiteDatabase, tableName: string) => {
 };
 
 //// Select
-export const countData = async (
-  db: SQLiteDatabase,
-  tableName: string,
-  uid: string,
-) => {
-  const query = `SELECT COUNT(*) as count FROM ${tableName} where uid = '${uid}'`;
+export const countData = async (db: SQLiteDatabase, tableName: string) => {
+  const query = `SELECT COUNT(*) as count FROM ${tableName}`;
 
   return await db.executeSql(query, []);
 };

@@ -7,7 +7,6 @@ import BootSplash from 'react-native-bootsplash';
 
 import {StackParamList} from 'src/types/stack';
 
-import SignInScreen from 'src/screens/signIn';
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
 import RootScreen from 'src/screens/root';
@@ -17,28 +16,17 @@ import EditStoryScreen from 'src/screens/editStory';
 import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
-import AccountInfoScreen from 'src/screens/accountInfo';
 import PinCodeSettingScreen from 'src/screens/pinCodeSetting';
 import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
 import AddStoryScreen from 'src/screens/addStory';
 import {lazy, Suspense} from 'react';
 import MapLoadingScreen from 'src/screens/mapLoadingScreen';
+import BackUpScreen from 'src/screens/backup';
+import BackButton from 'src/components/backButton';
+import MapTextSettingScreen from 'src/screens/mapTextSetting';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
-
-const Auth = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="SignIn"
-      screenOptions={{
-        headerShown: false,
-        animation: 'flip',
-      }}>
-      <Stack.Screen name="SignIn" component={SignInScreen} />
-    </Stack.Navigator>
-  );
-};
 
 const Main = () => {
   const theme = useAppTheme();
@@ -160,12 +148,11 @@ const Navigation = () => {
           animation: 'flip',
         }}>
         <Stack.Screen name="Root" component={RootScreen} />
-        <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen
           name="AddStory"
           component={AddStoryScreen}
-          options={({route}) => ({
+          options={({navigation}) => ({
             headerShown: true,
             headerShadowVisible: false,
             headerTintColor: '#000000',
@@ -174,13 +161,18 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '스토리 작성',
-            headerBackButtonMenuEnabled: true,
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
           })}
         />
         <Stack.Screen
           name="EditStory"
           component={EditStoryScreen}
-          options={({route}) => ({
+          options={({navigation}) => ({
             headerShown: true,
             headerShadowVisible: false,
             headerTintColor: '#000000',
@@ -189,13 +181,18 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '스토리 수정',
-            headerBackButtonMenuEnabled: true,
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
           })}
         />
         <Stack.Screen
           name="ViewStory"
           component={ViewStoryScreen}
-          options={({route}) => ({
+          options={({navigation}) => ({
             headerShown: true,
             headerShadowVisible: false,
             headerTintColor: '#000000',
@@ -204,13 +201,18 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '스토리',
-            headerBackButtonMenuEnabled: true,
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
           })}
         />
         <Stack.Screen
           name="SelectRegion"
           component={SelectRegionScreen}
-          options={{
+          options={({navigation}) => ({
             headerShown: true,
             headerShadowVisible: false,
             headerTintColor: '#ffffff',
@@ -219,29 +221,18 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '지역 선택',
-            headerBackButtonMenuEnabled: true,
             headerStyle: {backgroundColor: theme.colors.brandLight},
-          }}
-        />
-        <Stack.Screen
-          name="AccountInfo"
-          component={AccountInfoScreen}
-          options={{
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#ffffff',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
-            headerTitle: '개인/보안',
-            headerBackButtonMenuEnabled: true,
-            headerStyle: {backgroundColor: theme.colors.brandLight},
-          }}
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="PinCodeSetting"
-          options={{
+          options={({navigation}) => ({
             headerShown: true,
             headerShadowVisible: false,
             headerTintColor: '#ffffff',
@@ -250,12 +241,52 @@ const Navigation = () => {
             },
             headerTitleAlign: 'center',
             headerTitle: '잠금화면 설정',
-            headerBackButtonMenuEnabled: true,
             headerStyle: {backgroundColor: theme.colors.brandLight},
-          }}
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
+          })}
           component={PinCodeSettingScreen}
         />
         <Stack.Screen name="PinCodeEnter" component={PinCodeEnterScreen} />
+        <Stack.Screen
+          options={({navigation}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTitle: '',
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
+          })}
+          name="BackUp"
+          component={BackUpScreen}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#000000',
+            headerTitleStyle: {
+              fontFamily: 'GmarketSansMedium',
+            },
+            headerTitleAlign: 'center',
+            headerTitle: '지역명 표시',
+            headerLeft: () => (
+              <BackButton
+                navigation={navigation}
+                color={theme.colors.darkGray}
+              />
+            ),
+          })}
+          name="MapTextSetting"
+          component={MapTextSettingScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
