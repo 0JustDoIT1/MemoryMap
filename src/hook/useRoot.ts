@@ -47,7 +47,6 @@ const useRoot = () => {
     );
 
     if (mapNum === 0) {
-      console.log('SQLite 초기 없어유');
       // SQLite
       koreaMapDataInit.forEach(
         async item => await saveKoreaMapDataToDB(db, item),

@@ -62,7 +62,6 @@ const useKoreaMapMutation = () => {
       imageStyle: {width: number; height: number};
     }) => updateMapPhotoById(data, uri, imageStyle),
     onSuccess: async () => {
-      console.log('성공');
       await queryClient.invalidateQueries({
         queryKey: ['koreaMapData'],
         refetchType: 'all',

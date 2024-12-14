@@ -23,7 +23,6 @@ const clamp = (val: number, min: number, max: number) => {
 };
 
 const MapScreen = ({navigation}: MapProps) => {
-  console.log('맵');
   const theme = useAppTheme();
 
   const viewShotRef = useRef<ViewShot>(null);

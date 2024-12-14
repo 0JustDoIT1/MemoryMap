@@ -12,8 +12,6 @@ import {useRecoilValue} from 'recoil';
 import {appShowRegionNameState} from 'src/recoil/atom';
 
 const KoreaMapSvg = () => {
-  console.log('SVG');
-
   // Bottom Sheet Ref
   const mapSheetModalRef = useRef<BottomSheetModal>(null);
   // Bottom Sheet present event
