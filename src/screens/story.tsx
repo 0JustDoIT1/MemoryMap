@@ -10,7 +10,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomModal from 'src/components/modal';
 import useModal from 'src/hook/useModal';
 import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
-import SkeletonStory from 'src/skeleton/skeletonStory';
 import useStoryQuery from 'src/hook/useStoryQuery';
 import StoryCard from 'src/components/storyCard';
 
@@ -64,11 +63,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
       className="flex-1 justify-center items-center bg-white pb-6 px-6"
       edges={['bottom', 'left', 'right']}>
       {(isStoryError || isListError) && <></>}
-      {(isStoryLoading || isListLoading) && (
-        <View className="w-full h-full items-start">
-          <SkeletonStory />
-        </View>
-      )}
+      {(isStoryLoading || isListLoading) && <></>}
       {isStorySuccess && isListSuccess && (
         <View className="w-full h-full">
           <View className="w-full h-[8%] flex-row justify-between items-center">

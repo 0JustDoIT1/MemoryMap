@@ -5,7 +5,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
-import SkeletonDashboard from 'src/skeleton/skeletonDashboard';
 import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
 
@@ -29,7 +28,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
       className="flex-1 justify-center items-center bg-white"
       edges={['bottom', 'left', 'right']}>
       {(isMapError || isStoryError) && <></>}
-      {(isMapLoading || isStoryLoading) && <SkeletonDashboard />}
+      {(isMapLoading || isStoryLoading) && <></>}
       {isMapSuccess && isStorySuccess && mapData && storyData && (
         <React.Fragment>
           <View className="relative w-full h-2/5 flex justify-between items-start px-8 bg-brandLight shadow-md shadow-black">

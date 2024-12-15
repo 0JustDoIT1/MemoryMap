@@ -13,7 +13,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/calendar';
 import SelectPoint from 'src/components/selectPoint';
-import SkeletonAddStory from 'src/skeleton/skeletonAddStory';
 import useButton from 'src/hook/useButton';
 import useStoryData from 'src/hook/useStoryData';
 import useKoreaMapQuery from 'src/hook/useKoreaMapQuery';
@@ -102,7 +101,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       {isColorError && <></>}
-      {isColorLoading && <SkeletonAddStory />}
+      {isColorLoading && <></>}
       {isColorSuccess && colorData && (
         <React.Fragment>
           {colorData.main.length >= 1 ? (

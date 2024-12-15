@@ -13,6 +13,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
+import {useInterstitialAd} from 'react-native-google-mobile-ads';
+import {adUnitId} from 'src/constants/app';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');
@@ -24,6 +26,19 @@ const clamp = (val: number, min: number, max: number) => {
 
 const MapScreen = ({navigation}: MapProps) => {
   const theme = useAppTheme();
+
+  const {isLoaded, load, isClosed, show} = useInterstitialAd(adUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: ['fashion', 'clothing', 'game'],
+  });
+
+  useEffect(() => {
+    load();
+    if (isLoaded && !isClosed) {
+      show();
+      load();
+    }
+  }, [isLoaded, load]);
 
   const viewShotRef = useRef<ViewShot>(null);
 
