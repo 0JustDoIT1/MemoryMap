@@ -1497,7 +1497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.8.4":
   version: 7.26.0
   resolution: "@babel/runtime@npm:7.26.0"
   dependencies:
@@ -1802,6 +1802,13 @@ __metadata:
   version: 0.4.1
   resolution: "@humanwhocodes/retry@npm:0.4.1"
   checksum: f11167c28e8266faba470fd273cbaafe2827523492bc18c5623015adb7ed66f46b2e542e3d756fed9ca614300249267814220c2f5f03a59e07fdfa64fc14ad52
+  languageName: node
+  linkType: hard
+
+"@iabtcf/core@npm:^1.5.3":
+  version: 1.5.6
+  resolution: "@iabtcf/core@npm:1.5.6"
+  checksum: 561626b626ee476dea5dd3a6ed0ebc26caac2475fc9509583f0e66c92ad67c3a2c2816b3516a4f043904b40607c9a4d44cbacbf09a5897740fd273e057c02c2c
   languageName: node
   linkType: hard
 
@@ -3689,7 +3696,6 @@ __metadata:
     nativewind: ^2.0.11
     prettier: 3.3.3
     react: 18.3.1
-    react-content-loader: ^7.0.2
     react-hook-form: ^7.53.2
     react-native: 0.75.3
     react-native-bootsplash: ^6.3.1
@@ -3697,6 +3703,7 @@ __metadata:
     react-native-dotenv: ^3.4.11
     react-native-file-access: ^3.1.1
     react-native-gesture-handler: ^2.21.2
+    react-native-google-mobile-ads: ^14.7.1
     react-native-image-crop-picker: ^0.41.6
     react-native-keychain: ^9.2.2
     react-native-paper: ^5.12.5
@@ -3711,6 +3718,7 @@ __metadata:
     react-native-toast-message: ^2.2.1
     react-native-ui-datepicker: ^2.0.4
     react-native-vector-icons: ^10.2.0
+    react-native-version-check: ^3.4.7
     react-native-view-shot: ^4.0.2
     react-test-renderer: 18.3.1
     reanimated-color-picker: ^3.0.5
@@ -5242,6 +5250,13 @@ __metadata:
   version: 2.0.0
   resolution: "depd@npm:2.0.0"
   checksum: abbe19c768c97ee2eed6282d8ce3031126662252c58d711f646921c9623f9052e3e1906443066beec1095832f534e57c523b7333f8e7e0d93051ab6baef5ab3a
+  languageName: node
+  linkType: hard
+
+"dequal@npm:^2.0.2":
+  version: 2.0.3
+  resolution: "dequal@npm:2.0.3"
+  checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
   languageName: node
   linkType: hard
 
@@ -8043,10 +8058,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.isfunction@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "lodash.isfunction@npm:3.0.9"
+  checksum: 99e54c34b1e8a9ba75c034deb39cedbd2aca7af685815e67a2a8ec4f73ec9748cda6ebee5a07d7de4b938e90d421fd280e9c385cc190f903ac217ac8aff30314
+  languageName: node
+  linkType: hard
+
+"lodash.isnil@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "lodash.isnil@npm:4.0.0"
+  checksum: ebf8df69879badd6ad99c4f64c54c470248df5cf92b208ca730861b1d8ac058da7b632ac811d18b0929d93cbac8d8fc866e781ee816b0142c56952e85edc682f
+  languageName: node
+  linkType: hard
+
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: ad580b4bdbb7ca1f7abf7e1bce63a9a0b98e370cf40194b03380a46b4ed799c9573029599caebc1b14e3f24b111aef72b96674a56cfa105e0f5ac70546cdc005
+  languageName: node
+  linkType: hard
+
+"lodash.pick@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "lodash.pick@npm:4.4.0"
+  checksum: 2c36cab7da6b999a20bd3373b40e31a3ef81fa264f34a6979c852c5bc8ac039379686b27380f0cb8e3781610844fafec6949c6fbbebc059c98f8fa8570e3675f
   languageName: node
   linkType: hard
 
@@ -9944,15 +9980,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-content-loader@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "react-content-loader@npm:7.0.2"
-  peerDependencies:
-    react: ">=16.0.0"
-  checksum: 8f2f97cfb9a831cf487b8295fc60e05b153340a7bbaa2aa117c4af4c694ce0759313d8f538677ed231d3eb11d626e0561c416bc94f4ed158426bab5e8fa2ff67
-  languageName: node
-  linkType: hard
-
 "react-devtools-core@npm:^5.3.1":
   version: 5.3.2
   resolution: "react-devtools-core@npm:5.3.2"
@@ -10071,6 +10098,21 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 0a42cedb8860a326b465085d0f7622ba03f038b0f0bdd1b1fe5703e58d62cb08bfb82a686c069a1a1410705c2ae0d82971b0449d83796fdd6d071131cf88e68b
+  languageName: node
+  linkType: hard
+
+"react-native-google-mobile-ads@npm:^14.7.1":
+  version: 14.7.1
+  resolution: "react-native-google-mobile-ads@npm:14.7.1"
+  dependencies:
+    "@iabtcf/core": ^1.5.3
+    use-deep-compare-effect: ^1.8.1
+  peerDependencies:
+    expo: ">=47.0.0"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: abfacf898e84e8c17403951a26b97e4f91932b24492a6ce8aa2c8ad893e0d43acd3e97062f2d05eeb8ec2a0ee1ced6402b527e742feed94a58235783c26f1a4f
   languageName: node
   linkType: hard
 
@@ -10253,6 +10295,20 @@ __metadata:
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
   checksum: fda930df4e63f12533268f5b339ebe4c77c691eae43503328466b3087ed868a06a4593fd246e75ac6b5ec955543eec35608c7922191bdcc3b3a94ed7f3575ef0
+  languageName: node
+  linkType: hard
+
+"react-native-version-check@npm:^3.4.7":
+  version: 3.4.7
+  resolution: "react-native-version-check@npm:3.4.7"
+  dependencies:
+    lodash.isfunction: ^3.0.9
+    lodash.isnil: ^4.0.0
+    lodash.pick: ^4.4.0
+    semver: ^6.1.1
+  peerDependencies:
+    react-native: ">=0.48.0"
+  checksum: 96bfb203ff9326001b563fd1a6e6f77f3a5f3b898f417c301a7055e0cfd6aa5edbbc77300bba798feb677d2cb8cb0f7e56871b951a4840762c19fe4c7bfc829e
   languageName: node
   linkType: hard
 
@@ -10828,7 +10884,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.3.0, semver@npm:^6.3.1":
+"semver@npm:^6.1.1, semver@npm:^6.3.0, semver@npm:^6.3.1":
   version: 6.3.1
   resolution: "semver@npm:6.3.1"
   bin:
@@ -12008,6 +12064,18 @@ __metadata:
   dependencies:
     punycode: ^2.1.0
   checksum: 7167432de6817fe8e9e0c9684f1d2de2bb688c94388f7569f7dbdb1587c9f4ca2a77962f134ec90be0cc4d004c939ff0d05acc9f34a0db39a3c797dada262633
+  languageName: node
+  linkType: hard
+
+"use-deep-compare-effect@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "use-deep-compare-effect@npm:1.8.1"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    dequal: ^2.0.2
+  peerDependencies:
+    react: ">=16.13"
+  checksum: 2b9b6291df3f772f44d259b352e5d998963ccee0db2efeb76bb05525d928064aeeb69bb0dee5a5e428fea7cf3db67c097a770ebd30caa080662b565f6ef02b2e
   languageName: node
   linkType: hard
 

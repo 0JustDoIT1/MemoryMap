@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Cell, Section, TableView} from 'react-native-tableview-simple';
 import {Pressable, ScrollView, View} from 'react-native';
 import {Switch} from 'react-native-paper';
@@ -22,6 +22,8 @@ import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
+import {useInterstitialAd} from 'react-native-google-mobile-ads';
+import {adUnitId} from 'src/constants/app';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const theme = useAppTheme();
@@ -32,6 +34,18 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapMutation} = useKoreaMapMutation();
+  const {load, isClosed, isOpened, show} = useInterstitialAd(adUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: ['fashion', 'clothing', 'game'],
+  });
+
+  useEffect(() => {
+    load();
+    if (isOpened) onResetMap();
+    if (isClosed) {
+      onResetMapSuccess();
+    }
+  }, [load, isOpened, isClosed]);
 
   // BackUp AppData
   const onPressBackUp = () => {
@@ -65,14 +79,15 @@ const SettingScreen = ({navigation}: SettingProps) => {
     try {
       disabledButton();
       await resetMapMutation.mutateAsync();
-
-      abledButton();
-      hideDialog();
-      showBottomToast('info', '지도를 새로 채워보세요!');
     } catch (error) {
       abledButton();
       return;
     }
+  };
+  const onResetMapSuccess = () => {
+    abledButton();
+    hideDialog();
+    showBottomToast('info', '지도를 새로 채워보세요!');
   };
 
   // Term link
@@ -298,7 +313,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
         title="지도를 초기화하시겠습니까?"
         buttonText="초기화"
         isDisabled={isDisabled}
-        buttonOnPress={onResetMap}
+        buttonOnPress={show}
         hideAlert={hideDialog}
       />
     </SafeAreaView>

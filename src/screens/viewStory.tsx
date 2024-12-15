@@ -12,7 +12,6 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomAlert from 'src/components/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
-import SkeletonEditStory from 'src/skeleton/skeletonEditStory';
 import useButton from 'src/hook/useButton';
 import useViewStory from 'src/hook/useViewStory';
 
@@ -58,7 +57,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
       className="flex-1 justify-start items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
       {isError && <></>}
-      {isLoading && <SkeletonEditStory />}
+      {isLoading && <></>}
       {isSuccess && (
         <View className="w-full h-[90%]">
           <ViewShot
