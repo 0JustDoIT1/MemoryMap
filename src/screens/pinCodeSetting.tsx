@@ -69,7 +69,7 @@ const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
           </View>
           <View className="w-2/5 flex-row justify-around items-center mt-6">
             {[...Array(pinLength)].map((item, index) => {
-              item = reEnter ? !!reCode[index] : !!code[index];
+              item = typeof code[index] === 'undefined' ? false : true;
 
               return (
                 <MaterialCommunityIcons
