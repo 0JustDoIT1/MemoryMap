@@ -11,7 +11,7 @@ import {appBackUpRoute} from 'src/constants/app';
 import {AppData} from 'src/types/appData';
 import {getAllKoreaMapData, updateKoreaMapData} from 'src/database/koreaMap.db';
 import {addStoryByRegionId, getStoryAll} from 'src/database/story.db';
-import {dateToFormatString, dateToSeoulTime} from 'src/utils/dateFormat';
+import {dateToSeoulTime} from 'src/utils/dateFormat';
 
 const useBackUp = () => {
   // Access the client
@@ -42,27 +42,6 @@ const useBackUp = () => {
     } else if (type === 'cancelled') {
       return;
     }
-  };
-
-  // Create BackUp folder
-  const createBackUpFolder = async (gDrive: GDrive) => {
-    const folderName = `${appBackUpRoute}-${dateToFormatString(new Date(), 'YYYY.MM.DD HH:mm:ss')}`;
-    await gDrive.files.createIfNotExists(
-      {q: `name = '${folderName}'`},
-      gDrive.files.newMetadataOnlyUploader().setRequestBody({
-        name: `${folderName}`,
-        mimeType: 'application/vnd.google-apps.folder',
-      }),
-    );
-
-    const rootFolder = await gDrive.files.list({
-      q: `name contains '${appBackUpRoute}'`,
-      orderBy: 'createdTime desc',
-    });
-
-    const rootFolderId = rootFolder.files[0].id;
-
-    return rootFolderId;
   };
 
   // BackUp App Data -> Firebase

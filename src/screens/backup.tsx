@@ -21,9 +21,11 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
       setIsLoading(false);
       if (result)
         showBottomToast('success', 'Google Drive에 데이터를 백업했습니다.');
-    } catch (error) {
+    } catch (error: any) {
+      console.log('에러', error);
       setIsLoading(false);
-      showBottomToast('error', '데이터 백업에 실패했습니다.');
+      // showBottomToast('error', '데이터 백업에 실패했습니다.');
+      showBottomToast('error', error.message);
     }
   };
 
@@ -45,7 +47,7 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
     <SafeAreaView
       className="relative flex-1 justify-start items-center bg-white"
       edges={['top', 'bottom', 'left', 'right']}>
-      <View className="w-full h-[94%] flex justify-center items-center p-6">
+      <View className="w-full h-[92%] flex justify-center items-center p-6">
         <MaterialCommunityIcons
           name="backup-restore"
           size={60}
@@ -66,7 +68,7 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
           </Text>
         </View>
       </View>
-      <View className="w-full h-[6%] flex-row justify-between items-center border-t border-t-gray-300">
+      <View className="w-full h-[8%] flex-row justify-between items-center border-t border-t-gray-300">
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
           onPress={onBackUpData}>
