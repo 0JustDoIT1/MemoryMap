@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1075551018716-po0n7okfe6h0jna8queb8f2bcrip3bps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.memorymap",
+            "certificate_hash": "edf2f555f2f6c541119e6ab9d41a445f7539b805"
+          }
+        },
+        {
           "client_id": "1075551018716-gaco7n0df8lcrt89s7haq4m943cubjk8.apps.googleusercontent.com",
           "client_type": 3
         }
