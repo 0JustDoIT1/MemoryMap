@@ -12,8 +12,8 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/calendar';
 import SelectPoint from 'src/components/selectPoint';
 import useButton from 'src/hook/useButton';
-import useStoryData from 'src/hook/useStoryData';
-import useUpdateStory from 'src/hook/useUpdateStory';
+import useStoryInput from 'src/hook/useStoryInput';
+import useStoryUpdate from 'src/hook/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
@@ -45,9 +45,9 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
     point,
     setPoint,
     settingStoryData,
-  } = useStoryData(true, story);
+  } = useStoryInput(true, story);
   const {isDisabled, disabledButton, abledButton} = useButton();
-  const {editStoryMutation} = useUpdateStory(story.id);
+  const {editStoryMutation} = useStoryUpdate(story.id);
 
   // DateRangePicker bottomsheet open
   const onPressDate = () => {

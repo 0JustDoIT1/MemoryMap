@@ -27,12 +27,12 @@ import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import useLoading from 'src/hook/useLoading';
 import useBackButton from 'src/hook/useBackButton';
 
-interface MapSheet {
+interface KoreaMapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
   regionData: KoreaRegionData;
 }
 
-const MapSheet = ({mapSheetModalRef, regionData}: MapSheet) => {
+const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
   const theme = useAppTheme();
   // Bottom Sheet height setting [index0, index1]
   const snapPoints = useMemo(() => ['30%', '40%'], []);
@@ -248,4 +248,4 @@ const MapSheet = ({mapSheetModalRef, regionData}: MapSheet) => {
   );
 };
 
-export default MapSheet;
+export default KoreaMapSheet;

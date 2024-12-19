@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {updateKoreaMapDataStory} from 'src/database/koreaMap.db';
 import {deleteStoryById, getOneStoryById} from 'src/database/story.db';
 
-const useViewStory = (storyId: string) => {
+const useStoryView = (storyId: string) => {
   // Access the client
   const queryClient = useQueryClient();
 
@@ -61,4 +61,4 @@ const useViewStory = (storyId: string) => {
   };
 };
 
-export default useViewStory;
+export default useStoryView;

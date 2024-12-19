@@ -3,7 +3,7 @@ import {Story} from 'src/types/story';
 import {updateKoreaMapDataStory} from 'src/database/koreaMap.db';
 import {addStoryByRegionId} from 'src/database/story.db';
 
-const useUpdateStory = (storyId?: string) => {
+const useStoryUpdate = (storyId?: string) => {
   // Access the client
   const queryClient = useQueryClient();
 
@@ -52,4 +52,4 @@ const useUpdateStory = (storyId?: string) => {
   return {editStoryMutation, addStoryMutation, updateMapMutation};
 };
 
-export default useUpdateStory;
+export default useStoryUpdate;

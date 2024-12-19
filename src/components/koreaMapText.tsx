@@ -3,12 +3,12 @@ import {G, Text} from 'react-native-svg';
 import {AppShowRegionName} from 'src/types/appData';
 import {KoreaMapDataObject} from 'src/types/koreaMap';
 
-interface SvgText {
+interface KoreaMapText {
   data: KoreaMapDataObject;
   show: AppShowRegionName;
 }
 
-const SvgText = ({data, show}: SvgText) => {
+const KoreaMapText = ({data, show}: KoreaMapText) => {
   return (
     <React.Fragment>
       {show === 'show' && (
@@ -2809,4 +2809,4 @@ const SvgText = ({data, show}: SvgText) => {
   );
 };
 
-export default SvgText;
+export default KoreaMapText;
