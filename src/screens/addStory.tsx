@@ -18,6 +18,7 @@ import useStoryData from 'src/hook/useStoryData';
 import useKoreaMapQuery from 'src/hook/useKoreaMapQuery';
 import useUpdateStory from 'src/hook/useUpdateStory';
 import {StoryInit} from 'src/constants/story';
+import useBackButton from 'src/hook/useBackButton';
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet Ref
@@ -29,6 +30,8 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   );
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  useBackButton(() => navigation.goBack());
 
   const region = route.params.regionId ? route.params.regionId : '';
 

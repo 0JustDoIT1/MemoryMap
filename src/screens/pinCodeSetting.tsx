@@ -9,6 +9,7 @@ import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
 import usePinCode from 'src/hook/usePinCode';
+import useBackButton from 'src/hook/useBackButton';
 
 const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
   const {
@@ -25,6 +26,8 @@ const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
     setPinCodeToKeyChain,
     wobbleScreen,
   } = usePinCode();
+
+  useBackButton(() => navigation.goBack());
 
   // code length와 reCode length에 따라서 화면 전환
   useEffect(() => {
@@ -69,7 +72,9 @@ const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
           </View>
           <View className="w-2/5 flex-row justify-around items-center mt-6">
             {[...Array(pinLength)].map((item, index) => {
-              item = typeof code[index] === 'undefined' ? false : true;
+              if (!reEnter)
+                item = typeof code[index] === 'undefined' ? false : true;
+              else item = typeof reCode[index] === 'undefined' ? false : true;
 
               return (
                 <MaterialCommunityIcons

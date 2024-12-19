@@ -3,6 +3,7 @@ import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SelectRegionProps} from 'src/types/stack';
 import CustomAccordion from 'src/components/accordion';
+import useBackButton from 'src/hook/useBackButton';
 
 const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
   const regionList = route.params.regionList;
@@ -12,6 +13,8 @@ const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
     navigation.pop();
     navigation.navigate('AddStory', {regionId: value});
   };
+
+  useBackButton(() => navigation.goBack());
 
   return (
     <SafeAreaView

@@ -8,10 +8,13 @@ import {BackUpProps} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import LoadingScreen from './loadingScreen';
 import {useState} from 'react';
+import useBackButton from 'src/hook/useBackButton';
 
 const BackUpScreen = ({navigation}: BackUpProps) => {
   const {backUpAppData, getAppData} = useBackUp();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useBackButton(() => navigation.goBack());
 
   // BackUp App Data
   const onBackUpData = async () => {

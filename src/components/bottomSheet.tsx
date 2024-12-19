@@ -8,6 +8,7 @@ import {Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {forwardRef, useCallback, useMemo} from 'react';
+import useBackButton from 'src/hook/useBackButton';
 
 interface CustomBottomSheet {
   snap: string;
@@ -31,6 +32,8 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
       (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
       [],
     );
+
+    useBackButton(() => handleClosePress());
 
     const titleMarginBottom = description ? 'mb-4' : 'mb-8';
 

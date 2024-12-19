@@ -14,6 +14,7 @@ import SelectPoint from 'src/components/selectPoint';
 import useButton from 'src/hook/useButton';
 import useStoryData from 'src/hook/useStoryData';
 import useUpdateStory from 'src/hook/useUpdateStory';
+import useBackButton from 'src/hook/useBackButton';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -25,6 +26,8 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   );
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
+
+  useBackButton(() => navigation.goBack());
 
   const story = route.params.story;
 
