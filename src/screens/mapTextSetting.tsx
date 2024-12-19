@@ -12,6 +12,7 @@ import {useEffect, useState} from 'react';
 import {AppShowRegionName} from 'src/types/appData';
 import {customStyle} from 'src/style/customStyle';
 import useButton from 'src/hook/useButton';
+import useBackButton from 'src/hook/useBackButton';
 
 const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
   const theme = useAppTheme();
@@ -23,6 +24,8 @@ const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
   const {isDisabled, disabledButton} = useButton();
 
   const [select, setSelect] = useState<AppShowRegionName>(appShowRegionName);
+
+  useBackButton(() => navigation.goBack());
 
   // Save show region name
   const onShowRegionName = async () => {

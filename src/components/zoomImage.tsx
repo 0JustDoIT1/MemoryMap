@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message';
 import {toastConfig} from 'src/style/toast.config';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import useBackButton from 'src/hook/useBackButton';
 
 interface ZoomImage {
   data: KoreaRegionData;
@@ -28,24 +29,7 @@ const ZoomImage = ({data, setZoom}: ZoomImage) => {
   // Get Svg Data
   const regionSvgData = koreaMapSvgData[data.id];
 
-  // Hardware BackButton Handler
-  const onPressHardwareBackButton = () => {
-    setZoom(false);
-    return true;
-  };
-
-  useEffect(() => {
-    BackHandler.addEventListener(
-      'hardwareBackPress',
-      onPressHardwareBackButton,
-    );
-    return () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        onPressHardwareBackButton,
-      );
-    };
-  }, []);
+  useBackButton(() => setZoom(false));
 
   return (
     <Portal>

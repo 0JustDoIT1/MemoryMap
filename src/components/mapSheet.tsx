@@ -25,6 +25,7 @@ import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import useLoading from 'src/hook/useLoading';
+import useBackButton from 'src/hook/useBackButton';
 
 interface MapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
@@ -58,6 +59,8 @@ const MapSheet = ({mapSheetModalRef, regionData}: MapSheet) => {
   const {deleteMapMutation, updateMapByPhotoMutation} = useKoreaMapMutation();
 
   const [zoom, setZoom] = useState<boolean>(false);
+
+  useBackButton(() => handleClosePress());
 
   // Select Image
   const onImagePicker = async () => {

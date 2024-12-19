@@ -14,6 +14,7 @@ import CustomAlert from 'src/components/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useButton from 'src/hook/useButton';
 import useViewStory from 'src/hook/useViewStory';
+import useBackButton from 'src/hook/useBackButton';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
   const viewShotRef = useRef<ViewShot>(null);
@@ -31,6 +32,8 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
     deleteStoryMutation,
     updateMapMutation,
   } = useViewStory(storyId);
+
+  useBackButton(() => navigation.goBack());
 
   // 스토리 제거
   const onDeleteStory = async () => {

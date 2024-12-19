@@ -36,8 +36,6 @@ const useExitApp = () => {
       );
     };
   }, []);
-
-  return {};
 };
 
 export default useExitApp;
