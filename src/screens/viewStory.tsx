@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomAlert from 'src/components/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useButton from 'src/hook/useButton';
-import useViewStory from 'src/hook/useViewStory';
+import useStoryView from 'src/hook/useStoryView';
 import useBackButton from 'src/hook/useBackButton';
 
 const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
@@ -31,7 +31,7 @@ const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
     data,
     deleteStoryMutation,
     updateMapMutation,
-  } = useViewStory(storyId);
+  } = useStoryView(storyId);
 
   useBackButton(() => navigation.goBack());
 

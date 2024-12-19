@@ -1,9 +1,12 @@
 import {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {returnedResults} from 'reanimated-color-picker';
-import CustomColorPannel from 'src/components/colorPannel';
-import CustomColorSwatch from 'src/components/colorSwatch';
+import ColorPicker, {
+  HueSlider,
+  Panel1,
+  returnedResults,
+  Swatches,
+} from 'reanimated-color-picker';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import {customStyle} from 'src/style/customStyle';
@@ -64,19 +67,24 @@ const ColorPickerModal = ({
     <View>
       <Text className="text-lg mb-4">색상 선택</Text>
       {mode ? (
-        <CustomColorPannel
+        <ColorPicker
           value={
             regionData.type === 'color' ? regionData.background : '#ffffff'
           }
-          onChange={onColorSelect}
-        />
+          onChange={onColorSelect}>
+          <View className="flex-row justify-between">
+            <Panel1 style={{width: '85%'}} thumbSize={15} />
+            <HueSlider vertical thumbShape="pill" thumbColor="#000000" />
+          </View>
+        </ColorPicker>
       ) : (
-        <CustomColorSwatch
+        <ColorPicker
           value={
             regionData.type === 'color' ? regionData.background : '#ffffff'
           }
-          onChange={onColorSelect}
-        />
+          onChange={onColorSelect}>
+          <Swatches />
+        </ColorPicker>
       )}
       <View className="flex-row border border-black mt-4">
         <Text

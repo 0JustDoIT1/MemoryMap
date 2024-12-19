@@ -14,9 +14,9 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/calendar';
 import SelectPoint from 'src/components/selectPoint';
 import useButton from 'src/hook/useButton';
-import useStoryData from 'src/hook/useStoryData';
+import useStoryInput from 'src/hook/useStoryInput';
 import useKoreaMapQuery from 'src/hook/useKoreaMapQuery';
-import useUpdateStory from 'src/hook/useUpdateStory';
+import useStoryUpdate from 'src/hook/useStoryUpdate';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/useBackButton';
 
@@ -49,11 +49,11 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     point,
     setPoint,
     settingStoryData,
-  } = useStoryData(false, {...StoryInit, regionId: region});
+  } = useStoryInput(false, {...StoryInit, regionId: region});
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {isColorSuccess, isColorLoading, isColorError, colorData} =
     useKoreaMapQuery();
-  const {addStoryMutation, updateMapMutation} = useUpdateStory();
+  const {addStoryMutation, updateMapMutation} = useStoryUpdate();
 
   // BottomSheet opens when date is selected
   const onPressDate = () => {

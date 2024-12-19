@@ -4,11 +4,11 @@ import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import {KoreaMapDataObject} from 'src/types/koreaMap';
 import {getIdArrayByType} from 'src/utils/koreaMap.util';
 
-interface SvgPattern {
+interface KoreaMapPattern {
   data: KoreaMapDataObject;
 }
 
-const SvgPattern = ({data}: SvgPattern) => {
+const KoreaMapPattern = ({data}: KoreaMapPattern) => {
   const imageArray = getIdArrayByType(data, 'photo');
 
   return (
@@ -33,4 +33,4 @@ const SvgPattern = ({data}: SvgPattern) => {
   );
 };
 
-export default SvgPattern;
+export default KoreaMapPattern;

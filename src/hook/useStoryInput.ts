@@ -3,7 +3,7 @@ import {Story} from 'src/types/story';
 import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
-const useStoryData = (edit: boolean, data: Story) => {
+const useStoryInput = (edit: boolean, data: Story) => {
   const [regionId, setRegionId] = useState<string>('');
   const [regionTitle, setRegionTitle] = useState<string>('');
 
@@ -80,4 +80,4 @@ const useStoryData = (edit: boolean, data: Story) => {
   };
 };
 
-export default useStoryData;
+export default useStoryInput;

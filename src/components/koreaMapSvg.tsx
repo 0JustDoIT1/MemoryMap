@@ -1,12 +1,12 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {G, Path, Polygon, Svg} from 'react-native-svg';
-import SvgPattern from './svgPattern';
-import MapSheet from './mapSheet';
+import KoreaMapPattern from './koreaMapPattern';
+import KoreaMapSheet from './koreaMapSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {koreaRegionEmpty} from 'src/constants/koreaMapData';
 import SkeletonMap from '../skeleton/skeletonMap';
-import SvgText from './svgText';
+import KoreaMapText from './koreaMapText';
 import useKoreaMap from 'src/hook/useKoreaMapQuery';
 import {useRecoilValue} from 'recoil';
 import {appShowRegionNameState} from 'src/recoil/atom';
@@ -32,7 +32,7 @@ const KoreaMapSvg = () => {
       {isMapLoading && <SkeletonMap />}
       {isMapSuccess && mapData && (
         <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
-          <SvgPattern data={mapData} />
+          <KoreaMapPattern data={mapData} />
           <G id="제주특별자치도_1_">
             <Path
               id="제주도_1_"
@@ -2512,10 +2512,13 @@ const KoreaMapSvg = () => {
 	315.355,293.191 321.779,291.68 325.559,300.876 330.22,298.609 333.37,301.002 335.764,300.498 339.669,297.097 346.977,295.964 
 	348.865,302.641 356.424,297.601 360.96,295.586 364.109,294.2 364.361,285.633 370.41,280.09"
           />
-          <SvgText data={mapData} show={appShowRegionName} />
+          <KoreaMapText data={mapData} show={appShowRegionName} />
         </Svg>
       )}
-      <MapSheet mapSheetModalRef={mapSheetModalRef} regionData={regionData} />
+      <KoreaMapSheet
+        mapSheetModalRef={mapSheetModalRef}
+        regionData={regionData}
+      />
     </React.Fragment>
   );
 };
