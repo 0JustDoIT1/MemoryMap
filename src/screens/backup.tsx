@@ -25,10 +25,8 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
       if (result)
         showBottomToast('success', 'Google Drive에 데이터를 백업했습니다.');
     } catch (error: any) {
-      console.log('에러', error);
       setIsLoading(false);
-      // showBottomToast('error', '데이터 백업에 실패했습니다.');
-      showBottomToast('error', error.message);
+      showBottomToast('error', '데이터 백업에 실패했습니다.');
     }
   };
 

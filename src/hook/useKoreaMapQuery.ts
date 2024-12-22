@@ -3,7 +3,7 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {
   getAllKoreaMapData,
   getKoreaMapDataByColor,
-} from 'src/database/koreaMap.db';
+} from 'src/utils/koreaMap.db';
 import {koreaMapDataToObject} from 'src/utils/koreaMap.util';
 
 const useKoreaMapQuery = () => {

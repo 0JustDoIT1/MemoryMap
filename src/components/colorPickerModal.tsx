@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import ColorPicker, {
@@ -7,6 +7,7 @@ import ColorPicker, {
   returnedResults,
   Swatches,
 } from 'reanimated-color-picker';
+import useAd from 'src/hook/useAd';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import {customStyle} from 'src/style/customStyle';
@@ -28,11 +29,20 @@ const ColorPickerModal = ({
 }: ColorPickerModal) => {
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {updateMapByColorMutation} = useKoreaMapMutation();
+  const {load, show, isClosed, checkAdShow} = useAd();
 
   const [mode, setMode] = useState<boolean>(false);
   const [hex, setHex] = useState<string>(
     regionData.type === 'color' ? regionData.background : '#ffffff',
   );
+
+  useEffect(() => {
+    load();
+    if (isClosed) {
+      onUploadColorSuccess();
+      load();
+    }
+  }, [load, isClosed]);
 
   // Change ColorPicker mode(swatch <=> pannel)
   const onChangeMode = () => {
@@ -45,22 +55,35 @@ const ColorPickerModal = ({
   };
 
   // Color the map with hex
-  const onSettingColor = async () => {
+  const onUploadColor = async () => {
     try {
       disabledButton();
-      await updateMapByColorMutation.mutateAsync({
-        data: regionData,
-        color: hex,
-      });
-
-      abledButton();
-      hideModal();
-      handleClosePress();
-      showBottomToast('success', `${getRegionTitle(regionData)} 색칠 완료!`);
+      const adShow = await checkAdShow('map');
+      if (adShow) {
+        show();
+        await onUploadingColor();
+      } else {
+        await onUploadingColor();
+        onUploadColorSuccess();
+      }
     } catch (error) {
       abledButton();
       return;
     }
+  };
+
+  const onUploadingColor = async () => {
+    await updateMapByColorMutation.mutateAsync({
+      data: regionData,
+      color: hex,
+    });
+  };
+
+  const onUploadColorSuccess = () => {
+    abledButton();
+    hideModal();
+    handleClosePress();
+    showBottomToast('success', `${getRegionTitle(regionData)} 색칠 완료!`);
   };
 
   return (
@@ -118,7 +141,7 @@ const ColorPickerModal = ({
             {mode ? '기본 색상' : '더 많은 색상'}
           </Text>
         </Pressable>
-        <Pressable onPress={onSettingColor} disabled={isDisabled}>
+        <Pressable onPress={onUploadColor} disabled={isDisabled}>
           <Text className="text-brandMain">색칠하기</Text>
         </Pressable>
       </View>

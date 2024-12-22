@@ -13,8 +13,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
 import KoreaMapSvg from 'src/components/koreaMapSvg';
-import {useInterstitialAd} from 'react-native-google-mobile-ads';
-import {adUnitId} from 'src/constants/app';
+import {useRecoilState} from 'recoil';
+import {appInitAdState} from 'src/recoil/atom';
+import useAd from 'src/hook/useAd';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');
@@ -27,18 +28,16 @@ const clamp = (val: number, min: number, max: number) => {
 const MapScreen = ({navigation}: MapProps) => {
   const theme = useAppTheme();
 
-  const {isLoaded, load, isClosed, show} = useInterstitialAd(adUnitId, {
-    requestNonPersonalizedAdsOnly: true,
-    keywords: ['fashion', 'clothing', 'game'],
-  });
+  const [appInitAd, setAppInitAd] = useRecoilState(appInitAdState);
+  const {load, isClosed, isLoaded, show} = useAd();
 
   useEffect(() => {
     load();
-    if (isLoaded && !isClosed) {
+    if (!appInitAd && isLoaded && !isClosed) {
       show();
-      load();
+      setAppInitAd(true);
     }
-  }, [isLoaded, load]);
+  }, [isLoaded, load, appInitAd]);
 
   const viewShotRef = useRef<ViewShot>(null);
 

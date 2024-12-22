@@ -5,7 +5,7 @@ import KoreaMapSheet from './koreaMapSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {koreaRegionEmpty} from 'src/constants/koreaMapData';
-import SkeletonMap from '../skeleton/skeletonMap';
+import KoreaMapSkeleton from './koreaMapSkeleton';
 import KoreaMapText from './koreaMapText';
 import useKoreaMap from 'src/hook/useKoreaMapQuery';
 import {useRecoilValue} from 'recoil';
@@ -29,7 +29,7 @@ const KoreaMapSvg = () => {
   return (
     <React.Fragment>
       {isMapError && <></>}
-      {isMapLoading && <SkeletonMap />}
+      {isMapLoading && <KoreaMapSkeleton />}
       {isMapSuccess && mapData && (
         <Svg id="Layer_1" width="130%" height="130%" viewBox="0 0 960 1110">
           <KoreaMapPattern data={mapData} />

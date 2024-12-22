@@ -1,36 +1,33 @@
 import {KeyChainPinCode} from '@env';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSetRecoilState} from 'recoil';
-import {appShowRegionNameKey} from 'src/constants/app';
+import {appShowRegionNameKey, appTableName} from 'src/constants/app';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {saveKoreaMapDataToDB} from 'src/database/create';
 import {countData, getDBConnection} from 'src/database/sqlite';
-import {TableName} from 'src/database/table';
 import {appPinCodeState, appShowRegionNameState} from 'src/recoil/atom';
 import {StackParamList} from 'src/types/stack';
-import {getAsyncStorage, saveAsyncStorage} from 'src/utils/asyncStorage';
+import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
 import {getSecureValue} from 'src/utils/keyChain';
+import VersionCheck from 'react-native-version-check';
 
 const useRoot = () => {
   const setAppPinCode = useSetRecoilState(appPinCodeState);
   const appShowRegionName = useSetRecoilState(appShowRegionNameState);
 
   const checkVersion = async () => {
-    // const androidPackageName = VersionCheck.getPackageName(); //com.memorymap
+    const androidPackageName = VersionCheck.getPackageName(); //com.memorymap
 
-    // const currentVersion = VersionCheck.getCurrentVersion();
-    // const latestVersion = await VersionCheck.getLatestVersion({
-    //   provider: 'playStore',
-    //   packageName: androidPackageName,
-    // })
-    //   .then(value => value)
-    //   .catch(error => console.error('Error fetching latest version: ', error));
+    const currentVersion = VersionCheck.getCurrentVersion();
+    const latestVersion = await VersionCheck.getLatestVersion({
+      provider: 'playStore',
+      packageName: androidPackageName,
+    })
+      .then(value => value)
+      .catch(error => console.error('Error fetching latest version: ', error));
 
-    // if (latestVersion && latestVersion > currentVersion) return false;
-    // else return true;
-
-    // 임시
-    return true;
+    if (latestVersion && latestVersion > currentVersion) return false;
+    else return true;
   };
 
   // Get pincode in KeyChain
@@ -42,7 +39,7 @@ const useRoot = () => {
   const _checkSQLiteData = async () => {
     const db = await getDBConnection();
     // Check SQLite
-    const mapNum = await countData(db, TableName.map).then(
+    const mapNum = await countData(db, appTableName.map).then(
       res => res[0].rows.item(0)['count'],
     );
 
@@ -58,7 +55,7 @@ const useRoot = () => {
   const checkShowMapText = async () => {
     const showMapText = await getAsyncStorage(appShowRegionNameKey);
     if (!showMapText) {
-      await saveAsyncStorage(appShowRegionNameKey, 'show');
+      await setAsyncStorage(appShowRegionNameKey, 'show');
       appShowRegionName('show');
     } else {
       appShowRegionName(showMapText as 'show' | 'condition' | 'hide');

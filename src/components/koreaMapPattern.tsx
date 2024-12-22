@@ -25,7 +25,7 @@ const KoreaMapPattern = ({data}: KoreaMapPattern) => {
               width={koreaMapSvgData[item].mapSvgStyle.width}
               height={koreaMapSvgData[item].mapSvgStyle.height}
               preserveAspectRatio="xMidyMid slice"
-              href={data[item].imageUrl}
+              href={{uri: data[item].imageUrl}}
             />
           </Pattern>
         ))}

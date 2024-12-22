@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useAppTheme} from 'src/style/paperTheme';
 import {useRecoilState} from 'recoil';
 import {appShowRegionNameState} from 'src/recoil/atom';
-import {saveAsyncStorage} from 'src/utils/asyncStorage';
+import {setAsyncStorage} from 'src/utils/asyncStorage';
 import {appShowRegionNameKey} from 'src/constants/app';
 import {useEffect, useState} from 'react';
 import {AppShowRegionName} from 'src/types/appData';
@@ -30,7 +30,7 @@ const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
   // Save show region name
   const onShowRegionName = async () => {
     disabledButton();
-    await saveAsyncStorage(appShowRegionNameKey, select);
+    await setAsyncStorage(appShowRegionNameKey, select);
     setAppShowRegionName(select);
     navigation.goBack();
   };

@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -19,6 +19,7 @@ import useKoreaMapQuery from 'src/hook/useKoreaMapQuery';
 import useStoryUpdate from 'src/hook/useStoryUpdate';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/useBackButton';
+import useAd from 'src/hook/useAd';
 
 const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   // Bottom Sheet Ref
@@ -54,6 +55,15 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
   const {isColorSuccess, isColorLoading, isColorError, colorData} =
     useKoreaMapQuery();
   const {addStoryMutation, updateMapMutation} = useStoryUpdate();
+  const {load, show, isClosed, checkAdShow} = useAd();
+
+  useEffect(() => {
+    load();
+    if (isClosed) {
+      onAddStorySuccess();
+      load();
+    }
+  }, [load, isClosed]);
 
   // BottomSheet opens when date is selected
   const onPressDate = () => {
@@ -83,20 +93,32 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
     try {
       if (isColorSuccess) {
         disabledButton();
-        const newStory = settingStoryData();
-        await addStoryMutation.mutateAsync(newStory);
-        await updateMapMutation.mutateAsync({
-          id: regionId,
-          count: 1,
-        });
-
-        abledButton();
-        navigation.navigate('Main', {screen: 'Story'});
+        const adShow = await checkAdShow('story');
+        if (adShow) {
+          show();
+          await onAddingStory();
+        } else {
+          await onAddingStory();
+          onAddStorySuccess();
+        }
       }
     } catch (error) {
       abledButton();
       return;
     }
+  };
+
+  const onAddingStory = async () => {
+    const newStory = settingStoryData();
+    await addStoryMutation.mutateAsync(newStory);
+    await updateMapMutation.mutateAsync({
+      id: regionId,
+      count: 1,
+    });
+  };
+
+  const onAddStorySuccess = () => {
+    navigation.navigate('Main', {screen: 'Story'});
   };
 
   return (

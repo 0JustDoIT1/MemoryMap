@@ -8,7 +8,7 @@ import {Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import {BrandContainedButton, BrandOutlinedButton} from './button';
 import useModal from 'src/hook/useModal';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import CustomModal from './modal';
 import ColorPickerModal from 'src/components/colorPickerModal';
 import {showBottomToast} from 'src/utils/showToast';
@@ -26,6 +26,7 @@ import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import useLoading from 'src/hook/useLoading';
 import useBackButton from 'src/hook/useBackButton';
+import useAd from 'src/hook/useAd';
 
 interface KoreaMapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
@@ -57,16 +58,25 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
   const {visible, showModal, hideModal} = useModal();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {deleteMapMutation, updateMapByPhotoMutation} = useKoreaMapMutation();
+  const {load, show, isClosed, checkAdShow} = useAd();
 
   const [zoom, setZoom] = useState<boolean>(false);
 
   useBackButton(() => handleClosePress());
 
+  useEffect(() => {
+    load();
+    if (isClosed) {
+      onUploadPhotoSuccess();
+      load();
+    }
+  }, [load, isClosed]);
+
   // Select Image
   const onImagePicker = async () => {
     try {
-      const cropW = koreaMapSvgData[regionData.id].regionSvgStyle.width;
-      const cropH = koreaMapSvgData[regionData.id].regionSvgStyle.height;
+      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width * 1.5;
+      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height * 1.5;
 
       const cropImage = await ImagePicker.openPicker({
         width: cropW,
@@ -87,21 +97,38 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
     try {
       disabledButton();
       startLoading();
-      await updateMapByPhotoMutation.mutateAsync({
-        data: regionData,
-        uri: path,
-        imageStyle: {width: width, height: height},
-      });
-
-      endLoading();
-      abledButton();
-      handleClosePress();
-      showBottomToast('success', `${getRegionTitle(regionData)} 사진 추가!`);
+      const adShow = await checkAdShow('map');
+      if (adShow) {
+        show();
+        await onUploadingPhoto(path, width, height);
+      } else {
+        await onUploadingPhoto(path, width, height);
+        onUploadPhotoSuccess();
+      }
     } catch (error) {
       endLoading();
       abledButton();
       return;
     }
+  };
+
+  const onUploadingPhoto = async (
+    path: string,
+    width: number,
+    height: number,
+  ) => {
+    await updateMapByPhotoMutation.mutateAsync({
+      data: regionData,
+      uri: path,
+      imageStyle: {width: width, height: height},
+    });
+  };
+
+  const onUploadPhotoSuccess = () => {
+    endLoading();
+    abledButton();
+    handleClosePress();
+    showBottomToast('success', `${getRegionTitle(regionData)} 사진 추가!`);
   };
 
   // Delete map background

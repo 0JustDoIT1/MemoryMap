@@ -1,6 +1,6 @@
 import Svg, {Path, Polygon} from 'react-native-svg';
 
-const SkeletonMap = () => {
+const KoreaMapSkeleton = () => {
   return (
     <Svg width="130%" height="130%" viewBox="0 0 960 1110">
       <Path
@@ -834,4 +834,4 @@ const SkeletonMap = () => {
   );
 };
 
-export default SkeletonMap;
+export default KoreaMapSkeleton;

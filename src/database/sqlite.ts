@@ -1,5 +1,5 @@
 import {openDatabase, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {TableName} from './table';
+import {appTableName} from 'src/constants/app';
 
 // Connect SQLite Database
 export const getDBConnection = async () => {
@@ -10,12 +10,12 @@ export const getDBConnection = async () => {
 export const createTable = async (db: SQLiteDatabase, tableName: string) => {
   let tableColumn!: string;
 
-  if (tableName === TableName.map) {
+  if (tableName === appTableName.map) {
     tableColumn =
       '(id TEXT UNIQUE PRIMARY KEY, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, imageStyle TEXT)';
   }
 
-  if (tableName === TableName.story) {
+  if (tableName === appTableName.story) {
     tableColumn =
       '(id TEXT UNIQUE PRIMARY KEY, regionId TEXT, startDate TEXT, endDate TEXT, title TEXT, contents TEXT, point INT, createdAt TEXT, updatedAt TEXT)';
   }
