@@ -5,6 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
+import useExitApp from 'src/hook/useExitApp';
 import {customColor} from 'src/style/customColor';
 import {DashboardProps} from 'src/types/stack';
 
@@ -22,6 +23,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
     isStoryError,
     storyData,
   } = useDashboard(koreaMapRegionCount);
+  useExitApp();
 
   return (
     <SafeAreaView

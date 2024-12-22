@@ -12,6 +12,7 @@ import useModal from 'src/hook/useModal';
 import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
 import useStoryQuery from 'src/hook/useStoryQuery';
 import StoryCard from 'src/components/storyCard';
+import useExitApp from 'src/hook/useExitApp';
 
 const StoryScreen = ({navigation}: StoryProps) => {
   const {visible, showModal, hideModal} = useModal();
@@ -29,6 +30,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
     listData,
     onLoadMoreStory,
   } = useStoryQuery();
+  useExitApp();
 
   // Story data sorting
   const onPressOrderBy = () => {

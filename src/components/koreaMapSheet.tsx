@@ -25,8 +25,8 @@ import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import useLoading from 'src/hook/useLoading';
-import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';
+import useBottomSheetBackHandler from 'src/hook/useBottomSheetBackHandler';
 
 interface KoreaMapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
@@ -43,7 +43,14 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
 
   // Bottom Sheet close event when background touch
   const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" />,
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+        pressBehavior="close"
+      />
+    ),
     [],
   );
 
@@ -59,10 +66,10 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {deleteMapMutation, updateMapByPhotoMutation} = useKoreaMapMutation();
   const {load, show, isClosed, checkAdShow} = useAd();
+  const {handleSheetPositionChange} =
+    useBottomSheetBackHandler(mapSheetModalRef);
 
   const [zoom, setZoom] = useState<boolean>(false);
-
-  useBackButton(() => handleClosePress());
 
   useEffect(() => {
     load();
@@ -155,7 +162,8 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
         ref={mapSheetModalRef}
         index={1}
         snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}>
+        backdropComponent={renderBackdrop}
+        onChange={handleSheetPositionChange}>
         <BottomSheetView className="flex-1 items-center">
           <View className="flex justify-center items-center w-full py-6 px-8">
             <View className="flex-row justify-between items-center w-full mb-2">

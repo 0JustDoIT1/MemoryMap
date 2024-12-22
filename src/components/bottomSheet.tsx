@@ -9,6 +9,7 @@ import {customStyle} from 'src/style/customStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {forwardRef, useCallback, useMemo} from 'react';
 import useBackButton from 'src/hook/useBackButton';
+import useBottomSheetBackHandler from 'src/hook/useBottomSheetBackHandler';
 
 interface CustomBottomSheet {
   snap: string;
@@ -33,7 +34,7 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
       [],
     );
 
-    useBackButton(() => handleClosePress());
+    const {handleSheetPositionChange} = useBottomSheetBackHandler(ref);
 
     const titleMarginBottom = description ? 'mb-4' : 'mb-8';
 
@@ -43,6 +44,7 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
         index={1}
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
+        onChange={handleSheetPositionChange}
         keyboardBehavior="interactive"
         keyboardBlurBehavior="restore"
         android_keyboardInputMode="adjustResize">
