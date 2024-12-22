@@ -1,17 +1,14 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {BackHandler} from 'react-native';
 import {showBottomToast} from 'src/utils/showToast';
 
 const useExitApp = () => {
-  const [backPressCount, setBackPressCount] = useState<number>(0);
+  let backPressCount = 0;
 
   // Hardware BackButton Handler
-  const onPressHardwareBackButton = useCallback(() => {
-    if (backPressCount === 0) {
-      setBackPressCount(backPressCount + 1);
-      setTimeout(() => {
-        setBackPressCount(0);
-      }, 2000);
+  const onPressHardwareBackButton = () => {
+    if (backPressCount < 1) {
+      backPressCount += 1;
 
       showBottomToast(
         'blackOpacity',
@@ -20,9 +17,12 @@ const useExitApp = () => {
     } else if (backPressCount === 1) {
       BackHandler.exitApp();
     }
+    setTimeout(() => {
+      backPressCount = 0;
+    }, 2000);
 
     return true;
-  }, [backPressCount]);
+  };
 
   useEffect(() => {
     BackHandler.addEventListener(

@@ -16,6 +16,7 @@ import KoreaMapSvg from 'src/components/koreaMapSvg';
 import {useRecoilState} from 'recoil';
 import {appInitAdState} from 'src/recoil/atom';
 import useAd from 'src/hook/useAd';
+import useExitApp from 'src/hook/useExitApp';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');
@@ -30,6 +31,7 @@ const MapScreen = ({navigation}: MapProps) => {
 
   const [appInitAd, setAppInitAd] = useRecoilState(appInitAdState);
   const {load, isClosed, isLoaded, show} = useAd();
+  useExitApp();
 
   useEffect(() => {
     load();

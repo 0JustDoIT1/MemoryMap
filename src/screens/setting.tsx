@@ -24,6 +24,7 @@ import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import useAd from 'src/hook/useAd';
+import useExitApp from 'src/hook/useExitApp';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const theme = useAppTheme();
@@ -35,6 +36,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapMutation} = useKoreaMapMutation();
   const {load, isClosed, show} = useAd();
+  useExitApp();
 
   // BackUp AppData
   const onPressBackUp = () => {
