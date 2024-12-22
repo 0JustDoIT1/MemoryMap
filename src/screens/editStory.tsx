@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import useButton from 'src/hook/useButton';
 import useStoryInput from 'src/hook/useStoryInput';
 import useStoryUpdate from 'src/hook/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
+import useAd from 'src/hook/useAd';
 
 const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   // Bottom Sheet Ref
@@ -48,6 +49,15 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   } = useStoryInput(true, story);
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {editStoryMutation} = useStoryUpdate(story.id);
+  const {load, show, isClosed, checkAdShow} = useAd();
+
+  useEffect(() => {
+    load();
+    if (isClosed) {
+      onUpdateStorySuccess();
+      load();
+    }
+  }, [load, isClosed]);
 
   // DateRangePicker bottomsheet open
   const onPressDate = () => {
@@ -66,15 +76,27 @@ const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
   const onUpdateStory = async () => {
     try {
       disabledButton();
-      const newStory = settingStoryData();
-      await editStoryMutation.mutateAsync(newStory);
-
-      abledButton();
-      navigation.goBack();
+      const adShow = await checkAdShow('story');
+      if (adShow) {
+        show();
+        await onUpdatingStory();
+      } else {
+        await onUpdatingStory();
+        onUpdateStorySuccess();
+      }
     } catch (error) {
       abledButton();
       return;
     }
+  };
+
+  const onUpdatingStory = async () => {
+    const newStory = settingStoryData();
+    await editStoryMutation.mutateAsync(newStory);
+  };
+
+  const onUpdateStorySuccess = () => {
+    navigation.goBack();
   };
 
   return (

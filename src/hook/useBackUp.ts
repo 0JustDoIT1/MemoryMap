@@ -9,8 +9,8 @@ import {useEffect} from 'react';
 import {FileSystem} from 'react-native-file-access';
 import {appBackUpRoute} from 'src/constants/app';
 import {AppData} from 'src/types/appData';
-import {getAllKoreaMapData, updateKoreaMapData} from 'src/database/koreaMap.db';
-import {addStoryByRegionId, getStoryAll} from 'src/database/story.db';
+import {getAllKoreaMapData, updateKoreaMapData} from 'src/utils/koreaMap.db';
+import {addStoryByRegionId, getStoryAll} from 'src/utils/story.db';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
 
 const useBackUp = () => {

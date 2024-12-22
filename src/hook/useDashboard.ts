@@ -1,7 +1,7 @@
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
-import {getDashboardKoreaMapData} from 'src/database/koreaMap.db';
-import {getDashboardStory} from 'src/database/story.db';
+import {getDashboardKoreaMapData} from 'src/utils/koreaMap.db';
+import {getDashboardStory} from 'src/utils/story.db';
 
 const useDashboard = (regionCount: number) => {
   const [percent, setPercent] = useState<number>(0);

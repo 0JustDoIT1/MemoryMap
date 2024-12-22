@@ -13,7 +13,6 @@ const RootScreen = ({navigation}: RootProps) => {
 
   // App version check & Check existing SignIn status
   useEffect(() => {
-    // const check = checkVersion()
     checkVersion().then(check => {
       if (!check) return showDialog();
       else {

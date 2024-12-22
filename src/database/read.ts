@@ -1,7 +1,7 @@
 //// Read
 
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import {resultArrToStoryArr} from 'src/database/story.db';
+import {resultArrToStoryArr} from 'src/utils/story.db';
 
 // Read Auth to auth table
 export const getAuthToDB = async (db: SQLiteDatabase) => {

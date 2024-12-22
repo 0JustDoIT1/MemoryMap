@@ -13,10 +13,10 @@ import SQLite from 'react-native-sqlite-storage';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import {createTable, getDBConnection} from 'src/database/sqlite';
-import {TableName} from 'src/database/table';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {useNetInfo} from '@react-native-community/netinfo';
 import NoNetwork from 'src/screens/noNetwork';
+import {appTableName} from 'src/constants/app';
 
 dayjs.locale('ko');
 // Enable the SQLite
@@ -30,8 +30,8 @@ const App = (): React.JSX.Element => {
   // Create SQLite Table (If exists, no create)
   const createSqlTable = async () => {
     const db = await getDBConnection();
-    await createTable(db, TableName.map);
-    await createTable(db, TableName.story);
+    await createTable(db, appTableName.map);
+    await createTable(db, appTableName.story);
   };
 
   // Check Network

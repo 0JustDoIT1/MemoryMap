@@ -14,3 +14,9 @@ export const appShowRegionNameState = atom<AppShowRegionName>({
   key: 'appShowRegionName',
   default: 'show',
 });
+
+// Init Ad
+export const appInitAdState = atom<boolean>({
+  key: 'appInitAd',
+  default: false,
+});

@@ -12,7 +12,7 @@ import {
   mostColorMainRegionToDB,
 } from 'src/database/read';
 import {ResultSet} from 'react-native-sqlite-storage';
-import {getColorRegionList} from '../utils/koreaMap.util';
+import {getColorRegionList} from './koreaMap.util';
 import {Dirs, FileSystem} from 'react-native-file-access';
 
 // res type to KoreaMapDataObject
@@ -21,6 +21,10 @@ const _resToObject = async (res: [ResultSet]) => {
   for (let i = 0; i < res[0].rows.length; i++) {
     const region = res[0].rows.item(i);
     result[region.id] = region;
+    // if (region.imageUrl) {
+    //   const base64string = await FileSystem.readFile(region.imageUrl, 'base64');
+    //   result[region.id].imageUrl = 'data:image/jpg;base64,' + base64string;
+    // }
     if (region.imageStyle)
       result[region.id].imageStyle = JSON.parse(region.imageStyle);
   }
@@ -65,6 +69,10 @@ export const updateMapColorById = async (
   // Setting Data
   const updateKoreaMapData = await _updateDataByTypeColor(data, color);
 
+  // Cache Clear
+  const cacheDir = Dirs.CacheDir;
+  await FileSystem.unlink(cacheDir);
+
   // type is photo, remove the existing photo -> Firebase
   if (data.type === 'photo') {
     await FileSystem.unlink(data.imageUrl!);
@@ -101,6 +109,10 @@ export const updateMapPhotoById = async (
 ) => {
   // Upload Image -> Save Firebase Storage
   const imagePath = `file://${Dirs.DocumentDir}/${data.id}_${Number(new Date())}.jpg`;
+
+  // Cache Clear
+  const cacheDir = Dirs.CacheDir;
+  await FileSystem.unlink(cacheDir);
 
   if (data.type === 'photo') {
     const existImage = await FileSystem.exists(data.imageUrl!);

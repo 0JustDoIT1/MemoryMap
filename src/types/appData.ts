@@ -8,3 +8,5 @@ export interface AppData {
 }
 
 export type AppShowRegionName = 'show' | 'condition' | 'hide';
+
+export type AppAdShowType = 'map' | 'story';

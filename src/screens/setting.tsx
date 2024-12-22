@@ -22,8 +22,8 @@ import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
-import {useInterstitialAd} from 'react-native-google-mobile-ads';
-import {adUnitId} from 'src/constants/app';
+import {onOpenStoreLink} from 'src/utils/openStoreLink';
+import useAd from 'src/hook/useAd';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const theme = useAppTheme();
@@ -34,18 +34,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapMutation} = useKoreaMapMutation();
-  const {load, isClosed, isOpened, show} = useInterstitialAd(adUnitId, {
-    requestNonPersonalizedAdsOnly: true,
-    keywords: ['fashion', 'clothing', 'game'],
-  });
-
-  useEffect(() => {
-    load();
-    if (isOpened) onResetMap();
-    if (isClosed) {
-      onResetMapSuccess();
-    }
-  }, [load, isOpened, isClosed]);
+  const {load, isClosed, show} = useAd();
 
   // BackUp AppData
   const onPressBackUp = () => {
@@ -78,6 +67,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const onResetMap = async () => {
     try {
       disabledButton();
+      show();
       await resetMapMutation.mutateAsync();
     } catch (error) {
       abledButton();
@@ -89,6 +79,14 @@ const SettingScreen = ({navigation}: SettingProps) => {
     hideDialog();
     showBottomToast('info', '지도를 새로 채워보세요!');
   };
+
+  useEffect(() => {
+    load();
+    if (isClosed) {
+      onResetMapSuccess();
+      load();
+    }
+  }, [load, isClosed]);
 
   // Term link
   const onPressTermPrivacyUrl = async () => {
@@ -229,7 +227,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 />
               }
             />
-            {/* <Cell
+            <Cell
               contentContainerStyle={customStyle().settingTableCell}
               cellStyle="RightDetail"
               title="리뷰 작성"
@@ -245,7 +243,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                   disabled={isDisabled}
                 />
               }
-            /> */}
+            />
           </Section>
           <Section
             sectionPaddingTop={20}
@@ -313,7 +311,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
         title="지도를 초기화하시겠습니까?"
         buttonText="초기화"
         isDisabled={isDisabled}
-        buttonOnPress={show}
+        buttonOnPress={onResetMap}
         hideAlert={hideDialog}
       />
     </SafeAreaView>

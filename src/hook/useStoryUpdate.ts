@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Story} from 'src/types/story';
-import {updateKoreaMapDataStory} from 'src/database/koreaMap.db';
-import {addStoryByRegionId} from 'src/database/story.db';
+import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
+import {addStoryByRegionId} from 'src/utils/story.db';
 
 const useStoryUpdate = (storyId?: string) => {
   // Access the client

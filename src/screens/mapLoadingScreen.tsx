@@ -1,12 +1,12 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SkeletonMap from 'src/skeleton/skeletonMap';
+import KoreaMapSkeleton from 'src/components/koreaMapSkeleton';
 
 const MapLoadingScreen = () => {
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white"
       edges={['left', 'right']}>
-      <SkeletonMap />
+      <KoreaMapSkeleton />
     </SafeAreaView>
   );
 };
