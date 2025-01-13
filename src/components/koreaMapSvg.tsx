@@ -2184,7 +2184,7 @@ const KoreaMapSvg = () => {
 		l-1.135,3.527l-7.559-2.519h-1.638l-4.032-3.024l2.897-7.307l1.007-5.921l8.694,2.771L314.346,287.019z"
             />
             <Polygon
-              id="안양시_2_"
+              id="안양시_1_"
               onPress={() => {
                 setRegionData(mapData['KR-2-4']);
                 handlePresentPress();
@@ -2222,12 +2222,12 @@ const KoreaMapSvg = () => {
 		363.104,320.53 368.771,307.681 371.921,303.146"
             />
             <Polygon
-              id="안양시_1_"
+              id="수원시_1_"
               onPress={() => {
-                setRegionData(mapData['KR-2-4']);
+                setRegionData(mapData['KR-2-1']);
                 handlePresentPress();
               }}
-              fill={mapData['KR-2-4'].background}
+              fill={mapData['KR-2-1'].background}
               stroke="#000000"
               strokeWidth="0.8"
               points="347.607,324.184 347.607,323.933 

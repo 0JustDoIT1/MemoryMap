@@ -13,13 +13,15 @@ const RootScreen = ({navigation}: RootProps) => {
 
   // App version check & Check existing SignIn status
   useEffect(() => {
-    checkVersion().then(check => {
-      if (!check) return showDialog();
-      else {
-        checkShowMapText();
-        checkPincode(navigation);
-      }
-    });
+    // checkVersion().then(check => {
+    //   if (!check) return showDialog();
+    //   else {
+    //     checkShowMapText();
+    //     checkPincode(navigation);
+    //   }
+    // });
+    checkShowMapText();
+    checkPincode(navigation);
   }, []);
 
   return (
