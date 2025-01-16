@@ -235,7 +235,7 @@ const AddStoryScreen = ({navigation, route}: AddStoryProps) => {
                 <MaterialCommunityIcons
                   name="map-search-outline"
                   size={90}
-                  color={customColor.outline}
+                  color={customColor.blackOpacity}
                 />
               }
               title="색칠된 지역이 없습니다."
