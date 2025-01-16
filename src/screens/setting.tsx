@@ -102,7 +102,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-start items-center bg-gray-100"
+      className="flex-1 justify-start items-center bg-.gray-100"
       edges={['left', 'right']}>
       <ScrollView className="w-full">
         <TableView style={customStyle().settingTable} appearance="light">
@@ -124,7 +124,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onPressMapText}
                   disabled={isDisabled}
                 />
@@ -183,7 +183,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={showDialog}
                   disabled={isDisabled}
                 />
@@ -200,7 +200,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onPressBackUp}
                   disabled={isDisabled}
                 />
@@ -223,7 +223,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onPressContactUs}
                   disabled={isDisabled}
                 />
@@ -240,7 +240,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onOpenStoreLink}
                   disabled={isDisabled}
                 />
@@ -265,7 +265,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onPressTermServiceUrl}
                   disabled={isDisabled}
                 />
@@ -282,7 +282,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 <MaterialCommunityIcons
                   name="chevron-right"
                   size={30}
-                  color={theme.colors.backdrop}
+                  color={theme.colors.gray}
                   onPress={onPressTermPrivacyUrl}
                   disabled={isDisabled}
                 />
@@ -301,7 +301,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
               detail={`v ${appVersion}`}
               titleTextColor={theme.colors.darkGray}
               titleTextStyle={customStyle().settingTableCellTitle}
-              rightDetailColor={theme.colors.backdrop}
+              rightDetailColor={theme.colors.gray}
               hideSeparator
             />
           </Section>
