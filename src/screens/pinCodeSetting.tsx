@@ -66,7 +66,7 @@ const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
             />
           </View>
           <View className="w-2/3 flex items-center mt-6">
-            <Text className="text-sm text-white/80">
+            <Text className="text-sm text-white">
               {reEnter ? '암호를 다시 입력해 주세요.' : '암호를 입력해 주세요.'}
             </Text>
           </View>
