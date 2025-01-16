@@ -243,10 +243,7 @@ const Navigation = () => {
             headerTitle: '잠금화면 설정',
             headerStyle: {backgroundColor: theme.colors.brandLight},
             headerLeft: () => (
-              <BackButton
-                navigation={navigation}
-                color={theme.colors.darkGray}
-              />
+              <BackButton navigation={navigation} color={theme.colors.white} />
             ),
           })}
           component={PinCodeSettingScreen}
