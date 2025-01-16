@@ -132,7 +132,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
                   <MaterialCommunityIcons
                     name="file-search-outline"
                     size={90}
-                    color={customColor.outline}
+                    color={customColor.blackOpacity}
                   />
                 }
                 title="작성한 스토리가 없습니다."
