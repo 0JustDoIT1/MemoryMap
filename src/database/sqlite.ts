@@ -12,7 +12,7 @@ export const createTable = async (db: SQLiteDatabase, tableName: string) => {
 
   if (tableName === appTableName.map) {
     tableColumn =
-      '(id TEXT UNIQUE PRIMARY KEY, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, imageStyle TEXT)';
+      '(id TEXT UNIQUE PRIMARY KEY, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, zoomImageUrl TEXT)';
   }
 
   if (tableName === appTableName.story) {

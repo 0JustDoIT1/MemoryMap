@@ -14,6 +14,7 @@
     "log": "react-native log-android"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.11",
     "@gorhom/bottom-sheet": "^5.0.5",
     "@react-native-async-storage/async-storage": "https://github.com/react-native-async-storage/async-storage",
     "@react-native-camera-roll/camera-roll": "^7.8.4",

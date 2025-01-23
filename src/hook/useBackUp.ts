@@ -21,7 +21,10 @@ const useBackUp = () => {
   useEffect(() => {
     const googleSigninConfigure = GoogleSignin.configure({
       webClientId: WebClientId,
-      scopes: ['https://www.googleapis.com/auth/drive'],
+      scopes: [
+        'https://www.googleapis.com/auth/drive',
+        'https://www.googleapis.com/auth/drive.appfolder',
+      ],
     });
     return googleSigninConfigure;
   }, []);
@@ -55,19 +58,26 @@ const useBackUp = () => {
         item => item.type === 'photo',
       );
       const mapImage: {[key: string]: string} = {};
+      const zoomImage: {[key: string]: string} = {};
 
       for (let i = 0; i < photoRegionArray.length; i++) {
-        const image = await FileSystem.readFile(
+        const image1 = await FileSystem.readFile(
           photoRegionArray[i].imageUrl!,
           'base64',
         );
-        mapImage[photoRegionArray[i].id] = image;
+        const image2 = await FileSystem.readFile(
+          photoRegionArray[i].zoomImageUrl!,
+          'base64',
+        );
+        mapImage[photoRegionArray[i].id] = image1;
+        zoomImage[photoRegionArray[i].id] = image2;
       }
 
       const appData: AppData = {
         koreaMapData: koreaMapData,
         story: story,
-        image: mapImage,
+        mapImage: mapImage,
+        zoomImage: zoomImage,
       };
 
       await gDrive.files
@@ -102,21 +112,32 @@ const useBackUp = () => {
 
       const koreaMapData = appData.koreaMapData;
       const story = appData.story;
-      const image = appData.image;
+      const mapImage = appData.mapImage;
+      const zoomImage = appData.zoomImage;
 
       const koreaMapDataArray = Object.values(koreaMapData);
 
       for (let i = 0; i < Object.values(koreaMapData).length; i++) {
         if (koreaMapDataArray[i].type === 'photo') {
-          const existImage = await FileSystem.exists(
+          const existMapImage = await FileSystem.exists(
             koreaMapDataArray[i].imageUrl!,
           );
-          if (existImage)
+          const existZoomImage = await FileSystem.exists(
+            koreaMapDataArray[i].zoomImageUrl!,
+          );
+          if (existMapImage)
             await FileSystem.unlink(koreaMapDataArray[i].imageUrl!);
+          if (existZoomImage)
+            await FileSystem.unlink(koreaMapDataArray[i].zoomImageUrl!);
 
           await FileSystem.writeFile(
             koreaMapDataArray[i].imageUrl!,
-            image[koreaMapDataArray[i].id],
+            mapImage[koreaMapDataArray[i].id],
+            'base64',
+          );
+          await FileSystem.writeFile(
+            koreaMapDataArray[i].zoomImageUrl!,
+            zoomImage[koreaMapDataArray[i].id],
             'base64',
           );
         }

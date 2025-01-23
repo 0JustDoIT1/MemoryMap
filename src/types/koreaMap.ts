@@ -10,7 +10,7 @@ export interface KoreaRegionData {
   background: string;
   story: number;
   imageUrl?: string;
-  imageStyle?: {width: number; height: number};
+  zoomImageUrl?: string;
 }
 
 export interface SvgData {
