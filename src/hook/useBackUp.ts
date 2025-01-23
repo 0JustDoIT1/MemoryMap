@@ -12,6 +12,7 @@ import {AppData} from 'src/types/appData';
 import {getAllKoreaMapData, updateKoreaMapData} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId, getStoryAll} from 'src/utils/story.db';
 import {dateToSeoulTime} from 'src/utils/dateFormat';
+import {decryptData, encryptData} from 'src/utils/crypto';
 
 const useBackUp = () => {
   // Access the client
@@ -80,10 +81,12 @@ const useBackUp = () => {
         zoomImage: zoomImage,
       };
 
+      const encryptAppData = encryptData(JSON.stringify(appData));
+
       await gDrive.files
         .newMultipartUploader()
-        .setDataMimeType('application/json')
-        .setData(JSON.stringify(appData))
+        .setDataMimeType('text/plain')
+        .setData(encryptAppData)
         .setRequestBody({
           name:
             appBackUpRoute + dateToSeoulTime(new Date(), 'YYYY-MM-DD HH:mm:ss'),
@@ -108,7 +111,8 @@ const useBackUp = () => {
 
       const fileId = fileList.files[0].id;
 
-      const appData: AppData = await gDrive.files.getJson(fileId);
+      const encryptAppData = await gDrive.files.getText(fileId);
+      const appData: AppData = JSON.parse(decryptData(encryptAppData));
 
       const koreaMapData = appData.koreaMapData;
       const story = appData.story;

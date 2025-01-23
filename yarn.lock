@@ -3355,6 +3355,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-crypto-js@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/react-native-crypto-js@npm:1.0.3"
+  checksum: 1443f670853a397dd00deaa20504cee3e71f8abddd00b6c24c71078ac4f2c88f62c0bc80d9fa47f150dd27b2a851c2408f34c82979dddfaa0fb0b2b62b0c75f5
+  languageName: node
+  linkType: hard
+
 "@types/react-native-dotenv@npm:^0.2.2":
   version: 0.2.2
   resolution: "@types/react-native-dotenv@npm:0.2.2"
@@ -3748,6 +3755,7 @@ __metadata:
     "@tanstack/eslint-plugin-query": ^5.61.6
     "@tanstack/react-query": ^5.61.5
     "@types/react": ^19.0.0
+    "@types/react-native-crypto-js": ^1.0.3
     "@types/react-native-dotenv": ^0.2.2
     "@types/react-native-sqlite-storage": ^6.0.5
     "@types/react-native-vector-icons": ^6.4.18
@@ -3762,6 +3770,7 @@ __metadata:
     react: 18.3.1
     react-native: 0.75.3
     react-native-bootsplash: ^6.3.1
+    react-native-crypto-js: ^1.0.0
     react-native-device-info: ^14.0.1
     react-native-dotenv: ^3.4.11
     react-native-file-access: ^3.1.1
@@ -10173,6 +10182,13 @@ __metadata:
   bin:
     react-native-bootsplash: cli.js
   checksum: e636b1deefe007f372183e98943369893be7a5fc55d137b8683eb5ee2999191a42b41a82e64a13be35decc499fb70c8288ed5bc18b231d62f31f2b22659f7890
+  languageName: node
+  linkType: hard
+
+"react-native-crypto-js@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "react-native-crypto-js@npm:1.0.0"
+  checksum: 74aa3f16820b8d76fbb21a0bff720f0152e21ecc5e46edb4d1d01dcb86af4da934f4d8a1d5059bf8680bbc5090852b302b29bb742980c45137bfed6cef5991d3
   languageName: node
   linkType: hard
 
