@@ -52,15 +52,8 @@ const useKoreaMapMutation = () => {
 
   // Update Map by photo Mutation
   const updateMapByPhotoMutation = useMutation({
-    mutationFn: ({
-      data,
-      uri,
-      imageStyle,
-    }: {
-      data: KoreaRegionData;
-      uri: string;
-      imageStyle: {width: number; height: number};
-    }) => updateMapPhotoById(data, uri, imageStyle),
+    mutationFn: ({data, uri}: {data: KoreaRegionData; uri: string}) =>
+      updateMapPhotoById(data, uri),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['koreaMapData'],

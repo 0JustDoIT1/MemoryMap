@@ -1,11 +1,11 @@
-import {BackHandler, Pressable, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Portal, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Svg, {Defs, Image, Path, Pattern, Polygon} from 'react-native-svg';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {BlurView} from '@react-native-community/blur';
 import {customStyle} from 'src/style/customStyle';
-import {useEffect, useRef} from 'react';
+import {useRef} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import ViewShot from 'react-native-view-shot';
@@ -55,7 +55,7 @@ const ZoomImage = ({data, setZoom}: ZoomImage) => {
                     width={regionSvgData.regionSvgStyle.width}
                     height={regionSvgData.regionSvgStyle.height}
                     preserveAspectRatio="xMidyMid slice"
-                    href={data.imageUrl}
+                    href={data.zoomImageUrl}
                   />
                 </Pattern>
               </Defs>

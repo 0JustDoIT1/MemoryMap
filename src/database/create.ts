@@ -9,7 +9,7 @@ export const saveKoreaMapDataToDB = async (
   db: SQLiteDatabase,
   data: KoreaRegionData,
 ) => {
-  const query = `INSERT OR REPLACE INTO map(id, title, main, type, background, story, imageUrl, imageStyle) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT OR REPLACE INTO map(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
 
   return await db.executeSql(query, [
     data.id,
@@ -19,7 +19,7 @@ export const saveKoreaMapDataToDB = async (
     data.background,
     data.story,
     data.imageUrl,
-    JSON.stringify(data.imageStyle),
+    data.zoomImageUrl,
   ]);
 };
 

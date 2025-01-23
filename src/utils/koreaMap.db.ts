@@ -1,6 +1,6 @@
 import {KoreaMapDataObject, KoreaRegionData} from 'src/types/koreaMap';
 import {getDBConnection} from 'src/database/sqlite';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {koreaMapDataInit, koreaMapSvgData} from 'src/constants/koreaMapData';
 import {
   saveKoreaMapDataToDB,
   updateMapStoryCountingToDB,
@@ -14,6 +14,7 @@ import {
 import {ResultSet} from 'react-native-sqlite-storage';
 import {getColorRegionList} from './koreaMap.util';
 import {Dirs, FileSystem} from 'react-native-file-access';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 // res type to KoreaMapDataObject
 const _resToObject = async (res: [ResultSet]) => {
@@ -25,8 +26,6 @@ const _resToObject = async (res: [ResultSet]) => {
     //   const base64string = await FileSystem.readFile(region.imageUrl, 'base64');
     //   result[region.id].imageUrl = 'data:image/jpg;base64,' + base64string;
     // }
-    if (region.imageStyle)
-      result[region.id].imageStyle = JSON.parse(region.imageStyle);
   }
 
   return result;
@@ -56,7 +55,6 @@ const _updateDataByTypeColor = async (data: KoreaRegionData, color: string) => {
     type: 'color',
   };
   delete updateKoreaRegionData.imageUrl;
-  delete updateKoreaRegionData.imageStyle;
 
   return updateKoreaRegionData;
 };
@@ -76,6 +74,7 @@ export const updateMapColorById = async (
   // type is photo, remove the existing photo -> Firebase
   if (data.type === 'photo') {
     await FileSystem.unlink(data.imageUrl!);
+    await FileSystem.unlink(data.zoomImageUrl!);
   }
 
   // Save SQLite
@@ -87,7 +86,7 @@ export const updateMapColorById = async (
 const _updateDataByTypePhoto = async (
   data: KoreaRegionData,
   imageUrl: string,
-  imageStyle: {width: number; height: number},
+  zoomImageUrl: string,
 ) => {
   // Setting Data
   const updateKoreaRegionData: KoreaRegionData = {
@@ -95,7 +94,7 @@ const _updateDataByTypePhoto = async (
     background: `url(#${data.id})`,
     type: 'photo',
     imageUrl: imageUrl,
-    imageStyle: imageStyle,
+    zoomImageUrl: zoomImageUrl,
   };
 
   return updateKoreaRegionData;
@@ -104,28 +103,44 @@ const _updateDataByTypePhoto = async (
 // Update background on map (image) -> SQLite & Firebase
 export const updateMapPhotoById = async (
   data: KoreaRegionData,
-  uri: string,
-  imageStyle: {width: number; height: number},
+  imageUri: string,
 ) => {
   // Upload Image -> Save Firebase Storage
-  const imagePath = `file://${Dirs.DocumentDir}/${data.id}_${Number(new Date())}.jpg`;
+  const cropImagePath = `file://${Dirs.DocumentDir}/${data.id}_${Number(new Date())}.jpg`;
+  const zoomImagePath = `file://${Dirs.DocumentDir}/${data.id}_${Number(new Date())}_zoom.jpg`;
 
   // Cache Clear
   const cacheDir = Dirs.CacheDir;
   await FileSystem.unlink(cacheDir);
 
+  // Response Image = ZoomImage
+  // Crop Image for map view (with Image Resizer)
+  const cropWidth = koreaMapSvgData[data.id].mapSvgStyle.width;
+  const cropHeight = koreaMapSvgData[data.id].mapSvgStyle.height;
+  const cropImage = await ImageResizer.createResizedImage(
+    imageUri,
+    cropWidth,
+    cropHeight,
+    'PNG',
+    1,
+  );
+
   if (data.type === 'photo') {
-    const existImage = await FileSystem.exists(data.imageUrl!);
-    if (existImage) await FileSystem.unlink(data.imageUrl!);
+    const existCropImage = await FileSystem.exists(data.imageUrl!);
+    if (existCropImage) await FileSystem.unlink(data.imageUrl!);
+
+    const existZoomImage = await FileSystem.exists(data.zoomImageUrl!);
+    if (existZoomImage) await FileSystem.unlink(data.zoomImageUrl!);
   }
 
-  await FileSystem.cp(uri, imagePath);
+  await FileSystem.cp(imageUri, zoomImagePath);
+  await FileSystem.cp(cropImage.uri, cropImagePath);
 
   // Setting data
   const updateKoreaRegionData = await _updateDataByTypePhoto(
     data,
-    imagePath,
-    imageStyle,
+    cropImagePath,
+    zoomImagePath,
   );
 
   // Save SQLite
@@ -144,7 +159,6 @@ const _deleteDataById = (data: KoreaRegionData) => {
   };
 
   delete updateKoreaRegionData.imageUrl;
-  delete updateKoreaRegionData.imageStyle;
 
   return updateKoreaRegionData;
 };
@@ -157,6 +171,7 @@ export const deleteMapDataById = async (data: KoreaRegionData) => {
   // type is photo, remove the existing photo -> Firebase
   if (data.type === 'photo') {
     await FileSystem.unlink(data.imageUrl!);
+    await FileSystem.unlink(data.zoomImageUrl!);
   }
 
   // Save SQLite

@@ -82,34 +82,34 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
   // Select Image
   const onImagePicker = async () => {
     try {
-      const cropW = koreaMapSvgData[regionData.id].mapSvgStyle.width * 1.5;
-      const cropH = koreaMapSvgData[regionData.id].mapSvgStyle.height * 1.5;
+      const imageWidth = koreaMapSvgData[regionData.id].regionSvgStyle.width;
+      const imageHeight = koreaMapSvgData[regionData.id].regionSvgStyle.height;
 
-      const cropImage = await ImagePicker.openPicker({
-        width: cropW,
-        height: cropH,
+      const pickerImage = await ImagePicker.openPicker({
+        width: imageWidth,
+        height: imageHeight,
         cropping: true,
         mediaType: 'photo',
         compressImageQuality: 1,
         cropperToolbarTitle: getRegionTitle(regionData),
       });
-      await onUploadPhoto(cropImage.path, cropImage.width, cropImage.height);
+      await onUploadPhoto(pickerImage.path);
     } catch (error) {
       return;
     }
   };
 
   // Upload photo to map
-  const onUploadPhoto = async (path: string, width: number, height: number) => {
+  const onUploadPhoto = async (path: string) => {
     try {
       disabledButton();
       startLoading();
       const adShow = await checkAdShow('map');
       if (adShow) {
         show();
-        await onUploadingPhoto(path, width, height);
+        await onUploadingPhoto(path);
       } else {
-        await onUploadingPhoto(path, width, height);
+        await onUploadingPhoto(path);
         onUploadPhotoSuccess();
       }
     } catch (error) {
@@ -119,15 +119,10 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
     }
   };
 
-  const onUploadingPhoto = async (
-    path: string,
-    width: number,
-    height: number,
-  ) => {
+  const onUploadingPhoto = async (path: string) => {
     await updateMapByPhotoMutation.mutateAsync({
       data: regionData,
       uri: path,
-      imageStyle: {width: width, height: height},
     });
   };
 
