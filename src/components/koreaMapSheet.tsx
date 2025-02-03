@@ -90,7 +90,7 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheet) => {
         height: imageHeight,
         cropping: true,
         mediaType: 'photo',
-        compressImageQuality: 1,
+        compressImageQuality: 0.9,
         cropperToolbarTitle: getRegionTitle(regionData),
       });
       await onUploadPhoto(pickerImage.path);
