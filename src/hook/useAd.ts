@@ -1,6 +1,6 @@
+import {AdUnitId} from '@env';
 import {useInterstitialAd} from 'react-native-google-mobile-ads';
 import {
-  adUnitId,
   appAdMapCount,
   appAdMapMaxNum,
   appAdStoryMaxNum,
@@ -10,7 +10,7 @@ import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
 
 const useAd = () => {
   const {load, show, isClosed, isOpened, isLoaded} = useInterstitialAd(
-    adUnitId,
+    AdUnitId,
     {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing', 'game'],

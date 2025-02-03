@@ -3770,6 +3770,7 @@ __metadata:
     react: 18.3.1
     react-native: 0.75.3
     react-native-bootsplash: ^6.3.1
+    react-native-cloud-storage: ^2.2.2
     react-native-crypto-js: ^1.0.0
     react-native-device-info: ^14.0.1
     react-native-dotenv: ^3.4.11
@@ -10182,6 +10183,20 @@ __metadata:
   bin:
     react-native-bootsplash: cli.js
   checksum: e636b1deefe007f372183e98943369893be7a5fc55d137b8683eb5ee2999191a42b41a82e64a13be35decc499fb70c8288ed5bc18b231d62f31f2b22659f7890
+  languageName: node
+  linkType: hard
+
+"react-native-cloud-storage@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "react-native-cloud-storage@npm:2.2.2"
+  peerDependencies:
+    expo: ">=48.0.0"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 33e5eab184adbdda122161e6d0ec99d99a0e93a890291f9688fb47ab6eed3a670d16be3ce731f1871ef3ee0ec7deec78b1426c814ffa88b46244fc91ee181413
   languageName: node
   linkType: hard
 

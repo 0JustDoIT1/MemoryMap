@@ -1,5 +1,3 @@
-import {TestIds} from 'react-native-google-mobile-ads';
-
 // SQLite
 export const appTableName = {
   map: 'map',
@@ -18,6 +16,3 @@ export const appAdStoryCount = 'appAdStoryCount';
 
 // BackUp
 export const appBackUpRoute = 'MemoryMap-BackUp';
-
-// export const adUnitId = 'ca-app-pub-2823132658030308/3148579572';
-export const adUnitId = TestIds.INTERSTITIAL;
