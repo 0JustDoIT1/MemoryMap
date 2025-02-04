@@ -2980,27 +2980,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@robinbobin/mimetype-constants@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@robinbobin/mimetype-constants@npm:2.0.1"
-  dependencies:
-    radashi: ^12.2.3
-  checksum: a4d4888c4c9a66078d118f33ebc1a6b245dcf5787f962cbe3bc36dc459ea62052c2e27fcf0217049ae05f28899a33cc42e32088f19bbb985878e3b83940fb527
-  languageName: node
-  linkType: hard
-
-"@robinbobin/react-native-google-drive-api-wrapper@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "@robinbobin/react-native-google-drive-api-wrapper@npm:2.2.3"
-  dependencies:
-    "@robinbobin/mimetype-constants": ^2.0.1
-    base64-js: ^1.5.1
-    radashi: ^12.2.3
-    utf8: ^3.0.0
-  checksum: e4d50a433d137e214e9374a271d1b9f05700b3f53e8b86250bde24ab6031d982e3b1ddb2a3bd4ca357e5d5412d3de84fbbdb5c96e474589a13f2d95fa17b4782
-  languageName: node
-  linkType: hard
-
 "@sideway/address@npm:^4.1.5":
   version: 4.1.5
   resolution: "@sideway/address@npm:4.1.5"
@@ -3751,7 +3730,6 @@ __metadata:
     "@react-navigation/bottom-tabs": ^7.0.7
     "@react-navigation/native": ^7.0.4
     "@react-navigation/native-stack": ^7.1.1
-    "@robinbobin/react-native-google-drive-api-wrapper": ^2.2.3
     "@tanstack/eslint-plugin-query": ^5.61.6
     "@tanstack/react-query": ^5.61.5
     "@types/react": ^19.0.0
@@ -10091,13 +10069,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"radashi@npm:^12.2.3":
-  version: 12.3.0
-  resolution: "radashi@npm:12.3.0"
-  checksum: 1e3791fd28fedf89ee2b326957d4d8062c74271da41469cea8c8542a02298a7001e985b55daf95bfea40d6500a775ddbca02a1d8fb0a0ce97e4aef896c436351
-  languageName: node
-  linkType: hard
-
 "range-parser@npm:~1.2.1":
   version: 1.2.1
   resolution: "range-parser@npm:1.2.1"
@@ -12280,13 +12251,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: dc3843a1b59ac8bd01417bd79498d4c688d5df8bf4801be50008ef4bfaacb349058c0b1605b5b43c828e0a2d62722d7e861573b3f31cea77a7f23e8b0fc2f7e3
-  languageName: node
-  linkType: hard
-
-"utf8@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "utf8@npm:3.0.0"
-  checksum: cb89a69ad9ab393e3eae9b25305b3ff08bebca9adc839191a34f90777eb2942f86a96369d2839925fea58f8f722f7e27031d697f10f5f39690f8c5047303e62d
   languageName: node
   linkType: hard
 
