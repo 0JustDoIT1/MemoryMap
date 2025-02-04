@@ -11,7 +11,7 @@ import {useState} from 'react';
 import useBackButton from 'src/hook/useBackButton';
 
 const BackUpScreen = ({navigation}: BackUpProps) => {
-  const {backUpAppData, getAppData} = useBackUp();
+  const {backupAppData, getAppData} = useBackUp();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useBackButton(() => navigation.goBack());
@@ -20,14 +20,13 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
   const onBackUpData = async () => {
     try {
       setIsLoading(true);
-      const result = await backUpAppData();
+      await backupAppData();
       setIsLoading(false);
-      if (result)
-        showBottomToast('success', 'Google Drive에 데이터를 백업했습니다.');
+      showBottomToast('success', 'Google Drive에 데이터를 백업했습니다.');
     } catch (error: any) {
       setIsLoading(false);
       // showBottomToast('error', '데이터 백업에 실패했습니다.');
-      showBottomToast('error', error.message);
+      showBottomToast('error', error.details.message);
     }
   };
 
@@ -35,10 +34,9 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
   const onGetData = async () => {
     try {
       setIsLoading(true);
-      const result = await getAppData();
+      await getAppData();
       setIsLoading(false);
-      if (result)
-        showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
+      showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
     } catch (error) {
       setIsLoading(false);
       showBottomToast('error', '데이터 불러오기에 실패했습니다.');
