@@ -3,7 +3,10 @@ import {appTableName} from 'src/constants/app';
 
 // Connect SQLite Database
 export const getDBConnection = async () => {
-  return openDatabase({name: 'MemoryMap.db', location: 'default'});
+  return openDatabase({
+    name: 'MemoryMap.db',
+    location: 'default',
+  });
 };
 
 // Create Table

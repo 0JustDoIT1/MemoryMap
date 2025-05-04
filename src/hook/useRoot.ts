@@ -26,7 +26,7 @@ const useRoot = () => {
       .then(value => value)
       .catch(error => console.error('Error fetching latest version: ', error));
 
-    if (latestVersion && latestVersion > currentVersion) return false;
+    if (latestVersion && latestVersion !== currentVersion) return false;
     else return true;
   };
 

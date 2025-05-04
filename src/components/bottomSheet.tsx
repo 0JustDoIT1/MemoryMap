@@ -8,7 +8,6 @@ import {Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {forwardRef, useCallback, useMemo} from 'react';
-import useBackButton from 'src/hook/useBackButton';
 import useBottomSheetBackHandler from 'src/hook/useBottomSheetBackHandler';
 
 interface CustomBottomSheet {

@@ -189,7 +189,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                 />
               }
             />
-            <Cell
+            {/* <Cell
               contentContainerStyle={customStyle().settingTableCell}
               cellStyle="RightDetail"
               title="백업 및 복구"
@@ -205,7 +205,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
                   disabled={isDisabled}
                 />
               }
-            />
+            /> */}
           </Section>
           <Section
             sectionPaddingTop={20}

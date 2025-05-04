@@ -86,8 +86,8 @@ android {
         applicationId "com.memorymap"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "1.0.11"
+        versionCode 25
+        versionName "1.0.24"
         multiDexEnabled true
     }
     signingConfigs {
@@ -130,7 +130,7 @@ android {
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
-    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation platform('com.google.firebase:firebase-bom:33.8.0')
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-version-check')
     implementation project(':react-native-file-access')

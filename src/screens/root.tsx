@@ -20,8 +20,6 @@ const RootScreen = ({navigation}: RootProps) => {
         checkPincode(navigation);
       }
     });
-    checkShowMapText();
-    checkPincode(navigation);
   }, []);
 
   return (

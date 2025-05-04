@@ -18,30 +18,35 @@ const useBackUp = () => {
   // Access the client
   const queryClient = useQueryClient();
 
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  // const [accessToken, setAccessToken] = useState<string | null>(null);
 
   // Google Sign In Configure
   useEffect(() => {
     const googleSigninConfigure = GoogleSignin.configure({
       webClientId: WebClientId,
-      scopes: ['https://www.googleapis.com/auth/drive.appdata'],
+      scopes: [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/drive.appdata',
+      ],
+      offlineAccess: true,
     });
     return googleSigninConfigure;
   }, []);
 
-  // CloudStorage Setting
-  useEffect(() => {
-    if (
-      accessToken &&
-      CloudStorage.getProvider() === CloudStorageProvider.GoogleDrive
-    ) {
-      CloudStorage.setProviderOptions({
-        accessToken: accessToken,
-        strictFilenames: true,
-        scope: CloudStorageScope.AppData,
-      });
-    }
-  }, [accessToken]);
+  // // CloudStorage Setting
+  // useEffect(() => {
+  //   if (
+  //     accessToken &&
+  //     CloudStorage.getProvider() === CloudStorageProvider.GoogleDrive
+  //   ) {
+  //     CloudStorage.setProviderOptions({
+  //       accessToken: accessToken,
+  //       strictFilenames: true,
+  //       scope: CloudStorageScope.AppData,
+  //     });
+  //   }
+  // }, [accessToken]);
 
   // Sign in Google
   const googleSignIn = async () => {
@@ -50,7 +55,14 @@ const useBackUp = () => {
 
     if (type === 'success') {
       const {accessToken} = await GoogleSignin.getTokens();
-      setAccessToken(accessToken);
+      // setAccessToken(accessToken);
+      const googleCloud = new CloudStorage(CloudStorageProvider.GoogleDrive, {
+        accessToken: accessToken,
+        strictFilenames: true,
+        scope: CloudStorageScope.AppData,
+      });
+
+      return googleCloud;
     } else if (type === 'cancelled') {
       return;
     }
@@ -93,10 +105,12 @@ const useBackUp = () => {
 
   // BackUp App Data
   const backupAppData = async () => {
-    await googleSignIn();
-    const data = await createBackupData();
-    await CloudStorage.writeFile(`/${appBackUpRoute}.txt`, data);
-    await GoogleSignin.signOut();
+    const googleCloud = await googleSignIn();
+    if (googleCloud) {
+      const data = await createBackupData();
+      await googleCloud.writeFile(`/${appBackUpRoute}.txt`, data);
+      await GoogleSignin.signOut();
+    } else throw new Error('Google Drive에 연결하지 못했습니다.');
   };
 
   // Get Backup data & decrypt
@@ -169,10 +183,16 @@ const useBackUp = () => {
 
   // Get Backup Data
   const getAppData = async () => {
-    await googleSignIn();
-    const data = await CloudStorage.readFile(`/${appBackUpRoute}.txt`);
-    await getBackupData(data);
-    await GoogleSignin.signOut();
+    const googleCloud = await googleSignIn();
+    if (googleCloud) {
+      const exist = await googleCloud.exists(`/${appBackUpRoute}.txt`);
+      if (exist) {
+        const data = await googleCloud.readFile(`/${appBackUpRoute}.txt`);
+        await getBackupData(data);
+        await GoogleSignin.signOut();
+        return true;
+      } else return false;
+    } else throw new Error('Google Drive에 연결하지 못했습니다.');
   };
 
   return {backupAppData, getAppData};

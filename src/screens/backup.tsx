@@ -26,7 +26,8 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
     } catch (error: any) {
       setIsLoading(false);
       // showBottomToast('error', '데이터 백업에 실패했습니다.');
-      showBottomToast('error', error.details.message);
+      showBottomToast('error', error.code);
+      // showBottomToast('error', error.message);
     }
   };
 
@@ -34,9 +35,11 @@ const BackUpScreen = ({navigation}: BackUpProps) => {
   const onGetData = async () => {
     try {
       setIsLoading(true);
-      await getAppData();
+      const result = await getAppData();
       setIsLoading(false);
-      showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
+      if (result)
+        showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
+      else showBottomToast('info', 'Google Drive에 백업된 데이터가 없습니다.');
     } catch (error) {
       setIsLoading(false);
       showBottomToast('error', '데이터 불러오기에 실패했습니다.');
