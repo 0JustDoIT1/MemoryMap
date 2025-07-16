@@ -28,7 +28,7 @@ const DashboardScreen = ({navigation}: DashboardProps) => {
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white"
-      edges={['top', 'bottom', 'left', 'right']}>
+      edges={['bottom', 'left', 'right']}>
       {(isMapError || isStoryError) && <></>}
       {(isMapLoading || isStoryLoading) && <></>}
       {isMapSuccess && isStorySuccess && mapData && storyData && (
