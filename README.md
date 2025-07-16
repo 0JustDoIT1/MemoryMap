@@ -178,6 +178,11 @@
 
 ### [초기 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_root_1.gif" alt="스플래시 화면" width="22%" />
+  &nbsp;
+  <img src="./assets/images/readme_root_1.jpg" alt="버전 업데이트" width="22%" />
+</p>
 - 앱 실행 시 splash 화면 표시
 - SQLite local database 연결 및 테이블 확인/생성
 - 앱 버전 확인 후 업데이트 유도 Dialog 노출 (Google Play Store 비교)
@@ -189,6 +194,17 @@
 
 ### [지도(메인) 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_map_1.jpg" alt="지도 화면 1" width="17%" />
+  &nbsp;
+  <img src="./assets/images/readme_map_2.jpg" alt="지도 화면 2" width="17%" />
+  &nbsp;
+  <img src="./assets/images/readme_map_3.jpg" alt="지도 화면 3" width="17%" />
+  &nbsp;
+  <img src="./assets/images/readme_map_4.jpg" alt="지도 화면 4" width="17%" />
+  &nbsp;
+  <img src="./assets/images/readme_map_5.jpg" alt="지도 화면 5" width="17%" />
+</p>
 - Lazy Loading을 활용한 맵 화면 로딩
 - `react-native-svg`를 활용한 지도 SVG 렌더링
 - 지역 클릭 시 BottomSheet를 통해 사진/색칠 선택
@@ -202,6 +218,9 @@
 
 ### [스토리 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_story_1.jpg" alt="스토리 화면 1" width="22%" />
+</p>
 - 정렬(최신순/날짜순) 가능한 카드 리스트 구성
 - 지역 필터링 기능 지원
 - `useInfiniteQuery`로 무한 스크롤 구성 (10개 단위 로드)
@@ -211,6 +230,9 @@
 
 ### [스토리 내용 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_story_2.jpg" alt="스토리 화면 2" width="22%" />
+</p>
 - 카드 클릭 시 스토리 상세 진입
 - 작성 내용 전체 보기
 - 하단 버튼들:
@@ -223,6 +245,9 @@
 
 ### [스토리 작성 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_story_3.jpg" alt="스토리 화면 3" width="22%" />
+</p>
 - 색칠된 지역만 선택 가능
 - 지역 리스트는 `FlatList`로 렌더링 + `react-native-reanimated`로 accordion 애니메이션
 - 여행 일자 선택 시 캘린더 포함 Bottom Sheet 팝업
@@ -232,6 +257,9 @@
 
 ### [대시보드 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_dashboard.jpg" alt="대시보드 화면" width="22%" />
+</p>
 - 색칠된 지역, 스토리 데이터 한눈에 확인 가능
 - 색칠 비율은 막대형 Progress Bar로 시각화
 - 사진/색상 수, 스토리 수 표시
@@ -240,6 +268,11 @@
 
 ### [설정 화면]
 
+<p align="center">
+  <img src="./assets/images/readme_setting_1.jpg" alt="설정 화면 1" width="22%" />
+  &nbsp;
+  <img src="./assets/images/readme_setting_2.jpg" alt="설정 화면 2" width="22%" />
+</p>
 - 지역명 표시 여부 설정
   - 항상 표시 / 빈 지역만 / 표시 안 함
   - 선택값은 `Async Storage`에 저장 + `Recoil` 상태 동기화
