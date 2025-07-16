@@ -22,7 +22,7 @@ import AddStoryScreen from 'src/screens/addStory';
 import {lazy, Suspense} from 'react';
 import MapLoadingScreen from 'src/screens/mapLoadingScreen';
 import BackUpScreen from 'src/screens/backup';
-import BackButton from 'src/components/backButton';
+import BackButton from 'src/components/common/backButton';
 import MapTextSettingScreen from 'src/screens/mapTextSetting';
 
 const Stack = createNativeStackNavigator<StackParamList>();

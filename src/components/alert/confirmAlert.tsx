@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
-import {BrandContainedButton} from './button';
+import {BrandContainedButton} from '../common/button';
 
 interface CustomConfirmAlert {
   visible: boolean;

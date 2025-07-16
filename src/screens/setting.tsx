@@ -15,7 +15,7 @@ import {
 } from 'src/constants/linking';
 import {useRecoilValue} from 'recoil';
 import {appPinCodeState} from 'src/recoil/atom';
-import CustomAlert from 'src/components/alert';
+import CustomAlert from 'src/components/alert/alert';
 import useButton from 'src/hook/useButton';
 import useDialog from 'src/hook/useDialog';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';

@@ -4,7 +4,7 @@ import {PinCodeSettingProps} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import PinCodeNumber from 'src/components/pinCodeNumber';
+import PinCodeNumber from 'src/components/view/pinCodeNumber';
 import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';

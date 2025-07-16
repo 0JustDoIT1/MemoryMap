@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {BrandContainedButton} from './button';
+import {BrandContainedButton} from '../common/button';
 
 interface NotFound {
   icon: React.JSX.Element;

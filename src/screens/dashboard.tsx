@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CustomProgressBar from 'src/components/progressBar';
+import CustomProgressBar from 'src/components/common/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
 import useExitApp from 'src/hook/useExitApp';

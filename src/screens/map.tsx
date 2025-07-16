@@ -12,11 +12,11 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
-import KoreaMapSvg from 'src/components/koreaMapSvg';
 import {useRecoilState} from 'recoil';
 import {appInitAdState} from 'src/recoil/atom';
 import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
+import KoreaMapSvg from 'src/components/map/koreaMapSvg';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');

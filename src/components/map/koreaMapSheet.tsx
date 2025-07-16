@@ -10,7 +10,7 @@ import {BrandContainedButton, BrandOutlinedButton} from './button';
 import useModal from 'src/hook/useModal';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import CustomModal from './modal';
-import ColorPickerModal from 'src/components/colorPickerModal';
+import ColorPickerModal from 'src/components/modal/colorPickerModal';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';

@@ -10,7 +10,7 @@ import useDialog from 'src/hook/useDialog';
 import ViewShot from 'react-native-view-shot';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CustomAlert from 'src/components/alert';
+import CustomAlert from 'src/components/alert/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useButton from 'src/hook/useButton';
 import useStoryView from 'src/hook/useStoryView';

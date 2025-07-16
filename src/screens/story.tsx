@@ -2,16 +2,16 @@ import React from 'react';
 import {FlatList, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import NotFound from 'src/components/notFound';
+import NotFound from 'src/components/view/notFound';
 import {customStyle} from 'src/style/customStyle';
 import {StoryProps} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CustomModal from 'src/components/modal';
+import CustomModal from 'src/components/modal/modal';
 import useModal from 'src/hook/useModal';
 import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
 import useStoryQuery from 'src/hook/useStoryQuery';
-import StoryCard from 'src/components/storyCard';
+import StoryCard from 'src/components/view/storyCard';
 import useExitApp from 'src/hook/useExitApp';
 
 const StoryScreen = ({navigation}: StoryProps) => {
