@@ -45,62 +45,62 @@
 
 ## 🛠 기술 스택
 
-### Frontend
+#### Frontend
 
 <p align="left">
   <img src="https://img.shields.io/badge/React%20Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
 </p>
 
-### Backend
+#### Backend
 
 <p align="left">
   <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
   <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Google Cloud" />
 </p>
 
-### State Management
+#### State Management
 
 <p align="left">
   <img src="https://img.shields.io/badge/Recoil-007AF4?style=for-the-badge&logo=recoil&logoColor=white" alt="Recoil" />
   <img src="https://img.shields.io/badge/React%20Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="React Query" />
 </p>
 
-### Local Database
+#### Local Database
 
 <p align="left">
   <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
 </p>
 
-### Local Storage
+#### Local Storage
 
 <p align="left">
   <img src="https://img.shields.io/badge/AsyncStorage-000000?style=for-the-badge&logo=react&logoColor=white" alt="Async Storage" />
   <img src="https://img.shields.io/badge/Keychain-8E44AD?style=for-the-badge&logo=lock&logoColor=white" alt="Keychain" />
 </p>
 
-### API
+#### API
 
 <p align="left">
   <img src="https://img.shields.io/badge/Firebase%20Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase Auth" />
   <img src="https://img.shields.io/badge/Google%20Drive-34A853?style=for-the-badge&logo=googledrive&logoColor=white" alt="Google Drive API" />
 </p>
 
-### Design
+#### Design
 
 <p align="left">
   <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
   <img src="https://img.shields.io/badge/React%20Native%20Paper-6200EE?style=for-the-badge&logo=materialdesign&logoColor=white" alt="React Native Paper" />
 </p>
 
-### Build Tools
+#### Build Tools
 
 <p align="left">
   <img src="https://img.shields.io/badge/Metro-000000?style=for-the-badge&logo=metro&logoColor=white" alt="Metro" />
   <img src="https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=babel&logoColor=black" alt="Babel" />
 </p>
 
-### Code Quality
+#### Code Quality
 
 <p align="left">
   <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint" />
