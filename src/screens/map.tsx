@@ -150,7 +150,7 @@ const MapScreen = ({navigation}: MapProps) => {
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
-      edges={['left', 'right']}>
+      edges={['top', 'bottom', 'left', 'right']}>
       <ViewShot
         ref={viewShotRef}
         style={customStyle().mapViewShot}

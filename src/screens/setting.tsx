@@ -38,11 +38,6 @@ const SettingScreen = ({navigation}: SettingProps) => {
   const {load, isClosed, show} = useAd();
   useExitApp();
 
-  // BackUp AppData
-  const onPressBackUp = () => {
-    navigation.navigate('BackUp');
-  };
-
   // Email Contact us
   const onPressContactUs = async () => {
     const deviceName = await DeviceInfo.getDeviceName();
@@ -103,7 +98,7 @@ const SettingScreen = ({navigation}: SettingProps) => {
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-.gray-100"
-      edges={['left', 'right']}>
+      edges={['top', 'bottom', 'left', 'right']}>
       <ScrollView className="w-full">
         <TableView style={customStyle().settingTable} appearance="light">
           <Section

@@ -4,10 +4,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import {useState} from 'react';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {Pagination} from 'src/types/story';
-import {getAllKoreaMapData} from 'src/utils/koreaMap.db';
-import {koreaMapDataToObject} from 'src/utils/koreaMap.util';
 import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
 
 const useStoryQuery = () => {

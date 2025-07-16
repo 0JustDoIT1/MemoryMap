@@ -62,13 +62,13 @@ const StoryScreen = ({navigation}: StoryProps) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-center items-center bg-white pb-6 px-6"
-      edges={['bottom', 'left', 'right']}>
+      className="flex-1 justify-center items-center bg-white px-6"
+      edges={['top', 'bottom', 'left', 'right']}>
       {(isStoryError || isListError) && <></>}
       {(isStoryLoading || isListLoading) && <></>}
       {isStorySuccess && isListSuccess && (
-        <View className="w-full h-full">
-          <View className="w-full h-[8%] flex-row justify-between items-center">
+        <View className="flex-1 w-full">
+          <View className="h-[8%] flex-row justify-between items-center">
             <View className="flex-row">
               <Pressable
                 className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
@@ -116,7 +116,7 @@ const StoryScreen = ({navigation}: StoryProps) => {
           </View>
           {storyData && storyData.pages[0].totalCount >= 1 ? (
             <FlatList
-              className="w-full h-[90%] mt-1"
+              className="flex-1"
               contentContainerStyle={customStyle().storyFlatListContainer}
               data={storyData?.pages.map(page => page.doc).flat()}
               keyExtractor={item => item.createdAt}

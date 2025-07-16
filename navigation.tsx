@@ -24,12 +24,14 @@ import MapLoadingScreen from 'src/screens/mapLoadingScreen';
 import BackUpScreen from 'src/screens/backup';
 import BackButton from 'src/components/common/backButton';
 import MapTextSettingScreen from 'src/screens/mapTextSetting';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
 
 const Main = () => {
   const theme = useAppTheme();
+  const insets = useSafeAreaInsets();
 
   const LazyMapScreen = lazy(() => import('./src/screens/map'));
 
@@ -46,7 +48,8 @@ const Main = () => {
         headerTitleAlign: 'center',
         tabBarStyle: {
           backgroundColor: theme.colors.white,
-          height: 60,
+          paddingBottom: insets.bottom,
+          height: 60 + insets.bottom,
           elevation: 2,
         },
         tabBarItemStyle: {
