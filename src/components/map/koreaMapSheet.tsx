@@ -6,19 +6,15 @@ import {
 import {Pressable, View} from 'react-native';
 import {Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
-import {BrandContainedButton, BrandOutlinedButton} from './button';
 import useModal from 'src/hook/useModal';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import CustomModal from './modal';
 import ColorPickerModal from 'src/components/modal/colorPickerModal';
 import {showBottomToast} from 'src/utils/showToast';
 import useDialog from 'src/hook/useDialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {KoreaRegionData} from 'src/types/koreaMap';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
-import CustomAlert from './alert';
 import ImagePicker from 'react-native-image-crop-picker';
-import ZoomImage from './zoomImage';
 import {useAppTheme} from 'src/style/paperTheme';
 import LoadingScreen from 'src/screens/loadingScreen';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
@@ -27,6 +23,10 @@ import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import useLoading from 'src/hook/useLoading';
 import useAd from 'src/hook/useAd';
 import useBottomSheetBackHandler from 'src/hook/useBottomSheetBackHandler';
+import {BrandContainedButton, BrandOutlinedButton} from '../common/button';
+import CustomAlert from '../alert/alert';
+import CustomModal from '../modal/modal';
+import ZoomImage from '../view/zoomImage';
 
 interface KoreaMapSheet {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;

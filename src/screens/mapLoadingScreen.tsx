@@ -1,5 +1,5 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import KoreaMapSkeleton from 'src/components/koreaMapSkeleton';
+import KoreaMapSkeleton from 'src/components/map/koreaMapSkeleton';
 
 const MapLoadingScreen = () => {
   return (

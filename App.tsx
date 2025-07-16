@@ -42,23 +42,23 @@ const App = (): React.JSX.Element => {
   }, []);
 
   return (
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <PaperProvider theme={PaperTheme}>
-            <StatusBar
-              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            />
-            <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <PaperProvider theme={PaperTheme}>
               <BottomSheetModalProvider>
                 {isConnected ? <Navigation /> : <NoNetwork />}
+                <Toast config={toastConfig} />
+                <StatusBar
+                  barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                />
               </BottomSheetModalProvider>
-              <Toast config={toastConfig} />
-            </GestureHandlerRootView>
-          </PaperProvider>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </RecoilRoot>
+            </PaperProvider>
+          </QueryClientProvider>
+        </RecoilRoot>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
