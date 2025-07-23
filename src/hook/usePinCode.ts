@@ -1,7 +1,6 @@
 import {KeyChainPinCode} from '@env';
 import {useState} from 'react';
-import {useSetRecoilState} from 'recoil';
-import {appPinCodeState} from 'src/recoil/atom';
+import {useAppPinCode} from 'src/store/appPinCode';
 import {
   getSecureValue,
   removeSecureValue,
@@ -17,7 +16,7 @@ import {
 } from 'react-native-reanimated';
 
 const usePinCode = () => {
-  const setAppPinCode = useSetRecoilState(appPinCodeState);
+  const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
 
   const [code, setCode] = useState<number[]>([]);
   const [reEnter, setReEnter] = useState<boolean>(false);
@@ -65,7 +64,7 @@ const usePinCode = () => {
   const setPinCodeToKeyChain = async (pinCode: string) => {
     try {
       await setSecureValue(KeyChainPinCode, KeyChainPinCode, pinCode);
-      setAppPinCode(true);
+      const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
     } catch (error) {
       setAppPinCode(false);
     }

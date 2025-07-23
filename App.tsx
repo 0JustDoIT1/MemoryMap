@@ -6,7 +6,6 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {PaperProvider} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import {RecoilRoot} from 'recoil';
 import {PaperTheme} from 'src/style/paperTheme';
 import {toastConfig} from 'src/style/toast.config';
 import SQLite from 'react-native-sqlite-storage';
@@ -44,19 +43,17 @@ const App = (): React.JSX.Element => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
-        <RecoilRoot>
-          <QueryClientProvider client={queryClient}>
-            <PaperProvider theme={PaperTheme}>
-              <BottomSheetModalProvider>
-                {isConnected ? <Navigation /> : <NoNetwork />}
-                <Toast config={toastConfig} />
-                <StatusBar
-                  barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                />
-              </BottomSheetModalProvider>
-            </PaperProvider>
-          </QueryClientProvider>
-        </RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <PaperProvider theme={PaperTheme}>
+            <BottomSheetModalProvider>
+              {isConnected ? <Navigation /> : <NoNetwork />}
+              <Toast config={toastConfig} />
+              <StatusBar
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              />
+            </BottomSheetModalProvider>
+          </PaperProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

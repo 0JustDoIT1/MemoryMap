@@ -1,19 +1,21 @@
 import {KeyChainPinCode} from '@env';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useSetRecoilState} from 'recoil';
 import {appShowRegionNameKey, appTableName} from 'src/constants/app';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {saveKoreaMapDataToDB} from 'src/database/create';
 import {countData, getDBConnection} from 'src/database/sqlite';
-import {appPinCodeState, appShowRegionNameState} from 'src/recoil/atom';
 import {StackParamList} from 'src/types/stack';
 import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
 import {getSecureValue} from 'src/utils/keyChain';
 import VersionCheck from 'react-native-version-check';
+import {useAppPinCode} from 'src/store/appPinCode';
+import {useAppShowRegionName} from 'src/store/appShowRegionName';
 
 const useRoot = () => {
-  const setAppPinCode = useSetRecoilState(appPinCodeState);
-  const appShowRegionName = useSetRecoilState(appShowRegionNameState);
+  const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
+  const setAppShowRegionName = useAppShowRegionName(
+    state => state.setAppShowRegionName,
+  );
 
   const checkVersion = async () => {
     const androidPackageName = VersionCheck.getPackageName(); //com.memorymap
@@ -56,9 +58,9 @@ const useRoot = () => {
     const showMapText = await getAsyncStorage(appShowRegionNameKey);
     if (!showMapText) {
       await setAsyncStorage(appShowRegionNameKey, 'show');
-      appShowRegionName('show');
+      setAppShowRegionName('show');
     } else {
-      appShowRegionName(showMapText as 'show' | 'condition' | 'hide');
+      setAppShowRegionName(showMapText as 'show' | 'condition' | 'hide');
     }
   };
 

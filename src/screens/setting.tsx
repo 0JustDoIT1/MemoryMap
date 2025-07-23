@@ -13,8 +13,6 @@ import {
   TermPrivacyUrl,
   TermServiceUrl,
 } from 'src/constants/linking';
-import {useRecoilValue} from 'recoil';
-import {appPinCodeState} from 'src/recoil/atom';
 import CustomAlert from 'src/components/alert/alert';
 import useButton from 'src/hook/useButton';
 import useDialog from 'src/hook/useDialog';
@@ -25,12 +23,13 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
+import {useAppPinCode} from 'src/store/appPinCode';
 
 const SettingScreen = ({navigation}: SettingProps) => {
   const theme = useAppTheme();
   const appVersion = DeviceInfo.getVersion();
 
-  const appPinCode = useRecoilValue(appPinCodeState);
+  const appPinCode = useAppPinCode(state => state.appPinCode);
 
   const {isDisabled, disabledButton, abledButton} = useButton();
   const {visibleDialog, showDialog, hideDialog} = useDialog();

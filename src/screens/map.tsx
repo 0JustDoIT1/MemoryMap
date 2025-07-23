@@ -12,11 +12,10 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
-import {useRecoilState} from 'recoil';
-import {appInitAdState} from 'src/recoil/atom';
 import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
 import KoreaMapSvg from 'src/components/map/koreaMapSvg';
+import {useAppInitAd} from 'src/store/appInitAd';
 
 // Screen width & height
 const {width, height} = Dimensions.get('screen');
@@ -29,17 +28,21 @@ const clamp = (val: number, min: number, max: number) => {
 const MapScreen = ({navigation}: MapProps) => {
   const theme = useAppTheme();
 
-  const [appInitAd, setAppInitAd] = useRecoilState(appInitAdState);
+  const appInitAd = useAppInitAd(state => state.appInitAd);
+  const setAppInitAd = useAppInitAd(state => state.setAppInitAd);
+
   const {load, isClosed, isLoaded, show} = useAd();
   useExitApp();
 
   useEffect(() => {
+    if (appInitAd) return;
     load();
-    if (!appInitAd && isLoaded && !isClosed) {
+    if (isLoaded && !isClosed) {
       show();
       setAppInitAd(true);
     }
-  }, [isLoaded, load, appInitAd]);
+    // load, show, setAppInitAd는 dependency에서 빼세요!
+  }, [isLoaded, isClosed, appInitAd]);
 
   const viewShotRef = useRef<ViewShot>(null);
 

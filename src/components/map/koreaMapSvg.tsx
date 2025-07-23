@@ -8,8 +8,7 @@ import {koreaRegionEmpty} from 'src/constants/koreaMapData';
 import KoreaMapSkeleton from './koreaMapSkeleton';
 import KoreaMapText from './koreaMapText';
 import useKoreaMap from 'src/hook/useKoreaMapQuery';
-import {useRecoilValue} from 'recoil';
-import {appShowRegionNameState} from 'src/recoil/atom';
+import {useAppShowRegionName} from 'src/store/appShowRegionName';
 
 const KoreaMapSvg = () => {
   // Bottom Sheet Ref
@@ -19,12 +18,14 @@ const KoreaMapSvg = () => {
     mapSheetModalRef.current?.present();
   }, []);
 
-  const appShowRegionName = useRecoilValue(appShowRegionNameState);
-
   const {isMapSuccess, isMapLoading, isMapError, mapData} = useKoreaMap();
 
   const [regionData, setRegionData] =
     useState<KoreaRegionData>(koreaRegionEmpty);
+
+  const appShowRegionName = useAppShowRegionName(
+    state => state.appShowRegionName,
+  );
 
   return (
     <React.Fragment>

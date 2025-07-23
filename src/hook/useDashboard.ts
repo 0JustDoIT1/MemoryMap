@@ -35,7 +35,7 @@ const useDashboard = (regionCount: number) => {
     if (isMapSuccess) {
       setPercent(((mapData.color + mapData.photo) / regionCount) * 100);
     }
-  }, [mapData]);
+  }, [mapData?.color, mapData?.photo, isMapSuccess, regionCount]);
 
   return {
     percent,

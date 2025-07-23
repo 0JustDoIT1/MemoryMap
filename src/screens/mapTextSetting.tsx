@@ -4,8 +4,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {MapTextSettingProps} from 'src/types/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
-import {useRecoilState} from 'recoil';
-import {appShowRegionNameState} from 'src/recoil/atom';
 import {setAsyncStorage} from 'src/utils/asyncStorage';
 import {appShowRegionNameKey} from 'src/constants/app';
 import {useEffect, useState} from 'react';
@@ -13,12 +11,16 @@ import {AppShowRegionName} from 'src/types/appData';
 import {customStyle} from 'src/style/customStyle';
 import useButton from 'src/hook/useButton';
 import useBackButton from 'src/hook/useBackButton';
+import {useAppShowRegionName} from 'src/store/appShowRegionName';
 
 const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
   const theme = useAppTheme();
 
-  const [appShowRegionName, setAppShowRegionName] = useRecoilState(
-    appShowRegionNameState,
+  const appShowRegionName = useAppShowRegionName(
+    state => state.appShowRegionName,
+  );
+  const setAppShowRegionName = useAppShowRegionName(
+    state => state.setAppShowRegionName,
   );
 
   const {isDisabled, disabledButton} = useButton();
