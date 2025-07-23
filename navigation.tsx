@@ -19,51 +19,71 @@ import DashboardScreen from 'src/screens/dashboard';
 import PinCodeSettingScreen from 'src/screens/pinCodeSetting';
 import PinCodeEnterScreen from 'src/screens/pinCodeEnter';
 import AddStoryScreen from 'src/screens/addStory';
-import {lazy, Suspense} from 'react';
-import MapLoadingScreen from 'src/screens/mapLoadingScreen';
 import BackUpScreen from 'src/screens/backup';
 import BackButton from 'src/components/common/backButton';
 import MapTextSettingScreen from 'src/screens/mapTextSetting';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import MapScreen from './src/screens/map';
+import type {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
+import type {NativeStackNavigationOptions} from '@react-navigation/native-stack';
+import type {AppTheme} from 'src/style/paperTheme';
+import type {EdgeInsets} from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 const Tab = createBottomTabNavigator<StackParamList>();
+
+// Tab Navigator 공통 옵션
+const tabScreenOptions = (
+  theme: AppTheme,
+  insets: EdgeInsets,
+): BottomTabNavigationOptions => ({
+  headerShown: true,
+  headerShadowVisible: false,
+  headerTintColor: '#000000',
+  headerTitleStyle: {
+    fontFamily: 'GmarketSansMedium',
+  },
+  headerTitleAlign: 'center',
+  tabBarStyle: {
+    backgroundColor: theme.colors.white,
+    paddingBottom: insets.bottom,
+    height: 60 + insets.bottom,
+    elevation: 2,
+  },
+  tabBarItemStyle: {
+    height: 60,
+    paddingTop: 10,
+  },
+  tabBarActiveTintColor: theme.colors.brandMain,
+  tabBarInactiveTintColor: theme.colors.darkGray,
+  tabBarHideOnKeyboard: true,
+  tabBarShowLabel: false,
+  animation: 'shift',
+});
+
+// Stack Navigator 공통 옵션
+const stackScreenOptions: NativeStackNavigationOptions = {
+  headerShown: false,
+  headerShadowVisible: false,
+  headerTintColor: '#000000',
+  headerTitleStyle: {
+    fontFamily: 'GmarketSansMedium',
+  },
+  headerTitleAlign: 'center',
+  animation: 'flip',
+};
 
 const Main = () => {
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
 
-  const LazyMapScreen = lazy(() => import('./src/screens/map'));
-
   return (
     <Tab.Navigator
       initialRouteName="Map"
-      screenOptions={{
-        headerShown: true,
-        headerShadowVisible: false,
-        headerTintColor: '#000000',
-        headerTitleStyle: {
-          fontFamily: 'GmarketSansMedium',
-        },
-        headerTitleAlign: 'center',
-        tabBarStyle: {
-          backgroundColor: theme.colors.white,
-          paddingBottom: insets.bottom,
-          height: 60 + insets.bottom,
-          elevation: 2,
-        },
-        tabBarItemStyle: {
-          height: 60,
-          paddingTop: 10,
-        },
-        tabBarActiveTintColor: theme.colors.brandMain,
-        tabBarInactiveTintColor: theme.colors.darkGray,
-        tabBarHideOnKeyboard: true,
-        tabBarShowLabel: false,
-        animation: 'shift',
-      }}>
+      screenOptions={tabScreenOptions(theme, insets)}>
       <Tab.Screen
         name="Map"
+        component={MapScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'map' : 'map-outline';
@@ -72,13 +92,8 @@ const Main = () => {
             );
           },
           headerTitle: '여행지도',
-        }}>
-        {props => (
-          <Suspense fallback={<MapLoadingScreen />}>
-            <LazyMapScreen {...props} />
-          </Suspense>
-        )}
-      </Tab.Screen>
+        }}
+      />
       <Tab.Screen
         name="Story"
         component={StoryScreen}
@@ -120,7 +135,7 @@ const Main = () => {
       />
       <Tab.Screen
         name="Setting"
-        // component={SettingScreen}
+        component={SettingScreen}
         options={{
           tabBarIcon: ({focused, size, color}) => {
             const name = focused ? 'cog' : 'cog-outline';
@@ -129,9 +144,8 @@ const Main = () => {
             );
           },
           headerTitle: '설정',
-        }}>
-        {props => <SettingScreen {...props} />}
-      </Tab.Screen>
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -146,10 +160,7 @@ const Navigation = () => {
       }}>
       <Stack.Navigator
         initialRouteName="Root"
-        screenOptions={{
-          headerShown: false,
-          animation: 'flip',
-        }}>
+        screenOptions={stackScreenOptions}>
         <Stack.Screen name="Root" component={RootScreen} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen
@@ -157,12 +168,6 @@ const Navigation = () => {
           component={AddStoryScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#000000',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '스토리 작성',
             headerLeft: () => (
               <BackButton
@@ -177,12 +182,6 @@ const Navigation = () => {
           component={EditStoryScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#000000',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '스토리 수정',
             headerLeft: () => (
               <BackButton
@@ -197,12 +196,6 @@ const Navigation = () => {
           component={ViewStoryScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#000000',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '스토리',
             headerLeft: () => (
               <BackButton
@@ -217,12 +210,7 @@ const Navigation = () => {
           component={SelectRegionScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
             headerTintColor: '#ffffff',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '지역 선택',
             headerStyle: {backgroundColor: theme.colors.brandLight},
             headerLeft: () => (
@@ -235,27 +223,23 @@ const Navigation = () => {
         />
         <Stack.Screen
           name="PinCodeSetting"
+          component={PinCodeSettingScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
             headerTintColor: '#ffffff',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '잠금화면 설정',
             headerStyle: {backgroundColor: theme.colors.brandLight},
             headerLeft: () => (
               <BackButton navigation={navigation} color={theme.colors.white} />
             ),
           })}
-          component={PinCodeSettingScreen}
         />
         <Stack.Screen name="PinCodeEnter" component={PinCodeEnterScreen} />
         <Stack.Screen
+          name="BackUp"
+          component={BackUpScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
             headerTitle: '',
             headerLeft: () => (
               <BackButton
@@ -264,18 +248,12 @@ const Navigation = () => {
               />
             ),
           })}
-          name="BackUp"
-          component={BackUpScreen}
         />
         <Stack.Screen
+          name="MapTextSetting"
+          component={MapTextSettingScreen}
           options={({navigation}) => ({
             headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#000000',
-            headerTitleStyle: {
-              fontFamily: 'GmarketSansMedium',
-            },
-            headerTitleAlign: 'center',
             headerTitle: '지역명 표시',
             headerLeft: () => (
               <BackButton
@@ -284,8 +262,6 @@ const Navigation = () => {
               />
             ),
           })}
-          name="MapTextSetting"
-          component={MapTextSettingScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

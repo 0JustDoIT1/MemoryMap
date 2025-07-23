@@ -5,7 +5,7 @@ const MapLoadingScreen = () => {
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white"
-      edges={['left', 'right']}>
+      edges={['top', 'bottom', 'left', 'right']}>
       <KoreaMapSkeleton />
     </SafeAreaView>
   );

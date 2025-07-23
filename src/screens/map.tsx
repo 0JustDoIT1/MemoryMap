@@ -1,36 +1,42 @@
-import React, {useEffect, useRef} from 'react';
-import {Dimensions, Pressable} from 'react-native';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from 'react-native-reanimated';
+import React, {memo, useLayoutEffect, useRef, useState, useEffect} from 'react';
+import {useWindowDimensions, Pressable, InteractionManager} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import Animated from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {MapProps} from 'src/types/stack';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
 import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
 import KoreaMapSvg from 'src/components/map/koreaMapSvg';
 import {useAppInitAd} from 'src/store/appInitAd';
-
-// Screen width & height
-const {width, height} = Dimensions.get('screen');
-
-// Limit a value within a specified range.
-const clamp = (val: number, min: number, max: number) => {
-  return Math.min(Math.max(val, min), max);
-};
+import LoadingScreen from './loadingScreen';
+import {useMapAnimation} from 'src/hook/useMapAnimation';
+import {getMaxScale} from 'src/constants/map';
 
 const MapScreen = ({navigation}: MapProps) => {
+  // 2. 외부 훅 호출
+  const {width, height} = useWindowDimensions();
   const theme = useAppTheme();
 
+  // 3. 상태 관리 훅
   const appInitAd = useAppInitAd(state => state.appInitAd);
   const setAppInitAd = useAppInitAd(state => state.setAppInitAd);
+  const [showMap, setShowMap] = useState(false);
 
+  // 4. 커스텀 훅
+  const MAX_SCALE = getMaxScale(width, height);
+  const {animatedStyles} = useMapAnimation(width, height, MAX_SCALE);
+
+  // 5. ref 선언
+  const viewShotRef = useRef<ViewShot | null>(null);
+
+  // 6. 핸들러/콜백 함수 (필요시 분리)
+  // 현재는 별도 핸들러 없음
+
+  // 7. useEffect, useLayoutEffect 등 사이드 이펙트
   const {load, isClosed, isLoaded, show} = useAd();
   useExitApp();
 
@@ -41,13 +47,16 @@ const MapScreen = ({navigation}: MapProps) => {
       show();
       setAppInitAd(true);
     }
-    // load, show, setAppInitAd는 dependency에서 빼세요!
   }, [isLoaded, isClosed, appInitAd]);
 
-  const viewShotRef = useRef<ViewShot>(null);
-
-  // Header button
   useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => {
+      setShowMap(true);
+    });
+    return () => task.cancel();
+  }, []);
+
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <Pressable
@@ -72,84 +81,10 @@ const MapScreen = ({navigation}: MapProps) => {
         </Pressable>
       ),
     });
-  }, [navigation]);
+  }, [navigation, theme.colors.darkGray]);
 
-  // Setting map animation value
-  const translationX = useSharedValue(0);
-  const translationY = useSharedValue(0);
-  const prevTranslationX = useSharedValue(0);
-  const prevTranslationY = useSharedValue(0);
-  const scale = useSharedValue(1);
-  const startScale = useSharedValue(0);
-
-  // Pinch Animation(scale)
-  const pinch = Gesture.Pinch()
-    .onStart(() => {
-      startScale.value = scale.value;
-    })
-    .onUpdate(event => {
-      scale.value = clamp(
-        startScale.value * event.scale,
-        0.5,
-        Math.min(width / 80, height / 80),
-      );
-    })
-    .onEnd(() => {
-      if (scale.value <= 1) {
-        scale.value = 1;
-        translationX.value = 0;
-        translationY.value = 0;
-      }
-    })
-    .runOnJS(true);
-
-  // Pan Animation(move)
-  const pan = Gesture.Pan()
-    .averageTouches(true)
-    .onStart(() => {
-      if (scale.value > 1) {
-        prevTranslationX.value = translationX.value;
-        prevTranslationY.value = translationY.value;
-      }
-    })
-    .onUpdate(event => {
-      if (scale.value > 1) {
-        const maxTranslateX = width / 2 - 70;
-        const maxTranslateY = height / 2 - 70;
-
-        translationX.value = clamp(
-          prevTranslationX.value + event.translationX,
-          -maxTranslateX,
-          maxTranslateX,
-        );
-        translationY.value = clamp(
-          prevTranslationY.value + event.translationY,
-          -maxTranslateY,
-          maxTranslateY,
-        );
-      }
-    })
-    .onEnd(() => {
-      if (scale.value <= 1) {
-        scale.value = 1;
-        translationX.value = 0;
-        translationY.value = 0;
-      }
-    })
-    .runOnJS(true);
-
-  // Animation Style
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [
-      {scale: scale.value},
-      {translateX: translationX.value},
-      {translateY: translationY.value},
-    ],
-  }));
-
-  // Pinch + Pan Animation
-  const composed = Gesture.Simultaneous(pinch, pan);
-
+  // 8. 렌더링/JSX 반환
+  const MemoizedKoreaMapSvg = memo(KoreaMapSvg);
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
@@ -158,11 +93,9 @@ const MapScreen = ({navigation}: MapProps) => {
         ref={viewShotRef}
         style={customStyle().mapViewShot}
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
-        <GestureDetector gesture={composed}>
-          <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-            <KoreaMapSvg />
-          </Animated.View>
-        </GestureDetector>
+        <Animated.View style={[customStyle().mapBox, animatedStyles]}>
+          {showMap ? <MemoizedKoreaMapSvg /> : <LoadingScreen />}
+        </Animated.View>
       </ViewShot>
     </SafeAreaView>
   );

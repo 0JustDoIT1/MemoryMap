@@ -28,9 +28,13 @@ const App = (): React.JSX.Element => {
 
   // Create SQLite Table (If exists, no create)
   const createSqlTable = async () => {
-    const db = await getDBConnection();
-    await createTable(db, appTableName.map);
-    await createTable(db, appTableName.story);
+    try {
+      const db = await getDBConnection();
+      await createTable(db, appTableName.map);
+      await createTable(db, appTableName.story);
+    } catch (error) {
+      console.error('SQLite table creation failed', error);
+    }
   };
 
   // Check Network
