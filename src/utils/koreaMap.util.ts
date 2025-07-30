@@ -1,92 +1,63 @@
 import {
-  GetColorRegionList,
-  KoreaMapDataObject,
-  KoreaRegionData,
+  IGetColorRegionList,
+  IKoreaMapDataObject,
+  IKoreaRegionData,
 } from 'src/types/koreaMap';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 
 // KoreaMapData Array to Object
-export const koreaMapDataToObject = (data: KoreaRegionData[]) => {
-  const koreaMapDataObject: KoreaMapDataObject = {};
-  data.forEach(item => (koreaMapDataObject[item.id] = item));
-
-  return koreaMapDataObject;
+export const koreaMapDataToObject = (
+  data: IKoreaRegionData[],
+): IKoreaMapDataObject => {
+  return data.reduce((acc, cur) => {
+    acc[cur.id] = cur;
+    return acc;
+  }, {} as IKoreaMapDataObject);
 };
 
 // Id array matching type
 export const getIdArrayByType = (
-  data: KoreaMapDataObject,
+  data: IKoreaMapDataObject,
   type: 'init' | 'color' | 'photo',
-) => {
-  const arr: string[] = [];
-
-  Object.values(data).forEach(value => {
-    if (value.type === type) {
-      arr.push(value.id);
-    }
-  });
-
-  return arr;
+): string[] => {
+  return Object.values(data)
+    .filter(region => region.type === type)
+    .map(region => region.id);
 };
 
 // Get region name from the data (main + title)
-export const getRegionTitle = (data: KoreaRegionData) => {
-  let title = data.title;
-  if (title !== data.main) title = `${data.main} ${data.title}`;
-
-  return title;
+export const getRegionTitle = (data: IKoreaRegionData): string => {
+  return data.title === data.main ? data.title : `${data.main} ${data.title}`;
 };
 
 // Get region name from the KoreaMapDataInit (main + title)
-export const getRegionTitleById = (id: string) => {
+export const getRegionTitleById = (id: string): string => {
   const koreaMapDataObject = koreaMapDataToObject(koreaMapDataInit);
-
-  const title = getRegionTitle(koreaMapDataObject[id]);
-
-  return title;
+  return getRegionTitle(koreaMapDataObject[id]);
 };
 
 // Get main region name from the KoreaMapDataInit
-export const getRegionMainTitleById = (id: string) => {
+export const getRegionMainTitleById = (id: string): string | undefined => {
   const region = koreaMapDataInit.find(item => item.id.includes(id));
 
-  const main = region?.main!;
-
-  return main;
+  return region?.main;
 };
 
 // Get a list of map colored region (color & image)
-export const getColorRegionList = (data: KoreaMapDataObject) => {
-  const result: GetColorRegionList = {};
+export const getColorRegionList = (
+  data: IKoreaMapDataObject,
+): IGetColorRegionList => {
+  return Object.values(data).reduce<IGetColorRegionList>((acc, region) => {
+    const {id, title, main} = region;
 
-  const colorList = Object.values(data);
+    const entry = acc[main] ?? {
+      child: main !== title,
+      sub: [],
+    };
 
-  colorList.forEach((region, index) => {
-    const title = region.title;
-    const main = region.main;
+    entry.sub.push({id, title});
+    acc[main] = entry;
 
-    const value =
-      main === title
-        ? {
-            child: false,
-            sub: [{id: region.id, title: title}],
-          }
-        : {
-            child: true,
-            sub: [{id: region.id, title: title}],
-          };
-
-    if (index === 0) result[main] = value;
-    else {
-      const exist = result[main];
-      if (exist)
-        result[main].sub.push({
-          id: region.id,
-          title: title,
-        });
-      else result[main] = value;
-    }
-  });
-
-  return result;
+    return acc;
+  }, {});
 };

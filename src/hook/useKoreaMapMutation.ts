@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {KoreaRegionData} from 'src/types/koreaMap';
+import {IKoreaRegionData} from 'src/types/koreaMap';
 import {
   deleteMapDataById,
   resetMapData,
@@ -33,7 +33,7 @@ const useKoreaMapMutation = () => {
 
   // Delete Map Mutation
   const deleteMapMutation = useMutation({
-    mutationFn: (data: KoreaRegionData) => deleteMapDataById(data),
+    mutationFn: (data: IKoreaRegionData) => deleteMapDataById(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['koreaMapData'],
@@ -52,7 +52,7 @@ const useKoreaMapMutation = () => {
 
   // Update Map by photo Mutation
   const updateMapByPhotoMutation = useMutation({
-    mutationFn: ({data, uri}: {data: KoreaRegionData; uri: string}) =>
+    mutationFn: ({data, uri}: {data: IKoreaRegionData; uri: string}) =>
       updateMapPhotoById(data, uri),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -72,7 +72,7 @@ const useKoreaMapMutation = () => {
 
   // Update Map by color Mutation
   const updateMapByColorMutation = useMutation({
-    mutationFn: ({data, color}: {data: KoreaRegionData; color: string}) =>
+    mutationFn: ({data, color}: {data: IKoreaRegionData; color: string}) =>
       updateMapColorById(data, color),
     onSuccess: async () => {
       await queryClient.invalidateQueries({

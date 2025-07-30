@@ -11,13 +11,13 @@ import useAd from 'src/hook/useAd';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
 import {customStyle} from 'src/style/customStyle';
-import {KoreaRegionData} from 'src/types/koreaMap';
+import {IKoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {showBottomToast} from 'src/utils/showToast';
 
 interface ColorPickerModal {
-  regionData: KoreaRegionData;
+  regionData: IKoreaRegionData;
   hideModal: () => void;
   handleClosePress: () => void;
 }

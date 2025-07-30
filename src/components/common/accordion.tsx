@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {GetColorRegionList} from 'src/types/koreaMap';
+import {IGetColorRegionList} from 'src/types/koreaMap';
 
 interface Accordion<T> {
   title: string;
@@ -20,7 +20,7 @@ const CustomAccordion = ({
   title,
   item,
   onSelect,
-}: Accordion<GetColorRegionList>) => {
+}: Accordion<IGetColorRegionList>) => {
   const height = useSharedValue<number>(0);
   const expanded = useSharedValue<boolean>(false);
   const animatedHeight = useSharedValue<number>(0);

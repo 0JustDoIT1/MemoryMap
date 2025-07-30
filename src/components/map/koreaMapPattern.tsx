@@ -1,36 +1,42 @@
 import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
-import {KoreaMapDataObject} from 'src/types/koreaMap';
+import {IKoreaMapDataObject} from 'src/types/koreaMap';
 import {getIdArrayByType} from 'src/utils/koreaMap.util';
 
-interface KoreaMapPattern {
-  data: KoreaMapDataObject;
+interface IKoreaMapPattern {
+  data: IKoreaMapDataObject;
 }
 
-const KoreaMapPattern = ({data}: KoreaMapPattern) => {
+const KoreaMapPattern = ({data}: IKoreaMapPattern) => {
   const imageArray = getIdArrayByType(data, 'photo');
 
   return (
     <Defs>
-      {imageArray.length >= 1 &&
-        imageArray.map(item => (
+      {imageArray.map(item => {
+        const {mapSvgStyle} = koreaMapSvgData[item];
+        const {width, height, x, y} = mapSvgStyle;
+
+        return (
           <Pattern
             key={item}
             id={item}
             patternUnits="userSpaceOnUse"
-            x={koreaMapSvgData[item].mapSvgStyle.x}
-            y={koreaMapSvgData[item].mapSvgStyle.y}>
+            width={width}
+            height={height}
+            x={x}
+            y={y}>
             <Image
-              width={koreaMapSvgData[item].mapSvgStyle.width}
-              height={koreaMapSvgData[item].mapSvgStyle.height}
-              preserveAspectRatio="xMidyMid slice"
+              width={width}
+              height={height}
+              preserveAspectRatio="xMidYMid slice"
               href={{uri: data[item].imageUrl}}
             />
           </Pattern>
-        ))}
+        );
+      })}
     </Defs>
   );
 };
 
-export default KoreaMapPattern;
+export default React.memo(KoreaMapPattern);

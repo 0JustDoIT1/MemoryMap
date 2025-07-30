@@ -12,12 +12,12 @@ import ViewShot from 'react-native-view-shot';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from 'src/style/toast.config';
-import {KoreaRegionData} from 'src/types/koreaMap';
+import {IKoreaRegionData} from 'src/types/koreaMap';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import useBackButton from 'src/hook/useBackButton';
 
 interface ZoomImage {
-  data: KoreaRegionData;
+  data: IKoreaRegionData;
   setZoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

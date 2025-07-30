@@ -1,4 +1,10 @@
-import React, {memo, useLayoutEffect, useRef, useState, useEffect} from 'react';
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
 import {useWindowDimensions, Pressable, InteractionManager} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
@@ -10,11 +16,12 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
 import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
-import KoreaMapSvg from 'src/components/map/koreaMapSvg';
+import KoreaMap from 'src/components/map/koreaMap';
 import {useAppInitAd} from 'src/store/appInitAd';
 import LoadingScreen from './loadingScreen';
 import {useMapAnimation} from 'src/hook/useMapAnimation';
 import {getMaxScale} from 'src/constants/map';
+import {GestureDetector} from 'react-native-gesture-handler';
 
 const MapScreen = ({navigation}: MapProps) => {
   // 2. 외부 훅 호출
@@ -28,7 +35,7 @@ const MapScreen = ({navigation}: MapProps) => {
 
   // 4. 커스텀 훅
   const MAX_SCALE = getMaxScale(width, height);
-  const {animatedStyles} = useMapAnimation(width, height, MAX_SCALE);
+  const {animatedStyles, composed} = useMapAnimation(width, height, MAX_SCALE);
 
   // 5. ref 선언
   const viewShotRef = useRef<ViewShot | null>(null);
@@ -41,9 +48,11 @@ const MapScreen = ({navigation}: MapProps) => {
   useExitApp();
 
   useEffect(() => {
-    if (appInitAd) return;
-    load();
-    if (isLoaded && !isClosed) {
+    load(); // 항상 로드
+  }, [load]);
+
+  useEffect(() => {
+    if (!appInitAd && isLoaded && !isClosed) {
       show();
       setAppInitAd(true);
     }
@@ -56,6 +65,8 @@ const MapScreen = ({navigation}: MapProps) => {
     return () => task.cancel();
   }, []);
 
+  const headerIconColor = theme.colors.darkGray;
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -64,7 +75,7 @@ const MapScreen = ({navigation}: MapProps) => {
           onPress={() => onCaptureAndSave(viewShotRef)}>
           <MaterialCommunityIcons
             name="camera-outline"
-            color={theme.colors.darkGray}
+            color={headerIconColor}
             size={28}
           />
         </Pressable>
@@ -75,27 +86,31 @@ const MapScreen = ({navigation}: MapProps) => {
           onPress={() => onCaptureAndShare(viewShotRef, '나만의 여행지도')}>
           <MaterialCommunityIcons
             name="share-variant"
-            color={theme.colors.darkGray}
+            color={headerIconColor}
             size={26}
           />
         </Pressable>
       ),
     });
-  }, [navigation, theme.colors.darkGray]);
+  }, [navigation, headerIconColor]);
+
+  const styles = useMemo(() => customStyle(), []);
 
   // 8. 렌더링/JSX 반환
-  const MemoizedKoreaMapSvg = memo(KoreaMapSvg);
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
       edges={['top', 'bottom', 'left', 'right']}>
       <ViewShot
         ref={viewShotRef}
-        style={customStyle().mapViewShot}
+        style={styles.mapViewShot}
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
-        <Animated.View style={[customStyle().mapBox, animatedStyles]}>
-          {showMap ? <MemoizedKoreaMapSvg /> : <LoadingScreen />}
-        </Animated.View>
+        <GestureDetector gesture={composed}>
+          <Animated.View style={[styles.mapBox, animatedStyles]}>
+            {!showMap && <LoadingScreen />}
+            {showMap && <KoreaMap />}
+          </Animated.View>
+        </GestureDetector>
       </ViewShot>
     </SafeAreaView>
   );

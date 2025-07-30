@@ -1,8 +1,8 @@
-import {KoreaMapDataObject} from './koreaMap';
+import {IKoreaMapDataObject} from './koreaMap';
 import {Story} from './story';
 
 export interface AppData {
-  koreaMapData: KoreaMapDataObject;
+  koreaMapData: IKoreaMapDataObject;
   story: Story[];
   mapImage: {[key: string]: string};
   zoomImage: {[key: string]: string};

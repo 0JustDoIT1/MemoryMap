@@ -1,4 +1,4 @@
-import {KoreaMapDataObject, KoreaRegionData} from 'src/types/koreaMap';
+import {IKoreaMapDataObject, IKoreaRegionData} from 'src/types/koreaMap';
 import {getDBConnection} from 'src/database/sqlite';
 import {koreaMapDataInit, koreaMapSvgData} from 'src/constants/koreaMapData';
 import {
@@ -18,7 +18,7 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 // res type to KoreaMapDataObject
 const _resToObject = async (res: [ResultSet]) => {
-  const result: KoreaMapDataObject = {};
+  const result: IKoreaMapDataObject = {};
   for (let i = 0; i < res[0].rows.length; i++) {
     const region = res[0].rows.item(i);
     result[region.id] = region;
@@ -41,15 +41,18 @@ export const getAllKoreaMapData = async () => {
   return result;
 };
 
-export const updateKoreaMapData = async (data: KoreaRegionData) => {
+export const updateKoreaMapData = async (data: IKoreaRegionData) => {
   const db = await getDBConnection();
   await saveKoreaMapDataToDB(db, data);
 };
 
 // Return data when color is updated
-const _updateDataByTypeColor = async (data: KoreaRegionData, color: string) => {
+const _updateDataByTypeColor = async (
+  data: IKoreaRegionData,
+  color: string,
+) => {
   // Setting Data
-  const updateKoreaRegionData: KoreaRegionData = {
+  const updateKoreaRegionData: IKoreaRegionData = {
     ...data,
     background: color,
     type: 'color',
@@ -61,7 +64,7 @@ const _updateDataByTypeColor = async (data: KoreaRegionData, color: string) => {
 
 // Update background on map (color) -> SQLite & Firebase
 export const updateMapColorById = async (
-  data: KoreaRegionData,
+  data: IKoreaRegionData,
   color: string,
 ) => {
   // Setting Data
@@ -84,12 +87,12 @@ export const updateMapColorById = async (
 
 // Return data when image is updated
 const _updateDataByTypePhoto = async (
-  data: KoreaRegionData,
+  data: IKoreaRegionData,
   imageUrl: string,
   zoomImageUrl: string,
 ) => {
   // Setting Data
-  const updateKoreaRegionData: KoreaRegionData = {
+  const updateKoreaRegionData: IKoreaRegionData = {
     ...data,
     background: `url(#${data.id})`,
     type: 'photo',
@@ -102,7 +105,7 @@ const _updateDataByTypePhoto = async (
 
 // Update background on map (image) -> SQLite & Firebase
 export const updateMapPhotoById = async (
-  data: KoreaRegionData,
+  data: IKoreaRegionData,
   imageUri: string,
 ) => {
   // Upload Image -> Save Firebase Storage
@@ -149,9 +152,9 @@ export const updateMapPhotoById = async (
 };
 
 // Return data when background is deleted
-const _deleteDataById = (data: KoreaRegionData) => {
+const _deleteDataById = (data: IKoreaRegionData) => {
   // Setting Data
-  const updateKoreaRegionData: KoreaRegionData = {
+  const updateKoreaRegionData: IKoreaRegionData = {
     ...data,
     background: '#ffffff',
     type: 'init',
@@ -164,7 +167,7 @@ const _deleteDataById = (data: KoreaRegionData) => {
 };
 
 // Delete background on map (color or image) -> SQLite & Firebase
-export const deleteMapDataById = async (data: KoreaRegionData) => {
+export const deleteMapDataById = async (data: IKoreaRegionData) => {
   // Setting Data
   const updateKoreaRegionData = _deleteDataById(data);
 

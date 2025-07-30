@@ -2,6 +2,9 @@ import {useSharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {Gesture} from 'react-native-gesture-handler';
 import {MAP_EDGE_OFFSET, MIN_SCALE} from 'src/constants/map';
 
+const clamp = (val: number, min: number, max: number) =>
+  Math.min(Math.max(val, min), max);
+
 export function useMapAnimation(
   width: number,
   height: number,
@@ -14,29 +17,29 @@ export function useMapAnimation(
   const scale = useSharedValue(1);
   const startScale = useSharedValue(0);
 
-  // Limit a value within a specified range.
-  const clamp = (val: number, min: number, max: number) => {
-    return Math.min(Math.max(val, min), max);
+  const resetTransform = () => {
+    scale.value = 1;
+    translationX.value = 0;
+    translationY.value = 0;
   };
 
-  // Pinch Animation(scale)
+  // Pinch (Zoom)
   const pinch = Gesture.Pinch()
     .onStart(() => {
       startScale.value = scale.value;
     })
     .onUpdate(event => {
-      scale.value = clamp(startScale.value * event.scale, MIN_SCALE, MAX_SCALE);
+      const nextScale = startScale.value * event.scale;
+      scale.value = clamp(nextScale, MIN_SCALE, MAX_SCALE);
     })
     .onEnd(() => {
       if (scale.value <= 1) {
-        scale.value = 1;
-        translationX.value = 0;
-        translationY.value = 0;
+        resetTransform();
       }
     })
     .runOnJS(true);
 
-  // Pan Animation(move)
+  // Pan (Move)
   const pan = Gesture.Pan()
     .averageTouches(true)
     .onStart(() => {
@@ -47,40 +50,38 @@ export function useMapAnimation(
     })
     .onUpdate(event => {
       if (scale.value > 1) {
-        const maxTranslateX = width / 2 - MAP_EDGE_OFFSET;
-        const maxTranslateY = height / 2 - MAP_EDGE_OFFSET;
+        const maxX = width / 2 - MAP_EDGE_OFFSET;
+        const maxY = height / 2 - MAP_EDGE_OFFSET;
 
         translationX.value = clamp(
           prevTranslationX.value + event.translationX,
-          -maxTranslateX,
-          maxTranslateX,
+          -maxX,
+          maxX,
         );
         translationY.value = clamp(
           prevTranslationY.value + event.translationY,
-          -maxTranslateY,
-          maxTranslateY,
+          -maxY,
+          maxY,
         );
       }
     })
     .onEnd(() => {
       if (scale.value <= 1) {
-        scale.value = 1;
-        translationX.value = 0;
-        translationY.value = 0;
+        resetTransform();
       }
     })
     .runOnJS(true);
 
-  // Animation Style
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [
-      {scale: scale.value},
-      {translateX: translationX.value},
-      {translateY: translationY.value},
-    ],
-  }));
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {scale: scale.value},
+        {translateX: translationX.value},
+        {translateY: translationY.value},
+      ],
+    };
+  });
 
-  // Pinch + Pan Animation
   const composed = Gesture.Simultaneous(pinch, pan);
 
   return {
