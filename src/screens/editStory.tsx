@@ -3,7 +3,7 @@ import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
-import {EditStoryProps} from 'src/types/stack';
+import {TEditStory} from 'src/types/stack';
 import CustomBottomSheet from 'src/components/common/bottomSheet';
 import {BrandDynamicButton} from 'src/components/common/button';
 import {dateToFormatString} from 'src/utils/dateFormat';
@@ -17,7 +17,7 @@ import useStoryUpdate from 'src/hook/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';
 
-const EditStoryScreen = ({navigation, route}: EditStoryProps) => {
+const EditStoryScreen = ({navigation, route}: TEditStory) => {
   // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // Bottom Sheet present event

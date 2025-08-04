@@ -1,13 +1,13 @@
 import {IKoreaMapDataObject} from './koreaMap';
-import {Story} from './story';
+import {IStory} from './story';
 
-export interface AppData {
+export interface IAppData {
   koreaMapData: IKoreaMapDataObject;
-  story: Story[];
+  story: IStory[];
   mapImage: {[key: string]: string};
   zoomImage: {[key: string]: string};
 }
 
-export type AppShowRegionName = 'show' | 'condition' | 'hide';
+export type IAppShowRegionName = 'show' | 'condition' | 'hide';
 
-export type AppAdShowType = 'map' | 'story';
+export type IAppAdShowType = 'map' | 'story';

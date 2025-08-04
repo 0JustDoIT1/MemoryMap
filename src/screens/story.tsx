@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/view/notFound';
 import {customStyle} from 'src/style/customStyle';
-import {StoryProps} from 'src/types/stack';
+import {TStory} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal/modal';
@@ -14,7 +14,7 @@ import useStoryQuery from 'src/hook/useStoryQuery';
 import StoryCard from 'src/components/view/storyCard';
 import useExitApp from 'src/hook/useExitApp';
 
-const StoryScreen = ({navigation}: StoryProps) => {
+const StoryScreen = ({navigation}: TStory) => {
   const {visible, showModal, hideModal} = useModal();
   const {
     initPagination,

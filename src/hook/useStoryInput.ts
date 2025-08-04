@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
-import {Story} from 'src/types/story';
+import {IStory} from 'src/types/story';
 import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
-const useStoryInput = (edit: boolean, data: Story) => {
+const useStoryInput = (edit: boolean, data: IStory) => {
   const [regionId, setRegionId] = useState<string>('');
   const [regionTitle, setRegionTitle] = useState<string>('');
 
@@ -46,7 +46,7 @@ const useStoryInput = (edit: boolean, data: Story) => {
       ? data!.createdAt
       : dateToFormatString(new Date(), 'YYYY-MM-DD HH:mm:ss');
 
-    const story: Story = {
+    const story: IStory = {
       id: id,
       regionId: regionId,
       startDate: dateToFormatString(selectedStartDate, 'YYYY-MM-DD HH:mm:ss'),

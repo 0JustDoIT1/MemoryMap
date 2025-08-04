@@ -1,13 +1,13 @@
 import {useEffect} from 'react';
 import useDialog from 'src/hook/useDialog';
-import {RootProps} from 'src/types/stack';
+import {TRoot} from 'src/types/stack';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
 import CustomConfirmAlert from 'src/components/alert/confirmAlert';
 import useRoot from 'src/hook/useRoot';
 
-const RootScreen = ({navigation}: RootProps) => {
+const RootScreen = ({navigation}: TRoot) => {
   const {visibleDialog, showDialog} = useDialog();
   const {checkVersion, checkPincode, checkShowMapText} = useRoot();
 

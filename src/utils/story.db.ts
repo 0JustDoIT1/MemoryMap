@@ -1,5 +1,5 @@
 import {getDBConnection} from 'src/database/sqlite';
-import {Story} from 'src/types/story';
+import {IStory} from 'src/types/story';
 import {
   getOneStoryToDB,
   getStoryRegionIdToDB,
@@ -16,7 +16,7 @@ import {getRegionTitleById} from './koreaMap.util';
 
 // Result data convert Story Type
 const _resultToStory = (data: any) => {
-  const story: Story = {
+  const story: IStory = {
     id: data['id'],
     regionId: data['regionId'],
     startDate: data['startDate'],
@@ -33,10 +33,10 @@ const _resultToStory = (data: any) => {
 
 // Result data array convert Story array
 export const resultArrToStoryArr = (data: [ResultSet]) => {
-  const storyArray: Story[] = [];
+  const storyArray: IStory[] = [];
   for (let i = 0; i < data[0].rows.length; i++) {
     const item = data[0].rows.item(i);
-    const newStory: Story = _resultToStory(item);
+    const newStory: IStory = _resultToStory(item);
 
     storyArray.push(newStory);
   }
@@ -79,7 +79,7 @@ export const getOneStoryById = async (id: string) => {
 };
 
 // Add story by region id -> Firebase & Recoil
-export const addStoryByRegionId = async (data: Story) => {
+export const addStoryByRegionId = async (data: IStory) => {
   // Save SQLite
   const db = await getDBConnection();
   await saveStoryToDB(db, data);

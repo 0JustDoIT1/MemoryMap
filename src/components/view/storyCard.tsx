@@ -3,15 +3,15 @@ import {Image, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {storyPoint} from 'src/constants/point';
 import {customStyle} from 'src/style/customStyle';
-import {StackParamList} from 'src/types/stack';
-import {Story} from 'src/types/story';
+import {TStackParamList} from 'src/types/stack';
+import {IStory} from 'src/types/story';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
 // Story Card
 const StoryCard = (
-  item: Story,
-  navigation: NativeStackNavigationProp<StackParamList, 'Story', undefined>,
+  item: IStory,
+  navigation: NativeStackNavigationProp<TStackParamList, 'Story', undefined>,
 ) => {
   const title = getRegionTitleById(item.regionId);
   const startDateString = dateToFormatString(

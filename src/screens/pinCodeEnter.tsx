@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PinCodeEnterProps} from 'src/types/stack';
+import {TPinCodeEnter} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,7 +11,7 @@ import {customStyle} from 'src/style/customStyle';
 import {showBottomToast} from 'src/utils/showToast';
 import usePinCode from 'src/hook/usePinCode';
 
-const PinCodeEnterScreen = ({navigation, route}: PinCodeEnterProps) => {
+const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
   const {
     pinCodeArray,
     pinLength,

@@ -3,7 +3,7 @@ import {Cell, Section, TableView} from 'react-native-tableview-simple';
 import {Pressable, ScrollView, View} from 'react-native';
 import {Switch} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {SettingProps} from 'src/types/stack';
+import {TSetting} from 'src/types/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
 import {Linking} from 'react-native';
@@ -25,7 +25,7 @@ import useAd from 'src/hook/useAd';
 import useExitApp from 'src/hook/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 
-const SettingScreen = ({navigation}: SettingProps) => {
+const SettingScreen = ({navigation}: TSetting) => {
   const theme = useAppTheme();
   const appVersion = DeviceInfo.getVersion();
 

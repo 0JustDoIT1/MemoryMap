@@ -8,10 +8,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
-import {StackParamList} from 'src/types/stack';
+import {TStackParamList} from 'src/types/stack';
 
 interface CustomProgressBar {
-  navigation?: NativeStackNavigationProp<StackParamList, any, undefined>;
+  navigation?: NativeStackNavigationProp<TStackParamList, any, undefined>;
   title?: string;
   percent: number;
   percentView?: boolean;

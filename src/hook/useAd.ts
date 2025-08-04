@@ -5,7 +5,7 @@ import {
   appAdMapMaxNum,
   appAdStoryMaxNum,
 } from 'src/constants/app';
-import {AppAdShowType} from 'src/types/appData';
+import {IAppAdShowType} from 'src/types/appData';
 import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
 
 const useAd = () => {
@@ -17,7 +17,7 @@ const useAd = () => {
     },
   );
 
-  const checkAdShow = async (type: AppAdShowType) => {
+  const checkAdShow = async (type: IAppAdShowType) => {
     const count = await getAsyncStorage(appAdMapCount);
     const maxNum = type === 'map' ? appAdMapMaxNum : appAdStoryMaxNum;
 

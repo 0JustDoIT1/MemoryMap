@@ -2,7 +2,7 @@
 
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import {Story} from 'src/types/story';
+import {IStory} from 'src/types/story';
 
 // Create KoreaMapData to map table
 export const saveKoreaMapDataToDB = async (
@@ -24,7 +24,7 @@ export const saveKoreaMapDataToDB = async (
 };
 
 // Create Story to story table
-export const saveStoryToDB = async (db: SQLiteDatabase, data: Story) => {
+export const saveStoryToDB = async (db: SQLiteDatabase, data: IStory) => {
   const query = `INSERT OR REPLACE INTO story(id, regionId, startDate, endDate, title, contents, point, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?,?)`;
 
   return await db.executeSql(query, [

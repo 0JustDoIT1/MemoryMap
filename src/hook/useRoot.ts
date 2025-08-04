@@ -4,7 +4,7 @@ import {appShowRegionNameKey, appTableName} from 'src/constants/app';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {saveKoreaMapDataToDB} from 'src/database/create';
 import {countData, getDBConnection} from 'src/database/sqlite';
-import {StackParamList} from 'src/types/stack';
+import {TStackParamList} from 'src/types/stack';
 import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
 import {getSecureValue} from 'src/utils/keyChain';
 import VersionCheck from 'react-native-version-check';
@@ -66,7 +66,7 @@ const useRoot = () => {
 
   // Data Setting & Check pincode when AppUser Exists
   const checkPincode = async (
-    navigation: NativeStackNavigationProp<StackParamList, 'Root', undefined>,
+    navigation: NativeStackNavigationProp<TStackParamList, 'Root', undefined>,
   ) => {
     await _checkSQLiteData();
     // Check pincode settings

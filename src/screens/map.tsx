@@ -10,7 +10,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {MapProps} from 'src/types/stack';
+import {TMap} from 'src/types/stack';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
@@ -23,7 +23,7 @@ import {useMapAnimation} from 'src/hook/useMapAnimation';
 import {getMaxScale} from 'src/constants/map';
 import {GestureDetector} from 'react-native-gesture-handler';
 
-const MapScreen = ({navigation}: MapProps) => {
+const MapScreen = ({navigation}: TMap) => {
   // 2. 외부 훅 호출
   const {width, height} = useWindowDimensions();
   const theme = useAppTheme();

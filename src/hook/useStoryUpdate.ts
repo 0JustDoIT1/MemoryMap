@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {Story} from 'src/types/story';
+import {IStory} from 'src/types/story';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId} from 'src/utils/story.db';
 
@@ -9,7 +9,7 @@ const useStoryUpdate = (storyId?: string) => {
 
   // React-Query Mutation
   const editStoryMutation = useMutation({
-    mutationFn: (data: Story) => addStoryByRegionId(data),
+    mutationFn: (data: IStory) => addStoryByRegionId(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['story'],
@@ -27,7 +27,7 @@ const useStoryUpdate = (storyId?: string) => {
   });
 
   const addStoryMutation = useMutation({
-    mutationFn: (data: Story) => addStoryByRegionId(data),
+    mutationFn: (data: IStory) => addStoryByRegionId(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['story'],

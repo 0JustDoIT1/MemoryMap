@@ -1,4 +1,4 @@
-export interface Story {
+export interface IStory {
   id: string;
   regionId: string;
   startDate: string;
@@ -10,7 +10,7 @@ export interface Story {
   updatedAt: string;
 }
 
-export interface Pagination {
+export interface IPagination {
   limit: number;
   filter: string;
   order: string;

@@ -4,13 +4,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useBackUp from 'src/hook/useBackUp';
 import {customColor} from 'src/style/customColor';
-import {BackUpProps} from 'src/types/stack';
+import {TBackUp} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import LoadingScreen from './loadingScreen';
 import {useState} from 'react';
 import useBackButton from 'src/hook/useBackButton';
 
-const BackUpScreen = ({navigation}: BackUpProps) => {
+const BackUpScreen = ({navigation}: TBackUp) => {
   const {backupAppData, getAppData} = useBackUp();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

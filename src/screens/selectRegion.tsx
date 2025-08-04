@@ -1,11 +1,11 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {SelectRegionProps} from 'src/types/stack';
+import {TSelectRegion} from 'src/types/stack';
 import CustomAccordion from 'src/components/common/accordion';
 import useBackButton from 'src/hook/useBackButton';
 
-const SelectRegionScreen = ({navigation, route}: SelectRegionProps) => {
+const SelectRegionScreen = ({navigation, route}: TSelectRegion) => {
   const regionList = route.params.regionList;
   const regionMainList = route.params.regionMainList;
 

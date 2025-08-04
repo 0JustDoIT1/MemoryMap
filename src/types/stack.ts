@@ -1,8 +1,8 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Story} from './story';
+import {IStory} from './story';
 import {IGetColorRegionList} from './koreaMap';
 
-export type StackParamList = {
+export type TStackParamList = {
   Root: undefined;
   Main: {
     screen: string;
@@ -20,7 +20,7 @@ export type StackParamList = {
     regionId?: string;
   };
   EditStory: {
-    story: Story;
+    story: IStory;
   };
   ViewStory: {
     storyId: string;
@@ -33,38 +33,29 @@ export type StackParamList = {
   MapTextSetting: undefined;
 };
 
-export type RootProps = NativeStackScreenProps<StackParamList, 'Root'>;
-export type PinCodeSettingProps = NativeStackScreenProps<
-  StackParamList,
+export type TRoot = NativeStackScreenProps<TStackParamList, 'Root'>;
+export type TPinCodeSetting = NativeStackScreenProps<
+  TStackParamList,
   'PinCodeSetting'
 >;
-export type PinCodeEnterProps = NativeStackScreenProps<
-  StackParamList,
+export type TPinCodeEnter = NativeStackScreenProps<
+  TStackParamList,
   'PinCodeEnter'
 >;
-export type MapProps = NativeStackScreenProps<StackParamList, 'Map'>;
-export type DashboardProps = NativeStackScreenProps<
-  StackParamList,
-  'Dashboard'
->;
-export type StoryProps = NativeStackScreenProps<StackParamList, 'Story'>;
-export type SettingProps = NativeStackScreenProps<StackParamList, 'Setting'>;
-export type SubProps = NativeStackScreenProps<StackParamList, 'Sub'>;
-export type AddStoryProps = NativeStackScreenProps<StackParamList, 'AddStory'>;
-export type EditStoryProps = NativeStackScreenProps<
-  StackParamList,
-  'EditStory'
->;
-export type ViewStoryProps = NativeStackScreenProps<
-  StackParamList,
-  'ViewStory'
->;
-export type SelectRegionProps = NativeStackScreenProps<
-  StackParamList,
+export type TMap = NativeStackScreenProps<TStackParamList, 'Map'>;
+export type TDashboard = NativeStackScreenProps<TStackParamList, 'Dashboard'>;
+export type TStory = NativeStackScreenProps<TStackParamList, 'Story'>;
+export type TSetting = NativeStackScreenProps<TStackParamList, 'Setting'>;
+export type TSub = NativeStackScreenProps<TStackParamList, 'Sub'>;
+export type TAddStory = NativeStackScreenProps<TStackParamList, 'AddStory'>;
+export type TEditStory = NativeStackScreenProps<TStackParamList, 'EditStory'>;
+export type TViewStory = NativeStackScreenProps<TStackParamList, 'ViewStory'>;
+export type TSelectRegion = NativeStackScreenProps<
+  TStackParamList,
   'SelectRegion'
 >;
-export type BackUpProps = NativeStackScreenProps<StackParamList, 'BackUp'>;
-export type MapTextSettingProps = NativeStackScreenProps<
-  StackParamList,
+export type TBackUp = NativeStackScreenProps<TStackParamList, 'BackUp'>;
+export type TMapTextSetting = NativeStackScreenProps<
+  TStackParamList,
   'MapTextSetting'
 >;

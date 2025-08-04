@@ -1,19 +1,19 @@
 import {Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {MapTextSettingProps} from 'src/types/stack';
+import {TMapTextSetting} from 'src/types/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {setAsyncStorage} from 'src/utils/asyncStorage';
 import {appShowRegionNameKey} from 'src/constants/app';
 import {useEffect, useState} from 'react';
-import {AppShowRegionName} from 'src/types/appData';
+import {IAppShowRegionName} from 'src/types/appData';
 import {customStyle} from 'src/style/customStyle';
 import useButton from 'src/hook/useButton';
 import useBackButton from 'src/hook/useBackButton';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
 
-const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
+const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {
   const theme = useAppTheme();
 
   const appShowRegionName = useAppShowRegionName(
@@ -25,7 +25,7 @@ const MapTextSettingScreen = ({navigation}: MapTextSettingProps) => {
 
   const {isDisabled, disabledButton} = useButton();
 
-  const [select, setSelect] = useState<AppShowRegionName>(appShowRegionName);
+  const [select, setSelect] = useState<IAppShowRegionName>(appShowRegionName);
 
   useBackButton(() => navigation.goBack());
 

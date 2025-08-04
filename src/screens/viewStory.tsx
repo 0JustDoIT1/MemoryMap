@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {storyPoint} from 'src/constants/point';
 import {customStyle} from 'src/style/customStyle';
-import {ViewStoryProps} from 'src/types/stack';
+import {TViewStory} from 'src/types/stack';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import useDialog from 'src/hook/useDialog';
 import ViewShot from 'react-native-view-shot';
@@ -16,7 +16,7 @@ import useButton from 'src/hook/useButton';
 import useStoryView from 'src/hook/useStoryView';
 import useBackButton from 'src/hook/useBackButton';
 
-const ViewStoryScreen = ({navigation, route}: ViewStoryProps) => {
+const ViewStoryScreen = ({navigation, route}: TViewStory) => {
   const viewShotRef = useRef<ViewShot>(null);
 
   const storyId = route.params.storyId;

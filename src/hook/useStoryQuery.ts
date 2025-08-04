@@ -4,7 +4,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import {useState} from 'react';
-import {Pagination} from 'src/types/story';
+import {IPagination} from 'src/types/story';
 import {getStoryPagination, getStoryRegionList} from 'src/utils/story.db';
 
 const useStoryQuery = () => {
@@ -15,7 +15,7 @@ const useStoryQuery = () => {
     sort: 'DESC',
   };
 
-  const [pagination, setPagination] = useState<Pagination>(initPagination);
+  const [pagination, setPagination] = useState<IPagination>(initPagination);
 
   // React-Query Query
   const {

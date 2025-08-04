@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import BootSplash from 'react-native-bootsplash';
 
-import {StackParamList} from 'src/types/stack';
+import {TStackParamList} from 'src/types/stack';
 
 import StoryScreen from 'src/screens/story';
 import SettingScreen from 'src/screens/setting';
@@ -29,8 +29,8 @@ import type {NativeStackNavigationOptions} from '@react-navigation/native-stack'
 import type {AppTheme} from 'src/style/paperTheme';
 import type {EdgeInsets} from 'react-native-safe-area-context';
 
-const Stack = createNativeStackNavigator<StackParamList>();
-const Tab = createBottomTabNavigator<StackParamList>();
+const Stack = createNativeStackNavigator<TStackParamList>();
+const Tab = createBottomTabNavigator<TStackParamList>();
 
 // Tab Navigator 공통 옵션
 const tabScreenOptions = (

@@ -4,7 +4,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {FileSystem} from 'react-native-file-access';
 import {appBackUpRoute} from 'src/constants/app';
-import {AppData} from 'src/types/appData';
+import {IAppData} from 'src/types/appData';
 import {getAllKoreaMapData, updateKoreaMapData} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId, getStoryAll} from 'src/utils/story.db';
 import {decryptData, encryptData} from 'src/utils/crypto';
@@ -91,7 +91,7 @@ const useBackUp = () => {
       zoomImage[photoRegionArray[i].id] = image2;
     }
 
-    const appData: AppData = {
+    const appData: IAppData = {
       koreaMapData: koreaMapData,
       story: story,
       mapImage: mapImage,
@@ -115,7 +115,7 @@ const useBackUp = () => {
 
   // Get Backup data & decrypt
   const getBackupData = async (data: string) => {
-    const appData: AppData = JSON.parse(decryptData(data));
+    const appData: IAppData = JSON.parse(decryptData(data));
 
     const koreaMapData = appData.koreaMapData;
     const story = appData.story;

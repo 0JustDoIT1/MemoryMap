@@ -7,9 +7,9 @@ import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
 import useExitApp from 'src/hook/useExitApp';
 import {customColor} from 'src/style/customColor';
-import {DashboardProps} from 'src/types/stack';
+import {TDashboard} from 'src/types/stack';
 
-const DashboardScreen = ({navigation}: DashboardProps) => {
+const DashboardScreen = ({navigation}: TDashboard) => {
   const koreaMapRegionCount = Object.values(koreaMapDataInit).length;
 
   const {

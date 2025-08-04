@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {PinCodeSettingProps} from 'src/types/stack';
+import {TPinCodeSetting} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,7 +11,7 @@ import {customStyle} from 'src/style/customStyle';
 import usePinCode from 'src/hook/usePinCode';
 import useBackButton from 'src/hook/useBackButton';
 
-const PinCodeSettingScreen = ({navigation}: PinCodeSettingProps) => {
+const PinCodeSettingScreen = ({navigation}: TPinCodeSetting) => {
   const {
     pinCodeArray,
     pinLength,
