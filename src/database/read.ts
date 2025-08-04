@@ -220,28 +220,50 @@ export const countStoryToDB = async (db: SQLiteDatabase): Promise<number> => {
   }
 };
 
-// Read region with the highest average story point
+// Read region with the highest average story point (동점 허용)
 export const maxStoryNumToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId, count(*) as count FROM ${appTableName.story} GROUP BY regionId`;
-
-    return await db.executeSql(query, []);
+    const query = `
+      SELECT regionId, COUNT(*) as count
+      FROM ${appTableName.story}
+      GROUP BY regionId
+      HAVING count = (
+        SELECT MAX(region_count)
+        FROM (
+          SELECT COUNT(*) as region_count
+          FROM ${appTableName.story}
+          GROUP BY regionId
+        )
+      )
+    `;
+    return await db.executeSql(query);
   } catch (error) {
     console.error('Story DB MaxNum 조회 실패:', error);
     throw error;
   }
 };
 
-// Read region with the highest average story point
+// Read region with the highest average story point (동점 허용)
 export const highestPointStoryRegionToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId, avg(point) as avg FROM ${appTableName.story} GROUP BY regionId`;
-
-    return await db.executeSql(query, []);
+    const query = `
+      SELECT regionId, AVG(point) as avg
+      FROM ${appTableName.story}
+      GROUP BY regionId
+      HAVING avg = (
+        SELECT MAX(region_avg)
+        FROM (
+          SELECT AVG(point) as region_avg
+          FROM ${appTableName.story}
+          GROUP BY regionId
+        )
+      )
+    `;
+    return await db.executeSql(query);
   } catch (error) {
     console.error('Story DB Highest Point 조회 실패:', error);
     throw error;

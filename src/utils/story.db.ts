@@ -116,27 +116,29 @@ export const getStoryRegionList = async () => {
 export const getDashboardStory = async () => {
   // Get SQLite
   const db = await getDBConnection();
+  // 전체 개수
   const count = await countStoryToDB(db);
-  const pointRegion: {title: string; avg: number}[] = [];
-  await highestPointStoryRegionToDB(db).then(res => {
-    for (let i = 0; i < res[0].rows.length; i++) {
-      const item = res[0].rows.item(i);
-      const title = getRegionTitleById(item['regionId']);
 
-      if (i !== 0 && pointRegion[0].avg > item['avg']) return;
-      pointRegion.push({title: title, avg: item['avg']});
-    }
-  });
-  const countRegion: {title: string; count: number}[] = [];
-  await maxStoryNumToDB(db).then(res => {
-    for (let i = 0; i < res[0].rows.length; i++) {
-      const item = res[0].rows.item(i);
-      const title = getRegionTitleById(item['regionId']);
+  // 최고 평균 점수 지역
+  const pointRegion = await highestPointStoryRegionToDB(db).then(([res]) =>
+    Array.from({length: res.rows.length}, (_, i) => {
+      const item = res.rows.item(i);
+      return {
+        title: getRegionTitleById(item.regionId),
+        avg: item.avg,
+      };
+    }),
+  );
+  // 최다 작성 지역
+  const countRegion = await maxStoryNumToDB(db).then(([res]) =>
+    Array.from({length: res.rows.length}, (_, i) => {
+      const item = res.rows.item(i);
+      return {
+        title: getRegionTitleById(item.regionId),
+        count: item.count,
+      };
+    }),
+  );
 
-      if (i !== 0 && countRegion[0].count > item['count']) return;
-      countRegion.push({title: title, count: item['count']});
-    }
-  });
-
-  return {count: count, pointRegion: pointRegion, countRegion: countRegion};
+  return {count, pointRegion, countRegion};
 };
