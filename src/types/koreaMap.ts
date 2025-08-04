@@ -38,3 +38,9 @@ export interface IGetColorRegionList {
     sub: {id: string; title: string}[];
   };
 }
+
+export interface ICountKoreaMapDataByType {
+  color: number;
+  photo: number;
+  init: number;
+}

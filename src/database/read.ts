@@ -1,113 +1,169 @@
 //// Read
 
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
+import {appTableName} from 'src/constants/app';
+import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
+import {IPagination, IStoryPagination} from 'src/types/story';
 import {resultArrToStoryArr} from 'src/utils/story.db';
 
 // Read Auth to auth table
-export const getAuthToDB = async (db: SQLiteDatabase) => {
+export const getAuthToDB = async (db: SQLiteDatabase): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM auth`;
+    const query = `SELECT * FROM ${appTableName.auth}`;
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Auth DB 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read KoreaMapData to map table
-export const getKoreaMapDataToDB = async (db: SQLiteDatabase) => {
+export const getKoreaMapDataToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM map`;
+    const query = `SELECT * FROM ${appTableName.map}`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Map DB 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read Colored(color & photo) KoreaMapData to map table
-export const getKoreaMapDataByColorToDB = async (db: SQLiteDatabase) => {
+export const getKoreaMapDataByColorToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM map WHERE type IN ('color', 'photo')`;
+    const query = `SELECT * FROM ${appTableName.map} WHERE type IN ('color', 'photo')`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Colored Map DB 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read Number of KoreaMapData by type
-export const countKoreaMapDataByTypeToDB = async (db: SQLiteDatabase) => {
+export const countKoreaMapDataByTypeToDB = async (
+  db: SQLiteDatabase,
+): Promise<ICountKoreaMapDataByType> => {
   try {
-    const colorQuery = `SELECT COUNT(*) as count FROM map WHERE type = 'color'`;
-    const photoQuery = `SELECT COUNT(*) as count FROM map WHERE type = 'photo'`;
+    const query = `
+      SELECT
+        SUM(CASE WHEN type = 'color' THEN 1 ELSE 0 END) AS color,
+        SUM(CASE WHEN type = 'photo' THEN 1 ELSE 0 END) AS photo,
+        COUNT(*) AS total
+      FROM ${appTableName.map}
+    `;
+    const [result] = await db.executeSql(query);
+    const row = result.rows.item(0);
 
-    const colorNum = await db
-      .executeSql(colorQuery, [])
-      .then(res => res[0].rows.item(0)['count']);
-    const photoNum = await db
-      .executeSql(photoQuery, [])
-      .then(res => res[0].rows.item(0)['count']);
-
-    return {color: colorNum, photo: photoNum, init: 163 - colorNum - photoNum};
+    return {
+      color: row.color,
+      photo: row.photo,
+      init: row.total - row.color - row.photo,
+    };
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Map Count By Type 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read number of most colored regions
-export const mostColorMainRegionToDB = async (db: SQLiteDatabase) => {
+export const mostColorMainRegionToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT main, COUNT(*) as count FROM map WHERE type IN ('color', 'photo') GROUP BY main ORDER BY count DESC`;
+    const query = `SELECT main, COUNT(*) as count FROM ${appTableName.map} WHERE type IN ('color', 'photo') GROUP BY main ORDER BY count DESC`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Region Count 조회 실패:', error);
+    throw error;
   }
 };
 
 // Get all Story
-export const getStoryAllToDB = async (db: SQLiteDatabase) => {
-  const query = `SELECT * FROM story`;
+export const getStoryAllToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
+  try {
+    const query = `SELECT * FROM ${appTableName.story}`;
 
-  return await db.executeSql(query, []);
+    return await db.executeSql(query, []);
+  } catch (error) {
+    console.error('Story DB All 조회 실패:', error);
+    throw error;
+  }
 };
 
 // Get Story with pagination (+ filter, order by)
 export const getStoryPaginationToDB = async (
   db: SQLiteDatabase,
-
   page: number,
-  option: {
-    filter?: string;
-    order?: string;
-    sort?: string;
-    limit: number;
-  },
-) => {
+  option: IPagination,
+): Promise<IStoryPagination> => {
   try {
-    let query = `SELECT * FROM story`;
+    const {
+      filter = '',
+      limit = 10,
+      order = 'createdAt',
+      sort = 'DESC',
+    } = option;
 
-    if (option) {
-      if (option.filter && option.filter !== '')
-        query += ` and regionId LIKE '${option.filter}%'`;
-      if (
-        option.order &&
-        option.order !== '' &&
-        option.sort &&
-        option.sort !== ''
-      )
-        query += ` order by ${option.order} ${option.sort}`;
-      if (page)
-        query += ` LIMIT ${option.limit} OFFSET ${(page - 1) * option.limit}`;
+    const params: any[] = [];
+    let whereClause = '';
+    let orderClause = '';
+    let paginationClause = '';
+
+    // ✅ where 절 구성
+    if (filter) {
+      whereClause = `WHERE regionId LIKE ?`;
+      params.push(`${filter}%`);
     }
 
-    const countQuery = `SELECT COUNT(*) as count FROM story`;
+    // ✅ order by는 화이트리스트 필터링
+    const allowedOrderFields = ['createdAt', 'updatedAt', 'point', 'title']; // 허용 필드
+    const allowedSortValues = ['ASC', 'DESC'];
 
-    const result = await db.executeSql(query, []);
+    if (
+      allowedOrderFields.includes(order) &&
+      allowedSortValues.includes(sort)
+    ) {
+      orderClause = `ORDER BY ${order} ${sort}`;
+    }
+
+    // ✅ LIMIT / OFFSET
+    const offset = (page - 1) * limit;
+    paginationClause = `LIMIT ? OFFSET ?`;
+    params.push(limit, offset);
+
+    const query = `SELECT * FROM ${appTableName.story} ${whereClause} ${orderClause} ${paginationClause}`;
+    const result = await db.executeSql(query, params);
     const storyArray = resultArrToStoryArr(result);
 
-    const countResult = await db.executeSql(countQuery);
-    const totalCount = countResult[0].rows.item(0)['count'];
+    // if (option) {
+    //   if (option.filter && option.filter !== '')
+    //     query += ` and regionId LIKE '${option.filter}%'`;
+    //   if (
+    //     option.order &&
+    //     option.order !== '' &&
+    //     option.sort &&
+    //     option.sort !== ''
+    //   )
+    //     query += ` order by ${option.order} ${option.sort}`;
+    //   if (page)
+    //     query += ` LIMIT ${option.limit} OFFSET ${(page - 1) * option.limit}`;
+    // }
+
+    const countQuery = `SELECT COUNT(*) as count FROM ${appTableName.story} ${whereClause}`;
+    const countResult = await db.executeSql(
+      countQuery,
+      filter ? [`${filter}%`] : [],
+    );
+    const totalCount = countResult[0].rows.item(0).count;
     const totalPage = Math.ceil(totalCount / option.limit);
 
     return {
@@ -118,60 +174,76 @@ export const getStoryPaginationToDB = async (
       totalPage: totalPage,
     };
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB Pagination 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read One Story to story table
-export const getOneStoryToDB = async (db: SQLiteDatabase, id: string) => {
+export const getOneStoryToDB = async (
+  db: SQLiteDatabase,
+  id: string,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM story WHERE id = '${id}'`;
-    return await db.executeSql(query, []);
+    const query = `SELECT * FROM ${appTableName.story} WHERE id = ?`;
+    return await db.executeSql(query, [id]);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB One 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read region id to story table
-export const getStoryRegionIdToDB = async (db: SQLiteDatabase) => {
+export const getStoryRegionIdToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId FROM story GROUP BY regionId`;
+    const query = `SELECT regionId FROM ${appTableName.story} GROUP BY regionId`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB by ID 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read Number of Story
-export const countStoryToDB = async (db: SQLiteDatabase) => {
+export const countStoryToDB = async (db: SQLiteDatabase): Promise<number> => {
   try {
-    const query = `SELECT COUNT(*) as count FROM story`;
+    const query = `SELECT COUNT(*) as count FROM ${appTableName.story}`;
 
-    return await db.executeSql(query, []);
+    const [result] = await db.executeSql(query, []);
+    return result.rows.item(0).count;
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB Count 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read region with the highest average story point
-export const maxStoryNumToDB = async (db: SQLiteDatabase) => {
+export const maxStoryNumToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId, count(*) as count FROM story GROUP BY regionId`;
+    const query = `SELECT regionId, count(*) as count FROM ${appTableName.story} GROUP BY regionId`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB MaxNum 조회 실패:', error);
+    throw error;
   }
 };
 
 // Read region with the highest average story point
-export const highestPointStoryRegionToDB = async (db: SQLiteDatabase) => {
+export const highestPointStoryRegionToDB = async (
+  db: SQLiteDatabase,
+): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId, avg(point) as avg FROM story GROUP BY regionId`;
+    const query = `SELECT regionId, avg(point) as avg FROM ${appTableName.story} GROUP BY regionId`;
 
     return await db.executeSql(query, []);
   } catch (error) {
-    throw new Error('SQLite 조회 에러');
+    console.error('Story DB Highest Point 조회 실패:', error);
+    throw error;
   }
 };

@@ -116,9 +116,7 @@ export const getStoryRegionList = async () => {
 export const getDashboardStory = async () => {
   // Get SQLite
   const db = await getDBConnection();
-  const count = await countStoryToDB(db).then(
-    res => res[0].rows.item(0)['count'],
-  );
+  const count = await countStoryToDB(db);
   const pointRegion: {title: string; avg: number}[] = [];
   await highestPointStoryRegionToDB(db).then(res => {
     for (let i = 0; i < res[0].rows.length; i++) {

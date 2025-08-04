@@ -16,3 +16,11 @@ export interface IPagination {
   order: string;
   sort: string;
 }
+
+export interface IStoryPagination {
+  doc: IStory[];
+  currentCount: number;
+  totalCount: any;
+  currentPage: number;
+  totalPage: number;
+}

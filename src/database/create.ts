@@ -1,6 +1,7 @@
 //// Create
 
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
+import {appTableName} from 'src/constants/app';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {IStory} from 'src/types/story';
 
@@ -8,36 +9,49 @@ import {IStory} from 'src/types/story';
 export const saveKoreaMapDataToDB = async (
   db: SQLiteDatabase,
   data: IKoreaRegionData,
-) => {
-  const query = `INSERT OR REPLACE INTO map(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
+): Promise<[ResultSet]> => {
+  try {
+    const query = `INSERT OR REPLACE INTO ${appTableName.map}(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  return await db.executeSql(query, [
-    data.id,
-    data.title,
-    data.main,
-    data.type,
-    data.background,
-    data.story,
-    data.imageUrl,
-    data.zoomImageUrl,
-  ]);
+    return await db.executeSql(query, [
+      data.id,
+      data.title,
+      data.main,
+      data.type,
+      data.background,
+      data.story,
+      data.imageUrl,
+      data.zoomImageUrl,
+    ]);
+  } catch (error) {
+    console.error('Map DB 저장 실패:', error);
+    throw error;
+  }
 };
 
 // Create Story to story table
-export const saveStoryToDB = async (db: SQLiteDatabase, data: IStory) => {
-  const query = `INSERT OR REPLACE INTO story(id, regionId, startDate, endDate, title, contents, point, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?,?)`;
+export const saveStoryToDB = async (
+  db: SQLiteDatabase,
+  data: IStory,
+): Promise<[ResultSet]> => {
+  try {
+    const query = `INSERT OR REPLACE INTO ${appTableName.story}(id, regionId, startDate, endDate, title, contents, point, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?,?)`;
 
-  return await db.executeSql(query, [
-    data.id,
-    data.regionId,
-    data.startDate,
-    data.endDate,
-    data.title,
-    data.contents,
-    data.point,
-    data.createdAt,
-    data.updatedAt,
-  ]);
+    return await db.executeSql(query, [
+      data.id,
+      data.regionId,
+      data.startDate,
+      data.endDate,
+      data.title,
+      data.contents,
+      data.point,
+      data.createdAt,
+      data.updatedAt,
+    ]);
+  } catch (error) {
+    console.error('Story DB 저장 실패:', error);
+    throw error;
+  }
 };
 
 // Update KoreaMapData field "story" counting to map table
@@ -45,8 +59,13 @@ export const updateMapStoryCountingToDB = async (
   db: SQLiteDatabase,
   id: string,
   count: number,
-) => {
-  const query = `UPDATE map SET story = story + ${count} WHERE id = '${id}'`;
+): Promise<[ResultSet]> => {
+  try {
+    const query = `UPDATE ${appTableName.map} SET ${appTableName.story} = ${appTableName.story} + ? WHERE id = ?`;
 
-  return await db.executeSql(query, []);
+    return await db.executeSql(query, [count, id]);
+  } catch (error) {
+    console.error('Story Counting 실패:', error);
+    throw error;
+  }
 };

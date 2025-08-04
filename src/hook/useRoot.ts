@@ -41,9 +41,7 @@ const useRoot = () => {
   const _checkSQLiteData = async () => {
     const db = await getDBConnection();
     // Check SQLite
-    const mapNum = await countData(db, appTableName.map).then(
-      res => res[0].rows.item(0)['count'],
-    );
+    const mapNum = await countData(db, appTableName.map);
 
     if (mapNum === 0) {
       // SQLite
