@@ -7,11 +7,16 @@ import {showBottomToast} from 'src/utils/showToast';
 import Share from 'react-native-share';
 
 // Capture screen
-const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot | null>) => {
+const onCaptureMap = async (
+  viewShotRef: React.RefObject<ViewShot | null>,
+): Promise<string | undefined> => {
   try {
-    const viewShotUri = await viewShotRef.current?.capture?.();
-    return viewShotUri;
+    const uri = await viewShotRef.current?.capture?.();
+    if (!uri) throw new Error('캡처 실패');
+
+    return uri;
   } catch (error) {
+    showBottomToast('error', '캡처에 실패했습니다.');
     return;
   }
 };
@@ -19,13 +24,15 @@ const onCaptureMap = async (viewShotRef: React.RefObject<ViewShot | null>) => {
 // Save image to gallery
 const onSaveScreenShot = async (uri: string) => {
   if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
-    return showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
+    showBottomToast('error', '갤러리 접근 권한을 허용해주세요.');
+    return;
   }
 
   try {
     await CameraRoll.saveAsset(uri, {type: 'photo'});
     showBottomToast('success', '갤러리에 저장되었습니다.');
   } catch (error) {
+    showBottomToast('error', '저장에 실패했습니다.');
     return;
   }
 };
@@ -35,6 +42,7 @@ const onShareLink = async (uri: string, message: string) => {
   try {
     await Share.open({title: appName, message: message, url: uri});
   } catch (error) {
+    // 사용자가 공유창에서 취소했을 경우도 여기로 들어오므로 silent 처리
     return;
   }
 };
@@ -44,9 +52,9 @@ export const onCaptureAndSave = async (
   viewShotRef: React.RefObject<ViewShot | null>,
 ) => {
   const uri = await onCaptureMap(viewShotRef);
-  if (!uri) throw new Error('캡처 실패');
-
-  await onSaveScreenShot(uri);
+  if (uri) {
+    await onSaveScreenShot(uri);
+  }
 };
 
 // Capture screen and share
@@ -55,7 +63,7 @@ export const onCaptureAndShare = async (
   message: string,
 ) => {
   const uri = await onCaptureMap(viewShotRef);
-  if (!uri) throw new Error('캡처 실패');
-
-  await onShareLink(uri, message);
+  if (uri) {
+    await onShareLink(uri, message);
+  }
 };
