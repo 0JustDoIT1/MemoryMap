@@ -21,46 +21,44 @@ const CustomAccordion = ({
   item,
   onSelect,
 }: Accordion<IGetColorRegionList>) => {
+  const regionItem = item[title];
+
   const height = useSharedValue<number>(0);
   const expanded = useSharedValue<boolean>(false);
-  const animatedHeight = useSharedValue<number>(0);
-  const iconRotation = useDerivedValue<number>(() =>
+  const animatedHeight = useDerivedValue(() =>
     expanded.value
-      ? withTiming(1, {duration: 200})
+      ? withTiming(height.value, {duration: 200})
       : withTiming(0, {duration: 200}),
+  );
+  const iconRotation = useDerivedValue(() =>
+    expanded.value
+      ? withTiming('180deg', {duration: 200})
+      : withTiming('0deg', {duration: 200}),
   );
 
   const onPressAccordion = () => {
-    if (item[title].child) {
+    if (regionItem.child) {
       expanded.value = !expanded.value;
     } else {
-      onSelect(item[title].sub[0].id);
+      onSelect(regionItem.sub[0].id);
     }
   };
 
   const onLayout = (event: LayoutChangeEvent) => {
     const onLayoutHeight = event.nativeEvent.layout.height;
 
-    if (onLayoutHeight > 0 && height.value !== onLayoutHeight) {
+    if (onLayoutHeight > 0) {
       height.value = onLayoutHeight;
     }
   };
 
-  const iconRotationStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{rotate: `${iconRotation.value * 180}deg`}],
-    };
-  });
+  const iconRotationStyle = useAnimatedStyle(() => ({
+    transform: [{rotate: iconRotation.value}],
+  }));
 
-  const accordionListStyle = useAnimatedStyle(() => {
-    animatedHeight.value = expanded.value
-      ? withTiming(height.value, {duration: 200})
-      : withTiming(0, {duration: 200});
-
-    return {
-      height: animatedHeight.value,
-    };
-  });
+  const accordionListStyle = useAnimatedStyle(() => ({
+    height: animatedHeight.value,
+  }));
 
   return (
     <View className="w-full bg-white rounded-md my-1 border">
@@ -68,7 +66,7 @@ const CustomAccordion = ({
         className="flex-row justify-between items-center p-4"
         onPress={onPressAccordion}>
         <Text>{title}</Text>
-        {item[title].child && (
+        {regionItem.child && (
           <Animated.View style={iconRotationStyle}>
             <MaterialCommunityIcons
               name="chevron-down"
@@ -82,7 +80,7 @@ const CustomAccordion = ({
         className="overflow-hidden bg-gray-100 rounded-b-md"
         style={accordionListStyle}>
         <View className="absolute w-full px-4" onLayout={onLayout}>
-          {item[title].sub.map((value, index: number) => (
+          {regionItem.sub.map((value, index: number) => (
             <React.Fragment key={value.id}>
               {index !== 0 && <Divider className="w-full bg-blur" />}
               <Pressable className="py-4" onPress={() => onSelect(value.id)}>

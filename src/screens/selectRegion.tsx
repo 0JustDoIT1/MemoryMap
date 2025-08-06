@@ -6,12 +6,11 @@ import CustomAccordion from 'src/components/common/accordion';
 import useBackButton from 'src/hook/useBackButton';
 
 const SelectRegionScreen = ({navigation, route}: TSelectRegion) => {
-  const regionList = route.params.regionList;
-  const regionMainList = route.params.regionMainList;
+  const {regionList, regionMainList} = route.params;
 
-  const onSelectRegion = (value: string) => {
+  const onSelectRegion = (regionId: string) => {
     navigation.pop();
-    navigation.navigate('AddStory', {regionId: value});
+    navigation.navigate('AddStory', {regionId});
   };
 
   useBackButton(() => navigation.goBack());
@@ -23,7 +22,7 @@ const SelectRegionScreen = ({navigation, route}: TSelectRegion) => {
       <FlatList
         className="w-full"
         data={regionMainList}
-        keyExtractor={item => item}
+        keyExtractor={(item, index) => `${item}-${index}`}
         renderItem={({item}) => (
           <CustomAccordion
             title={item}

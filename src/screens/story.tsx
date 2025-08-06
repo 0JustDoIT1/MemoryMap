@@ -94,7 +94,7 @@ const StoryScreen = ({navigation}: TStory) => {
           <View className="w-56 max-h-full">
             <FlatList
               data={listData}
-              keyExtractor={item => item}
+              keyExtractor={(item, index) => `${item}-${index}`}
               renderItem={({item}) => (
                 <StoryFilterItem item={item} onSelect={selectFilter} />
               )}
