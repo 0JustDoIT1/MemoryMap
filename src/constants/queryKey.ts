@@ -1,6 +1,9 @@
 export const REACT_QUERY_KEYS = {
   koreaMapData: ['koreaMapData'],
   colorMapList: ['colorMapList'],
-  storyList: (pagination?: object) => ['storyList', pagination],
+  storyList: {
+    root: ['storyList'],
+    withPagination: (pagination?: object) => ['storyList', pagination],
+  },
   storyRegionList: ['storyRegionList'],
 };

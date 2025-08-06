@@ -1,0 +1,61 @@
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {deleteStoryById} from 'src/utils/story.db';
+import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
+import useButton from '../useButton';
+import {showBottomToast} from 'src/utils/showToast';
+import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
+
+export const useDeleteStory = (onSuccess: () => void) => {
+  const queryClient = useQueryClient();
+  const {isDisabled, disabledButton, abledButton} = useButton();
+
+  const invalidateQueries = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: REACT_QUERY_KEYS.storyList.root,
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: REACT_QUERY_KEYS.storyRegionList,
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ['koreaMapData'],
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ['dashboardStory'],
+      refetchType: 'all',
+    });
+  };
+
+  const deleteStoryMutation = useMutation({
+    mutationFn: deleteStoryById,
+  });
+
+  const updateMapMutation = useMutation({
+    mutationFn: ({id, count}: {id: string; count: number}) =>
+      updateKoreaMapDataStory(id, count),
+  });
+
+  const deleteStory = async (storyId: string, regionId: string) => {
+    try {
+      disabledButton();
+
+      await deleteStoryMutation.mutateAsync(storyId);
+      await updateMapMutation.mutateAsync({id: regionId, count: -1});
+
+      await invalidateQueries();
+
+      abledButton();
+      onSuccess();
+    } catch (err) {
+      abledButton();
+      showBottomToast('error', '스토리 삭제에 실패했습니다.');
+    }
+  };
+
+  return {
+    deleteStory,
+    isDisabled,
+  };
+};

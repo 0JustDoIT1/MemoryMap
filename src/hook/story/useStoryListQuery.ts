@@ -5,7 +5,7 @@ import {getStoryPagination} from 'src/utils/story.db';
 
 export const useStoryListQuery = (pagination: IPagination) => {
   const query = useInfiniteQuery({
-    queryKey: REACT_QUERY_KEYS.storyList(pagination),
+    queryKey: REACT_QUERY_KEYS.storyList.withPagination(pagination),
     queryFn: ({pageParam}) => getStoryPagination(pageParam, pagination),
     initialPageParam: 1,
     getNextPageParam: lastPage => {

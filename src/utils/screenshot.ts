@@ -44,7 +44,9 @@ export const onCaptureAndSave = async (
   viewShotRef: React.RefObject<ViewShot | null>,
 ) => {
   const uri = await onCaptureMap(viewShotRef);
-  if (uri) await onSaveScreenShot(uri);
+  if (!uri) throw new Error('캡처 실패');
+
+  await onSaveScreenShot(uri);
 };
 
 // Capture screen and share
@@ -53,5 +55,7 @@ export const onCaptureAndShare = async (
   message: string,
 ) => {
   const uri = await onCaptureMap(viewShotRef);
-  if (uri) await onShareLink(uri, message);
+  if (!uri) throw new Error('캡처 실패');
+
+  await onShareLink(uri, message);
 };
