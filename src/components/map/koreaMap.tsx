@@ -7,7 +7,7 @@ import {IKoreaRegionData} from 'src/types/koreaMap';
 import {koreaRegionEmpty} from 'src/constants/koreaMapData';
 import KoreaMapSkeleton from './koreaMapSkeleton';
 import KoreaMapText from './koreaMapText';
-import useKoreaMap from 'src/hook/useKoreaMapQuery';
+import useKoreaMap from 'src/hook/map/useKoreaMapQuery';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
 import KoreaMapSvg from './koreaMapSvg';
 

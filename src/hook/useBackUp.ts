@@ -160,7 +160,11 @@ const useBackUp = () => {
       refetchType: 'all',
     });
     await queryClient.invalidateQueries({
-      queryKey: ['story'],
+      queryKey: ['storyList'],
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ['storyRegionList'],
       refetchType: 'all',
     });
     await queryClient.invalidateQueries({

@@ -1,6 +1,5 @@
 import React from 'react';
-import {FlatList, Pressable, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/view/notFound';
 import {customStyle} from 'src/style/customStyle';
@@ -9,124 +8,70 @@ import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomModal from 'src/components/modal/modal';
 import useModal from 'src/hook/useModal';
-import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
-import useStoryQuery from 'src/hook/useStoryQuery';
-import StoryCard from 'src/components/view/storyCard';
+import {useStoryListQuery} from 'src/hook/story/useStoryListQuery';
+import StoryCard from 'src/components/story/storyCard';
 import useExitApp from 'src/hook/useExitApp';
+import LoadingScreen from './loadingScreen';
+import StoryFilterItem from 'src/components/story/storyFilterItem';
+import {useStoryRegionListQuery} from 'src/hook/story/useStoryRegionListQuery';
+import {useStoryPagination} from 'src/hook/story/useStoryPagination';
+import StoryHeader from 'src/components/story/storyHeader';
 
 const StoryScreen = ({navigation}: TStory) => {
+  const {pagination, toggleSort, selectFilter} = useStoryPagination();
   const {visible, showModal, hideModal} = useModal();
+
   const {
-    initPagination,
-    pagination,
-    setPagination,
-    isStorySuccess,
-    isStoryLoading,
-    isStoryError,
-    storyData,
-    isListSuccess,
-    isListLoading,
-    isListError,
-    listData,
+    data: storyData,
+    isSuccess: isStorySuccess,
+    isLoading: isStoryLoading,
+    isError: isStoryError,
     onLoadMoreStory,
-  } = useStoryQuery();
+  } = useStoryListQuery(pagination);
+
+  const {
+    data: listData,
+    isSuccess: isListSuccess,
+    isLoading: isListLoading,
+    isError: isListError,
+  } = useStoryRegionListQuery();
+
   useExitApp();
 
-  // Story data sorting
-  const onPressOrderBy = () => {
-    if (!storyData || storyData.pages[0].totalCount === 0) return;
-    setPagination({
-      ...initPagination,
-      filter: pagination.filter,
-      order: pagination.order,
-      sort: pagination.sort === 'ASC' ? 'DESC' : 'ASC',
-    });
-  };
+  const isStoryEmpty = !storyData?.pages?.[0]?.totalCount;
 
-  // Press filter button
-  const onPressFilter = () => {
-    if (!storyData || storyData.pages[0].totalCount === 0) return;
-    showModal();
-  };
+  if (isStoryError || isListError) {
+    return null;
+  }
 
-  // Story data filtering
-  const onSelectFilter = (value: string) => {
-    hideModal();
-    setPagination({
-      ...pagination,
-      filter: value,
-      order: pagination.order,
-      sort: pagination.sort,
-    });
-  };
+  if (isStoryLoading || isListLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white px-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      {(isStoryError || isListError) && <></>}
-      {(isStoryLoading || isListLoading) && <></>}
-      {isStorySuccess && isListSuccess && (
-        <View className="flex-1 w-full">
-          <View className="h-[8%] flex-row justify-between items-center">
-            <View className="flex-row">
-              <Pressable
-                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={onPressFilter}>
-                <Text className="text-sm text-brandMain mx-1">필터</Text>
-                <MaterialCommunityIcons
-                  name="filter-outline"
-                  size={15}
-                  color={customColor.brandMain}
-                />
-              </Pressable>
-              <Pressable
-                className="flex-row justify-between items-center p-2 mr-2 border border-brandMain rounded-md"
-                onPress={onPressOrderBy}>
-                <Text className="text-sm text-brandMain mx-1">
-                  {pagination.sort === 'DESC' ? '최신순' : '날짜순'}
-                </Text>
-                <MaterialCommunityIcons
-                  name="filter-variant"
-                  size={15}
-                  color={customColor.brandMain}
-                />
-              </Pressable>
-            </View>
-            <View className="flex-row">
-              <Pressable
-                className="flex-row justify-between items-center p-2 bg-brandLight rounded-md"
-                onPress={() => {
-                  if (pagination.filter !== '') onSelectFilter('');
-                }}>
-                <Text className="text-sm text-white mx-1">
-                  {pagination.filter === ''
-                    ? '전체'
-                    : getRegionMainTitleById(pagination.filter)}
-                </Text>
-                {pagination.filter !== '' && (
-                  <MaterialCommunityIcons
-                    name="window-close"
-                    size={15}
-                    color={customColor.white}
-                  />
-                )}
-              </Pressable>
-            </View>
-          </View>
-          {storyData && storyData.pages[0].totalCount >= 1 ? (
-            <FlatList
-              className="flex-1"
-              contentContainerStyle={customStyle().storyFlatListContainer}
-              data={storyData?.pages.map(page => page.doc).flat()}
-              keyExtractor={item => item.createdAt}
-              onEndReached={onLoadMoreStory}
-              onEndReachedThreshold={0.7}
-              renderItem={({item}) => StoryCard(item, navigation)}
-              showsHorizontalScrollIndicator={false}
-            />
-          ) : (
-            <View className="w-full h-[90%]">
+      <View className="flex-1 w-full">
+        <StoryHeader
+          pagination={pagination}
+          isStoryEmpty={isStoryEmpty}
+          onToggleSort={toggleSort}
+          onShowFilter={showModal}
+          onClearFilter={() => selectFilter('')}
+        />
+        <FlatList
+          className="flex-1"
+          contentContainerStyle={customStyle().storyFlatListContainer}
+          data={storyData?.pages.map(page => page.doc).flat()}
+          keyExtractor={item => item.id ?? item.createdAt}
+          onEndReached={onLoadMoreStory}
+          onEndReachedThreshold={0.7}
+          renderItem={({item}) => (
+            <StoryCard item={item} navigation={navigation} />
+          )}
+          ListEmptyComponent={
+            <View className="flex-1 items-center justify-center py-10">
               <NotFound
                 icon={
                   <MaterialCommunityIcons
@@ -138,33 +83,26 @@ const StoryScreen = ({navigation}: TStory) => {
                 title="작성한 스토리가 없습니다."
               />
             </View>
-          )}
-        </View>
-      )}
-      {isListSuccess && (
-        <CustomModal
-          visible={visible}
-          hideModal={hideModal}
-          contents={
-            <View className="w-56 max-h-full">
-              <FlatList
-                data={listData}
-                keyExtractor={item => item}
-                renderItem={({item}) => (
-                  <View className="w-full bg-white rounded-md my-1 border">
-                    <Pressable
-                      className="flex-row justify-between items-center p-4"
-                      onPress={() => onSelectFilter(item)}>
-                      <Text>{getRegionMainTitleById(item)}</Text>
-                    </Pressable>
-                  </View>
-                )}
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
           }
+          showsHorizontalScrollIndicator={false}
         />
-      )}
+      </View>
+      <CustomModal
+        visible={visible}
+        hideModal={hideModal}
+        contents={
+          <View className="w-56 max-h-full">
+            <FlatList
+              data={listData}
+              keyExtractor={item => item}
+              renderItem={({item}) => (
+                <StoryFilterItem item={item} onSelect={selectFilter} />
+              )}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };

@@ -8,7 +8,7 @@ import {IKoreaRegionData} from 'src/types/koreaMap';
 import useLoading from '../useLoading';
 import useModal from '../useModal';
 import useButton from '../useButton';
-import useKoreaMapMutation from '../useKoreaMapMutation';
+import useKoreaMapMutation from './useKoreaMapMutation';
 import useDialog from '../useDialog';
 import useBottomSheetBackHandler from '../useBottomSheetBackHandler';
 import useAd from '../useAd';

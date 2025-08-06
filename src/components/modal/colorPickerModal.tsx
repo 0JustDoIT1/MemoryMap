@@ -9,7 +9,7 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 import useAd from 'src/hook/useAd';
 import useButton from 'src/hook/useButton';
-import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
+import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {customStyle} from 'src/style/customStyle';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';

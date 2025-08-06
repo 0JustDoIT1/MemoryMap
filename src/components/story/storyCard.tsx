@@ -8,11 +8,13 @@ import {IStory} from 'src/types/story';
 import {dateToFormatString} from 'src/utils/dateFormat';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 
+interface IStoryCard {
+  item: IStory;
+  navigation: NativeStackNavigationProp<TStackParamList, 'Story', undefined>;
+}
+
 // Story Card
-const StoryCard = (
-  item: IStory,
-  navigation: NativeStackNavigationProp<TStackParamList, 'Story', undefined>,
-) => {
+const StoryCard = ({item, navigation}: IStoryCard) => {
   const title = getRegionTitleById(item.regionId);
   const startDateString = dateToFormatString(
     item.startDate,

@@ -13,7 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomAlert from 'src/components/alert/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useButton from 'src/hook/useButton';
-import useStoryView from 'src/hook/useStoryView';
+import useStoryView from 'src/hook/story/useStoryView';
 import useBackButton from 'src/hook/useBackButton';
 
 const ViewStoryScreen = ({navigation, route}: TViewStory) => {

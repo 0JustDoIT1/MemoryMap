@@ -9,3 +9,10 @@ export const StoryInit = {
   createdAt: '',
   updatedAt: '',
 };
+
+export const initPagination = {
+  limit: 10,
+  filter: '',
+  order: 'createdAt',
+  sort: 'DESC',
+};

@@ -16,7 +16,7 @@ import {
 import CustomAlert from 'src/components/alert/alert';
 import useButton from 'src/hook/useButton';
 import useDialog from 'src/hook/useDialog';
-import useKoreaMapMutation from 'src/hook/useKoreaMapMutation';
+import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';

@@ -19,7 +19,11 @@ const useStoryView = (storyId: string) => {
     mutationFn: deleteStoryById,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['story'],
+        queryKey: ['storyList'],
+        refetchType: 'all',
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['storyRegionList'],
         refetchType: 'all',
       });
       await queryClient.invalidateQueries({
@@ -37,7 +41,11 @@ const useStoryView = (storyId: string) => {
       updateKoreaMapDataStory(id, count),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['story'],
+        queryKey: ['storyList'],
+        refetchType: 'all',
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ['storyRegionList'],
         refetchType: 'all',
       });
       await queryClient.invalidateQueries({

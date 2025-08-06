@@ -120,6 +120,7 @@ export const customStyle = (props?: CustomStyle) =>
       backgroundColor: props?.bgColor,
     },
     storyFlatListContainer: {
+      flexGrow: 1,
       gap: 8,
     },
     storyViewShot: {

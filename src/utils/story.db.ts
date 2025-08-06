@@ -59,9 +59,9 @@ export const getStoryPagination = async (
   option: {
     limit: number;
     // offset: number;
-    filter?: string;
-    order?: string;
-    sort?: string;
+    filter: string;
+    order: string;
+    sort: string;
   },
 ) => {
   const db = await getDBConnection();
