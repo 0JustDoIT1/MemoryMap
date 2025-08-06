@@ -6,4 +6,8 @@ export const REACT_QUERY_KEYS = {
     withPagination: (pagination?: object) => ['storyList', pagination],
   },
   storyRegionList: ['storyRegionList'],
+  dashboard: {
+    koreaMap: ['dashboardKoreaMap'],
+    story: ['dashboardStory'],
+  },
 };

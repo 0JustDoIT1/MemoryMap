@@ -9,7 +9,7 @@ export const useDeleteStory = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
   const {isDisabled, disabledButton, abledButton} = useButton();
 
-  const invalidateQueries = async () => {
+  const invalidateDeleteStoryQueries = async () => {
     await queryClient.invalidateQueries({
       queryKey: REACT_QUERY_KEYS.storyList.root,
       refetchType: 'all',
@@ -19,11 +19,11 @@ export const useDeleteStory = (onSuccess: () => void) => {
       refetchType: 'all',
     });
     await queryClient.invalidateQueries({
-      queryKey: ['koreaMapData'],
+      queryKey: REACT_QUERY_KEYS.koreaMapData,
       refetchType: 'all',
     });
     await queryClient.invalidateQueries({
-      queryKey: ['dashboardStory'],
+      queryKey: REACT_QUERY_KEYS.dashboard.story,
       refetchType: 'all',
     });
   };
@@ -44,7 +44,7 @@ export const useDeleteStory = (onSuccess: () => void) => {
       await deleteStoryMutation.mutateAsync(storyId);
       await updateMapMutation.mutateAsync({id: regionId, count: -1});
 
-      await invalidateQueries();
+      await invalidateDeleteStoryQueries();
 
       abledButton();
       onSuccess();

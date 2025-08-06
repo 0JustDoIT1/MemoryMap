@@ -1,4 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {
   deleteMapDataById,
@@ -11,83 +12,46 @@ const useKoreaMapMutation = () => {
   // Access the client
   const queryClient = useQueryClient();
 
+  const invalidatekoreaMapQueries = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: REACT_QUERY_KEYS.koreaMapData,
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: REACT_QUERY_KEYS.dashboard.koreaMap,
+      refetchType: 'all',
+    });
+    await queryClient.invalidateQueries({
+      queryKey: REACT_QUERY_KEYS.colorMapList,
+      refetchType: 'all',
+    });
+  };
+
   // React-Query Mutation
   // Reset Map Mutation
   const resetMapMutation = useMutation({
-    mutationFn: () => resetMapData(),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboardKoreaMap'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['colorMapList'],
-        refetchType: 'all',
-      });
-    },
+    mutationFn: resetMapData,
+    onSuccess: invalidatekoreaMapQueries,
   });
 
   // Delete Map Mutation
   const deleteMapMutation = useMutation({
     mutationFn: (data: IKoreaRegionData) => deleteMapDataById(data),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboardKoreaMap'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['colorMapList'],
-        refetchType: 'all',
-      });
-    },
+    onSuccess: invalidatekoreaMapQueries,
   });
 
   // Update Map by photo Mutation
   const updateMapByPhotoMutation = useMutation({
     mutationFn: ({data, uri}: {data: IKoreaRegionData; uri: string}) =>
       updateMapPhotoById(data, uri),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboardKoreaMap'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['colorMapList'],
-        refetchType: 'all',
-      });
-    },
+    onSuccess: invalidatekoreaMapQueries,
   });
 
   // Update Map by color Mutation
   const updateMapByColorMutation = useMutation({
     mutationFn: ({data, color}: {data: IKoreaRegionData; color: string}) =>
       updateMapColorById(data, color),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboardKoreaMap'],
-        refetchType: 'all',
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['colorMapList'],
-        refetchType: 'all',
-      });
-    },
+    onSuccess: invalidatekoreaMapQueries,
   });
 
   return {
