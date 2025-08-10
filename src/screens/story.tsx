@@ -96,7 +96,11 @@ const StoryScreen = ({navigation}: TStory) => {
               data={listData}
               keyExtractor={(item, index) => `${item}-${index}`}
               renderItem={({item}) => (
-                <StoryFilterItem item={item} onSelect={selectFilter} />
+                <StoryFilterItem
+                  item={item}
+                  onSelect={selectFilter}
+                  onClose={hideModal}
+                />
               )}
               showsHorizontalScrollIndicator={false}
             />

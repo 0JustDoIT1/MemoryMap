@@ -45,7 +45,13 @@ export const useAddStory = ({
       if (adShow) {
         show(); // 광고 노출
         await onAddingStory(); // 저장 성공시만 플래그 on
-        pendingAdActionRef.current = true;
+        // 광고가 이미 닫혀 있었다면 즉시 이동
+        if (isClosed) {
+          onAddStorySuccess();
+          load();
+        } else {
+          pendingAdActionRef.current = true;
+        }
       } else {
         await onAddingStory();
         onAddStorySuccess();
