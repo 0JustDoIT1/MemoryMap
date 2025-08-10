@@ -1,5 +1,5 @@
 import React, {useCallback, useRef} from 'react';
-import {View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
 import {TAddStory} from 'src/types/stack';
@@ -16,6 +16,7 @@ import {useAddStory} from 'src/hook/story/useAddStory';
 import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
 import AddStoryContent from 'src/components/story/addStoryContent';
 import AddStoryCalendarSheet from 'src/components/story/addStoryCalendarSheet';
+import {TextInput} from 'react-native-paper';
 
 const AddStoryScreen = ({navigation, route}: TAddStory) => {
   const region = route.params.regionId ? route.params.regionId : '';
@@ -70,7 +71,7 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
   } = useSelectRegion(navigation);
 
   // 저장 플로우 hook
-  const {isDisabled, isBusy, onAddStory} = useAddStory({
+  const {onAddStory, isDisabled, isBusy} = useAddStory({
     settingStoryData,
     regionId,
     onAddStorySuccess: () => navigation.navigate('Main', {screen: 'Story'}),
@@ -90,8 +91,17 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
       edges={['top', 'bottom', 'left', 'right']}>
       {isRegionSelectable ? (
         <>
+          <Pressable className="w-full" onPress={onPressRegion}>
+            <TextInput
+              className="w-full bg-white"
+              mode="outlined"
+              label="지역을 선택해 주세요."
+              activeOutlineColor={customColor.brandMain}
+              editable={false}
+              value={regionTitle}
+            />
+          </Pressable>
           <AddStoryContent
-            regionTitle={regionTitle}
             title={title}
             setTitle={setTitle}
             contents={contents}
@@ -99,7 +109,6 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
             point={point}
             setPoint={setPoint}
             dateLabel={dateLabel}
-            onPressRegion={onPressRegion}
             onPressDate={onPressDate}
           />
           <View className="w-full mt-auto">

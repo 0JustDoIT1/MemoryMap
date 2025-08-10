@@ -6,7 +6,6 @@ import {storyPointArray} from 'src/constants/point';
 import {memo} from 'react';
 
 interface IAddStoryContent {
-  regionTitle: string;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   contents: string;
@@ -14,12 +13,10 @@ interface IAddStoryContent {
   point: number;
   setPoint: React.Dispatch<React.SetStateAction<number>>;
   dateLabel: string;
-  onPressRegion: () => void;
   onPressDate: () => void;
 }
 
 const AddStoryContent = ({
-  regionTitle,
   title,
   setTitle,
   contents,
@@ -27,21 +24,10 @@ const AddStoryContent = ({
   point,
   setPoint,
   dateLabel,
-  onPressRegion,
   onPressDate,
 }: IAddStoryContent) => {
   return (
     <>
-      <Pressable className="w-full" onPress={onPressRegion}>
-        <TextInput
-          className="w-full bg-white"
-          mode="outlined"
-          label="지역을 선택해 주세요."
-          activeOutlineColor={customColor.brandMain}
-          editable={false}
-          value={regionTitle}
-        />
-      </Pressable>
       <View className="w-full flex-row justify-between items-center mt-2">
         <Pressable className="w-full" onPress={onPressDate}>
           <TextInput

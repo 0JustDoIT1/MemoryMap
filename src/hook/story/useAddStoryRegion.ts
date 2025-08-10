@@ -5,7 +5,11 @@ import useKoreaMapQuery from 'src/hook/map/useKoreaMapQuery';
 import {TStackParamList} from 'src/types/stack';
 
 export const useSelectRegion = (
-  navigation: NativeStackNavigationProp<TStackParamList, 'AddStory', undefined>,
+  navigation: NativeStackNavigationProp<
+    TStackParamList,
+    'AddStory' | 'UpdateStory',
+    undefined
+  >,
 ) => {
   const {isColorSuccess, isColorLoading, isColorError, colorData} =
     useKoreaMapQuery();

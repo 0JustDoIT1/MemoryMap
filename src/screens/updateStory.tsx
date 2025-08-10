@@ -1,24 +1,21 @@
-import React, {useCallback, useEffect, useRef} from 'react';
-import {Keyboard, Pressable, View} from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import React, {useCallback, useRef} from 'react';
+import {View} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
-import CustomBottomSheet from 'src/components/common/bottomSheet';
 import {BrandDynamicButton} from 'src/components/common/button';
-import {dateToFormatString} from 'src/utils/dateFormat';
-import {storyPointArray} from 'src/constants/point';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import BrandCalendar from 'src/components/common/calendar';
-import SelectPoint from 'src/components/common/selectPoint';
-import useButton from 'src/hook/useButton';
 import useStoryInput from 'src/hook/story/useStoryInput';
-import useStoryUpdate from 'src/hook/story/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
-import useAd from 'src/hook/useAd';
-import {adShowType} from 'src/constants/app';
 import {TUpdateStory} from 'src/types/stack';
+import {useAddStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
+import {useUpdateStory} from 'src/hook/story/useUpdateStory';
+import AddStoryContent from 'src/components/story/addStoryContent';
+import AddStoryCalendarSheet from 'src/components/story/addStoryCalendarSheet';
 
 const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
+  const story = route.params.story;
+
   // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // Bottom Sheet present event
@@ -29,12 +26,11 @@ const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
+  // 뒤로가기 버튼 hook
   useBackButton(() => navigation.goBack());
 
-  const story = route.params.story;
-
+  // story form input hook
   const {
-    regionId,
     regionTitle,
     title,
     setTitle,
@@ -47,58 +43,24 @@ const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
     point,
     setPoint,
     settingStoryData,
+    isSaveDisabled,
+    dateLabel,
   } = useStoryInput(true, story);
-  const {isDisabled, disabledButton, abledButton} = useButton();
-  const {updateStoryMutation} = useStoryUpdate(story.id);
-  const {load, show, isClosed, checkAdShow} = useAd();
 
-  useEffect(() => {
-    load();
-    if (isClosed) {
-      onUpdateStorySuccess();
-      load();
-    }
-  }, [load, isClosed]);
+  // 캘린더 hook
+  const {onPressDate, onDatePicker} = useAddStoryCalendar({
+    setSelectedStartDate,
+    setSelectedEndDate,
+    handlePresentPress,
+    handleClosePress,
+  });
 
-  // DateRangePicker bottomsheet open
-  const onPressDate = () => {
-    Keyboard.dismiss();
-    handlePresentPress();
-  };
-
-  // Select Date(start & end)
-  const onDatePicker = (startDate: Date, endDate: Date) => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDate(endDate);
-    handleClosePress();
-  };
-
-  // Edit Story
-  const onUpdateStory = async () => {
-    try {
-      disabledButton();
-      const adShow = await checkAdShow(adShowType.story);
-      if (adShow) {
-        show();
-        await onUpdatingStory();
-      } else {
-        await onUpdatingStory();
-        onUpdateStorySuccess();
-      }
-    } catch (error) {
-      abledButton();
-      return;
-    }
-  };
-
-  const onUpdatingStory = async () => {
-    const newStory = settingStoryData();
-    await updateStoryMutation.mutateAsync(newStory);
-  };
-
-  const onUpdateStorySuccess = () => {
-    navigation.goBack();
-  };
+  // 업데이트 플로우 hook
+  const {onUpdateStory, isBusy, isDisabled} = useUpdateStory({
+    settingStoryData,
+    onUpdateStorySuccess: () => navigation.goBack(),
+    storyId: story.id,
+  });
 
   return (
     <SafeAreaView
@@ -113,92 +75,31 @@ const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
           value={regionTitle}
         />
       </View>
-      <View className="w-full flex-row justify-between items-center mt-2">
-        <Pressable
-          className="w-full"
-          onPress={onPressDate}
-          disabled={isDisabled}>
-          <TextInput
-            className="w-full bg-white"
-            mode="outlined"
-            label="여행일자"
-            activeOutlineColor={customColor.brandMain}
-            editable={false}
-            value={
-              selectedStartDate && selectedEndDate
-                ? `${dateToFormatString(selectedStartDate, 'YYYY.MM.DD (ddd)')} ~ ${dateToFormatString(selectedEndDate, 'YYYY.MM.DD (ddd)')}`
-                : ''
-            }
-          />
-        </Pressable>
-      </View>
-      <View className="w-full mt-2">
-        <TextInput
-          className="w-full bg-white"
-          mode="outlined"
-          label="제목"
-          placeholder="(10자)"
-          activeOutlineColor={customColor.brandMain}
-          value={title}
-          maxLength={10}
-          onChangeText={setTitle}
-        />
-        <TextInput
-          className="w-full bg-white h-40 mt-2"
-          mode="outlined"
-          label="내용"
-          placeholder="(100자)"
-          activeOutlineColor={customColor.brandMain}
-          multiline={true}
-          value={contents}
-          maxLength={100}
-          onChangeText={setContents}
-        />
-      </View>
-
-      <View className="mt-8">
-        <Text className="text-sm ml-2">여행은 즐거우셨나요?</Text>
-        <View className="w-full mt-4 flex-row justify-between items-center">
-          {storyPointArray.map(item => {
-            return (
-              <SelectPoint
-                key={item.point}
-                item={item}
-                point={point}
-                setPoint={setPoint}
-              />
-            );
-          })}
-        </View>
-      </View>
+      <AddStoryContent
+        title={title}
+        setTitle={setTitle}
+        contents={contents}
+        setContents={setContents}
+        point={point}
+        setPoint={setPoint}
+        dateLabel={dateLabel}
+        onPressDate={onPressDate}
+      />
 
       <View className="w-full mt-auto">
         <BrandDynamicButton
           classes="w-full"
-          text="저장"
-          isDisabled={
-            regionId === '' ||
-            !selectedStartDate ||
-            !selectedEndDate ||
-            title === '' ||
-            contents === '' ||
-            point === 0 ||
-            isDisabled
-          }
+          text={isBusy ? '저장 중...' : '저장'}
+          isDisabled={isSaveDisabled || isDisabled}
           onPress={onUpdateStory}
         />
       </View>
-      <CustomBottomSheet
-        ref={bottomSheetModalRef}
-        snap="60%"
-        contents={
-          <BrandCalendar
-            selectedStartDate={selectedStartDate!}
-            selectedEndDate={selectedEndDate!}
-            onDatePicker={onDatePicker}
-            close={handleClosePress}
-          />
-        }
+      <AddStoryCalendarSheet
+        bottomSheetRef={bottomSheetModalRef}
+        start={selectedStartDate ?? new Date()}
+        end={selectedEndDate ?? new Date()}
+        onPick={onDatePicker}
+        onClose={handleClosePress}
       />
     </SafeAreaView>
   );

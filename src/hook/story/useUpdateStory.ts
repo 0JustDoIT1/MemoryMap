@@ -22,7 +22,9 @@ export const useUpdateStory = ({
   const {load, show, isClosed, checkAdShow} = useAd();
   const {updateStoryMutation} = useStoryUpdate(storyId);
 
+  // 광고 닫힘 후 성공 네비 중복 방지
   const pendingAdActionRef = useRef(false);
+  // 연타 방지
   const submittingRef = useRef(false);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export const useUpdateStory = ({
     await updateStoryMutation.mutateAsync(newStory);
   }, [settingStoryData, updateStoryMutation]);
 
+  // Update Story
   const onUpdateStory = useCallback(async () => {
     if (submittingRef.current) return;
     submittingRef.current = true;
@@ -41,8 +44,9 @@ export const useUpdateStory = ({
     try {
       const adShow = await checkAdShow(adShowType.story);
       if (adShow) {
-        show();
-        await onUpdatingStory();
+        show(); // 광고 노출
+        await onUpdatingStory(); // 저장 성공시만 플래그 on
+        // 광고가 이미 닫혀 있었다면 즉시 이동
         if (isClosed) {
           onUpdateStorySuccess();
           load();
@@ -71,17 +75,20 @@ export const useUpdateStory = ({
     load,
   ]);
 
+  // 버튼 비활성화 처리
   const isBusy = updateStoryMutation.isPending;
   const buttonDisabled = isDisabled || isBusy;
 
+  // 광고 닫힘 감지 후 단 한 번만 네비게이션
   useEffect(() => {
     if (isClosed && pendingAdActionRef.current) {
       pendingAdActionRef.current = false;
       onUpdateStorySuccess();
-      load();
+      load(); // 다음 광고 로드
     }
   }, [isClosed, load, onUpdateStorySuccess]);
 
+  // 언마운트 시 플래그 정리 (안전)
   useEffect(() => {
     return () => {
       pendingAdActionRef.current = false;

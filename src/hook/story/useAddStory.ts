@@ -70,6 +70,8 @@ export const useAddStory = ({
     show,
     onAddingStory,
     onAddStorySuccess,
+    isClosed,
+    load,
   ]);
 
   // 버튼 비활성화 처리
@@ -93,5 +95,5 @@ export const useAddStory = ({
     };
   }, []);
 
-  return {isDisabled: buttonDisabled, isBusy, onAddStory};
+  return {onAddStory, isDisabled: buttonDisabled, isBusy};
 };
