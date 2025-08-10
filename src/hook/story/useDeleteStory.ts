@@ -46,11 +46,11 @@ export const useDeleteStory = (onSuccess: () => void) => {
 
       await invalidateDeleteStoryQueries();
 
-      abledButton();
       onSuccess();
     } catch (err) {
-      abledButton();
       showBottomToast('error', '스토리 삭제에 실패했습니다.');
+    } finally {
+      abledButton();
     }
   };
 
