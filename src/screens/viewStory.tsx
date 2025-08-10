@@ -59,7 +59,7 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
         </ViewShot>
 
         <StoryViewActionBar
-          onEdit={() => navigation.navigate('EditStory', {story: data})}
+          onEdit={() => navigation.navigate('UpdateStory', {story: data})}
           onSave={() => onCaptureAndSave(viewShotRef)}
           onShare={() =>
             onCaptureAndShare(

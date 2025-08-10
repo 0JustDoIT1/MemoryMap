@@ -3,7 +3,6 @@ import {Keyboard, Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
-import {TEditStory} from 'src/types/stack';
 import CustomBottomSheet from 'src/components/common/bottomSheet';
 import {BrandDynamicButton} from 'src/components/common/button';
 import {dateToFormatString} from 'src/utils/dateFormat';
@@ -17,8 +16,9 @@ import useStoryUpdate from 'src/hook/story/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';
 import {adShowType} from 'src/constants/app';
+import {TUpdateStory} from 'src/types/stack';
 
-const EditStoryScreen = ({navigation, route}: TEditStory) => {
+const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
   // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // Bottom Sheet present event
@@ -49,7 +49,7 @@ const EditStoryScreen = ({navigation, route}: TEditStory) => {
     settingStoryData,
   } = useStoryInput(true, story);
   const {isDisabled, disabledButton, abledButton} = useButton();
-  const {editStoryMutation} = useStoryUpdate(story.id);
+  const {updateStoryMutation} = useStoryUpdate(story.id);
   const {load, show, isClosed, checkAdShow} = useAd();
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const EditStoryScreen = ({navigation, route}: TEditStory) => {
 
   const onUpdatingStory = async () => {
     const newStory = settingStoryData();
-    await editStoryMutation.mutateAsync(newStory);
+    await updateStoryMutation.mutateAsync(newStory);
   };
 
   const onUpdateStorySuccess = () => {
@@ -204,4 +204,4 @@ const EditStoryScreen = ({navigation, route}: TEditStory) => {
   );
 };
 
-export default EditStoryScreen;
+export default UpdateStoryScreen;

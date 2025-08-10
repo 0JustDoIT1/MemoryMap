@@ -8,7 +8,7 @@ const useStoryUpdate = (storyId?: string) => {
   const queryClient = useQueryClient();
 
   // React-Query Mutation
-  const editStoryMutation = useMutation({
+  const updateStoryMutation = useMutation({
     mutationFn: (data: IStory) => addStoryByRegionId(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -57,7 +57,11 @@ const useStoryUpdate = (storyId?: string) => {
       }),
   });
 
-  return {editStoryMutation, addStoryMutation, updateMapMutation};
+  return {
+    updateStoryMutation,
+    addStoryMutation,
+    updateMapMutation,
+  };
 };
 
 export default useStoryUpdate;

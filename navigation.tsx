@@ -12,7 +12,7 @@ import SettingScreen from 'src/screens/setting';
 import RootScreen from 'src/screens/root';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Pressable} from 'react-native';
-import EditStoryScreen from 'src/screens/editStory';
+import UpdateStoryScreen from 'src/screens/updateStory';
 import SelectRegionScreen from 'src/screens/selectRegion';
 import ViewStoryScreen from 'src/screens/viewStory';
 import DashboardScreen from 'src/screens/dashboard';
@@ -178,8 +178,8 @@ const Navigation = () => {
           })}
         />
         <Stack.Screen
-          name="EditStory"
-          component={EditStoryScreen}
+          name="UpdateStory"
+          component={UpdateStoryScreen}
           options={({navigation}) => ({
             headerShown: true,
             headerTitle: '스토리 수정',

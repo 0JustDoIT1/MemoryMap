@@ -19,7 +19,7 @@ export type TStackParamList = {
   AddStory: {
     regionId?: string;
   };
-  EditStory: {
+  UpdateStory: {
     story: IStory;
   };
   ViewStory: {
@@ -48,7 +48,10 @@ export type TStory = NativeStackScreenProps<TStackParamList, 'Story'>;
 export type TSetting = NativeStackScreenProps<TStackParamList, 'Setting'>;
 export type TSub = NativeStackScreenProps<TStackParamList, 'Sub'>;
 export type TAddStory = NativeStackScreenProps<TStackParamList, 'AddStory'>;
-export type TEditStory = NativeStackScreenProps<TStackParamList, 'EditStory'>;
+export type TUpdateStory = NativeStackScreenProps<
+  TStackParamList,
+  'UpdateStory'
+>;
 export type TViewStory = NativeStackScreenProps<TStackParamList, 'ViewStory'>;
 export type TSelectRegion = NativeStackScreenProps<
   TStackParamList,
