@@ -1,6 +1,7 @@
 import {AdUnitId} from '@env';
 import {useInterstitialAd} from 'react-native-google-mobile-ads';
 import {
+  adShowType,
   appAdMapCount,
   appAdMapMaxNum,
   appAdStoryMaxNum,
@@ -19,7 +20,7 @@ const useAd = () => {
 
   const checkAdShow = async (type: IAppAdShowType) => {
     const count = await getAsyncStorage(appAdMapCount);
-    const maxNum = type === 'map' ? appAdMapMaxNum : appAdStoryMaxNum;
+    const maxNum = type === adShowType.map ? appAdMapMaxNum : appAdStoryMaxNum;
 
     if (Number(count) === maxNum) {
       await setAsyncStorage(appAdMapCount, '0');

@@ -15,6 +15,7 @@ import {IKoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {showBottomToast} from 'src/utils/showToast';
+import {adShowType} from 'src/constants/app';
 
 interface ColorPickerModal {
   regionData: IKoreaRegionData;
@@ -58,7 +59,7 @@ const ColorPickerModal = ({
   const onUploadColor = async () => {
     try {
       disabledButton();
-      const adShow = await checkAdShow('map');
+      const adShow = await checkAdShow(adShowType.map);
       if (adShow) {
         show();
         await onUploadingColor();

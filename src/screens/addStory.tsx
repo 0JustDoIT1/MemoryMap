@@ -20,6 +20,7 @@ import useStoryUpdate from 'src/hook/story/useStoryUpdate';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';
+import {adShowType} from 'src/constants/app';
 
 const AddStoryScreen = ({navigation, route}: TAddStory) => {
   // Bottom Sheet Ref
@@ -57,13 +58,19 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
   const {addStoryMutation, updateMapMutation} = useStoryUpdate();
   const {load, show, isClosed, checkAdShow} = useAd();
 
+  // 광고 닫힘 후 성공 네비게이션이 중복되지 않도록 보호
+  const pendingAdActionRef = useRef(false);
+
   useEffect(() => {
     load();
-    if (isClosed) {
+  }, [load]);
+
+  useEffect(() => {
+    if (isClosed && pendingAdActionRef.current) {
       onAddStorySuccess();
-      load();
+      load(); // 다음 광고 로드
     }
-  }, [load, isClosed]);
+  }, [isClosed, load]);
 
   // BottomSheet opens when date is selected
   const onPressDate = () => {
@@ -90,17 +97,16 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
 
   // Add Story
   const onAddStory = async () => {
+    if (!isColorSuccess) return;
+    disabledButton();
     try {
-      if (isColorSuccess) {
-        disabledButton();
-        const adShow = await checkAdShow('story');
-        if (adShow) {
-          show();
-          await onAddingStory();
-        } else {
-          await onAddingStory();
-          onAddStorySuccess();
-        }
+      const adShow = await checkAdShow(adShowType.story);
+      if (adShow) {
+        show();
+        await onAddingStory();
+      } else {
+        await onAddingStory();
+        onAddStorySuccess();
       }
     } catch (error) {
       abledButton();

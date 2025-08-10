@@ -7,8 +7,14 @@ export const appTableName = {
 
 // App
 export const appName = 'MemoryMap';
+
+// AD
 export const appAdMapMaxNum = 1;
 export const appAdStoryMaxNum = 1;
+export const adShowType = {
+  map: 'map',
+  story: 'story',
+} as const;
 
 // AsyncStorage
 export const appShowRegionNameKey = 'appShowRegionName';

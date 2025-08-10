@@ -16,6 +16,7 @@ import useStoryInput from 'src/hook/useStoryInput';
 import useStoryUpdate from 'src/hook/story/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';
+import {adShowType} from 'src/constants/app';
 
 const EditStoryScreen = ({navigation, route}: TEditStory) => {
   // Bottom Sheet Ref
@@ -76,7 +77,7 @@ const EditStoryScreen = ({navigation, route}: TEditStory) => {
   const onUpdateStory = async () => {
     try {
       disabledButton();
-      const adShow = await checkAdShow('story');
+      const adShow = await checkAdShow(adShowType.story);
       if (adShow) {
         show();
         await onUpdatingStory();

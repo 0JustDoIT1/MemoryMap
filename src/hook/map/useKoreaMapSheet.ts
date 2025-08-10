@@ -12,6 +12,7 @@ import useKoreaMapMutation from './useKoreaMapMutation';
 import useDialog from '../useDialog';
 import useBottomSheetBackHandler from '../useBottomSheetBackHandler';
 import useAd from '../useAd';
+import {adShowType} from 'src/constants/app';
 
 const useKoreaMapSheet = (
   regionData: IKoreaRegionData,
@@ -65,7 +66,7 @@ const useKoreaMapSheet = (
       try {
         disabledButton();
         startLoading();
-        const adShow = await checkAdShow('map');
+        const adShow = await checkAdShow(adShowType.map);
         if (adShow) {
           show();
           await onUploadingPhoto(path);
