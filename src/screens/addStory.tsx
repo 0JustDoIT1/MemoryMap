@@ -1,28 +1,25 @@
-import React, {useCallback, useEffect, useRef} from 'react';
-import {Keyboard, Pressable, View} from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import React, {useCallback, useRef} from 'react';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
 import {TAddStory} from 'src/types/stack';
-import CustomBottomSheet from 'src/components/common/bottomSheet';
 import {BrandDynamicButton} from 'src/components/common/button';
-import {dateToFormatString} from 'src/utils/dateFormat';
-import {storyPointArray} from 'src/constants/point';
 import NotFound from 'src/components/view/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import BrandCalendar from 'src/components/common/calendar';
-import SelectPoint from 'src/components/common/selectPoint';
-import useButton from 'src/hook/useButton';
-import useStoryInput from 'src/hook/useStoryInput';
-import useKoreaMapQuery from 'src/hook/map/useKoreaMapQuery';
-import useStoryUpdate from 'src/hook/story/useStoryUpdate';
+import useStoryInput from 'src/hook/story/useStoryInput';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/useBackButton';
-import useAd from 'src/hook/useAd';
-import {adShowType} from 'src/constants/app';
+import LoadingScreen from './loadingScreen';
+import {useAddStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
+import {useAddStory} from 'src/hook/story/useAddStory';
+import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
+import AddStoryContent from 'src/components/story/addStoryContent';
+import AddStoryCalendarSheet from 'src/components/story/addStoryCalendarSheet';
 
 const AddStoryScreen = ({navigation, route}: TAddStory) => {
+  const region = route.params.regionId ? route.params.regionId : '';
+
   // Bottom Sheet Ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // Bottom Sheet present event
@@ -33,10 +30,10 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
   // Bottom Sheet close event
   const handleClosePress = () => bottomSheetModalRef.current?.close();
 
+  // 뒤로가기 버튼 hook
   useBackButton(() => navigation.goBack());
 
-  const region = route.params.regionId ? route.params.regionId : '';
-
+  // story form input hook
   const {
     regionId,
     regionTitle,
@@ -51,205 +48,89 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
     point,
     setPoint,
     settingStoryData,
+    isSaveDisabled,
+    dateLabel,
   } = useStoryInput(false, {...StoryInit, regionId: region});
-  const {isDisabled, disabledButton, abledButton} = useButton();
-  const {isColorSuccess, isColorLoading, isColorError, colorData} =
-    useKoreaMapQuery();
-  const {addStoryMutation, updateMapMutation} = useStoryUpdate();
-  const {load, show, isClosed, checkAdShow} = useAd();
 
-  // 광고 닫힘 후 성공 네비게이션이 중복되지 않도록 보호
-  const pendingAdActionRef = useRef(false);
+  // 캘린더 hook
+  const {onPressDate, onDatePicker} = useAddStoryCalendar({
+    setSelectedStartDate,
+    setSelectedEndDate,
+    handlePresentPress,
+    handleClosePress,
+  });
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  // 지역 관련 hook
+  const {
+    onPressRegion,
+    isRegionSelectable,
+    isColorSuccess,
+    isColorLoading,
+    isColorError,
+  } = useSelectRegion(navigation);
 
-  useEffect(() => {
-    if (isClosed && pendingAdActionRef.current) {
-      onAddStorySuccess();
-      load(); // 다음 광고 로드
-    }
-  }, [isClosed, load]);
+  // 저장 플로우 hook
+  const {isDisabled, isBusy, onAddStory} = useAddStory({
+    settingStoryData,
+    regionId,
+    onAddStorySuccess: () => navigation.navigate('Main', {screen: 'Story'}),
+  });
 
-  // BottomSheet opens when date is selected
-  const onPressDate = () => {
-    Keyboard.dismiss();
-    handlePresentPress();
-  };
+  if (isColorError) {
+    return null;
+  }
 
-  // Navigate to region selection page
-  const onPressRegion = () => {
-    if (isColorSuccess && colorData) {
-      navigation.navigate('SelectRegion', {
-        regionList: colorData.all,
-        regionMainList: colorData.main,
-      });
-    }
-  };
-
-  // Select Date
-  const onDatePicker = (startDate: Date, endDate: Date) => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDate(endDate);
-    handleClosePress();
-  };
-
-  // Add Story
-  const onAddStory = async () => {
-    if (!isColorSuccess) return;
-    disabledButton();
-    try {
-      const adShow = await checkAdShow(adShowType.story);
-      if (adShow) {
-        show();
-        await onAddingStory();
-      } else {
-        await onAddingStory();
-        onAddStorySuccess();
-      }
-    } catch (error) {
-      abledButton();
-      return;
-    }
-  };
-
-  const onAddingStory = async () => {
-    const newStory = settingStoryData();
-    await addStoryMutation.mutateAsync(newStory);
-    await updateMapMutation.mutateAsync({
-      id: regionId,
-      count: 1,
-    });
-  };
-
-  const onAddStorySuccess = () => {
-    navigation.navigate('Main', {screen: 'Story'});
-  };
+  if (isColorLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      {isColorError && <></>}
-      {isColorLoading && <></>}
-      {isColorSuccess && colorData && (
-        <React.Fragment>
-          {colorData.main.length >= 1 ? (
-            <React.Fragment>
-              <Pressable
-                className="w-full"
-                onPress={onPressRegion}
-                disabled={isDisabled}>
-                <TextInput
-                  className="w-full bg-white"
-                  mode="outlined"
-                  label="지역을 선택해 주세요."
-                  activeOutlineColor={customColor.brandMain}
-                  editable={false}
-                  value={regionTitle}
-                />
-              </Pressable>
-              <View className="w-full flex-row justify-between items-center mt-2">
-                <Pressable
-                  className="w-full"
-                  onPress={onPressDate}
-                  disabled={isDisabled}>
-                  <TextInput
-                    className="w-full bg-white"
-                    mode="outlined"
-                    label="여행일자"
-                    activeOutlineColor={customColor.brandMain}
-                    editable={false}
-                    value={
-                      selectedStartDate && selectedEndDate
-                        ? `${dateToFormatString(selectedStartDate, 'YYYY.MM.DD (ddd)')} ~ ${dateToFormatString(selectedEndDate, 'YYYY.MM.DD (ddd)')}`
-                        : ''
-                    }
-                  />
-                </Pressable>
-              </View>
-              <View className="w-full mt-2">
-                <TextInput
-                  className="w-full bg-white"
-                  mode="outlined"
-                  label="제목"
-                  placeholder="(10자)"
-                  activeOutlineColor={customColor.brandMain}
-                  value={title}
-                  maxLength={10}
-                  onChangeText={setTitle}
-                />
-                <TextInput
-                  className="w-full bg-white h-40 mt-2"
-                  mode="outlined"
-                  label="내용"
-                  placeholder="(100자)"
-                  activeOutlineColor={customColor.brandMain}
-                  multiline={true}
-                  value={contents}
-                  maxLength={100}
-                  onChangeText={setContents}
-                />
-              </View>
-              <View className="mt-8">
-                <Text className="text-sm ml-2">여행은 즐거우셨나요?</Text>
-                <View className="w-full mt-4 flex-row justify-between items-center">
-                  {storyPointArray.map(item => (
-                    <SelectPoint
-                      key={item.point}
-                      item={item}
-                      point={point}
-                      setPoint={setPoint}
-                    />
-                  ))}
-                </View>
-              </View>
-
-              <View className="w-full mt-auto">
-                <BrandDynamicButton
-                  classes="w-full"
-                  text="저장"
-                  isDisabled={
-                    regionId === '' ||
-                    !selectedStartDate ||
-                    !selectedEndDate ||
-                    title === '' ||
-                    contents === '' ||
-                    point === 0 ||
-                    isDisabled
-                  }
-                  onPress={onAddStory}
-                />
-              </View>
-              <CustomBottomSheet
-                ref={bottomSheetModalRef}
-                snap="60%"
-                contents={
-                  <BrandCalendar
-                    selectedStartDate={selectedStartDate!}
-                    selectedEndDate={selectedEndDate!}
-                    onDatePicker={onDatePicker}
-                    close={handleClosePress}
-                  />
-                }
-              />
-            </React.Fragment>
-          ) : (
-            <NotFound
-              icon={
-                <MaterialCommunityIcons
-                  name="map-search-outline"
-                  size={90}
-                  color={customColor.blackOpacity}
-                />
-              }
-              title="색칠된 지역이 없습니다."
-              description="지도에서 색칠한 후에 스토리를 작성해 주세요."
-              onPress={() => navigation.navigate('Main', {screen: 'Map'})}
+      {isRegionSelectable ? (
+        <>
+          <AddStoryContent
+            regionTitle={regionTitle}
+            title={title}
+            setTitle={setTitle}
+            contents={contents}
+            setContents={setContents}
+            point={point}
+            setPoint={setPoint}
+            dateLabel={dateLabel}
+            onPressRegion={onPressRegion}
+            onPressDate={onPressDate}
+          />
+          <View className="w-full mt-auto">
+            <BrandDynamicButton
+              classes="w-full"
+              text={isBusy ? '저장 중...' : '저장'}
+              isDisabled={isSaveDisabled || isDisabled}
+              onPress={onAddStory}
             />
-          )}
-        </React.Fragment>
+          </View>
+          <AddStoryCalendarSheet
+            bottomSheetRef={bottomSheetModalRef}
+            start={selectedStartDate ?? new Date()}
+            end={selectedEndDate ?? new Date()}
+            onPick={onDatePicker}
+            onClose={handleClosePress}
+          />
+        </>
+      ) : (
+        <NotFound
+          icon={
+            <MaterialCommunityIcons
+              name="map-search-outline"
+              size={90}
+              color={customColor.blackOpacity}
+            />
+          }
+          title="색칠된 지역이 없습니다."
+          description="지도에서 색칠한 후에 스토리를 작성해 주세요."
+          onPress={() => navigation.navigate('Main', {screen: 'Map'})}
+        />
       )}
     </SafeAreaView>
   );

@@ -12,7 +12,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import BrandCalendar from 'src/components/common/calendar';
 import SelectPoint from 'src/components/common/selectPoint';
 import useButton from 'src/hook/useButton';
-import useStoryInput from 'src/hook/useStoryInput';
+import useStoryInput from 'src/hook/story/useStoryInput';
 import useStoryUpdate from 'src/hook/story/useStoryUpdate';
 import useBackButton from 'src/hook/useBackButton';
 import useAd from 'src/hook/useAd';

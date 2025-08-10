@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {IStory} from 'src/types/story';
 import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
@@ -61,6 +61,26 @@ const useStoryInput = (edit: boolean, data: IStory) => {
     return story;
   };
 
+  // 저장 버튼 비활성화 조건
+  const isSaveDisabled = useMemo(
+    () =>
+      regionId === '' ||
+      !selectedStartDate ||
+      !selectedEndDate ||
+      title.trim() === '' ||
+      contents.trim() === '' ||
+      point === 0,
+    [regionId, selectedStartDate, selectedEndDate, title, contents, point],
+  );
+
+  // 날짜 label
+  const dateLabel = useMemo(() => {
+    if (selectedStartDate && selectedEndDate) {
+      return `${dateToFormatString(selectedStartDate, 'YYYY.MM.DD (ddd)')} ~ ${dateToFormatString(selectedEndDate, 'YYYY.MM.DD (ddd)')}`;
+    }
+    return '';
+  }, [selectedStartDate, selectedEndDate]);
+
   return {
     regionId,
     setRegionId,
@@ -77,6 +97,8 @@ const useStoryInput = (edit: boolean, data: IStory) => {
     point,
     setPoint,
     settingStoryData,
+    isSaveDisabled,
+    dateLabel,
   };
 };
 
