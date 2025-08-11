@@ -8,7 +8,7 @@ import {adShowType} from 'src/constants/app';
 import {useRegionImagePicker} from './useRegionImagePicker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 
-export const useRegionUpload = (
+export const useRegionImageUpload = (
   regionData: IKoreaRegionData,
   closeSheet: () => void,
 ) => {

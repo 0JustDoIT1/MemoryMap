@@ -3,7 +3,7 @@ import {useActionLock} from '../common/useActionLock';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import useDialog from '../useDialog';
 
-export const useRegionDelete = (
+export const useRegionBackgroundDelete = (
   regionData: IKoreaRegionData,
   closeSheet: () => void,
 ) => {

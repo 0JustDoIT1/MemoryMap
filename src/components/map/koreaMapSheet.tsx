@@ -12,8 +12,8 @@ import KoreaMapSheetButtons from './koreaMapSheetButtons';
 import KoreaMapSheetOverlays from './koreaMapSheetOverlay';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {useKoreaMapSheetControl} from 'src/hook/mapSheet/useKoreaMapSheetControl';
-import {useRegionUpload} from 'src/hook/mapSheet/useRegionUpload';
-import {useRegionDelete} from 'src/hook/mapSheet/useRegionDelete';
+import {useRegionImageUpload} from 'src/hook/mapSheet/useRegionImageUpload';
+import {useRegionBackgroundDelete} from 'src/hook/mapSheet/useRegionBackgroundDelete';
 import useModal from 'src/hook/useModal';
 
 interface KoreaMapSheetProps {
@@ -42,7 +42,7 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
     isDisabled: isUploadDisabled,
     onLoading: onUploadLoading,
     onImagePicker,
-  } = useRegionUpload(regionData, handleClosePress);
+  } = useRegionImageUpload(regionData, handleClosePress);
 
   const {
     visibleDialog,
@@ -51,12 +51,12 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
     isDisabled: isDeleteDisabled,
     onLoading: onDeleteLoading,
     onDeleteBackground,
-  } = useRegionDelete(regionData, handleClosePress);
+  } = useRegionBackgroundDelete(regionData, handleClosePress);
 
   const [zoom, setZoom] = useState<boolean>(false);
 
   return (
-    <React.Fragment>
+    <>
       <BottomSheetModal
         ref={mapSheetModalRef}
         index={BOTTOM_SHEET_DEFAULT_INDEX}
@@ -95,7 +95,7 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
         onLoading={onUploadLoading || onDeleteLoading}
         handleClosePress={handleClosePress}
       />
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,21 +1,14 @@
-import {useEffect, useState} from 'react';
 import {Pressable, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Portal, Text} from 'react-native-paper';
 import ColorPicker, {
   HueSlider,
   Panel1,
-  returnedResults,
   Swatches,
 } from 'reanimated-color-picker';
-import useAd from 'src/hook/ad/useAd';
-import useButton from 'src/hook/useButton';
-import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
-import {customStyle} from 'src/style/customStyle';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
-import {getRegionTitle} from 'src/utils/koreaMap.util';
-import {showBottomToast} from 'src/utils/showToast';
-import {adShowType} from 'src/constants/app';
+import LoadingScreen from 'src/screens/loadingScreen';
+import {useRegionColorPicker} from 'src/hook/mapSheet/useRegionColorPicker';
+import {useRegionColorUpload} from 'src/hook/mapSheet/useRegionColorUpload';
 
 interface ColorPickerModal {
   regionData: IKoreaRegionData;
@@ -28,110 +21,45 @@ const ColorPickerModal = ({
   hideModal,
   handleClosePress,
 }: ColorPickerModal) => {
-  const {isDisabled, disabledButton, abledButton} = useButton();
-  const {updateMapByColorMutation} = useKoreaMapMutation();
-  const {load, show, isClosed, checkAdShow} = useAd();
+  // 색상/모드 상태 훅
+  const {
+    mode,
+    hex,
+    initialHex,
+    prevLeftStyle,
+    prevRightStyle,
+    onChangeMode,
+    onColorSelect,
+  } = useRegionColorPicker(regionData);
 
-  const [mode, setMode] = useState<boolean>(false);
-  const [hex, setHex] = useState<string>(
-    regionData.type === 'color' ? regionData.background : '#ffffff',
-  );
-
-  useEffect(() => {
-    load();
-    if (isClosed) {
-      onUploadColorSuccess();
-      load();
-    }
-  }, [load, isClosed]);
-
-  // Change ColorPicker mode(swatch <=> pannel)
-  const onChangeMode = () => {
-    setMode(!mode);
-  };
-
-  // Select Color
-  const onColorSelect = (color: returnedResults) => {
-    setHex(color.hex);
-  };
-
-  // Color the map with hex
-  const onUploadColor = async () => {
-    try {
-      disabledButton();
-      const adShow = await checkAdShow(adShowType.map);
-      if (adShow) {
-        show();
-        await onUploadingColor();
-      } else {
-        await onUploadingColor();
-        onUploadColorSuccess();
-      }
-    } catch (error) {
-      abledButton();
-      return;
-    }
-  };
-
-  const onUploadingColor = async () => {
-    await updateMapByColorMutation.mutateAsync({
-      data: regionData,
-      color: hex,
-    });
-  };
-
-  const onUploadColorSuccess = () => {
-    abledButton();
-    hideModal();
-    handleClosePress();
-    showBottomToast('success', `${getRegionTitle(regionData)} 색칠 완료!`);
-  };
+  // 업로드 훅
+  const {isDisabled, onLoading, onUploadColor} = useRegionColorUpload({
+    regionData,
+    hex,
+    hideModal,
+    handleClosePress,
+  });
 
   return (
-    <View>
+    <>
       <Text className="text-lg mb-4">색상 선택</Text>
       {mode ? (
-        <ColorPicker
-          value={
-            regionData.type === 'color' ? regionData.background : '#ffffff'
-          }
-          onChange={onColorSelect}>
+        <ColorPicker value={initialHex} onChange={onColorSelect}>
           <View className="flex-row justify-between">
             <Panel1 style={{width: '85%'}} thumbSize={15} />
             <HueSlider vertical thumbShape="pill" thumbColor="#000000" />
           </View>
         </ColorPicker>
       ) : (
-        <ColorPicker
-          value={
-            regionData.type === 'color' ? regionData.background : '#ffffff'
-          }
-          onChange={onColorSelect}>
+        <ColorPicker value={initialHex} onChange={onColorSelect}>
           <Swatches />
         </ColorPicker>
       )}
       <View className="flex-row border border-black mt-4">
-        <Text
-          className="w-1/2 text-center py-1"
-          style={
-            customStyle({
-              bgColor:
-                regionData.type === 'color' ? regionData.background : '#ffffff',
-              color: getTextColorByBackgroundColor(
-                regionData.type === 'color' ? regionData.background : '#ffffff',
-              ),
-            }).colorPickerPreview
-          }>
-          {regionData.type === 'color' ? regionData.background : '#ffffff'}
+        <Text className="w-1/2 text-center py-1" style={prevLeftStyle}>
+          {initialHex}
         </Text>
-        <Text
-          className="w-1/2 text-center py-1"
-          style={
-            customStyle({
-              bgColor: hex,
-              color: getTextColorByBackgroundColor(hex),
-            }).colorPickerPreview
-          }>
+        <Text className="w-1/2 text-center py-1" style={prevRightStyle}>
           {hex}
         </Text>
       </View>
@@ -146,7 +74,12 @@ const ColorPickerModal = ({
           <Text className="text-brandMain">색칠하기</Text>
         </Pressable>
       </View>
-    </View>
+      {onLoading && (
+        <Portal>
+          <LoadingScreen />
+        </Portal>
+      )}
+    </>
   );
 };
 export default ColorPickerModal;
