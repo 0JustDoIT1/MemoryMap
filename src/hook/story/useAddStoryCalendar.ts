@@ -1,19 +1,19 @@
 import {useCallback} from 'react';
 import {Keyboard} from 'react-native';
 
-interface IUseAddStoryCalendar {
+interface IUseStoryCalendar {
   setSelectedStartDate: (d: Date) => void;
   setSelectedEndDate: (d: Date) => void;
   handlePresentPress: () => void;
   handleClosePress: () => void;
 }
 
-export const useAddStoryCalendar = ({
+export const useStoryCalendar = ({
   setSelectedStartDate,
   setSelectedEndDate,
   handlePresentPress,
   handleClosePress,
-}: IUseAddStoryCalendar) => {
+}: IUseStoryCalendar) => {
   // BottomSheet opens when date is selected
   const onPressDate = useCallback(() => {
     Keyboard.dismiss();

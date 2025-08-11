@@ -11,7 +11,7 @@ import useStoryInput from 'src/hook/story/useStoryInput';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/useBackButton';
 import LoadingScreen from './loadingScreen';
-import {useAddStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
+import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useAddStory} from 'src/hook/story/useAddStory';
 import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
 import AddStoryContent from 'src/components/story/addStoryContent';
@@ -54,7 +54,7 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
   } = useStoryInput(false, {...StoryInit, regionId: region});
 
   // 캘린더 hook
-  const {onPressDate, onDatePicker} = useAddStoryCalendar({
+  const {onPressDate, onDatePicker} = useStoryCalendar({
     setSelectedStartDate,
     setSelectedEndDate,
     handlePresentPress,

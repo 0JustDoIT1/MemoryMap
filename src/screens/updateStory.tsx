@@ -8,7 +8,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
 import useBackButton from 'src/hook/useBackButton';
 import {TUpdateStory} from 'src/types/stack';
-import {useAddStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
+import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useUpdateStory} from 'src/hook/story/useUpdateStory';
 import AddStoryContent from 'src/components/story/addStoryContent';
 import AddStoryCalendarSheet from 'src/components/story/addStoryCalendarSheet';
@@ -48,7 +48,7 @@ const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
   } = useStoryInput(true, story);
 
   // 캘린더 hook
-  const {onPressDate, onDatePicker} = useAddStoryCalendar({
+  const {onPressDate, onDatePicker} = useStoryCalendar({
     setSelectedStartDate,
     setSelectedEndDate,
     handlePresentPress,
