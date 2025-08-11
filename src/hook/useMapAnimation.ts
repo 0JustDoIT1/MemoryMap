@@ -5,17 +5,15 @@ import {MAP_EDGE_OFFSET, MIN_SCALE} from 'src/constants/map';
 const clamp = (val: number, min: number, max: number) =>
   Math.min(Math.max(val, min), max);
 
-export function useMapAnimation(
-  width: number,
-  height: number,
-  MAX_SCALE: number,
-) {
+export function useMapAnimation(width: number, height: number) {
   const translationX = useSharedValue(0);
   const translationY = useSharedValue(0);
   const prevTranslationX = useSharedValue(0);
   const prevTranslationY = useSharedValue(0);
   const scale = useSharedValue(1);
   const startScale = useSharedValue(0);
+
+  const MAX_SCALE = Math.min(width / 80, height / 80);
 
   const resetTransform = () => {
     scale.value = 1;

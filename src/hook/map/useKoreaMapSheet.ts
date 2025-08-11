@@ -11,7 +11,7 @@ import useButton from '../useButton';
 import useKoreaMapMutation from './useKoreaMapMutation';
 import useDialog from '../useDialog';
 import useBottomSheetBackHandler from '../useBottomSheetBackHandler';
-import useAd from '../useAd';
+import useAd from '../ad/useAd';
 import {adShowType} from 'src/constants/app';
 
 const useKoreaMapSheet = (

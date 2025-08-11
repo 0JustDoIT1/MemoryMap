@@ -3,7 +3,7 @@ import {adShowType} from 'src/constants/app';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/showToast';
 import useButton from '../useButton';
-import useAd from '../useAd';
+import useAd from '../ad/useAd';
 import useStoryUpdate from './useStoryUpdate';
 
 interface IUseAddStory {

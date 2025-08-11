@@ -7,7 +7,7 @@ import ColorPicker, {
   returnedResults,
   Swatches,
 } from 'reanimated-color-picker';
-import useAd from 'src/hook/useAd';
+import useAd from 'src/hook/ad/useAd';
 import useButton from 'src/hook/useButton';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {customStyle} from 'src/style/customStyle';

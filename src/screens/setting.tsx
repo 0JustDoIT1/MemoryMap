@@ -21,7 +21,7 @@ import {showBottomToast} from 'src/utils/showToast';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
-import useAd from 'src/hook/useAd';
+import useAd from 'src/hook/ad/useAd';
 import useExitApp from 'src/hook/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 
