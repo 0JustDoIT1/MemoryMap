@@ -1,0 +1,33 @@
+// src/hook/map/useKoreaRegionSheet.ts
+import {useCallback, useState} from 'react';
+import {IKoreaMapDataObject, IKoreaRegionData} from 'src/types/koreaMap';
+import {koreaRegionEmpty} from 'src/constants/koreaMapData';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+
+export const useKoreaMapRegionSheet = (
+  mapData: IKoreaMapDataObject | undefined,
+  mapRef: React.RefObject<BottomSheetModal | null>,
+) => {
+  const [regionData, setRegionData] =
+    useState<IKoreaRegionData>(koreaRegionEmpty);
+
+  const handlePresentPress = useCallback(() => {
+    mapRef.current?.present();
+  }, []);
+
+  /** KoreaMapSvg에서 호출할 프레스 핸들러 */
+  const onRegionPress = useCallback(
+    (key: string) => {
+      if (!mapData || !mapData[key]) return;
+      setRegionData(mapData[key]);
+      handlePresentPress();
+    },
+    [mapData],
+  );
+
+  return {
+    regionData,
+    setRegionData,
+    onRegionPress,
+  };
+};

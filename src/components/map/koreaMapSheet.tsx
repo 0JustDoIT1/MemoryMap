@@ -11,7 +11,7 @@ import KoreaMapSheetTagList from './koreaMapSheetTagList';
 import KoreaMapSheetButtons from './koreaMapSheetButtons';
 import KoreaMapSheetOverlays from './koreaMapSheetOverlay';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import useKoreaMapSheet from 'src/hook/map/useKoreaMapSheet';
+import useKoreaMapSheet from 'src/hook/mapSheet/useKoreaMapSheet';
 
 interface KoreaMapSheetProps {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
