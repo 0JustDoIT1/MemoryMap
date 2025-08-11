@@ -8,7 +8,7 @@ import {TMap} from 'src/types/stack';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import {useAppTheme} from 'src/style/paperTheme';
 import {customStyle} from 'src/style/customStyle';
-import useExitApp from 'src/hook/useExitApp';
+import useExitApp from 'src/hook/common/useExitApp';
 import KoreaMap from 'src/components/map/koreaMap';
 import LoadingScreen from './loadingScreen';
 import {GestureDetector} from 'react-native-gesture-handler';

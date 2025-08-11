@@ -8,7 +8,7 @@ import {TBackUp} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
 import LoadingScreen from './loadingScreen';
 import {useState} from 'react';
-import useBackButton from 'src/hook/useBackButton';
+import useBackButton from 'src/hook/common/useBackButton';
 
 const BackUpScreen = ({navigation}: TBackUp) => {
   const {backupAppData, getAppData} = useBackUp();

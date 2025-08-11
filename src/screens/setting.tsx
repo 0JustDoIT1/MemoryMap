@@ -14,15 +14,15 @@ import {
   TermServiceUrl,
 } from 'src/constants/linking';
 import CustomAlert from 'src/components/alert/alert';
-import useButton from 'src/hook/useButton';
-import useDialog from 'src/hook/useDialog';
+import useButton from 'src/hook/common/useButton';
+import useDialog from 'src/hook/common/useDialog';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
 import {customStyle} from 'src/style/customStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import useAd from 'src/hook/ad/useAd';
-import useExitApp from 'src/hook/useExitApp';
+import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 
 const SettingScreen = ({navigation}: TSetting) => {

@@ -8,7 +8,7 @@ import {Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {forwardRef, useCallback, useMemo} from 'react';
-import useBottomSheetBackHandler from 'src/hook/useBottomSheetBackHandler';
+import useBottomSheetBackHandler from 'src/hook/bottomSheet/useBottomSheetBackHandler';
 
 interface CustomBottomSheet {
   snap: string;

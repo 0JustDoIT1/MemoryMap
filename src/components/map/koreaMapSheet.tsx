@@ -14,7 +14,7 @@ import {IKoreaRegionData} from 'src/types/koreaMap';
 import {useKoreaMapSheetControl} from 'src/hook/mapSheet/useKoreaMapSheetControl';
 import {useRegionImageUpload} from 'src/hook/mapSheet/useRegionImageUpload';
 import {useRegionBackgroundDelete} from 'src/hook/mapSheet/useRegionBackgroundDelete';
-import useModal from 'src/hook/useModal';
+import useModal from 'src/hook/common/useModal';
 
 interface KoreaMapSheetProps {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;

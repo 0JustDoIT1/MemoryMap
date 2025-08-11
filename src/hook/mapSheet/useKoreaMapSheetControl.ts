@@ -1,6 +1,6 @@
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useCallback, useMemo} from 'react';
-import useBottomSheetBackHandler from '../useBottomSheetBackHandler';
+import useBottomSheetBackHandler from '../bottomSheet/useBottomSheetBackHandler';
 
 export const useKoreaMapSheetControl = (
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>,

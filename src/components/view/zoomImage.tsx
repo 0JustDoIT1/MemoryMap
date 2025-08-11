@@ -14,7 +14,7 @@ import Toast from 'react-native-toast-message';
 import {toastConfig} from 'src/style/toast.config';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
-import useBackButton from 'src/hook/useBackButton';
+import useBackButton from 'src/hook/common/useBackButton';
 
 interface ZoomImage {
   data: IKoreaRegionData;

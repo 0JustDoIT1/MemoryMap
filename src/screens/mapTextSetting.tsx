@@ -9,8 +9,8 @@ import {appShowRegionNameKey} from 'src/constants/app';
 import {useEffect, useState} from 'react';
 import {IAppShowRegionName} from 'src/types/appData';
 import {customStyle} from 'src/style/customStyle';
-import useButton from 'src/hook/useButton';
-import useBackButton from 'src/hook/useBackButton';
+import useButton from 'src/hook/common/useButton';
+import useBackButton from 'src/hook/common/useBackButton';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
 
 const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {

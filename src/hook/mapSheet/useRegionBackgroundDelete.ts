@@ -1,7 +1,7 @@
 import useKoreaMapMutation from '../map/useKoreaMapMutation';
 import {useActionLock} from '../common/useActionLock';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import useDialog from '../useDialog';
+import useDialog from '../common/useDialog';
 
 export const useRegionBackgroundDelete = (
   regionData: IKoreaRegionData,

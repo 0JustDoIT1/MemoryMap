@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import useDialog from 'src/hook/useDialog';
+import useDialog from 'src/hook/common/useDialog';
 import {TRoot} from 'src/types/stack';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import {SafeAreaView} from 'react-native-safe-area-context';

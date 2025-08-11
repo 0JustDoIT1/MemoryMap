@@ -1,7 +1,7 @@
 // src/hook/common/useActionLock.ts
 import {useCallback} from 'react';
-import useButton from '../useButton';
-import useLoading from '../useLoading';
+import useButton from './useButton';
+import useLoading from './useLoading';
 
 export const useActionLock = () => {
   const {isDisabled, disabledButton, abledButton} = useButton();

@@ -9,7 +9,7 @@ import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {customStyle} from 'src/style/customStyle';
 import usePinCode from 'src/hook/usePinCode';
-import useBackButton from 'src/hook/useBackButton';
+import useBackButton from 'src/hook/common/useBackButton';
 
 const PinCodeSettingScreen = ({navigation}: TPinCodeSetting) => {
   const {

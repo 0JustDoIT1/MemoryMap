@@ -6,7 +6,7 @@ import {customColor} from 'src/style/customColor';
 import {BrandDynamicButton} from 'src/components/common/button';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
-import useBackButton from 'src/hook/useBackButton';
+import useBackButton from 'src/hook/common/useBackButton';
 import {TUpdateStory} from 'src/types/stack';
 import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useUpdateStory} from 'src/hook/story/useUpdateStory';

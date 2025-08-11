@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomProgressBar from 'src/components/common/progressBar';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import useDashboard from 'src/hook/useDashboard';
-import useExitApp from 'src/hook/useExitApp';
+import useExitApp from 'src/hook/common/useExitApp';
 import {customColor} from 'src/style/customColor';
 import {TDashboard} from 'src/types/stack';
 

@@ -9,7 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
 import {StoryInit} from 'src/constants/story';
-import useBackButton from 'src/hook/useBackButton';
+import useBackButton from 'src/hook/common/useBackButton';
 import LoadingScreen from './loadingScreen';
 import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useAddStory} from 'src/hook/story/useAddStory';

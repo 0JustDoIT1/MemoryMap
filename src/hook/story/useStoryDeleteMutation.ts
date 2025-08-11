@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {deleteStoryById} from 'src/utils/story.db';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
-import useButton from '../useButton';
+import useButton from '../common/useButton';
 import {showBottomToast} from 'src/utils/showToast';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 
