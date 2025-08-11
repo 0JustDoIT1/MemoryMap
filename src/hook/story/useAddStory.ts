@@ -21,12 +21,14 @@ export const useAddStory = ({
   const {runWithAdGate} = useAdGate();
   const {isDisabled, onLoading, wrap} = useActionLock();
 
+  // 실제 추가 이벤트
   const onAddingStory = useCallback(async () => {
     const newStory = settingStoryData();
     await addStoryMutation.mutateAsync(newStory);
     await updateMapMutation.mutateAsync({id: regionId, count: 1});
   }, [settingStoryData, addStoryMutation, updateMapMutation, regionId]);
 
+  // 버튼 handler
   const onAddStory = wrap(async () => {
     try {
       await runWithAdGate(adShowType.story, onAddingStory, onAddStorySuccess);
