@@ -16,5 +16,5 @@ export const useAdStartup = () => {
       show();
       setAppInitAd(true);
     }
-  }, [isLoaded, isClosed, appInitAd]);
+  }, [isLoaded, isClosed, appInitAd, show, setAppInitAd]);
 };

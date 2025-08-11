@@ -11,10 +11,10 @@ import {customStyle} from 'src/style/customStyle';
 import useExitApp from 'src/hook/useExitApp';
 import KoreaMap from 'src/components/map/koreaMap';
 import LoadingScreen from './loadingScreen';
-import {useMapAnimation} from 'src/hook/useMapAnimation';
 import {GestureDetector} from 'react-native-gesture-handler';
 import {useAdStartup} from 'src/hook/ad/useAdStartUp';
 import {useKoreaMapShow} from 'src/hook/map/useKoreaMapShow';
+import {useKoreaMapAnimation} from 'src/hook/map/useKoreaMapAnimation';
 
 const MapScreen = ({navigation}: TMap) => {
   const {width, height} = useWindowDimensions();
@@ -24,7 +24,7 @@ const MapScreen = ({navigation}: TMap) => {
 
   const viewShotRef = useRef<ViewShot | null>(null);
 
-  const {animatedStyles, composed} = useMapAnimation(width, height);
+  const {animatedStyles, composed} = useKoreaMapAnimation(width, height);
   const {show} = useKoreaMapShow();
 
   useAdStartup();
