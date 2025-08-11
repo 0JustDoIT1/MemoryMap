@@ -17,7 +17,7 @@ interface IKoreaMapSheetOverlays {
   onDeleteBackground: () => void;
   isDisabled: boolean;
   zoom: boolean;
-  setZoom: (val: boolean) => void;
+  setZoom: React.Dispatch<React.SetStateAction<boolean>>;
   onLoading: boolean;
   handleClosePress: () => void;
 }

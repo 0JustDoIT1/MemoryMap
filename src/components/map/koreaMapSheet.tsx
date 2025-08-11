@@ -4,14 +4,17 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import {View} from 'react-native';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {BOTTOM_SHEET_DEFAULT_INDEX} from 'src/constants/bottomSheet';
 import KoreaMapSheetHeader from './koreaMapSheetHeader';
 import KoreaMapSheetTagList from './koreaMapSheetTagList';
 import KoreaMapSheetButtons from './koreaMapSheetButtons';
 import KoreaMapSheetOverlays from './koreaMapSheetOverlay';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import useKoreaMapSheet from 'src/hook/mapSheet/useKoreaMapSheet';
+import {useKoreaMapSheetControl} from 'src/hook/mapSheet/useKoreaMapSheetControl';
+import {useRegionUpload} from 'src/hook/mapSheet/useRegionUpload';
+import {useRegionDelete} from 'src/hook/mapSheet/useRegionDelete';
+import useModal from 'src/hook/useModal';
 
 interface KoreaMapSheetProps {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
@@ -19,9 +22,6 @@ interface KoreaMapSheetProps {
 }
 
 const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
-  // Bottom Sheet height setting [index0, index1]
-  const snapPoints = useMemo(() => ['30%', '40%'], []);
-
   // Bottom Sheet close event when background touch
   const renderBackdrop = useMemo(
     () => (props: any) => (
@@ -35,22 +35,25 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
     [],
   );
 
+  const {visible, showModal, hideModal} = useModal();
+  const {snapPoints, handleClosePress, handleSheetPositionChange} =
+    useKoreaMapSheetControl(mapSheetModalRef);
   const {
-    isDisabled,
-    zoom,
-    setZoom,
-    visible,
-    showModal,
-    hideModal,
+    isDisabled: isUploadDisabled,
+    onLoading: onUploadLoading,
+    onImagePicker,
+  } = useRegionUpload(regionData, handleClosePress);
+
+  const {
     visibleDialog,
     showDialog,
     hideDialog,
-    onLoading,
-    onImagePicker,
+    isDisabled: isDeleteDisabled,
+    onLoading: onDeleteLoading,
     onDeleteBackground,
-    handleClosePress,
-    handleSheetPositionChange,
-  } = useKoreaMapSheet(regionData, mapSheetModalRef);
+  } = useRegionDelete(regionData, handleClosePress);
+
+  const [zoom, setZoom] = useState<boolean>(false);
 
   return (
     <React.Fragment>
@@ -65,7 +68,7 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
             <KoreaMapSheetHeader
               regionData={regionData}
               setZoom={setZoom}
-              isDisabled={isDisabled}
+              isDisabled={isUploadDisabled || isDeleteDisabled}
               showDialog={showDialog}
               handleClosePress={handleClosePress}
             />
@@ -73,7 +76,7 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
             <KoreaMapSheetButtons
               onImagePicker={onImagePicker}
               showModal={showModal}
-              isDisabled={isDisabled}
+              isDisabled={isUploadDisabled}
             />
           </View>
         </BottomSheetView>
@@ -86,10 +89,10 @@ const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {
         visibleDialog={visibleDialog}
         hideDialog={hideDialog}
         onDeleteBackground={onDeleteBackground}
-        isDisabled={isDisabled}
+        isDisabled={isDeleteDisabled}
         zoom={zoom}
         setZoom={setZoom}
-        onLoading={onLoading}
+        onLoading={onUploadLoading || onDeleteLoading}
         handleClosePress={handleClosePress}
       />
     </React.Fragment>
