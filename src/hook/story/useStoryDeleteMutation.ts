@@ -5,7 +5,7 @@ import useButton from '../useButton';
 import {showBottomToast} from 'src/utils/showToast';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 
-export const useDeleteStory = (onSuccess: () => void) => {
+export const useStoryDeleteMutation = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
   const {isDisabled, disabledButton, abledButton} = useButton();
 

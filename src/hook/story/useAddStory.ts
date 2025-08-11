@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {adShowType} from 'src/constants/app';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/showToast';
-import useStoryUpdate from './useStoryUpdate';
+import useStoryUpdateMutation from './useStoryUpdateMutation';
 import {useAdGate} from '../ad/useAdGate';
 import {useActionLock} from '../common/useActionLock';
 
@@ -17,7 +17,7 @@ export const useAddStory = ({
   regionId,
   onAddStorySuccess,
 }: IUseAddStory) => {
-  const {addStoryMutation, updateMapMutation} = useStoryUpdate();
+  const {addStoryMutation, updateMapMutation} = useStoryUpdateMutation();
   const {runWithAdGate} = useAdGate();
   const {isDisabled, onLoading, wrap} = useActionLock();
 

@@ -3,7 +3,7 @@ import {useCallback} from 'react';
 import {adShowType} from 'src/constants/app';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/showToast';
-import useStoryUpdate from './useStoryUpdate';
+import useStoryUpdateMutation from './useStoryUpdateMutation';
 import {useAdGate} from '../ad/useAdGate';
 import {useActionLock} from '../common/useActionLock';
 
@@ -18,7 +18,7 @@ export const useUpdateStory = ({
   onUpdateStorySuccess,
   storyId,
 }: IUseUpdateStory) => {
-  const {updateStoryMutation} = useStoryUpdate(storyId);
+  const {updateStoryMutation} = useStoryUpdateMutation(storyId);
   const {runWithAdGate} = useAdGate();
   const {isDisabled, onLoading, wrap} = useActionLock();
 
