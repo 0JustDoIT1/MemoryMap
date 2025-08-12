@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {storyPoint} from 'src/constants/point';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {TViewStory} from 'src/types/stack';
 import useDialog from 'src/hook/common/useDialog';
 import ViewShot from 'react-native-view-shot';
@@ -45,7 +45,7 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
       <View className="w-full h-[90%]">
         <ViewShot
           ref={viewShotRef}
-          style={customStyle().storyViewShot}
+          style={staticStyles.storyViewShot}
           options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
           <StoryViewHeader
             regionId={data.regionId}

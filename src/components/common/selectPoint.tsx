@@ -7,7 +7,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import {Point} from 'src/constants/point';
-import {customStyle} from 'src/style/customStyle';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
+import {staticStyles} from 'src/style/staticStyles';
 
 interface SelectPoint {
   item: Point;
@@ -39,6 +40,8 @@ const SelectPoint = ({item, point, setPoint}: SelectPoint) => {
     setPoint(item.point);
   }, [item.point, setPoint]);
 
+  const styles = useDynamicStyle({color: item.color});
+
   return (
     <AnimatedPressable
       key={item.point}
@@ -48,9 +51,7 @@ const SelectPoint = ({item, point, setPoint}: SelectPoint) => {
       <View className="w-[50px] h-[50px] bg-white rounded-full shadow-sm shadow-black">
         <Image style={{width: 50, height: 50}} source={item.image} />
       </View>
-      <Text
-        className="mt-1"
-        style={customStyle({color: item.color}).storyPointIconText}>
+      <Text className="mt-1" style={styles.storyPointIconText}>
         {item.text}
       </Text>
     </AnimatedPressable>

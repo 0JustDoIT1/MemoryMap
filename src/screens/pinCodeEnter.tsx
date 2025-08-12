@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import PinCodeNumber from 'src/components/view/pinCodeNumber';
 import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {showBottomToast} from 'src/utils/showToast';
 import usePinCode from 'src/hook/usePinCode';
 
@@ -61,7 +61,7 @@ const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
       edges={['bottom', 'left', 'right']}>
       <View className="w-full h-2/3 flex items-center justify-center bg-brandLight">
         <Animated.View
-          style={[customStyle().pinCodeTopContainer, animatedStyle]}>
+          style={[staticStyles.pinCodeTopContainer, animatedStyle]}>
           <View className="w-16 h-16 flex justify-center items-center rounded-full bg-white">
             <MaterialCommunityIcons
               name="lock"

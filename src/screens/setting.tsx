@@ -18,12 +18,13 @@ import useButton from 'src/hook/common/useButton';
 import useDialog from 'src/hook/common/useDialog';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
 import useAd from 'src/hook/ad/useAd';
 import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 
 const SettingScreen = ({navigation}: TSetting) => {
   const theme = useAppTheme();
@@ -94,25 +95,26 @@ const SettingScreen = ({navigation}: TSetting) => {
     await Linking.openURL(TermServiceUrl);
   };
 
+  const cellHasBorder = useDynamicStyle({border: {bottom: 0.5}});
+  const cellNoneBorder = useDynamicStyle();
+
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-.gray-100"
       edges={['top', 'bottom', 'left', 'right']}>
       <ScrollView className="w-full">
-        <TableView style={customStyle().settingTable} appearance="light">
+        <TableView style={staticStyles.settingTable} appearance="light">
           <Section
             sectionPaddingTop={20}
             sectionPaddingBottom={0}
-            headerTextStyle={customStyle().settingTableSectionTitle}
+            headerTextStyle={staticStyles.settingTableSectionTitle}
             hideSurroundingSeparators>
             <Cell
-              contentContainerStyle={
-                customStyle({border: {bottom: 0.5}}).settingTableCell
-              }
+              contentContainerStyle={cellHasBorder.settingTableCell}
               cellStyle="RightDetail"
               title="지역명 표시"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -125,11 +127,11 @@ const SettingScreen = ({navigation}: TSetting) => {
               }
             />
             <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="암호 잠금"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <View className="w-1/2 flex-row justify-end items-center">
@@ -162,16 +164,14 @@ const SettingScreen = ({navigation}: TSetting) => {
           <Section
             sectionPaddingTop={20}
             sectionPaddingBottom={0}
-            headerTextStyle={customStyle().settingTableSectionTitle}
+            headerTextStyle={staticStyles.settingTableSectionTitle}
             hideSurroundingSeparators>
             <Cell
-              contentContainerStyle={
-                customStyle({border: {bottom: 0.5}}).settingTableCell
-              }
+              contentContainerStyle={cellHasBorder.settingTableCell}
               cellStyle="RightDetail"
               title="지도 초기화"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -184,11 +184,11 @@ const SettingScreen = ({navigation}: TSetting) => {
               }
             />
             {/* <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="백업 및 복구"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -204,14 +204,14 @@ const SettingScreen = ({navigation}: TSetting) => {
           <Section
             sectionPaddingTop={20}
             sectionPaddingBottom={0}
-            headerTextStyle={customStyle().settingTableSectionTitle}
+            headerTextStyle={staticStyles.settingTableSectionTitle}
             hideSurroundingSeparators>
             <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="의견 보내기"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -224,11 +224,11 @@ const SettingScreen = ({navigation}: TSetting) => {
               }
             />
             <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="리뷰 작성"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -244,16 +244,14 @@ const SettingScreen = ({navigation}: TSetting) => {
           <Section
             sectionPaddingTop={20}
             sectionPaddingBottom={0}
-            headerTextStyle={customStyle().settingTableSectionTitle}
+            headerTextStyle={staticStyles.settingTableSectionTitle}
             hideSurroundingSeparators>
             <Cell
-              contentContainerStyle={
-                customStyle({border: {bottom: 0.5}}).settingTableCell
-              }
+              contentContainerStyle={cellHasBorder.settingTableCell}
               cellStyle="RightDetail"
               title="서비스 이용 약관"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -266,11 +264,11 @@ const SettingScreen = ({navigation}: TSetting) => {
               }
             />
             <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="개인정보 처리 방침"
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               hideSeparator
               cellAccessoryView={
                 <MaterialCommunityIcons
@@ -286,15 +284,15 @@ const SettingScreen = ({navigation}: TSetting) => {
           <Section
             sectionPaddingTop={20}
             sectionPaddingBottom={0}
-            headerTextStyle={customStyle().settingTableSectionTitle}
+            headerTextStyle={staticStyles.settingTableSectionTitle}
             hideSurroundingSeparators>
             <Cell
-              contentContainerStyle={customStyle().settingTableCell}
+              contentContainerStyle={cellNoneBorder.settingTableCell}
               cellStyle="RightDetail"
               title="앱 버전"
               detail={`v ${appVersion}`}
               titleTextColor={theme.colors.darkGray}
-              titleTextStyle={customStyle().settingTableCellTitle}
+              titleTextStyle={staticStyles.settingTableCellTitle}
               rightDetailColor={theme.colors.gray}
               hideSeparator
             />

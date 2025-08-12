@@ -1,6 +1,6 @@
 import {GestureResponderEvent, StyleProp, ViewStyle} from 'react-native';
 import {Button} from 'react-native-paper';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {customColor} from 'src/style/customColor';
 import {useCallback, useRef} from 'react';
 
@@ -51,7 +51,7 @@ const BrandButton = ({
     isOutlined || variant === 'text' ? customColor.brandMain : undefined;
 
   const outlinedStyle = isOutlined
-    ? customStyle().brandOutlinedButton
+    ? staticStyles.brandOutlinedButton
     : undefined;
 
   return (

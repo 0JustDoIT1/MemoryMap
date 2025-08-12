@@ -1,5 +1,5 @@
 import {Modal, Portal} from 'react-native-paper';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 interface CustomModal {
   visible: boolean;
   hideModal: () => void;
@@ -11,8 +11,8 @@ const CustomModal = ({visible, hideModal, contents}: CustomModal) => {
       <Modal
         visible={visible}
         onDismiss={hideModal}
-        style={customStyle().modal}
-        contentContainerStyle={customStyle().modalContent}>
+        style={staticStyles.modal}
+        contentContainerStyle={staticStyles.modalContent}>
         {contents}
       </Modal>
     </Portal>

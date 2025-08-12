@@ -3,8 +3,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Animated from 'react-native-reanimated';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {useProgressBar} from 'src/hook/common/useProgressBar';
-import {customStyle} from 'src/style/customStyle';
 import {TStackParamList} from 'src/types/stack';
 import {calcPercentTextMargin} from 'src/utils/progressBar';
 
@@ -35,40 +35,27 @@ const CustomProgressBar = ({
     durationMs,
   });
   const percentTextMargin = calcPercentTextMargin(safePercent);
+  const titleStyles = useDynamicStyle({color: textColor});
+  const barStyles = useDynamicStyle({bgColor});
+  const fillStyles = useDynamicStyle({bgColor: color});
+  const percentStyles = useDynamicStyle({
+    color: textColor,
+    margin: percentTextMargin,
+  });
 
   return (
     <View
       className="w-full"
       accessibilityRole="progressbar"
       accessibilityValue={{now: safePercent, min: 0, max: 100}}>
-      {title && (
-        <Text style={customStyle({color: textColor}).progressBarTitle}>
-          {title}
-        </Text>
-      )}
-      <View
-        style={
-          customStyle({
-            bgColor: bgColor,
-          }).progressBar
-        }>
+      {title && <Text style={titleStyles.progressBarTitle}>{title}</Text>}
+      <View style={barStyles.progressBar}>
         <Animated.View
-          style={[
-            customStyle({
-              bgColor: color,
-            }).progressBarFill,
-            progressAnimatedStyle,
-          ]}
+          style={[fillStyles.progressBarFill, progressAnimatedStyle]}
         />
       </View>
       {percentView && (
-        <Text
-          style={
-            customStyle({color: textColor, margin: percentTextMargin})
-              .progressBarText
-          }>
-          {safePercent}%
-        </Text>
+        <Text style={percentStyles.progressBarText}>{safePercent}%</Text>
       )}
     </View>
   );

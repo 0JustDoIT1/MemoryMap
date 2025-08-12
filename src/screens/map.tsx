@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {TMap} from 'src/types/stack';
 import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import {useAppTheme} from 'src/style/paperTheme';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import useExitApp from 'src/hook/common/useExitApp';
 import KoreaMap from 'src/components/map/koreaMap';
 import LoadingScreen from './loadingScreen';
@@ -29,8 +29,6 @@ const MapScreen = ({navigation}: TMap) => {
 
   useAdStartup();
   useExitApp();
-
-  const styles = useMemo(() => customStyle(), []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -66,10 +64,10 @@ const MapScreen = ({navigation}: TMap) => {
       edges={['top', 'bottom', 'left', 'right']}>
       <ViewShot
         ref={viewShotRef}
-        style={styles.mapViewShot}
+        style={staticStyles.mapViewShot}
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
-          <Animated.View style={[styles.mapBox, animatedStyles]}>
+          <Animated.View style={[staticStyles.mapBox, animatedStyles]}>
             {!show && <LoadingScreen />}
             {show && <KoreaMap />}
           </Animated.View>

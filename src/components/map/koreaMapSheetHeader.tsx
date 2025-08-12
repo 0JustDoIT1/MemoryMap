@@ -2,8 +2,8 @@ import {Pressable, View} from 'react-native';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
-import {customStyle} from 'src/style/customStyle';
 import {Text} from 'react-native-paper';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 
 interface IKoreaMapSheetHeader {
   regionData: IKoreaRegionData;
@@ -21,6 +21,8 @@ const KoreaMapSheetHeader = ({
   handleClosePress,
 }: IKoreaMapSheetHeader) => {
   const theme = useAppTheme();
+  const styles = useDynamicStyle({bgColor: regionData.background ?? '#ffffff'});
+
   return (
     <View className="flex-row justify-between items-center w-full mb-2">
       <View className="flex-row justify-start items-center">
@@ -38,9 +40,7 @@ const KoreaMapSheetHeader = ({
         {regionData && regionData.type === 'color' && (
           <View
             className="w-5 h-5 mr-1 mb-[2] rounded-full"
-            style={
-              customStyle({bgColor: regionData.background}).mapBottomSheetCircle
-            }
+            style={styles.mapBottomSheetCircle}
           />
         )}
         <Text className="text-xl text-black">{regionData.title}</Text>

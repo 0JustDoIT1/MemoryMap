@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NotFound from 'src/components/view/notFound';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {TStory} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -62,7 +62,7 @@ const StoryScreen = ({navigation}: TStory) => {
         />
         <FlatList
           className="flex-1"
-          contentContainerStyle={customStyle().storyFlatListContainer}
+          contentContainerStyle={staticStyles.storyFlatListContainer}
           data={storyData?.pages.map(page => page.doc).flat()}
           keyExtractor={item => item.id ?? item.createdAt}
           onEndReached={onLoadMoreStory}

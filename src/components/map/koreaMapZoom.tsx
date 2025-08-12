@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {Portal} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BlurView} from '@react-native-community/blur';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {useRef} from 'react';
 import {useAppTheme} from 'src/style/paperTheme';
 import ViewShot from 'react-native-view-shot';
@@ -40,12 +40,12 @@ const KoreaMapZoom = ({data, setZoom}: IKoreaMapZoom) => {
           blurType="light"
           blurAmount={20}
           reducedTransparencyFallbackColor="rgba(0,0,0,0.4)"
-          style={customStyle().blurScreen}
+          style={staticStyles.blurScreen}
         />
         <View className="w-full h-full p-12 flex items-center">
           <ViewShot
             ref={viewShotRef}
-            style={customStyle().blurViewShot}
+            style={staticStyles.blurViewShot}
             options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
             <KoreaMapZoomSvg
               region={regionSvgData}

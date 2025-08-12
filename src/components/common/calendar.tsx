@@ -4,7 +4,7 @@ import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import {dateTypeToDate} from 'src/utils/dateFormat';
 
 interface IhandleChange {
@@ -67,10 +67,10 @@ const BrandCalendar = ({
           onChange={params => handleChange(params)}
           selectedItemColor={customColor.brandMain}
           headerButtonColor={customColor.gray}
-          calendarTextStyle={customStyle().calendarText}
-          headerTextStyle={customStyle().calendarHeaderText}
-          weekDaysTextStyle={customStyle().calendarText}
-          selectedTextStyle={customStyle().calendarSelectedText}
+          calendarTextStyle={staticStyles.calendarText}
+          headerTextStyle={staticStyles.calendarHeaderText}
+          weekDaysTextStyle={staticStyles.calendarText}
+          selectedTextStyle={staticStyles.calendarSelectedText}
         />
       </View>
       <View>

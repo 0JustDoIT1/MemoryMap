@@ -6,17 +6,17 @@ import {
   BaseToast,
 } from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {customStyle} from './customStyle';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
+import {staticStyles} from './staticStyles';
 
 export const toastConfig = {
   success: (props: ToastProps) => (
     <SuccessToast
       {...props}
-      style={customStyle().successToast}
-      contentContainerStyle={customStyle().toastContent}
-      text1Style={customStyle().toastText1}
+      style={staticStyles.successToast}
+      contentContainerStyle={staticStyles.toastContent}
+      text1Style={staticStyles.toastText1}
       renderLeadingIcon={() => (
         <MaterialIcons name="check-circle" size={18} color="#ffffff" />
       )}
@@ -25,9 +25,9 @@ export const toastConfig = {
   error: (props: ToastProps) => (
     <ErrorToast
       {...props}
-      style={customStyle().errorToast}
-      contentContainerStyle={customStyle().toastContent}
-      text1Style={customStyle().toastText1}
+      style={staticStyles.errorToast}
+      contentContainerStyle={staticStyles.toastContent}
+      text1Style={staticStyles.toastText1}
       renderLeadingIcon={() => (
         <MaterialIcons name="check-circle" size={18} color="#ffffff" />
       )}
@@ -36,17 +36,17 @@ export const toastConfig = {
   info: (props: ToastProps) => (
     <InfoToast
       {...props}
-      style={customStyle().infoToast}
-      contentContainerStyle={customStyle().toastContent}
-      text1Style={customStyle().toastText1}
+      style={staticStyles.infoToast}
+      contentContainerStyle={staticStyles.toastContent}
+      text1Style={staticStyles.toastText1}
       renderLeadingIcon={() => (
         <MaterialIcons name="info" size={18} color="#ffffff" />
       )}
     />
   ),
   blackOpacity: ({text1}: any) => (
-    <View style={customStyle().blackOpacityToast}>
-      <Text style={customStyle().toastText1}>{text1}</Text>
+    <View style={staticStyles.blackOpacityToast}>
+      <Text style={staticStyles.toastText1}>{text1}</Text>
     </View>
   ),
 };

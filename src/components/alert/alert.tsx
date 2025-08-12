@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 
 interface CustomAlert {
   visible: boolean;
@@ -29,7 +29,7 @@ const CustomAlert = ({
         dismissable={false}
         dismissableBackButton={false}
         onDismiss={hideAlert}
-        style={customStyle().alert}>
+        style={staticStyles.alert}>
         <View className="flex justify-center items-center pt-2 pb-6">
           <Text className="text-base text-center">{title}</Text>
           {description && (

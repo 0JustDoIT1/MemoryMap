@@ -1,8 +1,8 @@
 import {useCallback, useMemo, useState} from 'react';
 import {returnedResults} from 'reanimated-color-picker';
-import {customStyle} from 'src/style/customStyle';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
+import {useDynamicStyle} from '../common/useDynamicStyle';
 
 export const useRegionColorPicker = (regionData: IKoreaRegionData) => {
   // 초기 색상 (지역이 color면 배경색, 아니면 #fff)
@@ -14,24 +14,22 @@ export const useRegionColorPicker = (regionData: IKoreaRegionData) => {
   const [mode, setMode] = useState(false);
   const [hex, setHex] = useState(initialHex);
 
+  const prevLeft = useDynamicStyle({
+    bgColor: initialHex,
+    color: getTextColorByBackgroundColor(initialHex),
+  });
+  const prevRight = useDynamicStyle({
+    bgColor: hex,
+    color: getTextColorByBackgroundColor(hex),
+  });
+
   // 미리보기 스타일 메모
   const prevLeftStyle = useMemo(
-    () =>
-      customStyle({
-        bgColor: initialHex,
-        color: getTextColorByBackgroundColor(initialHex),
-      }).colorPickerPreview,
+    () => prevLeft.colorPickerPreview,
     [initialHex],
   );
 
-  const prevRightStyle = useMemo(
-    () =>
-      customStyle({
-        bgColor: hex,
-        color: getTextColorByBackgroundColor(hex),
-      }).colorPickerPreview,
-    [hex],
-  );
+  const prevRightStyle = useMemo(() => prevRight.colorPickerPreview, [hex]);
 
   // Change ColorPicker mode(swatch <=> pannel)
   const onChangeMode = useCallback(() => setMode(prev => !prev), []);

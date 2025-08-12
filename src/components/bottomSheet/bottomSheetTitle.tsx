@@ -1,7 +1,7 @@
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 
 interface IBottomSheetTitle {
   className?: string;
@@ -23,7 +23,7 @@ const BottomSheetTitle = ({
         <MaterialCommunityIcons
           name="window-close"
           size={32}
-          style={customStyle().bottomSheetIcon}
+          style={staticStyles.bottomSheetIcon}
         />
       </Pressable>
     </View>

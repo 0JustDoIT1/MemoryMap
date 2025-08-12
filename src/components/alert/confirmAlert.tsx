@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
-import {customStyle} from 'src/style/customStyle';
+import {staticStyles} from 'src/style/staticStyles';
 import BrandButton from '../common/button';
 
 interface CustomConfirmAlert {
@@ -30,7 +30,7 @@ const CustomConfirmAlert = ({
         dismissable={dismissable}
         onDismiss={hideAlert}
         dismissableBackButton={dismissable}
-        style={customStyle().alert}>
+        style={staticStyles.alert}>
         <View className="flex justify-center items-center pt-2 pb-6">
           <Text className="text-base text-center">{title}</Text>
           {description && (

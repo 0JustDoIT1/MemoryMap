@@ -2,7 +2,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Image, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {storyPoint} from 'src/constants/point';
-import {customStyle} from 'src/style/customStyle';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {TStackParamList} from 'src/types/stack';
 import {IStory} from 'src/types/story';
 import {dateToFormatString} from 'src/utils/dateFormat';
@@ -27,15 +27,13 @@ const StoryCard = ({item, navigation}: IStoryCard) => {
     navigation.navigate('ViewStory', {storyId: item.id});
   };
 
+  const styles = useDynamicStyle({bgColor: point.color});
+
   return (
     <Pressable onPress={onDetailList}>
       <View
         className="flex-row justify-between items-start p-3 border border-b-0 border-gray-400 rounded-t-lg shadow-sm shadow-black"
-        style={
-          customStyle({
-            bgColor: point.color,
-          }).storyPointView
-        }>
+        style={styles.storyPointView}>
         <View>
           <Text className="text-white">{title}</Text>
           <Text className="text-white text-[10px] mt-1">{`${startDateString} ~ ${endDateString}`}</Text>
