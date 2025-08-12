@@ -2,19 +2,19 @@ import {View} from 'react-native';
 import {Text} from 'react-native-paper';
 
 const DashboardCard = ({
-  label,
+  title,
   value,
   region,
   othersCount, // “외 N 지역”의 N
 }: {
-  label: string;
+  title: string;
   value: number;
   region: string;
   othersCount: number;
 }) => (
   <View className="flex justify-start items-start w-full p-4 my-2 rounded-lg bg-white shadow-md shadow-black">
     <View className="flex-row items-end">
-      <Text className="text-base text-brandMain">{label}</Text>
+      <Text className="text-base text-brandMain">{title}</Text>
       {value > 0 && (
         <Text className="text-base text-gray-500">&nbsp;({value}개)</Text>
       )}

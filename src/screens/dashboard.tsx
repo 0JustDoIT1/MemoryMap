@@ -15,23 +15,13 @@ const DashboardScreen = ({navigation}: TDashboard) => {
     koreaMapRegionCount,
     mapData,
     storyData,
-
     isLoadingAny,
     isErrorAny,
     percent,
     visitedTotal,
-
-    mostCount,
-    mostRegion,
-    mostOthers,
-
-    storyTopCount,
-    storyTopRegion,
-    storyTopOthers,
-
-    pointTopAvg,
-    pointTopRegion,
-    pointTopOthers,
+    mostBg,
+    topStory,
+    topPoint,
   } = useDashboard();
   useExitApp();
 
@@ -112,22 +102,22 @@ const DashboardScreen = ({navigation}: TDashboard) => {
 
           <View className="w-full h-3/5 flex justify-center px-8 mt-4">
             <DashboardCard
-              label="가장 많이 색칠한 지역"
-              value={mostCount}
-              region={mostRegion}
-              othersCount={mostOthers}
+              title={mostBg.title}
+              value={mostBg.value}
+              region={mostBg.region}
+              othersCount={mostBg.others}
             />
             <DashboardCard
-              label="스토리 최다 지역"
-              value={storyTopCount}
-              region={storyTopRegion}
-              othersCount={storyTopOthers}
+              title={topStory.title}
+              value={topStory.value}
+              region={topStory.region}
+              othersCount={topStory.others}
             />
             <DashboardCard
-              label="최고 평점 지역"
-              value={pointTopAvg}
-              region={pointTopRegion}
-              othersCount={pointTopOthers}
+              title={topPoint.title}
+              value={topPoint.value}
+              region={topPoint.region}
+              othersCount={topPoint.others}
             />
           </View>
         </>

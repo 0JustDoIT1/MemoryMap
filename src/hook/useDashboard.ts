@@ -1,9 +1,15 @@
 import {keepPreviousData, useQuery} from '@tanstack/react-query';
-import {useMemo} from 'react';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {getDashboardKoreaMapData} from 'src/utils/koreaMap.db';
 import {getDashboardStory} from 'src/utils/story.db';
+
+interface IStat {
+  title: string;
+  value: number;
+  region: string;
+  others: number;
+}
 
 const clamp = (n: number, min = 0, max = 100) =>
   Math.min(max, Math.max(min, n));
@@ -43,60 +49,54 @@ const useDashboard = () => {
   });
 
   // 방문 합계
-  const visitedTotal = useMemo(() => {
-    const color = Number(mapData?.color ?? 0);
-    const photo = Number(mapData?.photo ?? 0);
-    return color + photo;
-  }, [mapData?.color, mapData?.photo]);
+  const visitedTotal =
+    Number(mapData?.color ?? 0) + Number(mapData?.photo ?? 0);
 
   // 퍼센트
-  const percent = useMemo(() => {
-    const raw = (visitedTotal / koreaMapRegionCount) * 100;
-    const safe = Number.isFinite(raw) ? raw : 0;
-    return clamp(safe);
-  }, [visitedTotal, koreaMapRegionCount]);
+  const percent = clamp(
+    Number.isFinite(visitedTotal)
+      ? (visitedTotal / koreaMapRegionCount) * 100
+      : 0,
+  );
 
   // 카드용
-  const mostCount = mapData?.mostRegion?.[0]?.count ?? 0;
-  const mostRegion = mapData?.mostRegion?.[0]?.main ?? '-';
-  const mostOthers = Math.max(0, (mapData?.mostRegion?.length ?? 0) - 1);
+  const mostBg: IStat = {
+    title: '가장 많이 색칠한 지역',
+    value: mapData?.mostRegion?.[0]?.count ?? 0,
+    region: mapData?.mostRegion?.[0]?.main ?? '-',
+    others: Math.max(0, (mapData?.mostRegion?.length ?? 0) - 1),
+  };
 
-  const storyTopCount = storyData?.countRegion?.[0]?.count ?? 0;
-  const storyTopRegion = storyData?.countRegion?.[0]?.title ?? '-';
-  const storyTopOthers = Math.max(0, (storyData?.countRegion?.length ?? 0) - 1);
+  const topStory: IStat = {
+    title: '스토리 최다 지역',
+    value: storyData?.countRegion?.[0]?.count ?? 0,
+    region: storyData?.countRegion?.[0]?.title ?? '-',
+    others: Math.max(0, (storyData?.countRegion?.length ?? 0) - 1),
+  };
 
-  const pointTopAvg = storyData?.pointRegion?.[0]?.avg ?? 0;
-  const pointTopRegion = storyData?.pointRegion?.[0]?.title ?? '-';
-  const pointTopOthers = Math.max(0, (storyData?.pointRegion?.length ?? 0) - 1);
+  const topPoint: IStat = {
+    title: '최고 평점 지역',
+    value: storyData?.pointRegion?.[0]?.avg ?? 0,
+    region: storyData?.pointRegion?.[0]?.title ?? '-',
+    others: Math.max(0, (storyData?.pointRegion?.length ?? 0) - 1),
+  };
 
   const isLoadingAny = isMapLoading || isStoryLoading;
   const isErrorAny = isMapError || isStoryError;
 
   return {
-    // 기초 데이터
     koreaMapRegionCount,
     mapData,
     storyData,
 
-    // 상태
     isLoadingAny,
     isErrorAny,
 
-    // 파생값
     percent,
     visitedTotal,
-
-    mostCount,
-    mostRegion,
-    mostOthers,
-
-    storyTopCount,
-    storyTopRegion,
-    storyTopOthers,
-
-    pointTopAvg,
-    pointTopRegion,
-    pointTopOthers,
+    mostBg,
+    topStory,
+    topPoint,
   };
 };
 
