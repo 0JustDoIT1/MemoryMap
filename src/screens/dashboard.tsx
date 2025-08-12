@@ -12,7 +12,7 @@ import useDashboardHero from 'src/hook/dashboard/useDashboardHero';
 const DashboardScreen = ({navigation}: TDashboard) => {
   const {mapData, storyData, isLoadingAny, isErrorAny, dashboardCardsList} =
     useDashboardCard();
-  const {koreaMapRegionCount, visitedTotal, fixedPercent} =
+  const {koreaMapRegionCount, visitedTotal, percent} =
     useDashboardHero(mapData);
   useExitApp();
 
@@ -33,7 +33,7 @@ const DashboardScreen = ({navigation}: TDashboard) => {
           <DashboardHero
             visitedTotal={visitedTotal}
             totalRegions={koreaMapRegionCount}
-            percent={fixedPercent}
+            percent={percent}
             photo={mapData.photo}
             color={mapData.color}
             storyCount={storyData.count}

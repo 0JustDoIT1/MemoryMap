@@ -1,14 +1,12 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
-import {DimensionValue, View} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import {useProgressBar} from 'src/hook/common/useProgressBar';
 import {customStyle} from 'src/style/customStyle';
 import {TStackParamList} from 'src/types/stack';
+import {calcPercentTextMargin} from 'src/utils/progressBar';
 
 interface CustomProgressBar {
   navigation?: NativeStackNavigationProp<TStackParamList, any, undefined>;
@@ -18,48 +16,31 @@ interface CustomProgressBar {
   color: string;
   bgColor: string;
   textColor?: string;
+  durationMs?: number;
 }
 
 const CustomProgressBar = ({
   navigation,
   title,
   percent,
-  percentView,
+  percentView = true,
   color,
   bgColor,
   textColor,
+  durationMs = 500,
 }: CustomProgressBar) => {
-  const percentTextMargin: {
-    marginLeft?: DimensionValue;
-    marginRight?: DimensionValue;
-  } =
-    percent - 4 < 0
-      ? {marginRight: 'auto'}
-      : percent - 4 > 90
-        ? {marginLeft: 'auto'}
-        : {marginLeft: `${percent - 4}%`};
-
-  const progress = useSharedValue(0);
-
-  const progressAnimatedStyle = useAnimatedStyle(() => {
-    progress.value = withTiming(percent, {duration: 500});
-
-    return {
-      width: `${progress.value}%`,
-    };
+  const {safePercent, progressAnimatedStyle} = useProgressBar({
+    navigation,
+    percent,
+    durationMs,
   });
-
-  useEffect(() => {
-    if (navigation) {
-      const focusScreen = navigation?.addListener('focus', () => {
-        progress.value = 0;
-      });
-      return focusScreen;
-    } else progress.value = percent;
-  }, [navigation]);
+  const percentTextMargin = calcPercentTextMargin(safePercent);
 
   return (
-    <View className="w-full">
+    <View
+      className="w-full"
+      accessibilityRole="progressbar"
+      accessibilityValue={{now: safePercent, min: 0, max: 100}}>
       {title && (
         <Text style={customStyle({color: textColor}).progressBarTitle}>
           {title}
@@ -86,7 +67,7 @@ const CustomProgressBar = ({
             customStyle({color: textColor, margin: percentTextMargin})
               .progressBarText
           }>
-          {percent}%
+          {safePercent}%
         </Text>
       )}
     </View>

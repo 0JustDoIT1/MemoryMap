@@ -55,7 +55,6 @@ const DashboardHero = ({
           <CustomProgressBar
             navigation={navigation}
             percent={percent}
-            percentView={true}
             color={customColor.brandMain}
             bgColor={customColor.white}
             textColor={customColor.white}
