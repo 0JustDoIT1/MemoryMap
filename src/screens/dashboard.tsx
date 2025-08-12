@@ -1,14 +1,12 @@
 import React from 'react';
-import {Image, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CustomProgressBar from 'src/components/common/progressBar';
 import useDashboard from 'src/hook/useDashboard';
 import useExitApp from 'src/hook/common/useExitApp';
-import {customColor} from 'src/style/customColor';
 import {TDashboard} from 'src/types/stack';
 import LoadingScreen from './loadingScreen';
 import DashboardCard from 'src/components/dashboard/dashboardCard';
+import DashboardHero from 'src/components/dashboard/dashboardHero';
 
 const DashboardScreen = ({navigation}: TDashboard) => {
   const {
@@ -19,9 +17,7 @@ const DashboardScreen = ({navigation}: TDashboard) => {
     isErrorAny,
     percent,
     visitedTotal,
-    mostBg,
-    topStory,
-    topPoint,
+    dashboardCardsList,
   } = useDashboard();
   useExitApp();
 
@@ -39,86 +35,26 @@ const DashboardScreen = ({navigation}: TDashboard) => {
       edges={['bottom', 'left', 'right']}>
       {mapData && storyData && (
         <>
-          <View className="relative w-full h-2/5 flex justify-between items-start px-8 bg-brandLight shadow-md shadow-black">
-            <View className="w-full h-full flex justify-center">
-              <View className="my-2">
-                <Text className="text-lg text-white">추억을 확인해보세요.</Text>
-              </View>
-              <View className="w-full flex-row justify-between items-center">
-                <View className="w-1/2">
-                  <View className="w-full flex-row justify-between items-center my-3">
-                    <View className="flex-row items-end">
-                      <Text className="text-6xl text-white">
-                        {visitedTotal}
-                      </Text>
-                      <Text className="text-xl text-white leading-8">
-                        /&nbsp;{koreaMapRegionCount}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View className="w-1/2 flex items-end">
-                  <Image
-                    style={{width: 100, height: 100}}
-                    source={require('assets/images/map.png')}
-                  />
-                </View>
-              </View>
-              <View className="w-full my-4">
-                <CustomProgressBar
-                  navigation={navigation}
-                  percent={percent}
-                  percentView={true}
-                  color={customColor.brandMain}
-                  bgColor={customColor.white}
-                  textColor={customColor.white}
-                />
-              </View>
-
-              <View className="absolute bottom-[-32] w-full h-16 flex-row justify-center items-center bg-white rounded-lg shadow shadow-black">
-                <View className="flex items-center mx-6">
-                  <Text className="text-sm text-brandMain">사진</Text>
-                  <Text className="text-xl text-gray-500 mt-[0.5px]">
-                    {mapData.photo}
-                  </Text>
-                </View>
-                <View className="h-5/6 mx-3 border-r-[0.5px] border-gray-400"></View>
-                <View className="flex items-center mx-6">
-                  <Text className="text-sm text-brandMain">색상</Text>
-                  <Text className="text-xl text-gray-500 mt-[0.5px]">
-                    {mapData.color}
-                  </Text>
-                </View>
-                <View className="h-5/6 mx-3 border-r-[0.5px] border-gray-400"></View>
-                <View className="flex items-center mx-6">
-                  <Text className="text-sm text-brandMain">스토리</Text>
-                  <Text className="text-xl text-gray-500 mt-[0.5px]">
-                    {storyData.count}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
+          <DashboardHero
+            visitedTotal={visitedTotal}
+            totalRegions={koreaMapRegionCount}
+            percent={percent}
+            photo={mapData.photo}
+            color={mapData.color}
+            storyCount={storyData.count}
+            navigation={navigation}
+          />
 
           <View className="w-full h-3/5 flex justify-center px-8 mt-4">
-            <DashboardCard
-              title={mostBg.title}
-              value={mostBg.value}
-              region={mostBg.region}
-              othersCount={mostBg.others}
-            />
-            <DashboardCard
-              title={topStory.title}
-              value={topStory.value}
-              region={topStory.region}
-              othersCount={topStory.others}
-            />
-            <DashboardCard
-              title={topPoint.title}
-              value={topPoint.value}
-              region={topPoint.region}
-              othersCount={topPoint.others}
-            />
+            {dashboardCardsList.map(card => (
+              <DashboardCard
+                key={card.title}
+                title={card.title}
+                value={card.value}
+                region={card.region}
+                othersCount={card.others}
+              />
+            ))}
           </View>
         </>
       )}

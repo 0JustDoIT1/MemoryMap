@@ -81,6 +81,8 @@ const useDashboard = () => {
     others: Math.max(0, (storyData?.pointRegion?.length ?? 0) - 1),
   };
 
+  const dashboardCardsList = [mostBg, topStory, topPoint];
+
   const isLoadingAny = isMapLoading || isStoryLoading;
   const isErrorAny = isMapError || isStoryError;
 
@@ -94,9 +96,7 @@ const useDashboard = () => {
 
     percent,
     visitedTotal,
-    mostBg,
-    topStory,
-    topPoint,
+    dashboardCardsList,
   };
 };
 
