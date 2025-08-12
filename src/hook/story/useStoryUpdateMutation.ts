@@ -1,4 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {IStory} from 'src/types/story';
 import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId} from 'src/utils/story.db';
@@ -12,21 +13,24 @@ const useStoryUpdateMutation = (storyId?: string) => {
     mutationFn: (data: IStory) => addStoryByRegionId(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['storyList'],
+        queryKey: REACT_QUERY_KEYS.storyList.root,
         refetchType: 'all',
       });
       await queryClient.invalidateQueries({
-        queryKey: ['storyRegionList'],
+        queryKey: REACT_QUERY_KEYS.storyRegionList,
         refetchType: 'all',
       });
+
       await queryClient.invalidateQueries({
-        queryKey: ['viewStory', storyId],
+        queryKey: REACT_QUERY_KEYS.dashboard.story,
         refetchType: 'all',
       });
-      await queryClient.invalidateQueries({
-        queryKey: ['dashboardStory'],
-        refetchType: 'all',
-      });
+      if (storyId) {
+        await queryClient.invalidateQueries({
+          queryKey: REACT_QUERY_KEYS.story(storyId),
+          refetchType: 'all',
+        });
+      }
     },
   });
 
@@ -34,15 +38,15 @@ const useStoryUpdateMutation = (storyId?: string) => {
     mutationFn: (data: IStory) => addStoryByRegionId(data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['storyList'],
+        queryKey: REACT_QUERY_KEYS.storyList.root,
         refetchType: 'all',
       });
       await queryClient.invalidateQueries({
-        queryKey: ['storyRegionList'],
+        queryKey: REACT_QUERY_KEYS.storyRegionList,
         refetchType: 'all',
       });
       await queryClient.invalidateQueries({
-        queryKey: ['dashboardStory'],
+        queryKey: REACT_QUERY_KEYS.dashboard.story,
         refetchType: 'all',
       });
     },
@@ -52,7 +56,7 @@ const useStoryUpdateMutation = (storyId?: string) => {
       updateKoreaMapDataStory(id, count),
     onSuccess: async () =>
       await queryClient.invalidateQueries({
-        queryKey: ['koreaMapData'],
+        queryKey: REACT_QUERY_KEYS.koreaMapData,
         refetchType: 'all',
       }),
   });

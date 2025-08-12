@@ -1,9 +1,10 @@
 import {useQuery} from '@tanstack/react-query';
+import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {getOneStoryById} from 'src/utils/story.db';
 
-export const useStoryView = (storyId: string) => {
+export const useStoryViewQuery = (storyId: string) => {
   const query = useQuery({
-    queryKey: ['viewStory', storyId],
+    queryKey: REACT_QUERY_KEYS.story(storyId),
     queryFn: () => getOneStoryById(storyId),
     enabled: true,
     retry: false,

@@ -12,7 +12,7 @@ import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useBackButton from 'src/hook/common/useBackButton';
 import LoadingScreen from './loadingScreen';
 import {useStoryDeleteMutation} from 'src/hook/story/useStoryDeleteMutation';
-import {useStoryView} from 'src/hook/story/useStoryView';
+import {useStoryViewQuery} from 'src/hook/story/useStoryViewQuery';
 import StoryViewHeader from 'src/components/story/storyViewHeader';
 import StoryViewContent from 'src/components/story/storyViewContent';
 import StoryViewActionBar from 'src/components/story/storyViewActionBar';
@@ -23,7 +23,7 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
   const storyId = route.params.storyId;
 
   const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {isSuccess, isLoading, isError, data} = useStoryView(storyId);
+  const {isSuccess, isLoading, isError, data} = useStoryViewQuery(storyId);
   const {deleteStory, isDisabled} = useStoryDeleteMutation(() =>
     navigation.goBack(),
   );
