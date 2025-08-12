@@ -1,7 +1,7 @@
 // components/map/koreaMapSheetButtons.tsx
 import React from 'react';
 import {View} from 'react-native';
-import {BrandContainedButton, BrandOutlinedButton} from '../common/button';
+import BrandButton from '../common/button';
 
 interface IKoreaMapSheetButtons {
   onImagePicker: () => void;
@@ -16,16 +16,18 @@ const KoreaMapSheetButtons = ({
 }: IKoreaMapSheetButtons) => {
   return (
     <View className="w-full pb-4">
-      <BrandContainedButton
+      <BrandButton
+        variant="contained"
         text="사진 넣기"
         onPress={onImagePicker}
-        isDisabled={isDisabled}
+        disabled={isDisabled}
       />
-      <BrandOutlinedButton
+      <BrandButton
+        variant="outlined"
         text="색칠 하기"
-        classes="mt-1"
+        className="mt-1"
         onPress={showModal}
-        isDisabled={isDisabled}
+        disabled={isDisabled}
       />
     </View>
   );

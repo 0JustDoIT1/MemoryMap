@@ -3,7 +3,6 @@ import {Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
 import {TAddStory} from 'src/types/stack';
-import {BrandDynamicButton} from 'src/components/common/button';
 import NotFound from 'src/components/view/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -17,6 +16,7 @@ import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
 import AddStoryContent from 'src/components/story/addStoryContent';
 import AddStoryCalendarSheet from 'src/components/story/addStoryCalendarSheet';
 import {TextInput} from 'react-native-paper';
+import BrandButton from 'src/components/common/button';
 
 const AddStoryScreen = ({navigation, route}: TAddStory) => {
   const region = route.params.regionId ? route.params.regionId : '';
@@ -112,10 +112,11 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
             onPressDate={onPressDate}
           />
           <View className="w-full mt-auto">
-            <BrandDynamicButton
-              classes="w-full"
+            <BrandButton
+              variant="contained"
+              className="w-full"
               text={isBusy ? '저장 중...' : '저장'}
-              isDisabled={isSaveDisabled || isDisabled}
+              disabled={isSaveDisabled || isDisabled}
               onPress={onAddStory}
             />
           </View>

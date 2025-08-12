@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {BrandContainedButton} from '../common/button';
+import BrandButton from '../common/button';
 
 interface NotFound {
   icon: React.JSX.Element;
@@ -25,9 +25,10 @@ const NotFound = ({icon, title, description, onPress}: NotFound) => {
       </View>
       {onPress && (
         <View className="mt-8">
-          <BrandContainedButton
+          <BrandButton
+            variant="contained"
             text="색칠하기"
-            classes="px-6 rounded-md"
+            className="px-6 rounded-md"
             onPress={onPress}
           />
         </View>

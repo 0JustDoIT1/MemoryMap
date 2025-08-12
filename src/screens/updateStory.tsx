@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {customColor} from 'src/style/customColor';
-import {BrandDynamicButton} from 'src/components/common/button';
+import BrandButton from 'src/components/common/button';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
 import useBackButton from 'src/hook/common/useBackButton';
@@ -87,10 +87,11 @@ const UpdateStoryScreen = ({navigation, route}: TUpdateStory) => {
       />
 
       <View className="w-full mt-auto">
-        <BrandDynamicButton
-          classes="w-full"
+        <BrandButton
+          variant="contained"
+          className="w-full"
           text={isBusy ? '저장 중...' : '저장'}
-          isDisabled={isSaveDisabled || isDisabled}
+          disabled={isSaveDisabled || isDisabled}
           onPress={onUpdateStory}
         />
       </View>

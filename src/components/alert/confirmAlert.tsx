@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Dialog, Portal, Text} from 'react-native-paper';
 import {customStyle} from 'src/style/customStyle';
-import {BrandContainedButton} from '../common/button';
+import BrandButton from '../common/button';
 
 interface CustomConfirmAlert {
   visible: boolean;
@@ -40,8 +40,9 @@ const CustomConfirmAlert = ({
           )}
         </View>
         <View className="w-full flex justify-center items-center p-4">
-          <BrandContainedButton
-            classes="w-full rounded-md"
+          <BrandButton
+            variant="contained"
+            className="w-full rounded-md"
             text={buttonText}
             onPress={buttonOnPress}
           />
