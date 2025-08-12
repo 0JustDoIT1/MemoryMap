@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
@@ -7,41 +7,53 @@ import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
 import {customStyle} from 'src/style/customStyle';
 import {dateTypeToDate} from 'src/utils/dateFormat';
 
+interface IhandleChange {
+  startDate: DateType;
+  endDate: DateType;
+}
+
 interface BrandCalendar {
   selectedStartDate: Date;
   selectedEndDate: Date;
-  onDatePicker: (startDate: Date, endDate: Date) => void;
+  onConfirm: (startDate: Date, endDate: Date) => void;
   close?: () => void;
 }
 
 const BrandCalendar = ({
   selectedStartDate,
   selectedEndDate,
-  onDatePicker,
+  onConfirm,
   close,
 }: BrandCalendar) => {
   const [startDate, setStartDate] = useState<DateType>(selectedStartDate);
   const [endDate, setEndDate] = useState<DateType>(selectedEndDate);
 
-  const onDateChange = ({
-    startDate,
-    endDate,
-  }: {
-    startDate: DateType;
-    endDate: DateType;
-  }) => {
+  useEffect(() => setStartDate(selectedStartDate), [selectedStartDate]);
+  useEffect(() => setEndDate(selectedEndDate), [selectedEndDate]);
+
+  const handleChange = ({startDate, endDate}: IhandleChange) => {
     setStartDate(startDate);
     setEndDate(endDate);
   };
 
-  const onDateReset = () => {
+  const handleReset = () => {
     setStartDate(null);
     setEndDate(null);
   };
 
-  const onSelectDate = () => {
-    if (startDate && endDate)
-      onDatePicker(dateTypeToDate(startDate), dateTypeToDate(endDate));
+  const isRangeValid = useMemo(
+    () => Boolean(startDate && endDate),
+    [startDate, endDate],
+  );
+
+  const handleConfirm = () => {
+    if (!isRangeValid) return;
+    const start = dateTypeToDate(startDate!);
+    const end = dateTypeToDate(endDate!);
+    // 보정: start > end면 swap
+    const [from, to] = start > end ? [end, start] : [start, end];
+    onConfirm(from, to);
+    onConfirm(dateTypeToDate(startDate), dateTypeToDate(endDate));
   };
 
   return (
@@ -52,7 +64,7 @@ const BrandCalendar = ({
           locale="ko"
           startDate={startDate}
           endDate={endDate}
-          onChange={params => onDateChange(params)}
+          onChange={params => handleChange(params)}
           selectedItemColor={customColor.brandMain}
           headerButtonColor={customColor.gray}
           calendarTextStyle={customStyle().calendarText}
@@ -64,7 +76,7 @@ const BrandCalendar = ({
       <View>
         <View className="flex-row justify-between items-center">
           <View className="w-1/2">
-            <Pressable className="p-2" onPress={onDateReset}>
+            <Pressable className="p-2" onPress={handleReset}>
               <Text className="text-brandMain">초기화</Text>
             </Pressable>
           </View>
@@ -74,7 +86,7 @@ const BrandCalendar = ({
             </Pressable>
             <Pressable
               className="p-2"
-              onPress={onSelectDate}
+              onPress={handleConfirm}
               disabled={!startDate || !endDate}>
               <Text
                 className={`${

@@ -22,7 +22,7 @@ export default function AddStoryCalendarSheet({
       <BrandCalendar
         selectedStartDate={start}
         selectedEndDate={end}
-        onDatePicker={onPick}
+        onConfirm={onPick}
         close={onClose}
       />
     </CustomBottomSheet>
