@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {LayoutChangeEvent, Pressable, View} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -16,48 +17,48 @@ interface Accordion<T> {
   onSelect: (value: string) => void;
 }
 
+const DURATION = 200;
+
 const CustomAccordion = ({
   title,
   item,
   onSelect,
 }: Accordion<IGetColorRegionList>) => {
   const regionItem = item[title];
+  const hasChildren = !!regionItem.child;
 
-  const height = useSharedValue<number>(0);
+  const measuredHeight = useSharedValue<number>(0);
   const expanded = useSharedValue<boolean>(false);
-  const animatedHeight = useDerivedValue(() =>
-    expanded.value
-      ? withTiming(height.value, {duration: 200})
-      : withTiming(0, {duration: 200}),
-  );
-  const iconRotation = useDerivedValue(() =>
-    expanded.value
-      ? withTiming('180deg', {duration: 200})
-      : withTiming('0deg', {duration: 200}),
+  const progress = useDerivedValue(() =>
+    withTiming(expanded.value ? 1 : 0, {
+      duration: DURATION,
+      easing: Easing.out(Easing.cubic),
+    }),
   );
 
-  const onPressAccordion = () => {
+  const onLayout = useCallback((e: LayoutChangeEvent) => {
+    const h = e.nativeEvent.layout.height;
+    if (h > 0 && Math.abs(h - measuredHeight.value) > 1) {
+      measuredHeight.value = h;
+    }
+  }, []);
+
+  const onPressAccordion = useCallback(() => {
     if (regionItem.child) {
       expanded.value = !expanded.value;
     } else {
-      onSelect(regionItem.sub[0].id);
+      const first = regionItem.sub?.[0];
+      if (first?.id) onSelect(first.id);
     }
-  };
-
-  const onLayout = (event: LayoutChangeEvent) => {
-    const onLayoutHeight = event.nativeEvent.layout.height;
-
-    if (onLayoutHeight > 0) {
-      height.value = onLayoutHeight;
-    }
-  };
-
-  const iconRotationStyle = useAnimatedStyle(() => ({
-    transform: [{rotate: iconRotation.value}],
-  }));
+  }, [regionItem, onSelect]);
 
   const accordionListStyle = useAnimatedStyle(() => ({
-    height: animatedHeight.value,
+    height: measuredHeight.value * progress.value,
+    opacity: progress.value === 0 ? 0 : 1,
+  }));
+
+  const iconRotationStyle = useAnimatedStyle(() => ({
+    transform: [{rotate: `${progress.value * 180}deg`}],
   }));
 
   return (
@@ -66,7 +67,7 @@ const CustomAccordion = ({
         className="flex-row justify-between items-center p-4"
         onPress={onPressAccordion}>
         <Text>{title}</Text>
-        {regionItem.child && (
+        {hasChildren && (
           <Animated.View style={iconRotationStyle}>
             <MaterialCommunityIcons
               name="chevron-down"
