@@ -1,24 +1,19 @@
 import React from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import useDashboard from 'src/hook/useDashboard';
+import useDashboardCard from 'src/hook/dashboard/useDashboardQuery';
 import useExitApp from 'src/hook/common/useExitApp';
 import {TDashboard} from 'src/types/stack';
 import LoadingScreen from './loadingScreen';
 import DashboardCard from 'src/components/dashboard/dashboardCard';
 import DashboardHero from 'src/components/dashboard/dashboardHero';
+import useDashboardHero from 'src/hook/dashboard/useDashboardHero';
 
 const DashboardScreen = ({navigation}: TDashboard) => {
-  const {
-    koreaMapRegionCount,
-    mapData,
-    storyData,
-    isLoadingAny,
-    isErrorAny,
-    percent,
-    visitedTotal,
-    dashboardCardsList,
-  } = useDashboard();
+  const {mapData, storyData, isLoadingAny, isErrorAny, dashboardCardsList} =
+    useDashboardCard();
+  const {koreaMapRegionCount, visitedTotal, fixedPercent} =
+    useDashboardHero(mapData);
   useExitApp();
 
   if (isErrorAny) {
@@ -38,7 +33,7 @@ const DashboardScreen = ({navigation}: TDashboard) => {
           <DashboardHero
             visitedTotal={visitedTotal}
             totalRegions={koreaMapRegionCount}
-            percent={percent}
+            percent={fixedPercent}
             photo={mapData.photo}
             color={mapData.color}
             storyCount={storyData.count}
@@ -52,7 +47,8 @@ const DashboardScreen = ({navigation}: TDashboard) => {
                 title={card.title}
                 value={card.value}
                 region={card.region}
-                othersCount={card.others}
+                others={card.others}
+                unit={card.unit}
               />
             ))}
           </View>

@@ -35,7 +35,9 @@ const DashboardHero = ({
           <View className="w-1/2">
             <View className="w-full flex-row justify-between items-center my-3">
               <View className="flex-row items-end">
-                <Text className="text-6xl text-white">{visitedTotal}</Text>
+                <Text className="text-6xl text-white">
+                  {visitedTotal.toLocaleString()}
+                </Text>
                 <Text className="text-xl text-white leading-8">
                   /&nbsp;{totalRegions}
                 </Text>

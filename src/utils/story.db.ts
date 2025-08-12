@@ -13,6 +13,7 @@ import {saveStoryToDB} from 'src/database/create';
 import {deleteOneStoryToDB} from 'src/database/delete';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {getRegionTitleById} from './koreaMap.util';
+import {IDashboardStory} from 'src/types/dashboard';
 
 // Result data convert Story Type
 const _resultToStory = (data: any) => {
@@ -113,7 +114,7 @@ export const getStoryRegionList = async () => {
 };
 
 // Get Dashboard of Story
-export const getDashboardStory = async () => {
+export const getDashboardStory = async (): Promise<IDashboardStory> => {
   // Get SQLite
   const db = await getDBConnection();
   // 전체 개수

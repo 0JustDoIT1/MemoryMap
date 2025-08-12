@@ -29,7 +29,6 @@ const CustomProgressBar = ({
   bgColor,
   textColor,
 }: CustomProgressBar) => {
-  const FixedPercent = Number(percent.toFixed(1));
   const percentTextMargin: {
     marginLeft?: DimensionValue;
     marginRight?: DimensionValue;
@@ -43,7 +42,7 @@ const CustomProgressBar = ({
   const progress = useSharedValue(0);
 
   const progressAnimatedStyle = useAnimatedStyle(() => {
-    progress.value = withTiming(FixedPercent, {duration: 500});
+    progress.value = withTiming(percent, {duration: 500});
 
     return {
       width: `${progress.value}%`,
@@ -87,7 +86,7 @@ const CustomProgressBar = ({
             customStyle({color: textColor, margin: percentTextMargin})
               .progressBarText
           }>
-          {FixedPercent}%
+          {percent}%
         </Text>
       )}
     </View>

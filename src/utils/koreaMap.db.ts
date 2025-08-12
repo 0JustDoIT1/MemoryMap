@@ -15,6 +15,7 @@ import {ResultSet} from 'react-native-sqlite-storage';
 import {getColorRegionList} from './koreaMap.util';
 import {Dirs, FileSystem} from 'react-native-file-access';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {IDashboardMap} from 'src/types/dashboard';
 
 // res type to KoreaMapDataObject
 const _resToObject = async (res: [ResultSet]) => {
@@ -216,7 +217,7 @@ export const updateKoreaMapDataStory = async (id: string, count: number) => {
 };
 
 // Get dashboadrd info of KoreaMapData by type
-export const getDashboardKoreaMapData = async () => {
+export const getDashboardKoreaMapData = async (): Promise<IDashboardMap> => {
   // Get SQLite
   const db = await getDBConnection();
   // Color Count (color & photo & init)
