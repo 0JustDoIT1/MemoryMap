@@ -1,6 +1,11 @@
+import {useCallback, useEffect} from 'react';
 import {Image, Keyboard, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import {Point} from 'src/constants/point';
 import {customStyle} from 'src/style/customStyle';
 
@@ -13,24 +18,33 @@ interface SelectPoint {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const SelectPoint = ({item, point, setPoint}: SelectPoint) => {
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {scale: item.point === point ? withTiming(1.3) : withTiming(1)},
-      ],
-      elevation: 1,
-    };
-  });
+  const isSelected = item.point === point;
+
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    scale.value = withSpring(isSelected ? 1.2 : 1, {
+      damping: 12,
+      stiffness: 180,
+      mass: 0.6,
+    });
+  }, [isSelected]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{scale: scale.value}],
+  }));
+
+  const onPress = useCallback(() => {
+    Keyboard.dismiss();
+    setPoint(item.point);
+  }, [item.point, setPoint]);
 
   return (
     <AnimatedPressable
       key={item.point}
       className="flex items-center"
       style={animatedStyle}
-      onPress={() => {
-        Keyboard.dismiss();
-        setPoint(item.point);
-      }}>
+      onPress={onPress}>
       <View className="w-[50px] h-[50px] bg-white rounded-full shadow-sm shadow-black">
         <Image style={{width: 50, height: 50}} source={item.image} />
       </View>
