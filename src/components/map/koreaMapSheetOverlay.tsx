@@ -4,7 +4,7 @@ import {Portal} from 'react-native-paper';
 import CustomModal from '../modal/modal';
 import CustomAlert from '../alert/alert';
 import LoadingScreen from 'src/screens/loadingScreen';
-import ZoomImage from '../view/zoomImage';
+import KoreaMapZoom from './koreaMapZoom';
 import ColorPickerModal from '../modal/colorPickerModal';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 
@@ -56,7 +56,7 @@ const KoreaMapSheetOverlays = ({
         buttonOnPress={onDeleteBackground}
         hideAlert={hideDialog}
       />
-      {zoom && <ZoomImage data={regionData} setZoom={setZoom} />}
+      {zoom && <KoreaMapZoom data={regionData} setZoom={setZoom} />}
       {onLoading && (
         <Portal>
           <LoadingScreen />
