@@ -1,5 +1,5 @@
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import CustomBottomSheet from '../common/bottomSheet';
+import CustomBottomSheet from '../bottomSheet/bottomSheet';
 import BrandCalendar from '../common/calendar';
 
 interface IAddStoryCalendarSheet {
@@ -18,17 +18,13 @@ export default function AddStoryCalendarSheet({
   onClose,
 }: IAddStoryCalendarSheet) {
   return (
-    <CustomBottomSheet
-      ref={bottomSheetRef}
-      snap="60%"
-      contents={
-        <BrandCalendar
-          selectedStartDate={start}
-          selectedEndDate={end}
-          onDatePicker={onPick}
-          close={onClose}
-        />
-      }
-    />
+    <CustomBottomSheet ref={bottomSheetRef} snap="60%">
+      <BrandCalendar
+        selectedStartDate={start}
+        selectedEndDate={end}
+        onDatePicker={onPick}
+        close={onClose}
+      />
+    </CustomBottomSheet>
   );
 }

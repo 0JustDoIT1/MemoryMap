@@ -3,22 +3,21 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import {Pressable, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {customStyle} from 'src/style/customStyle';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {View} from 'react-native';
 import {forwardRef, useCallback, useMemo} from 'react';
 import useBottomSheetBackHandler from 'src/hook/bottomSheet/useBottomSheetBackHandler';
+import BottomSheetTitle from './bottomSheetTitle';
+import BottomSheetDesc from './bottomSheetDesc';
 
 interface CustomBottomSheet {
   snap: string;
   title?: string;
   description?: string;
-  contents: React.JSX.Element;
+  children?: React.ReactNode;
 }
 
 const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
-  ({snap, title, description, contents}, ref) => {
+  ({snap, title, description, children}, ref) => {
     // Bottom Sheet height setting [index0, index1]
     const snapPoints = useMemo(() => ['40%', snap], [snap]);
 
@@ -35,7 +34,9 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
 
     const {handleSheetPositionChange} = useBottomSheetBackHandler(ref);
 
-    const titleMarginBottom = description ? 'mb-4' : 'mb-8';
+    const hasTitle = !!title?.trim();
+    const hasDesc = !!description?.trim();
+    const titleMarginBottom = hasDesc ? 'mb-4' : 'mb-8';
 
     return (
       <BottomSheetModal
@@ -49,27 +50,15 @@ const CustomBottomSheet = forwardRef<BottomSheetModal, CustomBottomSheet>(
         android_keyboardInputMode="adjustResize">
         <BottomSheetView className="flex-1 items-center">
           <View className="flex justify-center items-center w-full py-6 px-8">
-            {title && title !== '' && (
-              <View
-                className={`flex-row justify-center items-center w-full ${titleMarginBottom}`}>
-                <Text className="text-xl text-outline">{title}</Text>
-                <Pressable
-                  className="absolute top-50 right-0"
-                  onPress={handleClosePress}>
-                  <MaterialCommunityIcons
-                    name="window-close"
-                    size={32}
-                    style={customStyle().bottomSheetIcon}
-                  />
-                </Pressable>
-              </View>
+            {hasTitle && (
+              <BottomSheetTitle
+                className={titleMarginBottom}
+                title={title}
+                onPress={handleClosePress}
+              />
             )}
-            {description && description !== '' && (
-              <Text className="text-xs text-outline text-center mb-8">
-                {description}
-              </Text>
-            )}
-            <View className="w-full pb-4">{contents}</View>
+            {hasDesc && <BottomSheetDesc description={description} />}
+            <View className="w-full pb-4">{children}</View>
           </View>
         </BottomSheetView>
       </BottomSheetModal>
