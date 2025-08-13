@@ -234,7 +234,28 @@ const Navigation = () => {
             ),
           })}
         />
-        <Stack.Screen name="PinCodeEnter" component={PinCodeEnterScreen} />
+        <Stack.Screen
+          name="PinCodeEnter"
+          component={PinCodeEnterScreen}
+          options={({navigation}) => {
+            const canBack = navigation.canGoBack();
+            return {
+              headerShown: true,
+              headerTintColor: '#ffffff',
+              headerTitle: '잠금화면 설정',
+              headerStyle: {backgroundColor: theme.colors.brandLight},
+              // 뒤로가기가 가능할 때만 커스텀 버튼 노출
+              headerLeft: canBack
+                ? () => (
+                    <BackButton
+                      navigation={navigation}
+                      color={theme.colors.white}
+                    />
+                  )
+                : undefined,
+            };
+          }}
+        />
         <Stack.Screen
           name="BackUp"
           component={BackUpScreen}

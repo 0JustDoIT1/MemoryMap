@@ -3,10 +3,20 @@ import {TPinCodeEnter} from 'src/types/stack';
 import usePinCodeEnter from 'src/hook/setting/usePinCodeEnter';
 import PinCodeKeypad from 'src/components/pinCode/pinCodeKeypad';
 import PinCodeTopPanel from 'src/components/pinCode/pinCodeTopPanel';
+import useBackButton from 'src/hook/common/useBackButton';
 
 const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
   const {pinCodeArray, dotsFilled, animatedStyle, onNumberPressEnter} =
     usePinCodeEnter(navigation, route);
+  const canBack = navigation.canGoBack();
+
+  useBackButton(() => {
+    if (canBack) {
+      navigation.goBack();
+      return true;
+    }
+    return false;
+  });
 
   return (
     <SafeAreaView
