@@ -10,7 +10,7 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {staticStyles} from 'src/style/staticStyles';
 import useExitApp from 'src/hook/common/useExitApp';
 import KoreaMap from 'src/components/map/koreaMap';
-import LoadingOverlay from './loadingOverlay';
+import LoadingOverlay from '../components/feedback/loadingOverlay';
 import {GestureDetector} from 'react-native-gesture-handler';
 import {useAdStartup} from 'src/hook/ad/useAdStartUp';
 import {useKoreaMapShow} from 'src/hook/map/useKoreaMapShow';

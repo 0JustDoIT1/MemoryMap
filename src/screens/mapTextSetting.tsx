@@ -6,7 +6,7 @@ import {useLayoutEffect} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 import MapTextSettingOpt from 'src/components/setting/mapTextSettingOpt';
 import useMapTextSetting from 'src/hook/setting/useMapTextSetting';
-import LoadingOverlay from './loadingOverlay';
+import LoadingOverlay from '../components/feedback/loadingOverlay';
 
 const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {
   useBackButton(() => navigation.goBack());

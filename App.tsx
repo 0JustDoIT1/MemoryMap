@@ -7,14 +7,14 @@ import {PaperProvider} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {PaperTheme} from 'src/style/paperTheme';
-import {toastConfig} from 'src/style/toast.config';
+import {ToastConfig} from 'src/components/feedback/toast';
 import SQLite from 'react-native-sqlite-storage';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import {createTable, getDBConnection} from 'src/database/sqlite';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {useNetInfo} from '@react-native-community/netinfo';
-import NoNetwork from 'src/screens/noNetwork';
+import NoNetwork from 'src/components/states/noNetwork';
 import {appTableName} from 'src/constants/app';
 
 dayjs.locale('ko');
@@ -51,7 +51,7 @@ const App = (): React.JSX.Element => {
           <PaperProvider theme={PaperTheme}>
             <BottomSheetModalProvider>
               {isConnected ? <Navigation /> : <NoNetwork />}
-              <Toast config={toastConfig} />
+              <Toast config={ToastConfig} />
               <StatusBar
                 barStyle={isDarkMode ? 'light-content' : 'dark-content'}
               />

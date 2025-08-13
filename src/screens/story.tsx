@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import NotFound from 'src/components/view/notFound';
+import NotFound from 'src/components/states/notFound';
 import {staticStyles} from 'src/style/staticStyles';
 import {TStory} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
@@ -11,7 +11,7 @@ import useModal from 'src/hook/common/useModal';
 import {useStoryListQuery} from 'src/hook/story/useStoryListQuery';
 import StoryCard from 'src/components/story/storyCard';
 import useExitApp from 'src/hook/common/useExitApp';
-import LoadingOverlay from './loadingOverlay';
+import LoadingOverlay from '../components/feedback/loadingOverlay';
 import StoryFilterItem from 'src/components/story/storyFilterItem';
 import {useStoryRegionListQuery} from 'src/hook/story/useStoryRegionListQuery';
 import {useStoryPagination} from 'src/hook/story/useStoryPagination';

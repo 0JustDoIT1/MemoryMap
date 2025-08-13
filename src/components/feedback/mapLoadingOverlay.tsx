@@ -1,7 +1,7 @@
 import {SafeAreaView} from 'react-native-safe-area-context';
-import KoreaMapSkeleton from 'src/components/map/koreaMapSkeleton';
+import KoreaMapSkeleton from '../map/koreaMapSkeleton';
 
-const MapLoadingScreen = () => {
+const MapLoadingOverlay = () => {
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white"
@@ -11,4 +11,4 @@ const MapLoadingScreen = () => {
   );
 };
 
-export default MapLoadingScreen;
+export default MapLoadingOverlay;

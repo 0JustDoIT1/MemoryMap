@@ -7,7 +7,7 @@ import {useRef} from 'react';
 import {useAppTheme} from 'src/style/paperTheme';
 import ViewShot from 'react-native-view-shot';
 import Toast from 'react-native-toast-message';
-import {toastConfig} from 'src/style/toast.config';
+import {ToastConfig} from 'src/components/feedback/toast';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import useZoomImageControl from 'src/hook/map/useZoomImageControl';
@@ -76,7 +76,7 @@ const KoreaMapZoom = ({data, setZoom}: IKoreaMapZoom) => {
             />
           </View>
         </View>
-        <Toast config={toastConfig} />
+        <Toast config={ToastConfig} />
       </SafeAreaView>
     </Portal>
   );

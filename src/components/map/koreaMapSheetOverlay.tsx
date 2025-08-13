@@ -3,7 +3,7 @@ import React from 'react';
 import {Portal} from 'react-native-paper';
 import CustomModal from '../modal/modal';
 import CustomAlert from '../alert/alert';
-import LoadingOverlay from 'src/screens/loadingOverlay';
+import LoadingOverlay from 'src/components/feedback/loadingOverlay';
 import KoreaMapZoom from './koreaMapZoom';
 import ColorPickerModal from '../modal/colorPickerModal';
 import {IKoreaRegionData} from 'src/types/koreaMap';

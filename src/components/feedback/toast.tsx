@@ -8,9 +8,9 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {staticStyles} from './staticStyles';
+import {staticStyles} from '../../style/staticStyles';
 
-export const toastConfig = {
+export const ToastConfig = {
   success: (props: ToastProps) => (
     <SuccessToast
       {...props}

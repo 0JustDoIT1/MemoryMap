@@ -6,7 +6,7 @@ import useBackUp from 'src/hook/setting/useBackUp';
 import {customColor} from 'src/style/customColor';
 import {TBackUp} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
-import LoadingOverlay from './loadingOverlay';
+import LoadingOverlay from '../components/feedback/loadingOverlay';
 import {useState} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 
