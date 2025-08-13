@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import useDashboardCard from 'src/hook/dashboard/useDashboardQuery';
 import useExitApp from 'src/hook/common/useExitApp';
 import {TDashboard} from 'src/types/stack';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import DashboardCard from 'src/components/dashboard/dashboardCard';
 import DashboardHero from 'src/components/dashboard/dashboardHero';
 import useDashboardHero from 'src/hook/dashboard/useDashboardHero';
@@ -18,10 +18,6 @@ const DashboardScreen = ({navigation}: TDashboard) => {
 
   if (isErrorAny) {
     return null;
-  }
-
-  if (isLoadingAny) {
-    return <LoadingScreen />;
   }
 
   return (
@@ -54,6 +50,7 @@ const DashboardScreen = ({navigation}: TDashboard) => {
           </View>
         </>
       )}
+      <LoadingOverlay visible={isLoadingAny} />
     </SafeAreaView>
   );
 };

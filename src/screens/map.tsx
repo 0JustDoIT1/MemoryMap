@@ -10,7 +10,7 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {staticStyles} from 'src/style/staticStyles';
 import useExitApp from 'src/hook/common/useExitApp';
 import KoreaMap from 'src/components/map/koreaMap';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import {GestureDetector} from 'react-native-gesture-handler';
 import {useAdStartup} from 'src/hook/ad/useAdStartUp';
 import {useKoreaMapShow} from 'src/hook/map/useKoreaMapShow';
@@ -68,10 +68,10 @@ const MapScreen = ({navigation}: TMap) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[staticStyles.mapBox, animatedStyles]}>
-            {!show && <LoadingScreen />}
             {show && <KoreaMap />}
           </Animated.View>
         </GestureDetector>
+        <LoadingOverlay visible={!show} />
       </ViewShot>
     </SafeAreaView>
   );

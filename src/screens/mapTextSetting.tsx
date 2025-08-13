@@ -6,7 +6,7 @@ import {useLayoutEffect} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 import MapTextSettingOpt from 'src/components/setting/mapTextSettingOpt';
 import useMapTextSetting from 'src/hook/setting/useMapTextSetting';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 
 const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {
   useBackButton(() => navigation.goBack());
@@ -34,8 +34,6 @@ const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {
     });
   }, [navigation, onShowRegionName, isDirty, isDisabled]);
 
-  if (onLoading) return <LoadingScreen />;
-
   return (
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white"
@@ -61,6 +59,7 @@ const MapTextSettingScreen = ({navigation}: TMapTextSetting) => {
         onSelect={setSelect}
         isDisabled={isDisabled}
       />
+      <LoadingOverlay visible={onLoading} />
     </SafeAreaView>
   );
 };

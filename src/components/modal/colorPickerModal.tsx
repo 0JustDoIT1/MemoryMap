@@ -6,7 +6,7 @@ import ColorPicker, {
   Swatches,
 } from 'reanimated-color-picker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import LoadingScreen from 'src/screens/loadingOverlay';
+import LoadingOverlay from 'src/screens/loadingOverlay';
 import {useRegionColorPicker} from 'src/hook/mapSheet/useRegionColorPicker';
 import {useRegionColorUpload} from 'src/hook/mapSheet/useRegionColorUpload';
 
@@ -74,11 +74,7 @@ const ColorPickerModal = ({
           <Text className="text-brandMain">색칠하기</Text>
         </Pressable>
       </View>
-      {onLoading && (
-        <Portal>
-          <LoadingScreen />
-        </Portal>
-      )}
+      <LoadingOverlay visible={onLoading} />
     </>
   );
 };

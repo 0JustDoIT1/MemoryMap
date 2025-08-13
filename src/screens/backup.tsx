@@ -6,7 +6,7 @@ import useBackUp from 'src/hook/setting/useBackUp';
 import {customColor} from 'src/style/customColor';
 import {TBackUp} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import {useState} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 
@@ -94,11 +94,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
           <Text className="ml-2 text-base">복구</Text>
         </Pressable>
       </View>
-      {isLoading && (
-        <Portal>
-          <LoadingScreen />
-        </Portal>
-      )}
+      <LoadingOverlay visible={isLoading} />
     </SafeAreaView>
   );
 };

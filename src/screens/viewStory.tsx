@@ -10,7 +10,7 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import CustomAlert from 'src/components/alert/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useBackButton from 'src/hook/common/useBackButton';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import {useStoryDeleteMutation} from 'src/hook/story/useStoryDeleteMutation';
 import {useStoryViewQuery} from 'src/hook/story/useStoryViewQuery';
 import StoryViewHeader from 'src/components/story/storyViewHeader';
@@ -32,10 +32,6 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
 
   if (isError) {
     return null;
-  }
-
-  if (isLoading) {
-    return <LoadingScreen />;
   }
 
   return (
@@ -81,6 +77,8 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
         buttonOnPress={() => deleteStory(data.id, data.regionId)}
         hideAlert={hideDialog}
       />
+
+      <LoadingOverlay visible={isLoading} />
     </SafeAreaView>
   );
 };

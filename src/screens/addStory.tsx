@@ -9,7 +9,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/common/useBackButton';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useAddStory} from 'src/hook/story/useAddStory';
 import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
@@ -81,10 +81,6 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
     return null;
   }
 
-  if (isColorLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-white p-6"
@@ -142,6 +138,7 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
           onPress={() => navigation.navigate('Main', {screen: 'Map'})}
         />
       )}
+      <LoadingOverlay visible={isColorLoading} />
     </SafeAreaView>
   );
 };

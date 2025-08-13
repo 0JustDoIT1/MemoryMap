@@ -3,7 +3,7 @@ import React from 'react';
 import {Portal} from 'react-native-paper';
 import CustomModal from '../modal/modal';
 import CustomAlert from '../alert/alert';
-import LoadingScreen from 'src/screens/loadingOverlay';
+import LoadingOverlay from 'src/screens/loadingOverlay';
 import KoreaMapZoom from './koreaMapZoom';
 import ColorPickerModal from '../modal/colorPickerModal';
 import {IKoreaRegionData} from 'src/types/koreaMap';
@@ -57,11 +57,7 @@ const KoreaMapSheetOverlays = ({
         hideAlert={hideDialog}
       />
       {zoom && <KoreaMapZoom data={regionData} setZoom={setZoom} />}
-      {onLoading && (
-        <Portal>
-          <LoadingScreen />
-        </Portal>
-      )}
+      <LoadingOverlay visible={onLoading} />
     </>
   );
 };

@@ -11,7 +11,7 @@ import useModal from 'src/hook/common/useModal';
 import {useStoryListQuery} from 'src/hook/story/useStoryListQuery';
 import StoryCard from 'src/components/story/storyCard';
 import useExitApp from 'src/hook/common/useExitApp';
-import LoadingScreen from './loadingOverlay';
+import LoadingOverlay from './loadingOverlay';
 import StoryFilterItem from 'src/components/story/storyFilterItem';
 import {useStoryRegionListQuery} from 'src/hook/story/useStoryRegionListQuery';
 import {useStoryPagination} from 'src/hook/story/useStoryPagination';
@@ -42,10 +42,6 @@ const StoryScreen = ({navigation}: TStory) => {
 
   if (isStoryError || isListError) {
     return null;
-  }
-
-  if (isStoryLoading || isListLoading) {
-    return <LoadingScreen />;
   }
 
   return (
@@ -107,6 +103,7 @@ const StoryScreen = ({navigation}: TStory) => {
           </View>
         }
       />
+      <LoadingOverlay visible={isStoryLoading || isListLoading} />
     </SafeAreaView>
   );
 };
