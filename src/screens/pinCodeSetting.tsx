@@ -5,57 +5,27 @@ import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PinCodeNumber from 'src/components/view/pinCodeNumber';
-import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {staticStyles} from 'src/style/staticStyles';
-import usePinCode from 'src/hook/setting/usePinCode';
 import useBackButton from 'src/hook/common/useBackButton';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
+import usePinCodeSetting from 'src/hook/setting/usePinCodeSetting';
 
 const PinCodeSettingScreen = ({navigation}: TPinCodeSetting) => {
   const insets = useSafeAreaInsets();
 
+  useBackButton(() => navigation.goBack());
   const {
     pinCodeArray,
-    pinLength,
-    code,
-    setCode,
-    reCode,
-    setReCode,
     reEnter,
-    setReEnter,
-    onNumberPressSetting,
+    dotsFilled,
+    title,
     animatedStyle,
-    setPinCodeToKeyChain,
-    wobbleScreen,
-  } = usePinCode();
-
-  useBackButton(() => navigation.goBack());
-
-  // code length와 reCode length에 따라서 화면 전환
-  useEffect(() => {
-    if (code.length === 4) {
-      if (reCode.length === 0) setReEnter(true);
-      else if (reCode.length === 4) matchPinCode();
-    }
-  }, [code, reCode]);
-
-  // code와 reCode 값 비교
-  const matchPinCode = () => {
-    if (code.toString() === reCode.toString()) {
-      const codeString = code.join('');
-      setPinCodeToKeyChain(codeString);
-      navigation.replace('Main', {screen: 'Setting'});
-    } else {
-      wobbleScreen();
-      setReEnter(false);
-      setCode([]);
-      setReCode([]);
-    }
-  };
+    onNumberPressSetting,
+  } = usePinCodeSetting(navigation);
 
   const pinTyping = useDynamicStyle({
-    padding: {paddingBottom: insets.bottom}, // <- 여기만 추가
+    padding: {paddingBottom: insets.bottom},
   });
 
   return (
@@ -73,37 +43,29 @@ const PinCodeSettingScreen = ({navigation}: TPinCodeSetting) => {
             />
           </View>
           <View className="w-2/3 flex items-center mt-6">
-            <Text className="text-sm text-white">
-              {reEnter ? '암호를 다시 입력해 주세요.' : '암호를 입력해 주세요.'}
-            </Text>
+            <Text className="text-sm text-white">{title}</Text>
           </View>
           <View className="w-2/5 flex-row justify-around items-center mt-6">
-            {[...Array(pinLength)].map((item, index) => {
-              if (!reEnter)
-                item = typeof code[index] === 'undefined' ? false : true;
-              else item = typeof reCode[index] === 'undefined' ? false : true;
-
-              return (
-                <MaterialCommunityIcons
-                  key={index}
-                  name="circle"
-                  size={22}
-                  color={item ? customColor.white : customColor.whiteOpacity}
-                />
-              );
-            })}
+            {dotsFilled.map((pin, idx) => (
+              <MaterialCommunityIcons
+                key={idx}
+                name="circle"
+                size={22}
+                color={pin ? customColor.white : customColor.whiteOpacity}
+              />
+            ))}
           </View>
         </Animated.View>
       </View>
       <View className="w-full h-1/3 bg-white" style={pinTyping.pinCodeTyping}>
         {pinCodeArray.map(array => (
           <View key={array[0]} className="w-full h-1/4 flex-row">
-            {array.map(item => {
+            {array.map(digit => {
               return (
                 <PinCodeNumber
-                  key={item}
-                  item={item}
-                  onPress={() => onNumberPressSetting(item)}
+                  key={digit}
+                  item={digit}
+                  onPress={() => onNumberPressSetting(digit)}
                 />
               );
             })}

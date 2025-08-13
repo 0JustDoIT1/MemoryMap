@@ -47,3 +47,6 @@ export const MAX_BY_AD_COUNT: Partial<Record<IAppAdShowCategory, number>> = {
   [adShowCategory.map]: appAdMapMaxNum,
   [adShowCategory.story]: appAdStoryMaxNum,
 };
+
+// 핀코드
+export const PIN_LENGTH = 4;

@@ -5,61 +5,19 @@ import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PinCodeNumber from 'src/components/view/pinCodeNumber';
-import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {staticStyles} from 'src/style/staticStyles';
-import {showBottomToast} from 'src/utils/showToast';
-import usePinCode from 'src/hook/setting/usePinCode';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
+import usePinCodeEnter from 'src/hook/setting/usePinCodeEnter';
 
 const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
   const insets = useSafeAreaInsets();
 
-  const {
-    pinCodeArray,
-    pinLength,
-    code,
-    setCode,
-    onNumberPressEnter,
-    animatedStyle,
-    setAppPinCode,
-    getPinCodeToKeyChain,
-    deletePinCodeToKeyChain,
-    wobbleScreen,
-  } = usePinCode();
-
-  // Screen navigating according to pinCode length and re pinCode length
-  useEffect(() => {
-    if (code.length === 4) matchPinCode();
-  }, [code]);
-
-  // Compare pinCode
-  const matchPinCode = async () => {
-    try {
-      const pinCode = await getPinCodeToKeyChain();
-      const codeString = code.join('');
-
-      if (pinCode && pinCode === codeString) {
-        if (route.params.route === 'Setting') {
-          await deletePinCodeToKeyChain();
-          setAppPinCode(false);
-          navigation.replace('Main', {screen: route.params.route});
-        } else {
-          if (route.params.route === 'PinCodeSetting')
-            navigation.replace(route.params.route);
-          else navigation.replace('Main', {screen: route.params.route});
-        }
-      } else {
-        wobbleScreen();
-        setCode([]);
-      }
-    } catch (error) {
-      showBottomToast('error', '핀코드 설정 에러');
-    }
-  };
+  const {pinCodeArray, dotsFilled, animatedStyle, onNumberPressEnter} =
+    usePinCodeEnter(navigation, route);
 
   const pinTyping = useDynamicStyle({
-    padding: {paddingBottom: insets.bottom}, // <- 여기만 추가
+    padding: {paddingBottom: insets.bottom},
   });
 
   return (
@@ -80,30 +38,26 @@ const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
             <Text className="text-sm text-white/80">암호를 입력해 주세요.</Text>
           </View>
           <View className="w-2/5 flex-row justify-around items-center mt-6">
-            {[...Array(pinLength)].map((item, index) => {
-              item = typeof code[index] === 'undefined' ? false : true;
-
-              return (
-                <MaterialCommunityIcons
-                  key={index}
-                  name="circle"
-                  size={22}
-                  color={item ? customColor.white : customColor.whiteOpacity}
-                />
-              );
-            })}
+            {dotsFilled.map((pin, idx) => (
+              <MaterialCommunityIcons
+                key={idx}
+                name="circle"
+                size={22}
+                color={pin ? customColor.white : customColor.whiteOpacity}
+              />
+            ))}
           </View>
         </Animated.View>
       </View>
       <View className="w-full h-1/3 bg-white" style={pinTyping.pinCodeTyping}>
         {pinCodeArray.map(array => (
           <View key={array[0]} className="w-full h-1/4 flex-row">
-            {array.map(item => {
+            {array.map(digit => {
               return (
                 <PinCodeNumber
-                  key={item}
-                  item={item}
-                  onPress={() => onNumberPressEnter(item)}
+                  key={digit}
+                  item={digit}
+                  onPress={() => onNumberPressEnter(digit)}
                 />
               );
             })}

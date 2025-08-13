@@ -1,6 +1,6 @@
-import {KeyChainPinCode} from '@env';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useAppPinCode} from 'src/store/appPinCode';
+import {KeyChainPinCode} from '@env';
 import {
   getSecureValue,
   removeSecureValue,
@@ -14,16 +14,9 @@ import {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {TStackParamList} from 'src/types/stack';
+import {PIN_LENGTH} from 'src/constants/app';
 
-const usePinCode = (
-  navigation: NativeStackNavigationProp<
-    TStackParamList,
-    'PinCodeSetting' | 'PinCodeEnter',
-    undefined
-  >,
-) => {
+const usePinCodeBase = () => {
   const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
 
   const [code, setCode] = useState<number[]>([]);
@@ -36,7 +29,6 @@ const usePinCode = (
     [7, 8, 9],
     ['', 0, 'delete'],
   ];
-  const PIN_LENGTH = 4;
 
   // 숫자 입력(공통)
   const pushDigit = useCallback((prev: number[], digit: number) => {
@@ -47,33 +39,6 @@ const usePinCode = (
     if (prev.length === 0) return prev;
     return prev.slice(0, prev.length - 1);
   }, []);
-
-  // 엔터 화면용 입력
-  const onNumberPressEnter = useCallback(
-    (digit: string | number) => {
-      if (typeof digit === 'number') {
-        setCode(prev => pushDigit(prev, digit));
-      } else if (digit === 'delete') {
-        setCode(prev => popDigit(prev));
-      }
-    },
-    [pushDigit, popDigit],
-  );
-
-  // 설정 화면용 입력 (입력/재입력 분기)
-  const onNumberPressSetting = useCallback(
-    (digit: string | number) => {
-      if (reEnter) {
-        if (typeof digit === 'number')
-          setReCode(prev => pushDigit(prev, digit));
-        else if (digit === 'delete') setReCode(prev => popDigit(prev));
-      } else {
-        if (typeof digit === 'number') setCode(prev => pushDigit(prev, digit));
-        else if (digit === 'delete') setCode(prev => popDigit(prev));
-      }
-    },
-    [reEnter, pushDigit, popDigit],
-  );
 
   // Get pinCode to KeyChain
   const getPinCodeToKeyChain = useCallback(
@@ -129,23 +94,21 @@ const usePinCode = (
   }, []);
 
   return {
-    pinCodeArray,
-    PIN_LENGTH,
     code,
     setCode,
     reCode,
     setReCode,
     reEnter,
     setReEnter,
-    onNumberPressEnter,
-    onNumberPressSetting,
-    animatedStyle,
-    setAppPinCode,
+    pinCodeArray,
+    pushDigit,
+    popDigit,
     getPinCodeToKeyChain,
     deletePinCodeToKeyChain,
     setPinCodeToKeyChain,
+    animatedStyle,
     wobbleScreen,
+    setAppPinCode,
   };
 };
-
-export default usePinCode;
+export default usePinCodeBase;
