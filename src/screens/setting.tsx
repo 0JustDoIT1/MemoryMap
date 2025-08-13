@@ -15,7 +15,7 @@ import {useSettingResetMap} from 'src/hook/setting/useSettingResetMap';
 import {useSettingLink} from 'src/hook/setting/useSettingLink';
 import {useSettingNavigation} from 'src/hook/setting/useSettingNavigation';
 import SettingCell from 'src/components/setting/settingCell';
-import PinCodeAccessory from 'src/components/setting/pinCodeAccessory';
+import PinCodeAccessory from 'src/components/pinCode/pinCodeAccessory';
 import SettingSection from 'src/components/setting/settingSection';
 
 const Chevron = memo(() => {
