@@ -6,7 +6,7 @@ import ColorPicker, {
   Swatches,
 } from 'reanimated-color-picker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import LoadingScreen from 'src/screens/loadingScreen';
+import LoadingScreen from 'src/screens/loadingOverlay';
 import {useRegionColorPicker} from 'src/hook/mapSheet/useRegionColorPicker';
 import {useRegionColorUpload} from 'src/hook/mapSheet/useRegionColorUpload';
 

@@ -11,7 +11,7 @@ import useModal from 'src/hook/common/useModal';
 import {useStoryListQuery} from 'src/hook/story/useStoryListQuery';
 import StoryCard from 'src/components/story/storyCard';
 import useExitApp from 'src/hook/common/useExitApp';
-import LoadingScreen from './loadingScreen';
+import LoadingScreen from './loadingOverlay';
 import StoryFilterItem from 'src/components/story/storyFilterItem';
 import {useStoryRegionListQuery} from 'src/hook/story/useStoryRegionListQuery';
 import {useStoryPagination} from 'src/hook/story/useStoryPagination';

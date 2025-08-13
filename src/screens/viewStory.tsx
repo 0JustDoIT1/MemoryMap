@@ -10,7 +10,7 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
 import CustomAlert from 'src/components/alert/alert';
 import {getRegionTitleById} from 'src/utils/koreaMap.util';
 import useBackButton from 'src/hook/common/useBackButton';
-import LoadingScreen from './loadingScreen';
+import LoadingScreen from './loadingOverlay';
 import {useStoryDeleteMutation} from 'src/hook/story/useStoryDeleteMutation';
 import {useStoryViewQuery} from 'src/hook/story/useStoryViewQuery';
 import StoryViewHeader from 'src/components/story/storyViewHeader';

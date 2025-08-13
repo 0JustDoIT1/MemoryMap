@@ -9,7 +9,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
 import {StoryInit} from 'src/constants/story';
 import useBackButton from 'src/hook/common/useBackButton';
-import LoadingScreen from './loadingScreen';
+import LoadingScreen from './loadingOverlay';
 import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
 import {useAddStory} from 'src/hook/story/useAddStory';
 import {useSelectRegion} from 'src/hook/story/useAddStoryRegion';
