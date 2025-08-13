@@ -9,7 +9,7 @@ import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {staticStyles} from 'src/style/staticStyles';
 import {showBottomToast} from 'src/utils/showToast';
-import usePinCode from 'src/hook/usePinCode';
+import usePinCode from 'src/hook/setting/usePinCode';
 
 const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
   const {

@@ -2,7 +2,7 @@ import {Pressable, View} from 'react-native';
 import {Portal, Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import useBackUp from 'src/hook/useBackUp';
+import useBackUp from 'src/hook/setting/useBackUp';
 import {customColor} from 'src/style/customColor';
 import {TBackUp} from 'src/types/stack';
 import {showBottomToast} from 'src/utils/showToast';

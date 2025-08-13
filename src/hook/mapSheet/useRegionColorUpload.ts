@@ -3,7 +3,7 @@ import {IKoreaRegionData} from 'src/types/koreaMap';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {useAdGate} from 'src/hook/ad/useAdGate';
 import {useActionLock} from 'src/hook/common/useActionLock';
-import {adShowType} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/app';
 import {getRegionTitle} from 'src/utils/koreaMap.util';
 import {showBottomToast} from 'src/utils/showToast';
 
@@ -36,7 +36,11 @@ export const useRegionColorUpload = ({
 
   // 외부에서 바로 쓸 최종 핸들러
   const onUploadColor = wrap(async () => {
-    await runWithAdGate(adShowType.map, onUploadingColor, onUploadColorSuccess);
+    await runWithAdGate(
+      adShowCategory.map,
+      onUploadingColor,
+      onUploadColorSuccess,
+    );
   });
 
   return {isDisabled, onLoading, onUploadColor};

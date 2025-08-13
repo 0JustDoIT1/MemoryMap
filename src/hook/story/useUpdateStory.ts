@@ -1,6 +1,6 @@
 // src/hook/story/useUpdateStory.ts
 import {useCallback} from 'react';
-import {adShowType} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/app';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/showToast';
 import useStoryUpdateMutation from './useStoryUpdateMutation';
@@ -32,7 +32,7 @@ export const useUpdateStory = ({
   const onUpdateStory = wrap(async () => {
     try {
       await runWithAdGate(
-        adShowType.story,
+        adShowCategory.story,
         onUpdatingStory,
         onUpdateStorySuccess,
       );

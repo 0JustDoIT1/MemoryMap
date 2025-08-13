@@ -1,4 +1,3 @@
-// src/hook/common/useActionLock.ts
 import {useCallback} from 'react';
 import useButton from './useButton';
 import useLoading from './useLoading';

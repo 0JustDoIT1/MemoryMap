@@ -1,6 +1,6 @@
 import React from 'react';
 import {G, Text} from 'react-native-svg';
-import {IAppShowRegionName} from 'src/types/appData';
+import {IAppShowRegionName} from 'src/types/app';
 import {IKoreaMapDataObject} from 'src/types/koreaMap';
 
 interface KoreaMapText {

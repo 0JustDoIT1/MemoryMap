@@ -4,7 +4,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {FileSystem} from 'react-native-file-access';
 import {appBackUpRoute} from 'src/constants/app';
-import {IAppData} from 'src/types/appData';
+import {IAppData} from 'src/types/app';
 import {getAllKoreaMapData, updateKoreaMapData} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId, getStoryAll} from 'src/utils/story.db';
 import {decryptData, encryptData} from 'src/utils/crypto';

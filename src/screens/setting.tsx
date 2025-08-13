@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Cell, Section, TableView} from 'react-native-tableview-simple';
 import {Pressable, ScrollView, View} from 'react-native';
 import {Switch} from 'react-native-paper';
@@ -14,28 +14,29 @@ import {
   TermServiceUrl,
 } from 'src/constants/linking';
 import CustomAlert from 'src/components/alert/alert';
-import useButton from 'src/hook/common/useButton';
 import useDialog from 'src/hook/common/useDialog';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {showBottomToast} from 'src/utils/showToast';
 import {staticStyles} from 'src/style/staticStyles';
 import {useAppTheme} from 'src/style/paperTheme';
 import {onOpenStoreLink} from 'src/utils/openStoreLink';
-import useAd from 'src/hook/ad/useAd';
 import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
+import {useActionLock} from 'src/hook/common/useActionLock';
+import {useAdGate} from 'src/hook/ad/useAdGate';
+import {adShowCategory} from 'src/constants/app';
 
 const SettingScreen = ({navigation}: TSetting) => {
   const theme = useAppTheme();
   const appVersion = DeviceInfo.getVersion();
 
   const appPinCode = useAppPinCode(state => state.appPinCode);
+  const {isDisabled, wrap} = useActionLock();
+  const {runWithAdGate} = useAdGate();
 
-  const {isDisabled, disabledButton, abledButton} = useButton();
   const {visibleDialog, showDialog, hideDialog} = useDialog();
   const {resetMapMutation} = useKoreaMapMutation();
-  const {load, isClosed, show} = useAd();
   useExitApp();
 
   // Email Contact us
@@ -60,30 +61,19 @@ const SettingScreen = ({navigation}: TSetting) => {
     navigation.navigate('MapTextSetting');
   };
 
-  // Reset Map & RegionCount
-  const onResetMap = async () => {
-    try {
-      disabledButton();
-      show();
-      await resetMapMutation.mutateAsync();
-    } catch (error) {
-      abledButton();
-      return;
-    }
-  };
   const onResetMapSuccess = () => {
-    abledButton();
     hideDialog();
     showBottomToast('info', '지도를 새로 채워보세요!');
   };
 
-  useEffect(() => {
-    load();
-    if (isClosed) {
-      onResetMapSuccess();
-      load();
-    }
-  }, [load, isClosed]);
+  // Reset Map & RegionCount
+  const onResetMap = wrap(async () => {
+    await runWithAdGate(
+      adShowCategory.reset, // IAppAdShowType
+      () => resetMapMutation.mutateAsync(),
+      onResetMapSuccess,
+    );
+  });
 
   // Term link
   const onPressTermPrivacyUrl = async () => {
@@ -100,7 +90,7 @@ const SettingScreen = ({navigation}: TSetting) => {
 
   return (
     <SafeAreaView
-      className="flex-1 justify-start items-center bg-.gray-100"
+      className="flex-1 justify-start items-center bg-gray-100"
       edges={['top', 'bottom', 'left', 'right']}>
       <ScrollView className="w-full">
         <TableView style={staticStyles.settingTable} appearance="light">

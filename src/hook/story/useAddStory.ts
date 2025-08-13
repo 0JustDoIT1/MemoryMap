@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {adShowType} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/app';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/showToast';
 import useStoryUpdateMutation from './useStoryUpdateMutation';
@@ -31,7 +31,11 @@ export const useAddStory = ({
   // 버튼 handler
   const onAddStory = wrap(async () => {
     try {
-      await runWithAdGate(adShowType.story, onAddingStory, onAddStorySuccess);
+      await runWithAdGate(
+        adShowCategory.story,
+        onAddingStory,
+        onAddStorySuccess,
+      );
     } catch (e) {
       showBottomToast('error', '스토리 추가에 실패했습니다.');
     }

@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {IAppShowRegionName} from 'src/types/appData';
+import {IAppShowRegionName} from 'src/types/app';
 
 interface AppShowRegionNameState {
   appShowRegionName: IAppShowRegionName;

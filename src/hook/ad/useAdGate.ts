@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef} from 'react';
 import useAd from './useAd';
-import {IAppAdShowType} from 'src/types/appData';
+import {IAppAdShowCategory} from 'src/types/app';
 
 export const useAdGate = () => {
   const {load, show, isClosed, checkAdShow} = useAd();
@@ -16,7 +16,7 @@ export const useAdGate = () => {
 
   const runWithAdGate = useCallback(
     async (
-      type: IAppAdShowType,
+      type: IAppAdShowCategory,
       action: () => Promise<void>,
       actionSuccess: () => void,
     ) => {

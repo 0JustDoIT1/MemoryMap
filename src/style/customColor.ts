@@ -14,5 +14,5 @@ export const customColor = {
   backdrop: 'rgba(51, 47, 55, 0.4)',
   outline: '#968e98',
   blur: '#9CA3AF',
-  skelton: '#DBDBDB',
+  skeleton: '#DBDBDB',
 };

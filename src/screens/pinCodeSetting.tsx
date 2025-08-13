@@ -8,7 +8,7 @@ import PinCodeNumber from 'src/components/view/pinCodeNumber';
 import {useEffect} from 'react';
 import Animated from 'react-native-reanimated';
 import {staticStyles} from 'src/style/staticStyles';
-import usePinCode from 'src/hook/usePinCode';
+import usePinCode from 'src/hook/setting/usePinCode';
 import useBackButton from 'src/hook/common/useBackButton';
 
 const PinCodeSettingScreen = ({navigation}: TPinCodeSetting) => {

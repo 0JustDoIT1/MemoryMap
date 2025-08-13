@@ -7,7 +7,7 @@ import {useAppTheme} from 'src/style/paperTheme';
 import {setAsyncStorage} from 'src/utils/asyncStorage';
 import {appShowRegionNameKey} from 'src/constants/app';
 import {useEffect, useState} from 'react';
-import {IAppShowRegionName} from 'src/types/appData';
+import {IAppShowRegionName} from 'src/types/app';
 import useButton from 'src/hook/common/useButton';
 import useBackButton from 'src/hook/common/useBackButton';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
