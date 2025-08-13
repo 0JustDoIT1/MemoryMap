@@ -1,7 +1,5 @@
-// src/hook/setting/useSettingActions.ts
 import {useCallback} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {Linking} from 'react-native';
 import {showBottomToast} from 'src/utils/showToast';
 import {useActionLock} from 'src/hook/common/useActionLock';
 import {useAdGate} from 'src/hook/ad/useAdGate';
@@ -12,29 +10,27 @@ import {
   TermServiceUrl,
 } from 'src/constants/linking';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
-import {TSetting} from 'src/types/stack';
+import {TStackParamList} from 'src/types/stack';
+import {safeOpen} from 'src/utils/openLink';
+import useDialog from '../common/useDialog';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const safeOpen = async (url: string) => {
-  const can = await Linking.canOpenURL(url);
-  if (!can) {
-    showBottomToast('error', '링크를 열 수 없습니다.');
-    return;
-  }
-  await Linking.openURL(url);
-};
-
-export const useSettingActions = (
-  navigation: TSetting['navigation'],
-  hideDialog: () => void,
+export const useSettingAction = (
+  navigation: NativeStackNavigationProp<TStackParamList, 'Setting', undefined>,
 ) => {
-  const {wrap} = useActionLock();
+  const appVersion = DeviceInfo.getVersion();
+
+  const {isDisabled, wrap} = useActionLock();
   const {runWithAdGate} = useAdGate();
   const {resetMapMutation} = useKoreaMapMutation();
+  const {visibleDialog, showDialog, hideDialog} = useDialog();
 
+  // Map Text show
   const onPressMapText = useCallback(() => {
     navigation.navigate('MapTextSetting');
   }, [navigation]);
 
+  // Pincode(lock screen) on/off
   const onPressPinCodeSetting = useCallback(
     (hasPin: boolean) => {
       if (hasPin) navigation.navigate('PinCodeEnter', {route: 'Setting'});
@@ -43,16 +39,18 @@ export const useSettingActions = (
     [navigation],
   );
 
+  // Pincode(lock screen) reset
   const onPressPinCodeReset = useCallback(() => {
     navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
   }, [navigation]);
 
+  // Email Contact us
   const onPressContactUs = useCallback(async () => {
-    const appVersion = DeviceInfo.getVersion();
     const deviceName = await DeviceInfo.getDeviceName();
     await safeOpen(LinkingEmail(deviceName, appVersion));
   }, []);
 
+  // Term link
   const onPressTermPrivacyUrl = useCallback(() => safeOpen(TermPrivacyUrl), []);
   const onPressTermServiceUrl = useCallback(() => safeOpen(TermServiceUrl), []);
 
@@ -61,6 +59,7 @@ export const useSettingActions = (
     showBottomToast('info', '지도를 새로 채워보세요!');
   }, [hideDialog]);
 
+  // Reset Map & RegionCount
   const onResetMap = wrap(async () => {
     await runWithAdGate(
       adShowCategory.reset,
@@ -70,6 +69,11 @@ export const useSettingActions = (
   });
 
   return {
+    appVersion,
+    isDisabled,
+    visibleDialog,
+    showDialog,
+    hideDialog,
     onPressMapText,
     onPressPinCodeSetting,
     onPressPinCodeReset,

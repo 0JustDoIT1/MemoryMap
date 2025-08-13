@@ -6,84 +6,35 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {TSetting} from 'src/types/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
-import {Linking} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import {
-  LinkingEmail,
-  TermPrivacyUrl,
-  TermServiceUrl,
-} from 'src/constants/linking';
 import CustomAlert from 'src/components/alert/alert';
-import useDialog from 'src/hook/common/useDialog';
-import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
-import {showBottomToast} from 'src/utils/showToast';
 import {staticStyles} from 'src/style/staticStyles';
 import {useAppTheme} from 'src/style/paperTheme';
-import {onOpenStoreLink} from 'src/utils/openStoreLink';
+import {onOpenStoreLink} from 'src/utils/openLink';
 import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
-import {useActionLock} from 'src/hook/common/useActionLock';
-import {useAdGate} from 'src/hook/ad/useAdGate';
-import {adShowCategory} from 'src/constants/app';
+import {useSettingAction} from 'src/hook/setting/useSettingAction';
 
 const SettingScreen = ({navigation}: TSetting) => {
   const theme = useAppTheme();
-  const appVersion = DeviceInfo.getVersion();
 
   const appPinCode = useAppPinCode(state => state.appPinCode);
-  const {isDisabled, wrap} = useActionLock();
-  const {runWithAdGate} = useAdGate();
 
-  const {visibleDialog, showDialog, hideDialog} = useDialog();
-  const {resetMapMutation} = useKoreaMapMutation();
   useExitApp();
-
-  // Email Contact us
-  const onPressContactUs = async () => {
-    const deviceName = await DeviceInfo.getDeviceName();
-    await Linking.openURL(LinkingEmail(deviceName, appVersion));
-  };
-
-  // Pincode(lock screen) on/off
-  const onPressPinCodeSetting = () => {
-    if (appPinCode) navigation.navigate('PinCodeEnter', {route: 'Setting'});
-    else navigation.navigate('PinCodeSetting');
-  };
-
-  // Pincode(lock screen) reset
-  const onPressPinCodeReset = () => {
-    navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
-  };
-
-  // Map Text show
-  const onPressMapText = () => {
-    navigation.navigate('MapTextSetting');
-  };
-
-  const onResetMapSuccess = () => {
-    hideDialog();
-    showBottomToast('info', '지도를 새로 채워보세요!');
-  };
-
-  // Reset Map & RegionCount
-  const onResetMap = wrap(async () => {
-    await runWithAdGate(
-      adShowCategory.reset, // IAppAdShowType
-      () => resetMapMutation.mutateAsync(),
-      onResetMapSuccess,
-    );
-  });
-
-  // Term link
-  const onPressTermPrivacyUrl = async () => {
-    await Linking.openURL(TermPrivacyUrl);
-  };
-
-  // Term link
-  const onPressTermServiceUrl = async () => {
-    await Linking.openURL(TermServiceUrl);
-  };
+  const {
+    appVersion,
+    isDisabled,
+    visibleDialog,
+    showDialog,
+    hideDialog,
+    onPressMapText,
+    onPressPinCodeSetting,
+    onPressPinCodeReset,
+    onPressContactUs,
+    onPressTermPrivacyUrl,
+    onPressTermServiceUrl,
+    onResetMap,
+  } = useSettingAction(navigation);
 
   const cellHasBorder = useDynamicStyle({border: {bottom: 0.5}});
   const cellNoneBorder = useDynamicStyle();
@@ -137,16 +88,12 @@ const SettingScreen = ({navigation}: TSetting) => {
                       />
                     )}
                   </Pressable>
-                  <Pressable
-                    onPress={onPressPinCodeSetting}
-                    disabled={isDisabled}>
-                    <View pointerEvents="none">
-                      <Switch
-                        color={customColor.brandMain}
-                        value={appPinCode}
-                      />
-                    </View>
-                  </Pressable>
+                  <Switch
+                    color={customColor.brandMain}
+                    value={appPinCode}
+                    onValueChange={() => onPressPinCodeSetting(!!appPinCode)}
+                    disabled={isDisabled}
+                  />
                 </View>
               }
             />

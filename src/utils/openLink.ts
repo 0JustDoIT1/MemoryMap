@@ -1,4 +1,5 @@
 import {Linking} from 'react-native';
+import {showBottomToast} from './showToast';
 
 const GOOGLE_PLAY_STORE_LINK = 'market://details?id=com.memorymap';
 const GOOGLE_PLAY_STORE_WEB_LINK =
@@ -9,4 +10,13 @@ export const onOpenStoreLink = async () => {
 
   if (supported) await Linking.openURL(GOOGLE_PLAY_STORE_LINK);
   else await Linking.openURL(GOOGLE_PLAY_STORE_WEB_LINK);
+};
+
+export const safeOpen = async (url: string) => {
+  const can = await Linking.canOpenURL(url);
+  if (!can) {
+    showBottomToast('error', '링크를 열 수 없습니다.');
+    return;
+  }
+  await Linking.openURL(url);
 };
