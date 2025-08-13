@@ -44,7 +44,8 @@ const usePinCodeSetting = (
     const ok = code.toString() === reCode.toString();
     if (ok) {
       const pin = code.join('');
-      await setPinCodeToKeyChain(pin);
+      const setOk = await setPinCodeToKeyChain(pin);
+      if (!setOk) return;
       navigation.replace('Main', {screen: 'Setting'});
     } else {
       wobbleScreen();

@@ -24,7 +24,6 @@ const usePinCodeEnter = (
     deletePinCodeToKeyChain,
     animatedStyle,
     wobbleScreen,
-    setAppPinCode,
   } = usePinCodeBase();
 
   // 엔터 화면용 입력
@@ -42,20 +41,21 @@ const usePinCodeEnter = (
   const navigateAfterMatch = useCallback(
     async (target: string) => {
       if (target === 'Setting') {
-        await deletePinCodeToKeyChain();
-        setAppPinCode(false);
+        const ok = await deletePinCodeToKeyChain();
+        if (!ok) return false;
         navigation.replace('Main', {screen: target});
       } else {
         if (target === 'PinCodeSetting') navigation.replace(target);
         else navigation.replace('Main', {screen: target});
       }
     },
-    [deletePinCodeToKeyChain, setAppPinCode, navigation],
+    [deletePinCodeToKeyChain, navigation],
   );
 
   const matchPinCode = useCallback(async () => {
     try {
       const pinCode = await getPinCodeToKeyChain();
+      if (!pinCode) return;
       const codeString = code.join('');
 
       if (pinCode && pinCode === codeString) {

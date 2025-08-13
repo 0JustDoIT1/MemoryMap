@@ -40,30 +40,45 @@ const usePinCodeBase = () => {
     return prev.slice(0, prev.length - 1);
   }, []);
 
-  // Get pinCode to KeyChain
-  const getPinCodeToKeyChain = useCallback(
-    async () =>
-      await getSecureValue(KeyChainPinCode).then(value => value?.password),
-    [],
-  );
-
-  // Remove pinCode to KeyChain
-  const deletePinCodeToKeyChain = useCallback(
-    async () => await removeSecureValue(KeyChainPinCode),
-    [],
-  );
-
   // Setting pincode to keyChain
   const setPinCodeToKeyChain = useCallback(
     async (pin: string) => {
       try {
         await setSecureValue(KeyChainPinCode, KeyChainPinCode, pin);
+        setAppPinCode(true);
+
+        return true;
       } catch {
         setAppPinCode(false);
+
+        return false;
       }
     },
     [setAppPinCode],
   );
+
+  // Get pinCode to KeyChain
+  const getPinCodeToKeyChain = useCallback(async () => {
+    try {
+      return await getSecureValue(KeyChainPinCode).then(
+        value => value?.password,
+      );
+    } catch {
+      return false;
+    }
+  }, []);
+
+  // Remove pinCode to KeyChain
+  const deletePinCodeToKeyChain = useCallback(async () => {
+    try {
+      await removeSecureValue(KeyChainPinCode);
+      setAppPinCode(false);
+      return true;
+    } catch {
+      setAppPinCode(true);
+      return false;
+    }
+  }, [setAppPinCode]);
 
   // If incorrect, Reanimated wobble
   const ANGLE = 3;
