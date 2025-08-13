@@ -9,6 +9,9 @@ export interface IDynamicStyle {
     marginLeft?: DimensionValue;
     marginRight?: DimensionValue;
   };
+  padding?: {
+    paddingBottom?: DimensionValue;
+  };
   border?: {
     bottom?: number;
   };
@@ -30,6 +33,8 @@ interface IReturnStyles {
   settingTableCell: ViewStyle;
   mapTextSettingSelect: ViewStyle;
   mapTextSettingText: TextStyle;
+
+  pinCodeTyping: ViewStyle;
 }
 
 export const dynamicStyle = (props?: IDynamicStyle): IReturnStyles => ({
@@ -95,5 +100,8 @@ export const dynamicStyle = (props?: IDynamicStyle): IReturnStyles => ({
   },
   mapTextSettingText: {
     color: props?.color,
+  },
+  pinCodeTyping: {
+    paddingBottom: props?.padding?.paddingBottom,
   },
 });

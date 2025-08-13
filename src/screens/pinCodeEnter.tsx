@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TPinCodeEnter} from 'src/types/stack';
 import {customColor} from 'src/style/customColor';
 import {Text} from 'react-native-paper';
@@ -10,8 +10,11 @@ import Animated from 'react-native-reanimated';
 import {staticStyles} from 'src/style/staticStyles';
 import {showBottomToast} from 'src/utils/showToast';
 import usePinCode from 'src/hook/setting/usePinCode';
+import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 
 const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
+  const insets = useSafeAreaInsets();
+
   const {
     pinCodeArray,
     pinLength,
@@ -55,10 +58,14 @@ const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
     }
   };
 
+  const pinTyping = useDynamicStyle({
+    padding: {paddingBottom: insets.bottom}, // <- 여기만 추가
+  });
+
   return (
     <SafeAreaView
       className="flex-1 justify-center items-center bg-brandLight"
-      edges={['bottom', 'left', 'right']}>
+      edges={['left', 'right']}>
       <View className="w-full h-2/3 flex items-center justify-center bg-brandLight">
         <Animated.View
           style={[staticStyles.pinCodeTopContainer, animatedStyle]}>
@@ -88,7 +95,7 @@ const PinCodeEnterScreen = ({navigation, route}: TPinCodeEnter) => {
           </View>
         </Animated.View>
       </View>
-      <View className="w-full h-1/3 bg-white">
+      <View className="w-full h-1/3 bg-white" style={pinTyping.pinCodeTyping}>
         {pinCodeArray.map(array => (
           <View key={array[0]} className="w-full h-1/4 flex-row">
             {array.map(item => {
