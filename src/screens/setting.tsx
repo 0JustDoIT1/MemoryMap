@@ -13,7 +13,9 @@ import {onOpenStoreLink} from 'src/utils/openLink';
 import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
-import {useSettingAction} from 'src/hook/setting/useSettingAction';
+import {useSettingResetMap} from 'src/hook/setting/useSettingResetMap';
+import {useSettingLink} from 'src/hook/setting/useSettingLink';
+import {useSettingNavigation} from 'src/hook/setting/useSettingNavigation';
 
 const SettingScreen = ({navigation}: TSetting) => {
   const theme = useAppTheme();
@@ -21,20 +23,17 @@ const SettingScreen = ({navigation}: TSetting) => {
   const appPinCode = useAppPinCode(state => state.appPinCode);
 
   useExitApp();
+
+  const {isDisabled, visibleDialog, showDialog, hideDialog, onResetMap} =
+    useSettingResetMap();
   const {
     appVersion,
-    isDisabled,
-    visibleDialog,
-    showDialog,
-    hideDialog,
-    onPressMapText,
-    onPressPinCodeSetting,
-    onPressPinCodeReset,
     onPressContactUs,
     onPressTermPrivacyUrl,
     onPressTermServiceUrl,
-    onResetMap,
-  } = useSettingAction(navigation);
+  } = useSettingLink();
+  const {onPressMapText, onPressPinCodeSetting, onPressPinCodeReset} =
+    useSettingNavigation(navigation);
 
   const cellHasBorder = useDynamicStyle({border: {bottom: 0.5}});
   const cellNoneBorder = useDynamicStyle();
