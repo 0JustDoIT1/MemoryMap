@@ -3,7 +3,7 @@
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
 import {appTableName} from 'src/constants/app';
 import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
-import {IPagination, IStoryPagination} from 'src/types/story';
+import {IPagination, IStory, IStoryPagination} from 'src/types/story';
 import {resultArrToStoryArr} from 'src/utils/story.db';
 
 // Read Auth to auth table
@@ -183,10 +183,12 @@ export const getStoryPaginationToDB = async (
 export const getOneStoryToDB = async (
   db: SQLiteDatabase,
   id: string,
-): Promise<[ResultSet]> => {
+): Promise<IStory> => {
   try {
     const query = `SELECT * FROM ${appTableName.story} WHERE id = ?`;
-    return await db.executeSql(query, [id]);
+    const [result] = await db.executeSql(query, [id]);
+
+    return result.rows.item(0);
   } catch (error) {
     console.error('Story DB One 조회 실패:', error);
     throw error;

@@ -7,11 +7,13 @@ import {addStoryByRegionId, getStoryAll} from 'src/utils/story.db';
 import {decryptData, encryptData} from 'src/utils/crypto';
 import useAuth from '../auth/useAuth';
 import {showBottomToast} from 'src/utils/showToast';
-import {setRealtime} from 'src/utils/firebase/realtime';
+import {readRealtime, setRealtime} from 'src/utils/firebase/realtime';
 import {InteractionManager} from 'react-native';
 import {runWithConcurrency} from 'src/utils/common/task';
 import {useCallback, useRef, useState} from 'react';
 import {useActionLock} from '../common/useActionLock';
+import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
+import {writeBase64Retry} from 'src/utils/fileSystem';
 
 interface Progress {
   current: number; // 완료된 작업 수
@@ -21,38 +23,15 @@ interface Progress {
 const CONCURRENCY = 4;
 
 const useBackUp = () => {
-  const [progress, setProgress] = useState<Progress>({current: 0, total: 0});
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const cancelledRef = useRef<boolean>(false);
-  const lastUpdateRef = useRef<number>(0);
-
   // Access the client
   const queryClient = useQueryClient();
 
   const {googleSignIn, googleSignOut} = useAuth();
   const {wrap, isDisabled, onLoading} = useActionLock();
 
-  const cancel = useCallback(() => {
-    cancelledRef.current = true;
-  }, []);
-
-  // 간단 스로틀: 100ms마다 또는 완료 시에만 진행률 반영
-  const onProgress = (current: number, total: number) => {
-    const now = Date.now();
-    if (current === total || now - lastUpdateRef.current > 100) {
-      lastUpdateRef.current = now;
-      setProgress({current, total});
-    }
-  };
-
-  // Create backup data & encrypt
+  // data create & encrypt
   const createBackupData = async () => {
     try {
-      cancelledRef.current = false;
-      lastUpdateRef.current = 0;
-      setIsRunning(true);
-      setProgress({current: 0, total: 0});
-
       const koreaMapData = await getAllKoreaMapData();
       const story = await getStoryAll();
       const photoRegionArray = Object.values(koreaMapData).filter(
@@ -61,14 +40,8 @@ const useBackUp = () => {
       const mapImage: Record<string, string> = {};
       const zoomImage: Record<string, string> = {};
 
-      const total = photoRegionArray.length;
-      let current = 0;
-      onProgress(0, total);
-
       // 작업 큐 만들기
       const tasks = photoRegionArray.map(region => async () => {
-        if (cancelledRef.current) return;
-
         const {id, imageUrl, zoomImageUrl} = region;
 
         // JS 스레드 양보: UI 프레임 드랍 방지
@@ -85,18 +58,9 @@ const useBackUp = () => {
           const zoomImg = await FileSystem.readFile(zoomImageUrl, 'base64');
           zoomImage[id] = zoomImg;
         }
-
-        current += 1;
-        onProgress(current, total);
       });
 
-      await runWithConcurrency(tasks, CONCURRENCY, () => cancelledRef.current);
-
-      // 취소되었으면 암호화 전에 조기 종료
-      if (cancelledRef.current) return undefined;
-
-      // total=0 이거나 스로틀로 스킵된 경우 100% 보장
-      onProgress(total, total);
+      await runWithConcurrency(tasks, CONCURRENCY);
 
       const appData: IAppData = {
         koreaMapData,
@@ -110,13 +74,12 @@ const useBackUp = () => {
       return encrypted;
     } catch (error) {
       return undefined;
-    } finally {
-      setIsRunning(false);
     }
   };
 
   // BackUp App Data
-  const backupAppData = wrap(async () => {
+  const onBackUp = wrap(async () => {
+    let signedIn = false;
     try {
       // 1) 로그인 시도 (실패하면 백업 생성 안 함)
       const userInfo = await googleSignIn();
@@ -124,6 +87,8 @@ const useBackUp = () => {
         showBottomToast('error', '로그인이 필요합니다.');
         return;
       }
+      signedIn = true;
+      const {uid} = userInfo.user;
 
       // 2) 백업 데이터 생성 (취소 시 undefined)
       const data = await createBackupData();
@@ -132,103 +97,119 @@ const useBackUp = () => {
         return;
       }
 
-      const {uid} = userInfo.user;
-
+      // 3) Firebase에 백업
       await setRealtime(uid, {data});
 
       showBottomToast('success', 'Firebase에 데이터를 백업했습니다.');
     } catch (error) {
       showBottomToast('error', '데이터 백업에 실패했습니다.');
+    } finally {
+      if (signedIn) await googleSignOut();
     }
   });
 
-  // // Get Backup data & decrypt
-  // const getBackupData = async (data: string) => {
-  //   const appData: IAppData = JSON.parse(decryptData(data));
+  // data parse & decrypt
+  const getBackupData = async (data: string) => {
+    const appData: IAppData = JSON.parse(decryptData(data));
 
-  //   const koreaMapData = appData.koreaMapData;
-  //   const story = appData.story;
-  //   const mapImage = appData.mapImage;
-  //   const zoomImage = appData.zoomImage;
+    if (!appData) return showBottomToast('error', '백업된 데이터가 없습니다.');
 
-  //   const koreaMapDataArray = Object.values(koreaMapData);
+    const koreaMapData = appData.koreaMapData;
+    const story = appData.story;
+    const mapImage = appData.mapImage;
+    const zoomImage = appData.zoomImage;
 
-  //   for (let i = 0; i < Object.values(koreaMapData).length; i++) {
-  //     if (koreaMapDataArray[i].type === 'photo') {
-  //       const existMapImage = await FileSystem.exists(
-  //         koreaMapDataArray[i].imageUrl!,
-  //       );
-  //       const existZoomImage = await FileSystem.exists(
-  //         koreaMapDataArray[i].zoomImageUrl!,
-  //       );
-  //       if (existMapImage)
-  //         await FileSystem.unlink(koreaMapDataArray[i].imageUrl!);
-  //       if (existZoomImage)
-  //         await FileSystem.unlink(koreaMapDataArray[i].zoomImageUrl!);
+    const koreaMapDataArray = Object.values(koreaMapData);
 
-  //       await FileSystem.writeFile(
-  //         koreaMapDataArray[i].imageUrl!,
-  //         mapImage[koreaMapDataArray[i].id],
-  //         'base64',
-  //       );
-  //       await FileSystem.writeFile(
-  //         koreaMapDataArray[i].zoomImageUrl!,
-  //         zoomImage[koreaMapDataArray[i].id],
-  //         'base64',
-  //       );
-  //     }
-  //     await updateKoreaMapData(koreaMapDataArray[i]);
-  //   }
+    // 지도 데이터/이미지 복원
+    const mapTasks = koreaMapDataArray.map(region => async () => {
+      const {type, id, imageUrl, zoomImageUrl} = region;
+      if (type === 'photo') {
+        await Promise.all([
+          writeBase64Retry(imageUrl, mapImage[id]),
+          writeBase64Retry(zoomImageUrl, zoomImage[id]),
+        ]);
+      }
+      await updateKoreaMapData(region);
+    });
 
-  //   if (story.length >= 1) {
-  //     story.forEach(async item => await addStoryByRegionId(item));
-  //   }
+    await runWithConcurrency(mapTasks, CONCURRENCY);
 
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['koreaMapData'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['storyList'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['storyRegionList'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['colorMapList'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['viewStory'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['dashboardKoreaMap'],
-  //     refetchType: 'all',
-  //   });
-  //   await queryClient.invalidateQueries({
-  //     queryKey: ['dashboardStory'],
-  //     refetchType: 'all',
-  //   });
-  // };
+    // 스토리 복원
+    if (story.length > 0) {
+      const storyTasks = story.map(
+        item => async () => await addStoryByRegionId(item),
+      );
 
-  // // Get Backup Data
-  // const getAppData = async () => {
-  //   const googleCloud = await googleSignIn();
-  //   if (googleCloud) {
-  //     const exist = await googleCloud.exists(`/${appBackUpRoute}.txt`);
-  //     if (exist) {
-  //       const data = await googleCloud.readFile(`/${appBackUpRoute}.txt`);
-  //       await getBackupData(data);
-  //       await googleSignOut();
-  //       return true;
-  //     } else return false;
-  //   } else throw new Error('Google Drive에 연결하지 못했습니다.');
-  // };
+      await runWithConcurrency(storyTasks, CONCURRENCY);
+    }
 
-  return {isDisabled, onLoading, backupAppData};
+    // 캐시 무효화 (병렬)
+    await Promise.all([
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.koreaMapData,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.storyList.root,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.storyRegionList,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.colorMapList,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.story,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.dashboard.koreaMap,
+        refetchType: 'all',
+      }),
+      queryClient.invalidateQueries({
+        queryKey: REACT_QUERY_KEYS.dashboard.story,
+        refetchType: 'all',
+      }),
+    ]);
+  };
+
+  // Recover Backup Data
+  const onRecover = async () => {
+    let signedIn = false;
+    try {
+      // 1) 로그인 시도 (실패하면 복원 시도 안 함)
+      const userInfo = await googleSignIn();
+      if (!userInfo) {
+        showBottomToast('error', '로그인이 필요합니다.');
+        return;
+      }
+      signedIn = true;
+      const {uid} = userInfo.user;
+
+      // 2) Firebase에서 recover
+      const data = await readRealtime(uid);
+
+      if (!data) {
+        showBottomToast('error', '데이터 불러오기에 실패했습니다.');
+        return;
+      }
+
+      // 3) 데이터 파싱 및 복호화
+      await getBackupData(data.data);
+
+      showBottomToast('success', '데이터를 불러왔습니다.');
+    } catch (error) {
+      showBottomToast('error', '데이터 불러오기에 실패했습니다.');
+    } finally {
+      if (signedIn) await googleSignOut();
+    }
+  };
+
+  return {isDisabled, onLoading, onBackUp, onRecover};
 };
 
 export default useBackUp;

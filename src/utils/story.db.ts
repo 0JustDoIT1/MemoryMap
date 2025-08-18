@@ -74,19 +74,19 @@ export const getStoryPagination = async (
 // Get Story by id (one document)
 export const getOneStoryById = async (id: string) => {
   const db = await getDBConnection();
-  const result = await getOneStoryToDB(db, id).then(res => res[0].rows.item(0));
+  const result = await getOneStoryToDB(db, id);
 
   return result;
 };
 
-// Add story by region id -> Firebase & Recoil
+// Add story by region id -> SQLite
 export const addStoryByRegionId = async (data: IStory) => {
   // Save SQLite
   const db = await getDBConnection();
   await saveStoryToDB(db, data);
 };
 
-// Delete story by Region id -> Firebase & Recoil
+// Delete story by Region id -> SQLite
 export const deleteStoryById = async (id: string) => {
   // Delete SQLite
   const db = await getDBConnection();

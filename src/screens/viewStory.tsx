@@ -38,45 +38,48 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
     <SafeAreaView
       className="flex-1 justify-start items-center bg-white p-6"
       edges={['top', 'bottom', 'left', 'right']}>
-      <View className="w-full h-[90%]">
-        <ViewShot
-          ref={viewShotRef}
-          style={staticStyles.storyViewShot}
-          options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
-          <StoryViewHeader
-            regionId={data.regionId}
-            startDate={data.startDate}
-            endDate={data.endDate}
-            bgColor={storyPoint[data.point].color}
-          />
-          <StoryViewContent
-            image={storyPoint[data.point].image}
-            title={data.title}
-            contents={data.contents}
-          />
-        </ViewShot>
+      {isSuccess && (
+        <>
+          <View className="w-full h-[90%]">
+            <ViewShot
+              ref={viewShotRef}
+              style={staticStyles.storyViewShot}
+              options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
+              <StoryViewHeader
+                regionId={data.regionId}
+                startDate={data.startDate}
+                endDate={data.endDate}
+                bgColor={storyPoint[data.point].color}
+              />
+              <StoryViewContent
+                image={storyPoint[data.point].image}
+                title={data.title}
+                contents={data.contents}
+              />
+            </ViewShot>
 
-        <StoryViewActionBar
-          onEdit={() => navigation.navigate('UpdateStory', {story: data})}
-          onSave={() => onCaptureAndSave(viewShotRef)}
-          onShare={() =>
-            onCaptureAndShare(
-              viewShotRef,
-              `${getRegionTitleById(data.regionId)} 여행 스토리`,
-            )
-          }
-          onDelete={showDialog}
-        />
-      </View>
-
-      <CustomAlert
-        visible={visibleDialog}
-        title="스토리를 삭제하시겠습니까?"
-        buttonText="삭제"
-        isDisabled={isDisabled}
-        buttonOnPress={() => deleteStory(data.id, data.regionId)}
-        hideAlert={hideDialog}
-      />
+            <StoryViewActionBar
+              onEdit={() => navigation.navigate('UpdateStory', {story: data})}
+              onSave={() => onCaptureAndSave(viewShotRef)}
+              onShare={() =>
+                onCaptureAndShare(
+                  viewShotRef,
+                  `${getRegionTitleById(data.regionId)} 여행 스토리`,
+                )
+              }
+              onDelete={showDialog}
+            />
+          </View>
+          <CustomAlert
+            visible={visibleDialog}
+            title="스토리를 삭제하시겠습니까?"
+            buttonText="삭제"
+            isDisabled={isDisabled}
+            buttonOnPress={() => deleteStory(data.id, data.regionId)}
+            hideAlert={hideDialog}
+          />
+        </>
+      )}
 
       <LoadingOverlay visible={isLoading} />
     </SafeAreaView>

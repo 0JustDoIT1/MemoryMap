@@ -1,34 +1,17 @@
 import {Pressable, View} from 'react-native';
-import {Portal, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useBackUp from 'src/hook/setting/useBackUp';
 import {customColor} from 'src/style/customColor';
 import {TBackUp} from 'src/types/stack';
-import {showBottomToast} from 'src/utils/showToast';
 import LoadingOverlay from '../components/feedback/loadingOverlay';
-import {useState} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 
 const BackUpScreen = ({navigation}: TBackUp) => {
-  const {isDisabled, onLoading, backupAppData} = useBackUp();
+  const {isDisabled, onLoading, onBackUp, onRecover} = useBackUp();
 
   useBackButton(() => navigation.goBack());
-
-  // Get App Data
-  const onGetData = async () => {
-    // try {
-    //   setIsLoading(true);
-    //   const result = await getAppData();
-    //   setIsLoading(false);
-    //   if (result)
-    //     showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
-    //   else showBottomToast('info', 'Google Drive에 백업된 데이터가 없습니다.');
-    // } catch (error) {
-    //   setIsLoading(false);
-    //   showBottomToast('error', '데이터 불러오기에 실패했습니다.');
-    // }
-  };
 
   return (
     <SafeAreaView
@@ -58,7 +41,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
       <View className="w-full h-[8%] flex-row justify-between items-center border-t border-t-gray-300">
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
-          onPress={backupAppData}>
+          onPress={onBackUp}>
           <MaterialCommunityIcons
             name="cloud-upload-outline"
             size={24}
@@ -69,7 +52,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
         <View className="h-3/4 border-r-[0.5px] border-blur" />
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
-          onPress={onGetData}>
+          onPress={onRecover}>
           <MaterialCommunityIcons
             name="cloud-download-outline"
             size={24}
