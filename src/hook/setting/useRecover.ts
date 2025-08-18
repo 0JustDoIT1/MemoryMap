@@ -3,25 +3,36 @@ import {IAppData} from 'src/types/app';
 import {updateKoreaMapData} from 'src/utils/koreaMap.db';
 import {addStoryByRegionId} from 'src/utils/story.db';
 import {decryptData} from 'src/utils/crypto';
-import useAuth from '../auth/useAuth';
 import {showBottomToast} from 'src/utils/showToast';
-import {readRealtime} from 'src/utils/firebase/realtime';
+import {readRealtime, readRealtimeDate} from 'src/utils/firebase/realtime';
 import {runWithConcurrency} from 'src/utils/common/task';
 import {useActionLock} from '../common/useActionLock';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {writeBase64Retry} from 'src/utils/fileSystem';
+import useDialog from '../common/useDialog';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {useEffect, useState} from 'react';
 
 const CONCURRENCY = 4;
 
-const useRecover = () => {
+const useRecover = (user: FirebaseAuthTypes.User | null) => {
   // Access the client
   const queryClient = useQueryClient();
 
-  const {googleSignIn, googleSignOut} = useAuth();
+  const [date, setDate] = useState<string>('');
+
+  const {showDialog, hideDialog, visibleDialog} = useDialog();
   const {wrap, isDisabled, onLoading} = useActionLock();
 
+  useEffect(() => {
+    if (!user) return;
+
+    const {uid} = user;
+    readRealtimeDate(uid).then(date => setDate(date ?? ''));
+  }, [user]);
+
   // data parse & decrypt
-  const getBackupData = async (data: string) => {
+  const getRecoverData = async (data: string) => {
     const appData: IAppData = JSON.parse(decryptData(data));
 
     if (!appData) return showBottomToast('error', '백업된 데이터가 없습니다.');
@@ -91,16 +102,13 @@ const useRecover = () => {
 
   // Recover Backup Data
   const onRecover = wrap(async () => {
-    let signedIn = false;
     try {
-      // 1) 로그인 시도 (실패하면 복원 시도 안 함)
-      const userInfo = await googleSignIn();
-      if (!userInfo) {
-        showBottomToast('error', '로그인이 필요합니다.');
+      // 1) 로그인 확인 (실패하면 복원 시도 안 함)
+      if (!user) {
+        showBottomToast('info', '로그인이 필요합니다.');
         return;
       }
-      signedIn = true;
-      const {uid} = userInfo.user;
+      const {uid} = user;
 
       // 2) Firebase에서 recover
       const data = await readRealtime(uid);
@@ -111,17 +119,25 @@ const useRecover = () => {
       }
 
       // 3) 데이터 파싱 및 복호화
-      await getBackupData(data.data);
+      await getRecoverData(data.data);
 
       showBottomToast('success', '데이터를 불러왔습니다.');
     } catch (error) {
       showBottomToast('error', '데이터 불러오기에 실패했습니다.');
     } finally {
-      if (signedIn) await googleSignOut();
+      hideDialog();
     }
   });
 
-  return {isDisabled, onLoading, onRecover};
+  return {
+    date,
+    showDialog,
+    hideDialog,
+    visibleDialog,
+    isDisabled,
+    onLoading,
+    onRecover,
+  };
 };
 
 export default useRecover;

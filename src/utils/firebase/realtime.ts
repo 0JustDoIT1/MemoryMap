@@ -15,6 +15,7 @@ const dbRef = (uid: string) => ref(db, 'users/' + uid);
 
 interface IRealtimeData {
   data: string;
+  date: string;
 }
 
 export const setRealtime = async (uid: string, data: IRealtimeData) => {
@@ -41,6 +42,16 @@ export const readRealtime = async (uid: string) => {
     return snapshot.val() as IRealtimeData | null;
   } catch (err) {
     console.error('readRealtime error', err);
+    throw err;
+  }
+};
+
+export const readRealtimeDate = async (uid: string) => {
+  try {
+    const snapshot = await get(ref(db, `users/${uid}/date`));
+    return (snapshot.val() as string | null) ?? null;
+  } catch (err) {
+    console.error('readRealtimeDate error', err);
     throw err;
   }
 };

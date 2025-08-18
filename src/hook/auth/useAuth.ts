@@ -5,7 +5,7 @@ import {
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {useCallback, useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {
   FirebaseAuthTypes,
   getAuth,
@@ -17,12 +17,26 @@ import {showBottomToast} from 'src/utils/showToast';
 import {Platform} from 'react-native';
 
 const useAuth = () => {
+  // 로그인 상태
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  const [initializing, setInitializing] = useState(true);
+
   // Google Sign In Configure
   useEffect(() => {
     // webClientId: Firebase 콘솔(GCP)에서 발급된 "Web client"의 Client ID 사용
     GoogleSignin.configure({
       webClientId: WebClientId,
     });
+  }, []);
+
+  // Firebase Auth 구독: 로그인/로그아웃/토큰 갱신까지 반영
+  useEffect(() => {
+    const auth = getAuth();
+    const unsub = auth.onAuthStateChanged(user => {
+      setUser(user);
+      setInitializing(false);
+    });
+    return unsub;
   }, []);
 
   // 연타 방지
@@ -107,7 +121,7 @@ const useAuth = () => {
     }
   }, []);
 
-  return {googleSignIn, googleSignOut};
+  return {user, initializing, googleSignIn, googleSignOut};
 };
 
 export default useAuth;
