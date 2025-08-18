@@ -1,23 +1,23 @@
 import {ImageSourcePropType} from 'react-native';
-import {sorting} from 'src/utils/common/sort';
+
 import point_1 from 'assets/images/point_1.png';
 import point_2 from 'assets/images/point_2.png';
 import point_3 from 'assets/images/point_3.png';
 import point_4 from 'assets/images/point_4.png';
 import point_5 from 'assets/images/point_5.png';
 
-export interface Point {
+export interface IPoint {
   point: number;
   image: ImageSourcePropType;
   color: string;
   text: string;
 }
 
-interface StoryPoint {
-  [key: number]: Point;
-}
+type IStoryPoint = Record<number, IPoint>;
 
-export const storyPoint: StoryPoint = {
+export const STORY_POINT_VALUES = [5, 4, 3, 2, 1] as const;
+
+export const storyPointBase: IStoryPoint = {
   5: {
     point: 5,
     image: point_5,
@@ -50,6 +50,6 @@ export const storyPoint: StoryPoint = {
   },
 };
 
-export const storyPointArray: Point[] = Object.values(storyPoint).sort((a, b) =>
-  sorting(a, b, -1, 'point'),
+export const storyPointArray: IPoint[] = STORY_POINT_VALUES.map(
+  v => storyPointBase[v],
 );

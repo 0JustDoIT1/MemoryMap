@@ -6,12 +6,11 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import {Point} from 'src/constants/point';
+import {IPoint} from 'src/constants/point';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
-import {staticStyles} from 'src/style/staticStyles';
 
 interface SelectPoint {
-  item: Point;
+  item: IPoint;
   point: number;
   setPoint: React.Dispatch<React.SetStateAction<number>>;
 }

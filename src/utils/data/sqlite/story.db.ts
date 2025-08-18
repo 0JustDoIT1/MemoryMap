@@ -12,8 +12,8 @@ import {
 import {saveStoryToDB} from 'src/database/create';
 import {deleteOneStoryToDB} from 'src/database/delete';
 import {ResultSet} from 'react-native-sqlite-storage';
-import {getRegionTitleById} from '../../screen/koreaMap.util';
 import {IDashboardStory} from 'src/types/dashboard';
+import {getRegionTitleById} from 'src/utils/screen/koreaMap.util';
 
 // Result data convert Story Type
 const _resultToStory = (data: any) => {
