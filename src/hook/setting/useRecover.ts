@@ -11,7 +11,7 @@ import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {writeBase64Retry} from 'src/utils/fileSystem';
 import useDialog from '../common/useDialog';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 const CONCURRENCY = 4;
 
@@ -100,6 +100,14 @@ const useRecover = (user: FirebaseAuthTypes.User | null) => {
     ]);
   };
 
+  const confirmRecover = useCallback(() => {
+    if (!user) {
+      showBottomToast('info', '로그인이 필요합니다.');
+      return;
+    }
+    showDialog();
+  }, []);
+
   // Recover Backup Data
   const onRecover = wrap(async () => {
     try {
@@ -131,7 +139,7 @@ const useRecover = (user: FirebaseAuthTypes.User | null) => {
 
   return {
     date,
-    showDialog,
+    confirmRecover,
     hideDialog,
     visibleDialog,
     isDisabled,
