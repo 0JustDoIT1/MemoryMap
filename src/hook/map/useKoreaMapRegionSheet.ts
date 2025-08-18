@@ -1,14 +1,14 @@
 // src/hook/map/useKoreaRegionSheet.ts
 import {useCallback, useState} from 'react';
-import {IKoreaMapDataObject, IKoreaRegionData} from 'src/types/koreaMap';
+import {IMapDataObject, IRegionData} from 'src/types/koreaMap';
 import {REGION_EMPTY} from 'src/constants/koreaMapData';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 export const useKoreaMapRegionSheet = (
-  mapData: IKoreaMapDataObject | undefined,
+  mapData: IMapDataObject | undefined,
   mapRef: React.RefObject<BottomSheetModal | null>,
 ) => {
-  const [regionData, setRegionData] = useState<IKoreaRegionData>(REGION_EMPTY);
+  const [regionData, setRegionData] = useState<IRegionData>(REGION_EMPTY);
 
   const handlePresentPress = useCallback(() => {
     mapRef.current?.present();

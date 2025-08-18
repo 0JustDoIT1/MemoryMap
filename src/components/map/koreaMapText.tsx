@@ -1,11 +1,11 @@
 import React from 'react';
 import {G, Text} from 'react-native-svg';
-import {IAppShowRegionName} from 'src/types/app';
-import {IKoreaMapDataObject} from 'src/types/koreaMap';
+import {IShowRegionName} from 'src/types/koreaMap';
+import {IMapDataObject} from 'src/types/koreaMap';
 
 interface KoreaMapText {
-  data: IKoreaMapDataObject;
-  show: IAppShowRegionName;
+  data: IMapDataObject;
+  show: IShowRegionName;
 }
 
 const KoreaMapText = ({data, show}: KoreaMapText) => {

@@ -1,12 +1,12 @@
 import {Pressable, View} from 'react-native';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from 'src/style/paperTheme';
 import {Text} from 'react-native-paper';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 
 interface IKoreaMapSheetHeader {
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
   setZoom: (zoom: boolean) => void;
   isDisabled: boolean;
   showDialog: () => void;

@@ -6,10 +6,10 @@ import CustomAlert from '../alert/alert';
 import LoadingOverlay from 'src/components/feedback/loadingOverlay';
 import KoreaMapZoom from './koreaMapZoom';
 import ColorPickerModal from '../modal/colorPickerModal';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 
 interface IKoreaMapSheetOverlays {
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
   visible: boolean;
   hideModal: () => void;
   visibleDialog: boolean;

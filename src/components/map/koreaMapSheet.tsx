@@ -10,7 +10,7 @@ import KoreaMapSheetHeader from './koreaMapSheetHeader';
 import KoreaMapSheetTagList from './koreaMapSheetTagList';
 import KoreaMapSheetButtons from './koreaMapSheetButtons';
 import KoreaMapSheetOverlays from './koreaMapSheetOverlay';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import {useKoreaMapSheetControl} from 'src/hook/mapSheet/useKoreaMapSheetControl';
 import {useRegionImageUpload} from 'src/hook/mapSheet/useRegionImageUpload';
 import {useRegionBackgroundDelete} from 'src/hook/mapSheet/useRegionBackgroundDelete';
@@ -18,7 +18,7 @@ import useModal from 'src/hook/common/useModal';
 
 interface KoreaMapSheetProps {
   mapSheetModalRef: React.RefObject<BottomSheetModal | null>;
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
 }
 
 const KoreaMapSheet = ({mapSheetModalRef, regionData}: KoreaMapSheetProps) => {

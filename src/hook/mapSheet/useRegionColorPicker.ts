@@ -1,10 +1,10 @@
 import {useCallback, useMemo, useState} from 'react';
 import {returnedResults} from 'reanimated-color-picker';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import {getTextColorByBackgroundColor} from 'src/utils/ui/getTextColorByBackgroundColor';
 import {useDynamicStyle} from '../common/useDynamicStyle';
 
-export const useRegionColorPicker = (regionData: IKoreaRegionData) => {
+export const useRegionColorPicker = (regionData: IRegionData) => {
   // 초기 색상 (지역이 color면 배경색, 아니면 #fff)
   const initialHex = useMemo(
     () => (regionData.type === 'color' ? regionData.background : '#ffffff'),

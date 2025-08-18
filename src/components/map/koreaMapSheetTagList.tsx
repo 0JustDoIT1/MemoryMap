@@ -2,10 +2,10 @@
 import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 
 interface IKoreaMapSheetTagList {
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
 }
 
 const KoreaMapSheetTagList = ({regionData}: IKoreaMapSheetTagList) => {

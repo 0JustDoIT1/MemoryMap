@@ -2,15 +2,15 @@ import React from 'react';
 import {Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {IAppShowRegionName} from 'src/types/app';
+import {IShowRegionName} from 'src/types/koreaMap';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {useAppTheme} from 'src/style/paperTheme';
 
 interface IMapTextSettingOpt {
-  value: IAppShowRegionName;
+  value: IShowRegionName;
   label: string;
-  selected: IAppShowRegionName;
-  onSelect: (val: IAppShowRegionName) => void;
+  selected: IShowRegionName;
+  onSelect: (val: IShowRegionName) => void;
   isDisabled: boolean;
 }
 

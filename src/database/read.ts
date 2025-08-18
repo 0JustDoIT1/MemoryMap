@@ -2,7 +2,7 @@
 
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
 import {APP_TABLE_NAME} from 'src/constants/db';
-import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
+import {ICountedRegionByType} from 'src/types/koreaMap';
 import {IPagination, IStory, IStoryPagination} from 'src/types/story';
 import {resultArrToStoryArr} from 'src/utils/data/sqlite/story.db';
 
@@ -48,7 +48,7 @@ export const getKoreaMapDataByColorToDB = async (
 // Read Number of KoreaMapData by type
 export const countKoreaMapDataByTypeToDB = async (
   db: SQLiteDatabase,
-): Promise<ICountKoreaMapDataByType> => {
+): Promise<ICountedRegionByType> => {
   try {
     const query = `
       SELECT

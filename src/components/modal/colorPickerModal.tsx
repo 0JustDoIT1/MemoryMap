@@ -5,13 +5,13 @@ import ColorPicker, {
   Panel1,
   Swatches,
 } from 'reanimated-color-picker';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import LoadingOverlay from 'src/components/feedback/loadingOverlay';
 import {useRegionColorPicker} from 'src/hook/mapSheet/useRegionColorPicker';
 import {useRegionColorUpload} from 'src/hook/mapSheet/useRegionColorUpload';
 
 interface ColorPickerModal {
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
   hideModal: () => void;
   handleClosePress: () => void;
 }

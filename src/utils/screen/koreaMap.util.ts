@@ -1,23 +1,21 @@
 import {
-  IGetColorRegionList,
-  IKoreaMapDataObject,
-  IKoreaRegionData,
+  IColoredRegionList,
+  IMapDataObject,
+  IRegionData,
 } from 'src/types/koreaMap';
 import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 
 // KoreaMapData Array to Object
-export const koreaMapDataToObject = (
-  data: IKoreaRegionData[],
-): IKoreaMapDataObject => {
+export const koreaMapDataToObject = (data: IRegionData[]): IMapDataObject => {
   return data.reduce((acc, cur) => {
     acc[cur.id] = cur;
     return acc;
-  }, {} as IKoreaMapDataObject);
+  }, {} as IMapDataObject);
 };
 
 // Id array matching type
 export const getIdArrayByType = (
-  data: IKoreaMapDataObject,
+  data: IMapDataObject,
   type: 'init' | 'color' | 'photo',
 ): string[] => {
   return Object.values(data)
@@ -26,7 +24,7 @@ export const getIdArrayByType = (
 };
 
 // Get region name from the data (main + title)
-export const getRegionTitle = (data: IKoreaRegionData): string => {
+export const getRegionTitle = (data: IRegionData): string => {
   return data.title === data.main ? data.title : `${data.main} ${data.title}`;
 };
 
@@ -45,9 +43,9 @@ export const getRegionMainTitleById = (id: string): string | undefined => {
 
 // Get a list of map colored region (color & image)
 export const getColorRegionList = (
-  data: IKoreaMapDataObject,
-): IGetColorRegionList => {
-  return Object.values(data).reduce<IGetColorRegionList>((acc, region) => {
+  data: IMapDataObject,
+): IColoredRegionList => {
+  return Object.values(data).reduce<IColoredRegionList>((acc, region) => {
     const {id, title, main} = region;
 
     const entry = acc[main] ?? {

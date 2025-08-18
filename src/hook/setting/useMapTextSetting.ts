@@ -1,6 +1,6 @@
 import {useCallback, useMemo, useState} from 'react';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
-import {IAppShowRegionName} from 'src/types/app';
+import {IShowRegionName} from 'src/types/koreaMap';
 import {setAsyncStorage} from 'src/utils/storage/asyncStorage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {TStackParamList} from 'src/types/stack';
@@ -23,7 +23,7 @@ const useMapTextSetting = (
 
   const {isDisabled, onLoading, wrap} = useActionLock();
 
-  const [select, setSelect] = useState<IAppShowRegionName>(appShowRegionName);
+  const [select, setSelect] = useState<IShowRegionName>(appShowRegionName);
 
   const isDirty = useMemo(
     () => select !== appShowRegionName,
@@ -31,7 +31,7 @@ const useMapTextSetting = (
   );
 
   const save = useCallback(
-    async (value: IAppShowRegionName) => {
+    async (value: IShowRegionName) => {
       await setAsyncStorage(STORAGE_KEYS.showRegionName, value);
       setAppShowRegionName(value);
     },

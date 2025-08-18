@@ -5,7 +5,7 @@ import {
   AD_COUNTED,
   MAX_BY_AD_COUNT,
 } from 'src/constants/ad';
-import {IAppAdShowCategory} from 'src/types/app';
+import {IAdShowCategory} from 'src/types/ad';
 import {getAsyncStorage, setAsyncStorage} from 'src/utils/storage/asyncStorage';
 
 const useAd = () => {
@@ -17,7 +17,7 @@ const useAd = () => {
     },
   );
 
-  const checkAdShow = async (type: IAppAdShowCategory) => {
+  const checkAdShow = async (type: IAdShowCategory) => {
     if (!AD_COUNTED.has(type)) return true;
     if (!AD_COUNT_STORAGE_KEY[type] || !MAX_BY_AD_COUNT[type]) return true;
 

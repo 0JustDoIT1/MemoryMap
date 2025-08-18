@@ -8,14 +8,14 @@ import {useAppTheme} from 'src/style/paperTheme';
 import ViewShot from 'react-native-view-shot';
 import Toast from 'react-native-toast-message';
 import {ToastConfig} from 'src/components/feedback/toast';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
 import useZoomImageControl from 'src/hook/map/useZoomImageControl';
 import KoreaMapZoomSvg from './koreaMapZoomSvg';
 import KoreaMapZoomActionButton from './KoreaMapZoomActionButton';
 
 interface IKoreaMapZoom {
-  data: IKoreaRegionData;
+  data: IRegionData;
   setZoom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Path, Polygon} from 'react-native-svg';
 import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
-import {IKoreaMapDataObject} from 'src/types/koreaMap';
+import {IMapDataObject} from 'src/types/koreaMap';
 
 interface IKoreaMapSvg {
-  mapData: IKoreaMapDataObject;
+  mapData: IMapDataObject;
   onRegionPress: (key: string) => void;
 }
 

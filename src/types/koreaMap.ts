@@ -1,8 +1,6 @@
-export interface IKoreaMapDataObject {
-  [key: string]: IKoreaRegionData;
-}
+export type IMapDataObject = Record<string, IRegionData>;
 
-export interface IKoreaRegionData {
+export interface IRegionData {
   id: string;
   title: string;
   main: string;
@@ -27,20 +25,21 @@ export interface ISvgData {
   };
 }
 
-export interface IKoreaMapSvgData {
-  [key: string]: ISvgData;
-}
+export type IMapSvgData = Record<string, ISvgData>;
 
 // 지도 색칠된 지역(color & photo) 리스트 가져오기 결과값
-export interface IGetColorRegionList {
-  [key: string]: {
-    child: boolean;
-    sub: {id: string; title: string}[];
-  };
+
+interface IColoredRegionData {
+  child: boolean;
+  sub: {id: string; title: string}[];
 }
 
-export interface ICountKoreaMapDataByType {
+export type IColoredRegionList = Record<string, IColoredRegionData>;
+
+export interface ICountedRegionByType {
   color: number;
   photo: number;
   init: number;
 }
+
+export type IShowRegionName = 'show' | 'condition' | 'hide';

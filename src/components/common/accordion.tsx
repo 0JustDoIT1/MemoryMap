@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {IGetColorRegionList} from 'src/types/koreaMap';
+import {IColoredRegionList} from 'src/types/koreaMap';
 
 interface Accordion<T> {
   title: string;
@@ -23,7 +23,7 @@ const CustomAccordion = ({
   title,
   item,
   onSelect,
-}: Accordion<IGetColorRegionList>) => {
+}: Accordion<IColoredRegionList>) => {
   const regionItem = item[title];
   const hasChildren = !!regionItem.child;
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
 import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
-import {IKoreaMapDataObject} from 'src/types/koreaMap';
+import {IMapDataObject} from 'src/types/koreaMap';
 import {getIdArrayByType} from 'src/utils/screen/koreaMap.util';
 
 interface IKoreaMapPattern {
-  data: IKoreaMapDataObject;
+  data: IMapDataObject;
 }
 
 const KoreaMapPattern = ({data}: IKoreaMapPattern) => {

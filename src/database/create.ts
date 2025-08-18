@@ -2,13 +2,13 @@
 
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
 import {APP_TABLE_NAME} from 'src/constants/db';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import {IStory} from 'src/types/story';
 
 // Create KoreaMapData to map table
 export const saveKoreaMapDataToDB = async (
   db: SQLiteDatabase,
-  data: IKoreaRegionData,
+  data: IRegionData,
 ): Promise<[ResultSet]> => {
   try {
     const query = `INSERT OR REPLACE INTO ${APP_TABLE_NAME.map}(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;

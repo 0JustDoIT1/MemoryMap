@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {useAdGate} from 'src/hook/ad/useAdGate';
 import {useActionLock} from 'src/hook/common/useActionLock';
@@ -8,7 +8,7 @@ import {showBottomToast} from 'src/utils/ui/showToast';
 import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 
 interface IUseRegionColorUpload {
-  regionData: IKoreaRegionData;
+  regionData: IRegionData;
   hex: string;
   hideModal: () => void;
   handleClosePress: () => void;

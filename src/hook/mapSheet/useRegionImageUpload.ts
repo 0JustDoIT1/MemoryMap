@@ -6,10 +6,10 @@ import {useActionLock} from '../common/useActionLock';
 import {useAdGate} from '../ad/useAdGate';
 import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 import {useRegionImagePicker} from './useRegionImagePicker';
-import {IKoreaRegionData} from 'src/types/koreaMap';
+import {IRegionData} from 'src/types/koreaMap';
 
 export const useRegionImageUpload = (
-  regionData: IKoreaRegionData,
+  regionData: IRegionData,
   closeSheet: () => void,
 ) => {
   const title = useMemo(() => getRegionTitle(regionData), [regionData]);

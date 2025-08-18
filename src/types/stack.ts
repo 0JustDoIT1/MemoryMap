@@ -1,6 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {IStory} from './story';
-import {IGetColorRegionList} from './koreaMap';
+import {IColoredRegionList} from './koreaMap';
 
 export type TStackParamList = {
   Root: undefined;
@@ -26,7 +26,7 @@ export type TStackParamList = {
     storyId: string;
   };
   SelectRegion: {
-    regionList: IGetColorRegionList;
+    regionList: IColoredRegionList;
     regionMainList: string[];
   };
   BackUp: undefined;

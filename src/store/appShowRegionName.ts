@@ -1,13 +1,13 @@
 import {create} from 'zustand';
-import {IAppShowRegionName} from 'src/types/app';
+import {IShowRegionName} from 'src/types/koreaMap';
 
 interface AppShowRegionNameState {
-  appShowRegionName: IAppShowRegionName;
-  setAppShowRegionName: (appShowRegionName: IAppShowRegionName) => void;
+  appShowRegionName: IShowRegionName;
+  setAppShowRegionName: (appShowRegionName: IShowRegionName) => void;
 }
 
 export const useAppShowRegionName = create<AppShowRegionNameState>(set => ({
   appShowRegionName: 'show',
-  setAppShowRegionName: (appShowRegionName: IAppShowRegionName) =>
+  setAppShowRegionName: (appShowRegionName: IShowRegionName) =>
     set({appShowRegionName}),
 }));
