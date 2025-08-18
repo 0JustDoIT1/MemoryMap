@@ -1,6 +1,6 @@
 import {IKoreaMapDataObject, IKoreaRegionData} from 'src/types/koreaMap';
 import {getDBConnection} from 'src/database/sqlite';
-import {koreaMapDataInit, koreaMapSvgData} from 'src/constants/koreaMapData';
+import {MAP_DATA_INIT, MAP_SVG_DATA} from 'src/constants/koreaMapData';
 import {
   saveKoreaMapDataToDB,
   updateMapStoryCountingToDB,
@@ -119,8 +119,8 @@ export const updateMapPhotoById = async (
 
   // Response Image = ZoomImage
   // Crop Image for map view (with Image Resizer)
-  const cropWidth = koreaMapSvgData[data.id].mapSvgStyle.width;
-  const cropHeight = koreaMapSvgData[data.id].mapSvgStyle.height;
+  const cropWidth = MAP_SVG_DATA[data.id].mapSvgStyle.width;
+  const cropHeight = MAP_SVG_DATA[data.id].mapSvgStyle.height;
   const cropImage = await ImageResizer.createResizedImage(
     imageUri,
     cropWidth,
@@ -187,8 +187,8 @@ export const deleteMapDataById = async (data: IKoreaRegionData) => {
 export const resetMapData = async () => {
   // Save SQLite
   const db = await getDBConnection();
-  koreaMapDataInit.forEach(async item => await saveKoreaMapDataToDB(db, item));
-  koreaMapDataInit.forEach(async item => {
+  MAP_DATA_INIT.forEach(async item => await saveKoreaMapDataToDB(db, item));
+  MAP_DATA_INIT.forEach(async item => {
     if (item.type === 'photo') {
       await FileSystem.unlink(item.imageUrl!);
     }

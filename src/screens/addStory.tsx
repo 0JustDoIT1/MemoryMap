@@ -7,7 +7,7 @@ import NotFound from 'src/components/states/notFound';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import useStoryInput from 'src/hook/story/useStoryInput';
-import {StoryInit} from 'src/constants/story';
+import {INIT_STORY} from 'src/constants/story';
 import useBackButton from 'src/hook/common/useBackButton';
 import LoadingOverlay from '../components/feedback/loadingOverlay';
 import {useStoryCalendar} from 'src/hook/story/useAddStoryCalendar';
@@ -51,7 +51,7 @@ const AddStoryScreen = ({navigation, route}: TAddStory) => {
     settingStoryData,
     isSaveDisabled,
     dateLabel,
-  } = useStoryInput(false, {...StoryInit, regionId: region});
+  } = useStoryInput(false, {...INIT_STORY, regionId: region});
 
   // 캘린더 hook
   const {onPressDate, onDatePicker} = useStoryCalendar({

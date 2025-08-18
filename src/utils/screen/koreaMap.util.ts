@@ -3,7 +3,7 @@ import {
   IKoreaMapDataObject,
   IKoreaRegionData,
 } from 'src/types/koreaMap';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 
 // KoreaMapData Array to Object
 export const koreaMapDataToObject = (
@@ -32,13 +32,13 @@ export const getRegionTitle = (data: IKoreaRegionData): string => {
 
 // Get region name from the KoreaMapDataInit (main + title)
 export const getRegionTitleById = (id: string): string => {
-  const koreaMapDataObject = koreaMapDataToObject(koreaMapDataInit);
+  const koreaMapDataObject = koreaMapDataToObject(MAP_DATA_INIT);
   return getRegionTitle(koreaMapDataObject[id]);
 };
 
 // Get main region name from the KoreaMapDataInit
 export const getRegionMainTitleById = (id: string): string | undefined => {
-  const region = koreaMapDataInit.find(item => item.id.includes(id));
+  const region = MAP_DATA_INIT.find(item => item.id.includes(id));
 
   return region?.main;
 };

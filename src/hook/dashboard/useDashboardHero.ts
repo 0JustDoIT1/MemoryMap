@@ -1,8 +1,8 @@
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 import {IDashboardMap} from 'src/types/dashboard';
 
 const useDashboardHero = (mapData: IDashboardMap | undefined) => {
-  const koreaMapRegionCount = Object.values(koreaMapDataInit).length || 1;
+  const koreaMapRegionCount = Object.values(MAP_DATA_INIT).length || 1;
 
   // 방문 합계
   const visitedTotal =

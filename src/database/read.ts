@@ -1,7 +1,7 @@
 //// Read
 
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/db';
+import {APP_TABLE_NAME} from 'src/constants/db';
 import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
 import {IPagination, IStory, IStoryPagination} from 'src/types/story';
 import {resultArrToStoryArr} from 'src/utils/data/sqlite/story.db';
@@ -9,7 +9,7 @@ import {resultArrToStoryArr} from 'src/utils/data/sqlite/story.db';
 // Read Auth to auth table
 export const getAuthToDB = async (db: SQLiteDatabase): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM ${appTableName.auth}`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.auth}`;
     return await db.executeSql(query, []);
   } catch (error) {
     console.error('Auth DB 조회 실패:', error);
@@ -22,7 +22,7 @@ export const getKoreaMapDataToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM ${appTableName.map}`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.map}`;
 
     return await db.executeSql(query, []);
   } catch (error) {
@@ -36,7 +36,7 @@ export const getKoreaMapDataByColorToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM ${appTableName.map} WHERE type IN ('color', 'photo')`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.map} WHERE type IN ('color', 'photo')`;
 
     return await db.executeSql(query, []);
   } catch (error) {
@@ -55,7 +55,7 @@ export const countKoreaMapDataByTypeToDB = async (
         SUM(CASE WHEN type = 'color' THEN 1 ELSE 0 END) AS color,
         SUM(CASE WHEN type = 'photo' THEN 1 ELSE 0 END) AS photo,
         COUNT(*) AS total
-      FROM ${appTableName.map}
+      FROM ${APP_TABLE_NAME.map}
     `;
     const [result] = await db.executeSql(query);
     const row = result.rows.item(0);
@@ -76,7 +76,7 @@ export const mostColorMainRegionToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT main, COUNT(*) as count FROM ${appTableName.map} WHERE type IN ('color', 'photo') GROUP BY main ORDER BY count DESC`;
+    const query = `SELECT main, COUNT(*) as count FROM ${APP_TABLE_NAME.map} WHERE type IN ('color', 'photo') GROUP BY main ORDER BY count DESC`;
 
     return await db.executeSql(query, []);
   } catch (error) {
@@ -90,7 +90,7 @@ export const getStoryAllToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT * FROM ${appTableName.story}`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.story}`;
 
     return await db.executeSql(query, []);
   } catch (error) {
@@ -140,7 +140,7 @@ export const getStoryPaginationToDB = async (
     paginationClause = `LIMIT ? OFFSET ?`;
     params.push(limit, offset);
 
-    const query = `SELECT * FROM ${appTableName.story} ${whereClause} ${orderClause} ${paginationClause}`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.story} ${whereClause} ${orderClause} ${paginationClause}`;
     const result = await db.executeSql(query, params);
     const storyArray = resultArrToStoryArr(result);
 
@@ -158,7 +158,7 @@ export const getStoryPaginationToDB = async (
     //     query += ` LIMIT ${option.limit} OFFSET ${(page - 1) * option.limit}`;
     // }
 
-    const countQuery = `SELECT COUNT(*) as count FROM ${appTableName.story} ${whereClause}`;
+    const countQuery = `SELECT COUNT(*) as count FROM ${APP_TABLE_NAME.story} ${whereClause}`;
     const countResult = await db.executeSql(
       countQuery,
       filter ? [`${filter}%`] : [],
@@ -185,7 +185,7 @@ export const getOneStoryToDB = async (
   id: string,
 ): Promise<IStory> => {
   try {
-    const query = `SELECT * FROM ${appTableName.story} WHERE id = ?`;
+    const query = `SELECT * FROM ${APP_TABLE_NAME.story} WHERE id = ?`;
     const [result] = await db.executeSql(query, [id]);
 
     return result.rows.item(0);
@@ -200,7 +200,7 @@ export const getStoryRegionIdToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `SELECT regionId FROM ${appTableName.story} GROUP BY regionId`;
+    const query = `SELECT regionId FROM ${APP_TABLE_NAME.story} GROUP BY regionId`;
 
     return await db.executeSql(query, []);
   } catch (error) {
@@ -212,7 +212,7 @@ export const getStoryRegionIdToDB = async (
 // Read Number of Story
 export const countStoryToDB = async (db: SQLiteDatabase): Promise<number> => {
   try {
-    const query = `SELECT COUNT(*) as count FROM ${appTableName.story}`;
+    const query = `SELECT COUNT(*) as count FROM ${APP_TABLE_NAME.story}`;
 
     const [result] = await db.executeSql(query, []);
     return result.rows.item(0).count;
@@ -229,13 +229,13 @@ export const maxStoryNumToDB = async (
   try {
     const query = `
       SELECT regionId, COUNT(*) as count
-      FROM ${appTableName.story}
+      FROM ${APP_TABLE_NAME.story}
       GROUP BY regionId
       HAVING count = (
         SELECT MAX(region_count)
         FROM (
           SELECT COUNT(*) as region_count
-          FROM ${appTableName.story}
+          FROM ${APP_TABLE_NAME.story}
           GROUP BY regionId
         )
       )
@@ -254,13 +254,13 @@ export const highestPointStoryRegionToDB = async (
   try {
     const query = `
       SELECT regionId, AVG(point) as avg
-      FROM ${appTableName.story}
+      FROM ${APP_TABLE_NAME.story}
       GROUP BY regionId
       HAVING avg = (
         SELECT MAX(region_avg)
         FROM (
           SELECT AVG(point) as region_avg
-          FROM ${appTableName.story}
+          FROM ${APP_TABLE_NAME.story}
           GROUP BY regionId
         )
       )

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Path, Polygon} from 'react-native-svg';
-import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
 import {IKoreaMapDataObject} from 'src/types/koreaMap';
 
 interface IKoreaMapSvg {
@@ -11,7 +11,7 @@ interface IKoreaMapSvg {
 const KoreaMapSvg = ({mapData, onRegionPress}: IKoreaMapSvg) => {
   return (
     <>
-      {Object.entries(koreaMapSvgData).map(([key, value]) => {
+      {Object.entries(MAP_SVG_DATA).map(([key, value]) => {
         const {mapSvgType, mapSvgPath, strokeConfig} = value;
         const region = mapData[key];
         if (!region) return null;

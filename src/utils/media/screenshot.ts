@@ -1,7 +1,7 @@
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {Platform} from 'react-native';
 import ViewShot from 'react-native-view-shot';
-import {appName} from 'src/constants/app';
+import {APP_NAME} from 'src/constants/app';
 import {hasAndroidPermission} from 'src/utils/platform/getCheckPermission';
 import {showBottomToast} from 'src/utils/ui/showToast';
 import Share from 'react-native-share';
@@ -40,7 +40,7 @@ const onSaveScreenShot = async (uri: string) => {
 // Share link
 const onShareLink = async (uri: string, message: string) => {
   try {
-    await Share.open({title: appName, message: message, url: uri});
+    await Share.open({title: APP_NAME, message: message, url: uri});
   } catch (error) {
     // 사용자가 공유창에서 취소했을 경우도 여기로 들어오므로 silent 처리
     return;

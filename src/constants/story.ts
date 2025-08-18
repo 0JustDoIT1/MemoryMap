@@ -1,4 +1,4 @@
-export const StoryInit = {
+export const INIT_STORY = {
   id: '',
   regionId: '',
   startDate: '',
@@ -10,7 +10,7 @@ export const StoryInit = {
   updatedAt: '',
 };
 
-export const initPagination = {
+export const INIT_PAGINATION = {
   limit: 10,
   filter: '',
   order: 'createdAt',

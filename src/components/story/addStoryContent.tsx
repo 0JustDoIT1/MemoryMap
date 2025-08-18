@@ -2,7 +2,7 @@ import {Pressable, View} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {customColor} from 'src/style/customColor';
 import SelectPoint from '../common/selectPoint';
-import {storyPointArray} from 'src/constants/point';
+import {STORY_POINT_ARRAY} from 'src/constants/point';
 import {memo} from 'react';
 
 interface IAddStoryContent {
@@ -66,7 +66,7 @@ const AddStoryContent = ({
       <View className="mt-8">
         <Text className="text-sm ml-2">여행은 즐거우셨나요?</Text>
         <View className="w-full mt-4 flex-row justify-between items-center">
-          {storyPointArray.map(item => (
+          {STORY_POINT_ARRAY.map(item => (
             <SelectPoint
               key={item.point}
               item={item}

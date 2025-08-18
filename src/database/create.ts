@@ -1,7 +1,7 @@
 //// Create
 
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/db';
+import {APP_TABLE_NAME} from 'src/constants/db';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 import {IStory} from 'src/types/story';
 
@@ -11,7 +11,7 @@ export const saveKoreaMapDataToDB = async (
   data: IKoreaRegionData,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `INSERT OR REPLACE INTO ${appTableName.map}(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT OR REPLACE INTO ${APP_TABLE_NAME.map}(id, title, main, type, background, story, imageUrl, zoomImageUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
 
     return await db.executeSql(query, [
       data.id,
@@ -35,7 +35,7 @@ export const saveStoryToDB = async (
   data: IStory,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `INSERT OR REPLACE INTO ${appTableName.story}(id, regionId, startDate, endDate, title, contents, point, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?,?)`;
+    const query = `INSERT OR REPLACE INTO ${APP_TABLE_NAME.story}(id, regionId, startDate, endDate, title, contents, point, createdAt, updatedAt) VALUES(?,?,?,?,?,?,?,?,?)`;
 
     return await db.executeSql(query, [
       data.id,
@@ -61,7 +61,7 @@ export const updateMapStoryCountingToDB = async (
   count: number,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `UPDATE ${appTableName.map} SET ${appTableName.story} = ${appTableName.story} + ? WHERE id = ?`;
+    const query = `UPDATE ${APP_TABLE_NAME.map} SET ${APP_TABLE_NAME.story} = ${APP_TABLE_NAME.story} + ? WHERE id = ?`;
 
     return await db.executeSql(query, [count, id]);
   } catch (error) {

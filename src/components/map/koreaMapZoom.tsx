@@ -9,7 +9,7 @@ import ViewShot from 'react-native-view-shot';
 import Toast from 'react-native-toast-message';
 import {ToastConfig} from 'src/components/feedback/toast';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
 import useZoomImageControl from 'src/hook/map/useZoomImageControl';
 import KoreaMapZoomSvg from './koreaMapZoomSvg';
 import KoreaMapZoomActionButton from './KoreaMapZoomActionButton';
@@ -23,7 +23,7 @@ const KoreaMapZoom = ({data, setZoom}: IKoreaMapZoom) => {
   const theme = useAppTheme();
   const viewShotRef = useRef<ViewShot>(null);
   // Get Svg Data
-  const regionSvgData = koreaMapSvgData[data.id];
+  const regionSvgData = MAP_SVG_DATA[data.id];
 
   const {handleSave, handleShare, handleClose} = useZoomImageControl(
     data,

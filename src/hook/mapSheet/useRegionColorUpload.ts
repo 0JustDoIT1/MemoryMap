@@ -5,7 +5,7 @@ import {useAdGate} from 'src/hook/ad/useAdGate';
 import {useActionLock} from 'src/hook/common/useActionLock';
 import {getRegionTitle} from 'src/utils/screen/koreaMap.util';
 import {showBottomToast} from 'src/utils/ui/showToast';
-import {adShowCategory} from 'src/constants/ad';
+import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 
 interface IUseRegionColorUpload {
   regionData: IKoreaRegionData;
@@ -37,7 +37,7 @@ export const useRegionColorUpload = ({
   // 외부에서 바로 쓸 최종 핸들러
   const onUploadColor = wrap(async () => {
     await runWithAdGate(
-      adShowCategory.map,
+      AD_SHOW_CATEGORY.map,
       onUploadingColor,
       onUploadColorSuccess,
     );

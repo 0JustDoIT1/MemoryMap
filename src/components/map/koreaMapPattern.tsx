@@ -1,6 +1,6 @@
 import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
-import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
 import {IKoreaMapDataObject} from 'src/types/koreaMap';
 import {getIdArrayByType} from 'src/utils/screen/koreaMap.util';
 
@@ -14,7 +14,7 @@ const KoreaMapPattern = ({data}: IKoreaMapPattern) => {
   return (
     <Defs>
       {imageArray.map(item => {
-        const {mapSvgStyle} = koreaMapSvgData[item];
+        const {mapSvgStyle} = MAP_SVG_DATA[item];
         const {width, height, x, y} = mapSvgStyle;
 
         return (

@@ -1,6 +1,6 @@
 import {IKoreaMapSvgData, IKoreaRegionData} from 'src/types/koreaMap';
 
-export const koreaMapSvgData: IKoreaMapSvgData = {
+export const MAP_SVG_DATA: IKoreaMapSvgData = {
   'KR-1': {
     mapSvgStyle: {height: 53.417, width: 65.513, x: 304.897, y: 249.224},
     mapSvgType: 'polygon',
@@ -1808,7 +1808,7 @@ export const koreaMapSvgData: IKoreaMapSvgData = {
   },
 };
 
-export const koreaRegionEmpty: IKoreaRegionData = {
+export const REGION_EMPTY: IKoreaRegionData = {
   id: '',
   title: '',
   main: '',
@@ -1818,7 +1818,7 @@ export const koreaRegionEmpty: IKoreaRegionData = {
 };
 
 //163
-export const koreaMapDataInit: IKoreaRegionData[] = [
+export const MAP_DATA_INIT: IKoreaRegionData[] = [
   {
     id: 'KR-1',
     title: '서울특별시',

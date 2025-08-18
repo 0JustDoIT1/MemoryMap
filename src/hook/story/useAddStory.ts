@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {adShowCategory} from 'src/constants/ad';
+import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/ui/showToast';
 import useStoryUpdateMutation from './useStoryUpdateMutation';
@@ -32,7 +32,7 @@ export const useAddStory = ({
   const onAddStory = wrap(async () => {
     try {
       await runWithAdGate(
-        adShowCategory.story,
+        AD_SHOW_CATEGORY.story,
         onAddingStory,
         onAddStorySuccess,
       );

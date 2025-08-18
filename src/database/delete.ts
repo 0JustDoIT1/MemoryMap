@@ -1,13 +1,13 @@
 //// Delete
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/db';
+import {APP_TABLE_NAME} from 'src/constants/db';
 
 // Delete Auth to auth table
 export const deleteAuthToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `DELETE from ${appTableName.auth}`;
+    const query = `DELETE from ${APP_TABLE_NAME.auth}`;
 
     return await db.executeSql(query);
   } catch (error) {
@@ -21,7 +21,7 @@ export const deleteKoreaMapDataToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `DELETE from ${appTableName.map}`;
+    const query = `DELETE from ${APP_TABLE_NAME.map}`;
 
     return await db.executeSql(query);
   } catch (error) {
@@ -35,7 +35,7 @@ export const deleteAllStoryToDB = async (
   db: SQLiteDatabase,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `DELETE FROM ${appTableName.story}`;
+    const query = `DELETE FROM ${APP_TABLE_NAME.story}`;
 
     return await db.executeSql(query);
   } catch (error) {
@@ -50,7 +50,7 @@ export const deleteOneStoryToDB = async (
   id: string,
 ): Promise<[ResultSet]> => {
   try {
-    const query = `DELETE FROM ${appTableName.story} where id = ?`;
+    const query = `DELETE FROM ${APP_TABLE_NAME.story} where id = ?`;
 
     return await db.executeSql(query, [id]);
   } catch (error) {

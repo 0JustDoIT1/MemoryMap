@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {
   getAllKoreaMapData,
@@ -23,7 +23,7 @@ const useKoreaMapQuery = () => {
   } = useQuery({
     queryKey: REACT_QUERY_KEYS.koreaMapData,
     queryFn: () => getAllKoreaMapData(),
-    placeholderData: koreaMapDataToObject(koreaMapDataInit),
+    placeholderData: koreaMapDataToObject(MAP_DATA_INIT),
     ...commonOptions,
   });
 

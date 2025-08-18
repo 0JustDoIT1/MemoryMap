@@ -1,4 +1,4 @@
-import {adShowCategory} from 'src/constants/ad';
+import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 import {IKoreaMapDataObject} from './koreaMap';
 import {IStory} from './story';
 
@@ -12,4 +12,4 @@ export interface IAppData {
 export type IAppShowRegionName = 'show' | 'condition' | 'hide';
 
 export type IAppAdShowCategory =
-  (typeof adShowCategory)[keyof typeof adShowCategory];
+  (typeof AD_SHOW_CATEGORY)[keyof typeof AD_SHOW_CATEGORY];

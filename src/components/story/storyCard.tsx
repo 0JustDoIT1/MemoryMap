@@ -1,7 +1,7 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Image, Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {storyPointBase} from 'src/constants/point';
+import {STORY_POINT_BASE} from 'src/constants/point';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {TStackParamList} from 'src/types/stack';
 import {IStory} from 'src/types/story';
@@ -21,7 +21,7 @@ const StoryCard = ({item, navigation}: IStoryCard) => {
     'YYYY.MM.DD (ddd)',
   );
   const endDateString = dateToFormatString(item.endDate, 'YYYY.MM.DD (ddd)');
-  const point = storyPointBase[item.point];
+  const point = STORY_POINT_BASE[item.point];
 
   const onDetailList = () => {
     navigation.navigate('ViewStory', {storyId: item.id});

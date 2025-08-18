@@ -1,8 +1,8 @@
 import {useState, useCallback} from 'react';
-import {initPagination} from 'src/constants/story';
+import {INIT_PAGINATION} from 'src/constants/story';
 import {IPagination} from 'src/types/story';
 
-export const useStoryPagination = (initial: IPagination = initPagination) => {
+export const useStoryPagination = (initial: IPagination = INIT_PAGINATION) => {
   const [pagination, setPagination] = useState<IPagination>(initial);
 
   const toggleSort = useCallback(() => {

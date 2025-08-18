@@ -3,8 +3,8 @@ import DeviceInfo from 'react-native-device-info';
 import {safeOpen} from 'src/utils/platform/openLink';
 import {
   LinkingEmail,
-  TermPrivacyUrl,
-  TermServiceUrl,
+  TERM_PRIVACY_URL,
+  TERM_SERVICE_URL,
 } from 'src/constants/linking';
 
 export const useSettingLink = () => {
@@ -17,8 +17,14 @@ export const useSettingLink = () => {
   }, [appVersion]);
 
   // Term link
-  const onPressTermPrivacyUrl = useCallback(() => safeOpen(TermPrivacyUrl), []);
-  const onPressTermServiceUrl = useCallback(() => safeOpen(TermServiceUrl), []);
+  const onPressTermPrivacyUrl = useCallback(
+    () => safeOpen(TERM_PRIVACY_URL),
+    [],
+  );
+  const onPressTermServiceUrl = useCallback(
+    () => safeOpen(TERM_SERVICE_URL),
+    [],
+  );
 
   return {
     appVersion,

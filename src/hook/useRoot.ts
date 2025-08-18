@@ -1,6 +1,6 @@
 import {KeyChainPinCode} from '@env';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {koreaMapDataInit} from 'src/constants/koreaMapData';
+import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 import {saveKoreaMapDataToDB} from 'src/database/create';
 import {countData, getDBConnection} from 'src/database/sqlite';
 import {TStackParamList} from 'src/types/stack';
@@ -9,8 +9,8 @@ import {getSecureValue} from 'src/utils/security/keyChain';
 import VersionCheck from 'react-native-version-check';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
-import {appTableName} from 'src/constants/db';
-import {storageKeys} from 'src/constants/storage';
+import {APP_TABLE_NAME} from 'src/constants/db';
+import {STORAGE_KEYS} from 'src/constants/storage';
 
 const useRoot = () => {
   const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
@@ -42,21 +42,19 @@ const useRoot = () => {
   const _checkSQLiteData = async () => {
     const db = await getDBConnection();
     // Check SQLite
-    const mapNum = await countData(db, appTableName.map);
+    const mapNum = await countData(db, APP_TABLE_NAME.map);
 
     if (mapNum === 0) {
       // SQLite
-      koreaMapDataInit.forEach(
-        async item => await saveKoreaMapDataToDB(db, item),
-      );
+      MAP_DATA_INIT.forEach(async item => await saveKoreaMapDataToDB(db, item));
     }
   };
 
   // Show map text
   const checkShowMapText = async () => {
-    const showMapText = await getAsyncStorage(storageKeys.showRegionName);
+    const showMapText = await getAsyncStorage(STORAGE_KEYS.showRegionName);
     if (!showMapText) {
-      await setAsyncStorage(storageKeys.showRegionName, 'show');
+      await setAsyncStorage(STORAGE_KEYS.showRegionName, 'show');
       setAppShowRegionName('show');
     } else {
       setAppShowRegionName(showMapText as 'show' | 'condition' | 'hide');

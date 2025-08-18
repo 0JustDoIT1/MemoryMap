@@ -1,11 +1,11 @@
 import {IAppAdShowCategory} from 'src/types/app';
-import {storageKeys} from './storage';
+import {STORAGE_KEYS} from './storage';
 
 // AD
-export const appAdMapMaxNum = 1;
-export const appAdStoryMaxNum = 1;
+export const AD_MAP_MAXNUM = 1;
+export const AD_STORY_MAXNUM = 1;
 
-export const adShowCategory = {
+export const AD_SHOW_CATEGORY = {
   map: 'map',
   story: 'story',
   reset: 'reset',
@@ -15,18 +15,18 @@ export const adShowCategory = {
 // (map, story는 일정 횟수 도달하면 광고 표시)
 // (그 외에는 무조건 광고 표시)
 export const AD_COUNTED = new Set<IAppAdShowCategory>([
-  adShowCategory.map,
-  adShowCategory.story,
+  AD_SHOW_CATEGORY.map,
+  AD_SHOW_CATEGORY.story,
 ]);
 
 export const AD_COUNT_STORAGE_KEY: Partial<Record<IAppAdShowCategory, string>> =
   {
-    [adShowCategory.map]: storageKeys.adMapCount,
-    [adShowCategory.story]: storageKeys.adStoryCount,
+    [AD_SHOW_CATEGORY.map]: STORAGE_KEYS.adMapCount,
+    [AD_SHOW_CATEGORY.story]: STORAGE_KEYS.adStoryCount,
   };
 
 // 카운팅하는 category 최대 노출 간격(카운트 최대값)
 export const MAX_BY_AD_COUNT: Partial<Record<IAppAdShowCategory, number>> = {
-  [adShowCategory.map]: appAdMapMaxNum,
-  [adShowCategory.story]: appAdStoryMaxNum,
+  [AD_SHOW_CATEGORY.map]: AD_MAP_MAXNUM,
+  [AD_SHOW_CATEGORY.story]: AD_STORY_MAXNUM,
 };

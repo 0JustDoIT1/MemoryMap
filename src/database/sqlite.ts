@@ -3,7 +3,7 @@ import {
   ResultSet,
   SQLiteDatabase,
 } from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/db';
+import {APP_TABLE_NAME} from 'src/constants/db';
 
 // Connect SQLite Database
 export const getDBConnection = async () => {
@@ -22,11 +22,11 @@ export const createTable = async (
     let tableColumn: string;
 
     switch (tableName) {
-      case appTableName.map:
+      case APP_TABLE_NAME.map:
         tableColumn =
           '(id TEXT UNIQUE PRIMARY KEY, title TEXT, main TEXT, type TEXT, background TEXT, story INTEGER, imageUrl TEXT, zoomImageUrl TEXT)';
         break;
-      case appTableName.story:
+      case APP_TABLE_NAME.story:
         tableColumn =
           '(id TEXT UNIQUE PRIMARY KEY, regionId TEXT, startDate TEXT, endDate TEXT, title TEXT, contents TEXT, point INT, createdAt TEXT, updatedAt TEXT)';
         break;

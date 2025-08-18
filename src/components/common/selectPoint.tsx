@@ -6,8 +6,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import {IPoint} from 'src/constants/point';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
+import {IPoint} from 'src/types/point';
 
 interface SelectPoint {
   item: IPoint;

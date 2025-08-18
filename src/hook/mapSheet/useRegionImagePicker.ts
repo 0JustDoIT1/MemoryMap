@@ -1,10 +1,10 @@
 import {useCallback} from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
-import {koreaMapSvgData} from 'src/constants/koreaMapData';
+import {MAP_SVG_DATA} from 'src/constants/koreaMapData';
 
 export const useRegionImagePicker = (regionId: string, title: string) => {
   const pick = useCallback(async () => {
-    const {width, height} = koreaMapSvgData[regionId].regionSvgStyle;
+    const {width, height} = MAP_SVG_DATA[regionId].regionSvgStyle;
     const img = await ImagePicker.openPicker({
       width,
       height,

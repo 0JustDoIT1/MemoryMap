@@ -1,23 +1,13 @@
-import {ImageSourcePropType} from 'react-native';
-
 import point_1 from 'assets/images/point_1.png';
 import point_2 from 'assets/images/point_2.png';
 import point_3 from 'assets/images/point_3.png';
 import point_4 from 'assets/images/point_4.png';
 import point_5 from 'assets/images/point_5.png';
-
-export interface IPoint {
-  point: number;
-  image: ImageSourcePropType;
-  color: string;
-  text: string;
-}
-
-type IStoryPoint = Record<number, IPoint>;
+import {IPoint, IStoryPoint} from 'src/types/point';
 
 export const STORY_POINT_VALUES = [5, 4, 3, 2, 1] as const;
 
-export const storyPointBase: IStoryPoint = {
+export const STORY_POINT_BASE: IStoryPoint = {
   5: {
     point: 5,
     image: point_5,
@@ -50,6 +40,6 @@ export const storyPointBase: IStoryPoint = {
   },
 };
 
-export const storyPointArray: IPoint[] = STORY_POINT_VALUES.map(
-  v => storyPointBase[v],
+export const STORY_POINT_ARRAY: IPoint[] = STORY_POINT_VALUES.map(
+  v => STORY_POINT_BASE[v],
 );

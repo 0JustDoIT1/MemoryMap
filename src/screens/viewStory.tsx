@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {storyPointBase} from 'src/constants/point';
+import {STORY_POINT_BASE} from 'src/constants/point';
 import {staticStyles} from 'src/style/staticStyles';
 import {TViewStory} from 'src/types/stack';
 import useDialog from 'src/hook/common/useDialog';
@@ -49,10 +49,10 @@ const ViewStoryScreen = ({navigation, route}: TViewStory) => {
                 regionId={data.regionId}
                 startDate={data.startDate}
                 endDate={data.endDate}
-                bgColor={storyPointBase[data.point].color}
+                bgColor={STORY_POINT_BASE[data.point].color}
               />
               <StoryViewContent
-                image={storyPointBase[data.point].image}
+                image={STORY_POINT_BASE[data.point].image}
                 title={data.title}
                 contents={data.contents}
               />

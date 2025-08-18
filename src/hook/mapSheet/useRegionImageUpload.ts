@@ -4,7 +4,7 @@ import {showBottomToast} from 'src/utils/ui/showToast';
 import useKoreaMapMutation from '../map/useKoreaMapMutation';
 import {useActionLock} from '../common/useActionLock';
 import {useAdGate} from '../ad/useAdGate';
-import {adShowCategory} from 'src/constants/ad';
+import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 import {useRegionImagePicker} from './useRegionImagePicker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 
@@ -33,7 +33,7 @@ export const useRegionImageUpload = (
   const onImagePicker = wrap(async () => {
     const path = await pick();
     await runWithAdGate(
-      adShowCategory.map,
+      AD_SHOW_CATEGORY.map,
       () => onUploadPhoto(path),
       onUploadPhotoSuccess,
     );

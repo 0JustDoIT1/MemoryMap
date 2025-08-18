@@ -15,7 +15,7 @@ import {createTable, getDBConnection} from 'src/database/sqlite';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {useNetInfo} from '@react-native-community/netinfo';
 import NoNetwork from 'src/components/states/noNetwork';
-import {appTableName} from 'src/constants/db';
+import {APP_TABLE_NAME} from 'src/constants/db';
 
 dayjs.locale('ko');
 // Enable the SQLite
@@ -30,8 +30,8 @@ const App = (): React.JSX.Element => {
   const createSqlTable = async () => {
     try {
       const db = await getDBConnection();
-      await createTable(db, appTableName.map);
-      await createTable(db, appTableName.story);
+      await createTable(db, APP_TABLE_NAME.map);
+      await createTable(db, APP_TABLE_NAME.story);
     } catch (error) {
       console.error('SQLite table creation failed', error);
     }

@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {showBottomToast} from 'src/utils/ui/showToast';
 import {useActionLock} from 'src/hook/common/useActionLock';
 import {useAdGate} from 'src/hook/ad/useAdGate';
-import {adShowCategory} from 'src/constants/ad';
+import {AD_SHOW_CATEGORY} from 'src/constants/ad';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import useDialog from '../common/useDialog';
 
@@ -20,7 +20,7 @@ export const useSettingResetMap = () => {
   // Reset Map & RegionCount
   const onResetMap = wrap(async () => {
     await runWithAdGate(
-      adShowCategory.reset,
+      AD_SHOW_CATEGORY.reset,
       () => resetMapMutation.mutateAsync(),
       onResetMapSuccess,
     );
