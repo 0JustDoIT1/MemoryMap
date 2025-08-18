@@ -2,7 +2,7 @@ import {useCallback, useMemo, useState} from 'react';
 import {appShowRegionNameKey} from 'src/constants/app';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
 import {IAppShowRegionName} from 'src/types/app';
-import {setAsyncStorage} from 'src/utils/asyncStorage';
+import {setAsyncStorage} from 'src/utils/storage/asyncStorage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {TStackParamList} from 'src/types/stack';
 import {useActionLock} from '../common/useActionLock';

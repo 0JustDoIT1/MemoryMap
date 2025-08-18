@@ -5,8 +5,8 @@ import {storyPoint} from 'src/constants/point';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {TStackParamList} from 'src/types/stack';
 import {IStory} from 'src/types/story';
-import {dateToFormatString} from 'src/utils/dateFormat';
-import {getRegionTitleById} from 'src/utils/koreaMap.util';
+import {dateToFormatString} from 'src/utils/date/dateFormat';
+import {getRegionTitleById} from 'src/utils/screen/koreaMap.util';
 
 interface IStoryCard {
   item: IStory;

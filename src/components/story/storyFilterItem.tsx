@@ -1,6 +1,6 @@
 import {Pressable, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
+import {getRegionMainTitleById} from 'src/utils/screen/koreaMap.util';
 
 interface IStoryFilterItem {
   item: string;

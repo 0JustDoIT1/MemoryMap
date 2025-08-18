@@ -4,8 +4,8 @@ import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {
   getAllKoreaMapData,
   getKoreaMapDataByColor,
-} from 'src/utils/koreaMap.db';
-import {koreaMapDataToObject} from 'src/utils/koreaMap.util';
+} from 'src/utils/data/sqlite/koreaMap.db';
+import {koreaMapDataToObject} from 'src/utils/screen/koreaMap.util';
 
 const useKoreaMapQuery = () => {
   const commonOptions = {

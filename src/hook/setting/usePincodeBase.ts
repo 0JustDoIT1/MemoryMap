@@ -5,7 +5,7 @@ import {
   getSecureValue,
   removeSecureValue,
   setSecureValue,
-} from 'src/utils/keyChain';
+} from 'src/utils/security/keyChain';
 import {
   Easing,
   useAnimatedStyle,

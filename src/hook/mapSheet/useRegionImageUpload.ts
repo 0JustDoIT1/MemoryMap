@@ -1,6 +1,6 @@
 import {useCallback, useMemo} from 'react';
-import {getRegionTitle} from 'src/utils/koreaMap.util';
-import {showBottomToast} from 'src/utils/showToast';
+import {getRegionTitle} from 'src/utils/screen/koreaMap.util';
+import {showBottomToast} from 'src/utils/ui/showToast';
 import useKoreaMapMutation from '../map/useKoreaMapMutation';
 import {useActionLock} from '../common/useActionLock';
 import {useAdGate} from '../ad/useAdGate';

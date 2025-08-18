@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 import {IStory} from 'src/types/story';
-import {dateToFormatString, dateTypeToDate} from 'src/utils/dateFormat';
-import {getRegionTitleById} from 'src/utils/koreaMap.util';
+import {dateToFormatString, dateTypeToDate} from 'src/utils/date/dateFormat';
+import {getRegionTitleById} from 'src/utils/screen/koreaMap.util';
 
 const useStoryInput = (edit: boolean, data: IStory) => {
   const [regionId, setRegionId] = useState<string>('');

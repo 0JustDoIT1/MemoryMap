@@ -4,7 +4,7 @@ import {PIN_LENGTH} from 'src/constants/app';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {TStackParamList} from 'src/types/stack';
 import {RouteProp} from '@react-navigation/native';
-import {showBottomToast} from 'src/utils/showToast';
+import {showBottomToast} from 'src/utils/ui/showToast';
 
 const usePinCodeEnter = (
   navigation: NativeStackNavigationProp<

@@ -1,8 +1,8 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteStoryById} from 'src/utils/story.db';
-import {updateKoreaMapDataStory} from 'src/utils/koreaMap.db';
+import {deleteStoryById} from 'src/utils/data/sqlite/story.db';
+import {updateKoreaMapDataStory} from 'src/utils/data/sqlite/koreaMap.db';
 import useButton from '../common/useButton';
-import {showBottomToast} from 'src/utils/showToast';
+import {showBottomToast} from 'src/utils/ui/showToast';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 
 export const useStoryDeleteMutation = (onSuccess: () => void) => {

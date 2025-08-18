@@ -6,7 +6,7 @@ import {
   resetMapData,
   updateMapColorById,
   updateMapPhotoById,
-} from 'src/utils/koreaMap.db';
+} from 'src/utils/data/sqlite/koreaMap.db';
 
 const useKoreaMapMutation = () => {
   // Access the client

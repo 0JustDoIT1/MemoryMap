@@ -5,7 +5,7 @@ import {Text} from 'react-native-paper';
 import DateTimePicker from 'react-native-ui-datepicker';
 import {DateType} from 'react-native-ui-datepicker/lib/typescript/src/types';
 import {staticStyles} from 'src/style/staticStyles';
-import {dateTypeToDate} from 'src/utils/dateFormat';
+import {dateTypeToDate} from 'src/utils/date/dateFormat';
 
 interface IhandleChange {
   startDate: DateType;

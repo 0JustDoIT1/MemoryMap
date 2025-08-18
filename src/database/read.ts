@@ -4,7 +4,7 @@ import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
 import {appTableName} from 'src/constants/app';
 import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
 import {IPagination, IStory, IStoryPagination} from 'src/types/story';
-import {resultArrToStoryArr} from 'src/utils/story.db';
+import {resultArrToStoryArr} from 'src/utils/data/sqlite/story.db';
 
 // Read Auth to auth table
 export const getAuthToDB = async (db: SQLiteDatabase): Promise<[ResultSet]> => {

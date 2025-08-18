@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomAlert from 'src/components/alert/alert';
 import {staticStyles} from 'src/style/staticStyles';
 import {useAppTheme} from 'src/style/paperTheme';
-import {onOpenStoreLink} from 'src/utils/openLink';
+import {onOpenStoreLink} from 'src/utils/platform/openLink';
 import useExitApp from 'src/hook/common/useExitApp';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';

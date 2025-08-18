@@ -1,4 +1,4 @@
-import {dateTypeToDate} from './dateFormat';
+import {dateTypeToDate} from '../date/dateFormat';
 
 export const sorting = (a: any, b: any, sort: number, option?: string) => {
   let newA;

@@ -3,7 +3,7 @@ import Keychain, {
   ACCESSIBLE,
   STORAGE_TYPE,
 } from 'react-native-keychain';
-import {showBottomToast} from './showToast';
+import {showBottomToast} from '../ui/showToast';
 
 export const getSecureValue = async (server: string) => {
   try {

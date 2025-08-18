@@ -1,5 +1,5 @@
 import {Linking} from 'react-native';
-import {showBottomToast} from './showToast';
+import {showBottomToast} from '../ui/showToast';
 
 const GOOGLE_PLAY_STORE_LINK = 'market://details?id=com.memorymap';
 const GOOGLE_PLAY_STORE_WEB_LINK =

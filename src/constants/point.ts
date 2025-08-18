@@ -1,5 +1,5 @@
 import {ImageSourcePropType} from 'react-native';
-import {sorting} from 'src/utils/sort';
+import {sorting} from 'src/utils/common/sort';
 import point_1 from 'assets/images/point_1.png';
 import point_2 from 'assets/images/point_2.png';
 import point_3 from 'assets/images/point_3.png';

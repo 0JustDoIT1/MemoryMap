@@ -6,7 +6,7 @@ import Animated from 'react-native-reanimated';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
 import {useProgressBar} from 'src/hook/common/useProgressBar';
 import {TStackParamList} from 'src/types/stack';
-import {calcPercentTextMargin} from 'src/utils/progressBar';
+import {calcPercentTextMargin} from 'src/utils/ui/progressBar';
 
 interface CustomProgressBar {
   navigation?: NativeStackNavigationProp<TStackParamList, any, undefined>;

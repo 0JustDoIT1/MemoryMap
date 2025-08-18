@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {safeOpen} from 'src/utils/openLink';
+import {safeOpen} from 'src/utils/platform/openLink';
 import {
   LinkingEmail,
   TermPrivacyUrl,

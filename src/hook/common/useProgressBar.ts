@@ -6,7 +6,7 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {clamp, toFixed} from 'src/utils/progressBar';
+import {clamp, toFixed} from 'src/utils/ui/progressBar';
 
 export function useProgressBar({
   navigation,

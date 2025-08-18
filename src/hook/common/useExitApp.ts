@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {BackHandler} from 'react-native';
-import {showBottomToast} from 'src/utils/showToast';
+import {showBottomToast} from 'src/utils/ui/showToast';
 
 const useExitApp = () => {
   const backPressCount = useRef(0);

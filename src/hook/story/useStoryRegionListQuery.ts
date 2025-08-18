@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {getStoryRegionList} from 'src/utils/story.db';
+import {getStoryRegionList} from 'src/utils/data/sqlite/story.db';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 
 export const useStoryRegionListQuery = () => {

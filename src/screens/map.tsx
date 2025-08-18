@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import ViewShot from 'react-native-view-shot';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TMap} from 'src/types/stack';
-import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
+import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/media/screenshot';
 import {useAppTheme} from 'src/style/paperTheme';
 import {staticStyles} from 'src/style/staticStyles';
 import useExitApp from 'src/hook/common/useExitApp';

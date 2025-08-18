@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
-import {getOneStoryById} from 'src/utils/story.db';
+import {getOneStoryById} from 'src/utils/data/sqlite/story.db';
 
 export const useStoryViewQuery = (storyId: string) => {
   const query = useQuery({

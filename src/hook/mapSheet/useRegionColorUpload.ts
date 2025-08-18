@@ -4,8 +4,8 @@ import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import {useAdGate} from 'src/hook/ad/useAdGate';
 import {useActionLock} from 'src/hook/common/useActionLock';
 import {adShowCategory} from 'src/constants/app';
-import {getRegionTitle} from 'src/utils/koreaMap.util';
-import {showBottomToast} from 'src/utils/showToast';
+import {getRegionTitle} from 'src/utils/screen/koreaMap.util';
+import {showBottomToast} from 'src/utils/ui/showToast';
 
 interface IUseRegionColorUpload {
   regionData: IKoreaRegionData;

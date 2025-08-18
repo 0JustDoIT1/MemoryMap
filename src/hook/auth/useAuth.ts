@@ -13,7 +13,7 @@ import {
   signInWithCredential,
   signOut,
 } from '@react-native-firebase/auth';
-import {showBottomToast} from 'src/utils/showToast';
+import {showBottomToast} from 'src/utils/ui/showToast';
 import {Platform} from 'react-native';
 
 const useAuth = () => {

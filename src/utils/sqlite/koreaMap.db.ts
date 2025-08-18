@@ -12,7 +12,7 @@ import {
   mostColorMainRegionToDB,
 } from 'src/database/read';
 import {ResultSet} from 'react-native-sqlite-storage';
-import {getColorRegionList} from './koreaMap.util';
+import {getColorRegionList} from '../screen/koreaMap.util';
 import {Dirs, FileSystem} from 'react-native-file-access';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {IDashboardMap} from 'src/types/dashboard';

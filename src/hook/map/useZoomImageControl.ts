@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
-import {getRegionTitle} from 'src/utils/koreaMap.util';
+import {getRegionTitle} from 'src/utils/screen/koreaMap.util';
 import useBackButton from 'src/hook/common/useBackButton';
-import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/screenshot';
+import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/media/screenshot';
 import type ViewShot from 'react-native-view-shot';
 import type {IKoreaRegionData} from 'src/types/koreaMap';
 

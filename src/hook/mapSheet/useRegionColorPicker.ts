@@ -1,7 +1,7 @@
 import {useCallback, useMemo, useState} from 'react';
 import {returnedResults} from 'reanimated-color-picker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
-import {getTextColorByBackgroundColor} from 'src/utils/getTextColorByBackgroundColor';
+import {getTextColorByBackgroundColor} from 'src/utils/ui/getTextColorByBackgroundColor';
 import {useDynamicStyle} from '../common/useDynamicStyle';
 
 export const useRegionColorPicker = (regionData: IKoreaRegionData) => {

@@ -1,7 +1,7 @@
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {IPagination} from 'src/types/story';
-import {getStoryPagination} from 'src/utils/story.db';
+import {getStoryPagination} from 'src/utils/data/sqlite/story.db';
 
 export const useStoryListQuery = (pagination: IPagination) => {
   const query = useInfiniteQuery({

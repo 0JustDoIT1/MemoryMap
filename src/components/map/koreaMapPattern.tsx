@@ -2,7 +2,7 @@ import React from 'react';
 import {Defs, Image, Pattern} from 'react-native-svg';
 import {koreaMapSvgData} from 'src/constants/koreaMapData';
 import {IKoreaMapDataObject} from 'src/types/koreaMap';
-import {getIdArrayByType} from 'src/utils/koreaMap.util';
+import {getIdArrayByType} from 'src/utils/screen/koreaMap.util';
 
 interface IKoreaMapPattern {
   data: IKoreaMapDataObject;

@@ -1,8 +1,8 @@
 import {View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useDynamicStyle} from 'src/hook/common/useDynamicStyle';
-import {dateToFormatString} from 'src/utils/dateFormat';
-import {getRegionTitleById} from 'src/utils/koreaMap.util';
+import {dateToFormatString} from 'src/utils/date/dateFormat';
+import {getRegionTitleById} from 'src/utils/screen/koreaMap.util';
 
 interface IStoryViewHeader {
   regionId: string;

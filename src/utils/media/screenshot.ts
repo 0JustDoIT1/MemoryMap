@@ -2,8 +2,8 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {Platform} from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import {appName} from 'src/constants/app';
-import {hasAndroidPermission} from 'src/utils/getCheckPermission';
-import {showBottomToast} from 'src/utils/showToast';
+import {hasAndroidPermission} from 'src/utils/platform/getCheckPermission';
+import {showBottomToast} from 'src/utils/ui/showToast';
 import Share from 'react-native-share';
 
 // Capture screen

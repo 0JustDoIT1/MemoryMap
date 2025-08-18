@@ -10,7 +10,7 @@ import {
   MAX_BY_AD_COUNT,
 } from 'src/constants/app';
 import {IAppAdShowCategory} from 'src/types/app';
-import {getAsyncStorage, setAsyncStorage} from 'src/utils/asyncStorage';
+import {getAsyncStorage, setAsyncStorage} from 'src/utils/storage/asyncStorage';
 
 const useAd = () => {
   const {load, show, isClosed, isOpened, isLoaded} = useInterstitialAd(

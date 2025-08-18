@@ -2,8 +2,8 @@ import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import {useMemo} from 'react';
 import {REACT_QUERY_KEYS} from 'src/constants/queryKey';
 import {IStat} from 'src/types/dashboard';
-import {getDashboardKoreaMapData} from 'src/utils/koreaMap.db';
-import {getDashboardStory} from 'src/utils/story.db';
+import {getDashboardKoreaMapData} from 'src/utils/data/sqlite/koreaMap.db';
+import {getDashboardStory} from 'src/utils/data/sqlite/story.db';
 
 const useDashboardCard = () => {
   // React-Query Query

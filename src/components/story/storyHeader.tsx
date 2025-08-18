@@ -3,7 +3,7 @@ import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {customColor} from 'src/style/customColor';
 import {IPagination} from 'src/types/story';
-import {getRegionMainTitleById} from 'src/utils/koreaMap.util';
+import {getRegionMainTitleById} from 'src/utils/screen/koreaMap.util';
 
 interface IStoryHeader {
   pagination: IPagination;
