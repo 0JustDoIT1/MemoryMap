@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {adShowCategory} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/ad';
 import {IStory} from 'src/types/story';
 import {showBottomToast} from 'src/utils/ui/showToast';
 import useStoryUpdateMutation from './useStoryUpdateMutation';

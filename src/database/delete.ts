@@ -1,6 +1,6 @@
 //// Delete
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/app';
+import {appTableName} from 'src/constants/db';
 
 // Delete Auth to auth table
 export const deleteAuthToDB = async (

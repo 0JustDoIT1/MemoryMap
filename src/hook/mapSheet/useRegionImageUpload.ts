@@ -4,7 +4,7 @@ import {showBottomToast} from 'src/utils/ui/showToast';
 import useKoreaMapMutation from '../map/useKoreaMapMutation';
 import {useActionLock} from '../common/useActionLock';
 import {useAdGate} from '../ad/useAdGate';
-import {adShowCategory} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/ad';
 import {useRegionImagePicker} from './useRegionImagePicker';
 import {IKoreaRegionData} from 'src/types/koreaMap';
 

@@ -1,7 +1,7 @@
 //// Read
 
 import {ResultSet, SQLiteDatabase} from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/app';
+import {appTableName} from 'src/constants/db';
 import {ICountKoreaMapDataByType} from 'src/types/koreaMap';
 import {IPagination, IStory, IStoryPagination} from 'src/types/story';
 import {resultArrToStoryArr} from 'src/utils/data/sqlite/story.db';

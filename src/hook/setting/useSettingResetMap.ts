@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {showBottomToast} from 'src/utils/ui/showToast';
 import {useActionLock} from 'src/hook/common/useActionLock';
 import {useAdGate} from 'src/hook/ad/useAdGate';
-import {adShowCategory} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/ad';
 import useKoreaMapMutation from 'src/hook/map/useKoreaMapMutation';
 import useDialog from '../common/useDialog';
 

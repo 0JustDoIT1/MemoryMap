@@ -1,4 +1,4 @@
-import {adShowCategory} from 'src/constants/app';
+import {adShowCategory} from 'src/constants/ad';
 import {IKoreaMapDataObject} from './koreaMap';
 import {IStory} from './story';
 

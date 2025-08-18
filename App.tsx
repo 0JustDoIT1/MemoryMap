@@ -15,7 +15,7 @@ import {createTable, getDBConnection} from 'src/database/sqlite';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {useNetInfo} from '@react-native-community/netinfo';
 import NoNetwork from 'src/components/states/noNetwork';
-import {appTableName} from 'src/constants/app';
+import {appTableName} from 'src/constants/db';
 
 dayjs.locale('ko');
 // Enable the SQLite

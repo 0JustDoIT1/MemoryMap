@@ -3,7 +3,7 @@ import {
   ResultSet,
   SQLiteDatabase,
 } from 'react-native-sqlite-storage';
-import {appTableName} from 'src/constants/app';
+import {appTableName} from 'src/constants/db';
 
 // Connect SQLite Database
 export const getDBConnection = async () => {

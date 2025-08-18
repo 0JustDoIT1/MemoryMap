@@ -1,6 +1,5 @@
 import {KeyChainPinCode} from '@env';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {appShowRegionNameKey, appTableName} from 'src/constants/app';
 import {koreaMapDataInit} from 'src/constants/koreaMapData';
 import {saveKoreaMapDataToDB} from 'src/database/create';
 import {countData, getDBConnection} from 'src/database/sqlite';
@@ -10,6 +9,8 @@ import {getSecureValue} from 'src/utils/security/keyChain';
 import VersionCheck from 'react-native-version-check';
 import {useAppPinCode} from 'src/store/appPinCode';
 import {useAppShowRegionName} from 'src/store/appShowRegionName';
+import {appTableName} from 'src/constants/db';
+import {storageKeys} from 'src/constants/storage';
 
 const useRoot = () => {
   const setAppPinCode = useAppPinCode(state => state.setAppPinCode);
@@ -53,9 +54,9 @@ const useRoot = () => {
 
   // Show map text
   const checkShowMapText = async () => {
-    const showMapText = await getAsyncStorage(appShowRegionNameKey);
+    const showMapText = await getAsyncStorage(storageKeys.showRegionName);
     if (!showMapText) {
-      await setAsyncStorage(appShowRegionNameKey, 'show');
+      await setAsyncStorage(storageKeys.showRegionName, 'show');
       setAppShowRegionName('show');
     } else {
       setAppShowRegionName(showMapText as 'show' | 'condition' | 'hide');
