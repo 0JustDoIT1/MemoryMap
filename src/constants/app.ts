@@ -15,9 +15,6 @@ export const appShowRegionNameKey = 'appShowRegionName';
 export const appAdMapCount = 'appAdMapCount';
 export const appAdStoryCount = 'appAdStoryCount';
 
-// BackUp
-export const appBackUpRoute = 'MemoryMap-BackUp';
-
 // AD
 export const appAdMapMaxNum = 1;
 export const appAdStoryMaxNum = 1;

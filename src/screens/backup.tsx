@@ -7,9 +7,19 @@ import {customColor} from 'src/style/customColor';
 import {TBackUp} from 'src/types/stack';
 import LoadingOverlay from '../components/feedback/loadingOverlay';
 import useBackButton from 'src/hook/common/useBackButton';
+import useRecover from 'src/hook/setting/useRecover';
 
 const BackUpScreen = ({navigation}: TBackUp) => {
-  const {isDisabled, onLoading, onBackUp, onRecover} = useBackUp();
+  const {
+    isDisabled: isDisabledB,
+    onLoading: onLoadingB,
+    onBackUp,
+  } = useBackUp();
+  const {
+    isDisabled: isDisabledR,
+    onLoading: onLoadingR,
+    onRecover,
+  } = useRecover();
 
   useBackButton(() => navigation.goBack());
 
@@ -28,7 +38,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
         </View>
         <View className="mt-4">
           <Text className="text-xs text-center">
-            "Google Drive" 에 데이터를 백업합니다.
+            "Firebase" 에 데이터를 백업합니다.
           </Text>
           <Text className="mt-2 text-xs text-center">
             안전한 백업을 위해 백업 중에는 앱을 종료하거나
@@ -41,6 +51,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
       <View className="w-full h-[8%] flex-row justify-between items-center border-t border-t-gray-300">
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
+          disabled={isDisabledB || isDisabledR}
           onPress={onBackUp}>
           <MaterialCommunityIcons
             name="cloud-upload-outline"
@@ -52,6 +63,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
         <View className="h-3/4 border-r-[0.5px] border-blur" />
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
+          disabled={isDisabledB || isDisabledR}
           onPress={onRecover}>
           <MaterialCommunityIcons
             name="cloud-download-outline"
@@ -61,7 +73,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
           <Text className="ml-2 text-base">복구</Text>
         </Pressable>
       </View>
-      <LoadingOverlay visible={onLoading} />
+      <LoadingOverlay visible={onLoadingB || onLoadingR} />
     </SafeAreaView>
   );
 };
