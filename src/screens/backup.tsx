@@ -11,39 +11,23 @@ import {useState} from 'react';
 import useBackButton from 'src/hook/common/useBackButton';
 
 const BackUpScreen = ({navigation}: TBackUp) => {
-  const {backupAppData, getAppData} = useBackUp();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {isDisabled, onLoading, backupAppData} = useBackUp();
 
   useBackButton(() => navigation.goBack());
 
-  // BackUp App Data
-  const onBackUpData = async () => {
-    try {
-      setIsLoading(true);
-      await backupAppData();
-      setIsLoading(false);
-      showBottomToast('success', 'Google Drive에 데이터를 백업했습니다.');
-    } catch (error: any) {
-      setIsLoading(false);
-      // showBottomToast('error', '데이터 백업에 실패했습니다.');
-      showBottomToast('error', error.code);
-      // showBottomToast('error', error.message);
-    }
-  };
-
   // Get App Data
   const onGetData = async () => {
-    try {
-      setIsLoading(true);
-      const result = await getAppData();
-      setIsLoading(false);
-      if (result)
-        showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
-      else showBottomToast('info', 'Google Drive에 백업된 데이터가 없습니다.');
-    } catch (error) {
-      setIsLoading(false);
-      showBottomToast('error', '데이터 불러오기에 실패했습니다.');
-    }
+    // try {
+    //   setIsLoading(true);
+    //   const result = await getAppData();
+    //   setIsLoading(false);
+    //   if (result)
+    //     showBottomToast('success', 'Google Drive에서 데이터를 불러왔습니다.');
+    //   else showBottomToast('info', 'Google Drive에 백업된 데이터가 없습니다.');
+    // } catch (error) {
+    //   setIsLoading(false);
+    //   showBottomToast('error', '데이터 불러오기에 실패했습니다.');
+    // }
   };
 
   return (
@@ -74,7 +58,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
       <View className="w-full h-[8%] flex-row justify-between items-center border-t border-t-gray-300">
         <Pressable
           className="w-1/2 flex-row justify-center items-center"
-          onPress={onBackUpData}>
+          onPress={backupAppData}>
           <MaterialCommunityIcons
             name="cloud-upload-outline"
             size={24}
@@ -94,7 +78,7 @@ const BackUpScreen = ({navigation}: TBackUp) => {
           <Text className="ml-2 text-base">복구</Text>
         </Pressable>
       </View>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay visible={onLoading} />
     </SafeAreaView>
   );
 };

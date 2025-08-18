@@ -6,4 +6,5 @@ declare module '@env' {
   export const AdMobUnitIdIos: string;
   export const AdUnitId: string;
   export const CryptoSecretKey: string;
+  export const FirebaseRealtime: string;
 }

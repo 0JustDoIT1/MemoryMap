@@ -24,5 +24,15 @@ export const useSettingNavigation = (
     navigation.navigate('PinCodeEnter', {route: 'PinCodeSetting'});
   }, [navigation]);
 
-  return {onPressMapText, onPressPinCodeSetting, onPressPinCodeReset};
+  // BackUp Data
+  const onPressBackUp = useCallback(() => {
+    navigation.navigate('BackUp');
+  }, [navigation]);
+
+  return {
+    onPressMapText,
+    onPressPinCodeSetting,
+    onPressPinCodeReset,
+    onPressBackUp,
+  };
 };

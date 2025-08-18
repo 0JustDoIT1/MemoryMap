@@ -43,8 +43,12 @@ const SettingScreen = ({navigation}: TSetting) => {
     onPressTermPrivacyUrl,
     onPressTermServiceUrl,
   } = useSettingLink();
-  const {onPressMapText, onPressPinCodeSetting, onPressPinCodeReset} =
-    useSettingNavigation(navigation);
+  const {
+    onPressMapText,
+    onPressPinCodeSetting,
+    onPressPinCodeReset,
+    onPressBackUp,
+  } = useSettingNavigation(navigation);
 
   const cellHasBorder = useDynamicStyle({border: {bottom: 0.5}});
   const cellNoneBorder = useDynamicStyle();
@@ -82,12 +86,12 @@ const SettingScreen = ({navigation}: TSetting) => {
               onPress={showDialog}
               cellAccessoryView={<Chevron />}
             />
-            {/* <SettingCell
+            <SettingCell
               contentContainerStyle={cellNoneBorder.settingTableCell}
               title="백업 및 복구"
               onPress={onPressBackUp}
               cellAccessoryView={<Chevron />}
-            /> */}
+            />
           </SettingSection>
           <SettingSection>
             <SettingCell
