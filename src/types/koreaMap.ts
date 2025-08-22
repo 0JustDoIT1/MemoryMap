@@ -36,6 +36,11 @@ interface IColoredRegionData {
 
 export type IColoredRegionList = Record<string, IColoredRegionData>;
 
+export interface IGetKoreaMapDataByColorResult {
+  all: IColoredRegionList;
+  main: string[];
+}
+
 export interface ICountedRegionByType {
   color: number;
   photo: number;
