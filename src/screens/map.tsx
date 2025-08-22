@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef, useMemo} from 'react';
+import React, {useLayoutEffect, useRef, lazy, Suspense} from 'react';
 import {useWindowDimensions, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
@@ -9,12 +9,13 @@ import {onCaptureAndSave, onCaptureAndShare} from 'src/utils/media/screenshot';
 import {useAppTheme} from 'src/style/paperTheme';
 import {staticStyles} from 'src/style/staticStyles';
 import useExitApp from 'src/hook/common/useExitApp';
-import KoreaMap from 'src/components/map/koreaMap';
-import LoadingOverlay from '../components/feedback/loadingOverlay';
 import {GestureDetector} from 'react-native-gesture-handler';
 import {useAdStartup} from 'src/hook/ad/useAdStartUp';
 import {useKoreaMapShow} from 'src/hook/map/useKoreaMapShow';
 import {useKoreaMapAnimation} from 'src/hook/map/useKoreaMapAnimation';
+import KoreaMapSkeleton from 'src/components/map/koreaMapSkeleton';
+
+const KoreaMapLazy = lazy(() => import('src/components/map/koreaMap'));
 
 const MapScreen = ({navigation}: TMap) => {
   const {width, height} = useWindowDimensions();
@@ -68,10 +69,15 @@ const MapScreen = ({navigation}: TMap) => {
         options={{fileName: 'MemoryMap', format: 'jpg', quality: 1}}>
         <GestureDetector gesture={composed}>
           <Animated.View style={[staticStyles.mapBox, animatedStyles]}>
-            {show && <KoreaMap />}
+            {!show ? (
+              <KoreaMapSkeleton />
+            ) : (
+              <Suspense fallback={<KoreaMapSkeleton />}>
+                <KoreaMapLazy />
+              </Suspense>
+            )}
           </Animated.View>
         </GestureDetector>
-        <LoadingOverlay visible={!show} />
       </ViewShot>
     </SafeAreaView>
   );
