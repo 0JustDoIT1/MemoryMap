@@ -1,5 +1,4 @@
 import {
-  IColoredRegionList,
   IGetKoreaMapDataByColorResult,
   IMapDataObject,
   IRegionData,
@@ -18,7 +17,7 @@ import {
 } from 'src/database/read';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {getColorRegionList} from '../../screen/koreaMap.util';
-import {Dirs, FileSystem} from 'react-native-file-access';
+import {FileSystem} from 'react-native-file-access';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {IDashboardMap} from 'src/types/dashboard';
 import {safeUnlink} from 'src/utils/storage/fileSystem';

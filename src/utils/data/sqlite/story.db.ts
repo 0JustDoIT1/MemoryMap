@@ -1,5 +1,5 @@
 import {getDBConnection} from 'src/database/sqlite';
-import {IStory} from 'src/types/story';
+import {IStory, IStoryPagination} from 'src/types/story';
 import {
   getOneStoryToDB,
   getStoryRegionIdToDB,
@@ -16,42 +16,32 @@ import {IDashboardStory} from 'src/types/dashboard';
 import {getRegionTitleById} from 'src/utils/screen/koreaMap.util';
 
 // Result data convert Story Type
-const _resultToStory = (data: any) => {
-  const story: IStory = {
-    id: data['id'],
-    regionId: data['regionId'],
-    startDate: data['startDate'],
-    endDate: data['endDate'],
-    title: data['title'],
-    contents: data['contents'],
-    point: data['point'],
-    createdAt: data['createdAt'],
-    updatedAt: data['updatedAt'],
-  };
-
-  return story;
-};
+const storyResultSetToObject = (data: IStory): IStory => ({
+  id: data['id'],
+  regionId: data['regionId'],
+  startDate: data['startDate'],
+  endDate: data['endDate'],
+  title: data['title'],
+  contents: data['contents'],
+  point: data['point'],
+  createdAt: data['createdAt'],
+  updatedAt: data['updatedAt'],
+});
 
 // Result data array convert Story array
-export const resultArrToStoryArr = (data: [ResultSet]) => {
-  const storyArray: IStory[] = [];
-  for (let i = 0; i < data[0].rows.length; i++) {
-    const item = data[0].rows.item(i);
-    const newStory: IStory = _resultToStory(item);
-
-    storyArray.push(newStory);
-  }
-  return storyArray;
+export const resultArrToStoryArr = (data: [ResultSet]): IStory[] => {
+  const rows = data[0].rows;
+  return Array.from({length: rows.length}, (_, i) =>
+    storyResultSetToObject(rows.item(i)),
+  );
 };
 
 // Get All Story -> SQLite
-export const getStoryAll = async () => {
+export const getStoryAll = async (): Promise<IStory[]> => {
   const db = await getDBConnection();
-  const result = await getStoryAllToDB(db).then(res =>
-    resultArrToStoryArr(res),
-  );
+  const res = await getStoryAllToDB(db);
 
-  return result;
+  return resultArrToStoryArr(res);
 };
 
 // Get Story with pagination -> SQLite
@@ -59,58 +49,56 @@ export const getStoryPagination = async (
   page: number,
   option: {
     limit: number;
-    // offset: number;
     filter: string;
     order: string;
     sort: string;
   },
-) => {
+): Promise<IStoryPagination> => {
   const db = await getDBConnection();
-  const result = await getStoryPaginationToDB(db, page, option);
 
-  return result;
+  return await getStoryPaginationToDB(db, page, option);
 };
 
 // Get Story by id (one document)
-export const getOneStoryById = async (id: string) => {
+export const getOneStoryById = async (id: string): Promise<IStory> => {
   const db = await getDBConnection();
-  const result = await getOneStoryToDB(db, id);
 
-  return result;
+  return await getOneStoryToDB(db, id);
 };
 
 // Add story by region id -> SQLite
-export const addStoryByRegionId = async (data: IStory) => {
+export const addStoryByRegionId = async (data: IStory): Promise<void> => {
   // Save SQLite
   const db = await getDBConnection();
+
   await saveStoryToDB(db, data);
 };
 
 // Delete story by Region id -> SQLite
-export const deleteStoryById = async (id: string) => {
+export const deleteStoryById = async (id: string): Promise<void> => {
   // Delete SQLite
   const db = await getDBConnection();
   await deleteOneStoryToDB(db, id);
 };
 
 // Get region id list by story exist
-export const getStoryRegionList = async () => {
-  const regionIdArray: string[] = [];
+export const getStoryRegionList = async (): Promise<string[]> => {
   // Get SQLite
   const db = await getDBConnection();
+
   const result = await getStoryRegionIdToDB(db);
+  const rows = result[0].rows;
 
-  for (let i = 0; i < result[0].rows.length; i++) {
-    let regionId = result[0].rows.item(i)['regionId'];
-    if (regionId.split('-').length - 1 >= 2)
-      regionId = `${regionId.split('-')[0]}-${regionId.split('-')[1]}`;
+  const toMainRegionId = (id: string) => {
+    const parts = id.split('-');
+    return parts.length >= 3 ? `${parts[0]}-${parts[1]}` : id;
+  };
 
-    regionIdArray.push(regionId);
-  }
+  const mainIds = Array.from({length: rows.length}, (_, i) =>
+    toMainRegionId(rows.item(i)['regionId'] as string),
+  );
 
-  const mainIdArray = [...new Set(regionIdArray)];
-
-  return mainIdArray;
+  return [...new Set(mainIds)];
 };
 
 // Get Dashboard of Story
@@ -130,6 +118,7 @@ export const getDashboardStory = async (): Promise<IDashboardStory> => {
       };
     }),
   );
+
   // 최다 작성 지역
   const countRegion = await maxStoryNumToDB(db).then(([res]) =>
     Array.from({length: res.rows.length}, (_, i) => {
