@@ -272,6 +272,8 @@
   <img src="./assets/images/readme_setting_1.jpg" alt="설정 화면 1" width="22%" />
   &nbsp;
   <img src="./assets/images/readme_setting_2.jpg" alt="설정 화면 2" width="22%" />
+   &nbsp;
+  <!-- <img src="./assets/images/readme_setting_3.jpg" alt="설정 화면 3" width="22%" /> -->
 </p>
 - 지역명 표시 여부 설정
   - 항상 표시 / 빈 지역만 / 표시 안 함
@@ -283,10 +285,9 @@
 - 리뷰 작성 (Play Store `Linking`)
 - 서비스 이용약관 및 개인정보 처리방침 연결
 - 앱 버전 정보 (`react-native-device-info`)
-- 구글 드라이브 백업
+- 데이터 백업
   - Firebase Auth 로그인
-  - `react-native-cloud-storage`로 암호화 후 저장 (`react-native-crypto-js`)
-  - **심사 이슈로 현재는 프로덕션에서는 비활성화**
+  - Firebase RealtimeDatabse에 암호화 후 저장 (`react-native-crypto-js`)
 
 ---
 
@@ -303,9 +304,5 @@
 
 ## 🚧 개선 목표
 
-- 스토리 필터링 작동 오류 해결 필요
-- 전체적인 코드 최적화
-- Lazy Loading 적용에도 SVG 지도의 렌더링 성능 개선 필요
-- 상태관리 라이브러리를 Recoil → Zustand로 전환 고려
 - 모바일뿐 아니라 태블릿 화면 비율까지 고려한 반응형 스타일 개선
-- 백업 방식 : Google Drive → Firebase Cloud Firestore로의 전환 고려
+- 스토리에 포인트 화면 비중을 줄이고 사진(1장) 첨부 기능 고려
