@@ -7,8 +7,8 @@ import {MAP_DATA_INIT} from 'src/constants/koreaMapData';
 
 // KoreaMapData Array to Object
 export const koreaMapDataToObject = (data: IRegionData[]): IMapDataObject => {
-  return data.reduce((acc, cur) => {
-    acc[cur.id] = cur;
+  return data.reduce((acc, region) => {
+    acc[region.id] = region;
     return acc;
   }, {} as IMapDataObject);
 };
